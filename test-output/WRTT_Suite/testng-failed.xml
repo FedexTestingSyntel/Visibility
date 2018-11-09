@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="3" guice-stage="DEVELOPMENT" name="Failed suite [WRTT_Suite]" parallel="methods">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="3" name="WRTT_Test(failed)" parallel="methods">
+    <parameter name="Level" value="2"/>
+    <classes>
+      <class name="SupportClasses.Environment">
+        <methods>
+          <include name="SetEvironmentLevel" invocation-numbers="0"/>
+        </methods>
+      </class> <!-- SupportClasses.Environment -->
+    </classes>
+  </test> <!-- WRTT_Test(failed) -->
+</suite> <!-- Failed suite [WRTT_Suite] -->

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [CMAC_Suite]" parallel="methods">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="CMAC_Test(failed)" parallel="methods">
+    <classes>
+      <class name="TestNG.CMAC">
+        <methods>
+          <include name="CreateProject" invocation-numbers="2 0 3 1"/>
+          <include name="beforeClass"/>
+        </methods>
+      </class> <!-- TestNG.CMAC -->
+    </classes>
+  </test> <!-- CMAC_Test(failed) -->
+</suite> <!-- Failed suite [CMAC_Suite] -->

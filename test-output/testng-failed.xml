@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WFCL_Suite]">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
+    <parameter name="Level" value="2"/>
+    <classes>
+      <class name="AgileApplications.WFCL">
+        <methods>
+          <include name="beforeClass"/>
+          <include name="AccountRegistration_INET" invocation-numbers="0"/>
+          <include name="AccountRegistration_Admin" invocation-numbers="0"/>
+          <include name="AccountRegistration_Linkage" invocation-numbers="0 1"/>
+        </methods>
+      </class> <!-- AgileApplications.WFCL -->
+    </classes>
+  </test> <!-- WFCL_Test(failed) -->
+</suite> <!-- Failed suite [WFCL_Suite] -->

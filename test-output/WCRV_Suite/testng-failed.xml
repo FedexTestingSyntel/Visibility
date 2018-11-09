@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WCRV_Suite]" parallel="methods">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="WCRV_Test(failed)" parallel="methods">
+    <parameter name="Level" value="2"/>
+    <classes>
+      <class name="WaterfallApplications.WCRV">
+        <methods>
+          <include name="beforeClass"/>
+          <include name="WCRV_Generate_RateSheet"/>
+        </methods>
+      </class> <!-- WaterfallApplications.WCRV -->
+      <class name="SupportClasses.Environment">
+        <methods>
+          <include name="SetEvironmentLevel" invocation-numbers="0"/>
+        </methods>
+      </class> <!-- SupportClasses.Environment -->
+    </classes>
+  </test> <!-- WCRV_Test(failed) -->
+</suite> <!-- Failed suite [WCRV_Suite] -->

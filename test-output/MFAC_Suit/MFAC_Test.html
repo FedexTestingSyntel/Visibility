@@ -1,0 +1,199 @@
+<html>
+<head>
+<title>TestNG:  MFAC_Test</title>
+<link href="../testng.css" rel="stylesheet" type="text/css" />
+<link href="../my-testng.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+.log { display: none;} 
+.stack-trace { display: none;} 
+</style>
+<script type="text/javascript">
+<!--
+function flip(e) {
+  current = e.style.display;
+  if (current == 'block') {
+    e.style.display = 'none';
+    return 0;
+  }
+  else {
+    e.style.display = 'block';
+    return 1;
+  }
+}
+
+function toggleBox(szDivId, elem, msg1, msg2)
+{
+  var res = -1;  if (document.getElementById) {
+    res = flip(document.getElementById(szDivId));
+  }
+  else if (document.all) {
+    // this is the way old msie versions work
+    res = flip(document.all[szDivId]);
+  }
+  if(elem) {
+    if(res == 0) elem.innerHTML = msg1; else elem.innerHTML = msg2;
+  }
+
+}
+
+function toggleAllBoxes() {
+  if (document.getElementsByTagName) {
+    d = document.getElementsByTagName('div');
+    for (i = 0; i < d.length; i++) {
+      if (d[i].className == 'log') {
+        flip(d[i]);
+      }
+    }
+  }
+}
+
+// -->
+</script>
+
+</head>
+<body>
+<h2 align='center'>MFAC_Test</h2><table border='1' align="center">
+<tr>
+<td>Tests passed/Failed/Skipped:</td><td>24/0/0</td>
+</tr><tr>
+<td>Started on:</td><td>Thu Oct 25 17:49:11 CDT 2018</td>
+</tr>
+<tr><td>Total time:</td><td>49 seconds (49374 ms)</td>
+</tr><tr>
+<td>Included groups:</td><td></td>
+</tr><tr>
+<td>Excluded groups:</td><td></td>
+</tr>
+</table><p/>
+<small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-passed'>
+<tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='TestNG.MFAC.AddressVelocity()'><b>AddressVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/addresses/velocitycheck, 10</td>
+<td></td>
+<td>35</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.AddressVelocity()'><b>AddressVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/addressVelocityCheck, 10</td>
+<td></td>
+<td>39</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.AddressVelocity()'><b>AddressVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/addresses/velocitycheck, 10</td>
+<td></td>
+<td>46</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.AddressVelocity()'><b>AddressVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/addressVelocityCheck, 10</td>
+<td></td>
+<td>46</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.IssuePin()'><b>IssuePin</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN</td>
+<td></td>
+<td>4</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.IssuePin()'><b>IssuePin</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN</td>
+<td></td>
+<td>9</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.IssuePin()'><b>IssuePin</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin</td>
+<td></td>
+<td>20</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.IssuePin()'><b>IssuePin</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin</td>
+<td></td>
+<td>28</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.IssuePinVelocity()'><b>IssuePinVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN, 3</td>
+<td></td>
+<td>20</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.IssuePinVelocity()'><b>IssuePinVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin, 3</td>
+<td></td>
+<td>30</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.IssuePinVelocity()'><b>IssuePinVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin, 3</td>
+<td></td>
+<td>36</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.IssuePinVelocity()'><b>IssuePinVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN, 3</td>
+<td></td>
+<td>36</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinNoLongerValid()'><b>VerifyPinNoLongerValid</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/verifyPIN</td>
+<td></td>
+<td>4</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinNoLongerValid()'><b>VerifyPinNoLongerValid</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/verifyPIN</td>
+<td></td>
+<td>27</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinNoLongerValid()'><b>VerifyPinNoLongerValid</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin, https://apidrt.idev.fedex.com:8443/security/v1/pin/verify</td>
+<td></td>
+<td>31</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinNoLongerValid()'><b>VerifyPinNoLongerValid</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin, https://apidrt.idev.fedex.com:8443/security/v1/pin/verify</td>
+<td></td>
+<td>35</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinValid()'><b>VerifyPinValid</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/verifyPIN</td>
+<td></td>
+<td>16</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinValid()'><b>VerifyPinValid</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin, https://apidrt.idev.fedex.com:8443/security/v1/pin/verify</td>
+<td></td>
+<td>21</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinValid()'><b>VerifyPinValid</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin, https://apidrt.idev.fedex.com:8443/security/v1/pin/verify</td>
+<td></td>
+<td>28</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinValid()'><b>VerifyPinValid</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/verifyPIN</td>
+<td></td>
+<td>29</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinVelocity()'><b>VerifyPinVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin, https://apidrt.idev.fedex.com:8443/security/v1/pin/verify, 3</td>
+<td></td>
+<td>7</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinVelocity()'><b>VerifyPinVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, https://apidrt.idev.fedex.com:8443/security/v1/pin, https://apidrt.idev.fedex.com:8443/security/v1/pin/verify, 3</td>
+<td></td>
+<td>23</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinVelocity()'><b>VerifyPinVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-PHONE-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/verifyPIN, 3</td>
+<td></td>
+<td>38</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+<tr>
+<td title='TestNG.MFAC.VerifyPinVelocity()'><b>VerifyPinVelocity</b><br>Test class: TestNG.MFAC<br>Parameters: FDM-POSTCARD-PIN, l7xx1892f99a6f88470ba29abc141cd7bd8d, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN, http://mfacdrt-cos-vip.test.cloud.fedex.com:9090/mfac/v3/verifyPIN, 3</td>
+<td></td>
+<td>40</td>
+<td>TestNG.MFAC@2698dc7</td></tr>
+</table><p>
+</body>
+</html>
