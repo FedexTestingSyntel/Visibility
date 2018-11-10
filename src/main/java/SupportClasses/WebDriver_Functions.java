@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
@@ -57,6 +58,8 @@ public class WebDriver_Functions{
     				AppUrl = "https://ecamdev.idev.fedex.com/ecam/index.html";
     			}else if (Environment.getInstance().getLevel().contentEquals("3")) {
     				AppUrl = "https://ecamdrt.idev.fedex.com/ecam/index.html";
+    			}else if (Environment.getInstance().getLevel().contentEquals("5")) {
+    				AppUrl = "https://ecambit.idev.fedex.com/ecam/index.html";
     			}
     			break;
     		case "WPOR":  	
@@ -229,6 +232,7 @@ public class WebDriver_Functions{
 	}
 	
     public static void takeSnapShot(String FileName) throws Exception{
+    	FileName = DriverFactory.getScreenshotPath() + FileName;
     	if (DriverFactory.BrowserCurrent == 0) {
     		return;
     	}
@@ -263,7 +267,7 @@ public class WebDriver_Functions{
         
         //Copy file at destination
         FileUtils.copyFile(SrcFile, DestFile);
-        Helper_Functions.PrintOut(FileName + " Screenshot Taken", true);
+        Helper_Functions.PrintOut("Screenshot Taken:  " + FileName, false);
     }
 	
 	public static boolean isPresent(By Ele){
@@ -554,4 +558,14 @@ public class WebDriver_Functions{
 		Helper_Functions.PrintOut("Passkey check: " + AdminUser, true);
 		return AdminUser;
 	}	
+	
+	public static void CloseAlertPopUp() {
+		try {
+			Alert alert = DriverFactory.getInstance().getDriver().switchTo().alert();
+
+			alert.accept(); //for two buttons, choose the affirmative one
+			// or
+			alert.dismiss(); //to cancel the affirmative decision, i.e., pop up will be dismissed and no action will take place
+		}catch (Exception e) {}
+	}
 }

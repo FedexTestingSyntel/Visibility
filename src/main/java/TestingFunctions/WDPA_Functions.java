@@ -19,9 +19,6 @@ public class WDPA_Functions{
 	//PackageDetails for express/ground = {String Packages, String Weight, String WeightUnit (L or K), String Date, String ReadyTime, String CloseTime, String Special}
 	//PackageDetails for expressLTL =     {String Skids,    String Weight, String WeightUnit,          String ReadyTime, String CloseTime, String Name, String Service, String ConfirmationNo, String Special, String Length, String Width, String Height)
 	public static String[] WDPAPickupDetailed(String CountryCode, String User, String Password, String Service, String Company, String Name, String Phone, String Address[], String PackageDetails[], String ConfirmationRedirect) throws Exception{
-		//https://wwwdev.idev.fedex.com/PickupApp/login?locale=en_US
-		String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WDPA " + Service + " ";
-		
 		try {
 			WebDriver_Functions.Login(User, Password);
 			
@@ -40,11 +37,11 @@ public class WDPA_Functions{
 			}else if (Service.contentEquals("expFreight")) {
 				WDPAPackageInformationExpressLTL(PackageDetails);
 			}
-			WebDriver_Functions.takeSnapShot(SCPath + " Schedule.png");
+			WebDriver_Functions.takeSnapShot("Schedule.png");
 			WebDriver_Functions.Click(By.id("button.completePickup"));
 
 			if (WebDriver_Functions.CheckBodyText("A FedEx Ground pickup has already been scheduled by this account for this date, time and location.")){
-				WDPAGroundPickupTime(SCPath);
+				WDPAGroundPickupTime("Ground Already Scheduled");
 				Helper_Functions.PrintOut("Need to use different Ground pikcup time.", true);
 			}else if (WebDriver_Functions.CheckBodyText("Please correct the error(s) in red.") || WebDriver_Functions.CheckBodyText("The system has experienced an unexpected problem and is unable to complete your request.")){
 				String ErrorMessage = "Error on Pickup Page.";//generic message.
@@ -73,15 +70,15 @@ public class WDPA_Functions{
 			ConfirmationNumber = ConfirmationNumber.substring(ConfirmationNumber.indexOf(".") + 2);
 			Helper_Functions.PrintOut("Schedule " + Service + " , Pickup: " + ConfirmationNumber, true);
 			
-			WebDriver_Functions.takeSnapShot(SCPath + " Confirmation.png");
+			WebDriver_Functions.takeSnapShot("Confirmation.png");
 			
 			if (Service.contentEquals("ground") || Service.contentEquals("express")) {
-				WDPAConfirmationLinks(ConfirmationRedirect, PackageDetails[0], PackageDetails[1], SCPath);
+				WDPAConfirmationLinks(ConfirmationRedirect, PackageDetails[0], PackageDetails[1]);
 			}else if (Service.contentEquals("expFreight")) {
 				//need to finish
 			}
 			
-			WDPAMyPickupsPage(Service, ConfirmationNumber, Address, PackageDetails, SCPath);
+			WDPAMyPickupsPage(Service, ConfirmationNumber, Address, PackageDetails);
 
 			Helper_Functions.PrintOut(ConfirmationNumber, false);
 			return new String[] {ConfirmationNumber, ConfirmationRedirect, User};//need to add correct return valuers
@@ -242,7 +239,7 @@ public class WDPA_Functions{
 		}catch(Exception e){}
 	}
 	
-	public static void WDPAConfirmationLinks(String AppTested, String Packages, String Weight, String SCPath) throws Exception{
+	public static void WDPAConfirmationLinks(String AppTested, String Packages, String Weight) throws Exception{
 		if (AppTested.contentEquals("INET") && WebDriver_Functions.isPresent(By.xpath("//input[(@value='Ship')]"))){//test INET
 			WebDriver_Functions.Click(By.xpath("//input[(@value='Ship')]"));
 			WebDriver_Functions.Click(By.id("module.from._header"));
@@ -253,7 +250,7 @@ public class WDPA_Functions{
 			if (Packages == "1"){
 				String WeightFormated = Weight + ".00";
 				WebDriver_Functions.ElementMatches(By.id("psd.mps.row.weight.0"), WeightFormated, 0);
-				WebDriver_Functions.takeSnapShot(SCPath + " INET page.png");
+				WebDriver_Functions.takeSnapShot("INET page.png");
 			}else if (AppTested.contentEquals("WGRT") && WebDriver_Functions.isPresent(By.xpath("//input[(@value='Get rate quote')]"))){//test wgrt
 				WebDriver_Functions.Click(By.xpath("//input[(@value='Get rate quote')]"));
 				WebDriver_Functions.WaitForText(By.id("pageTitle"), "Get Rates & Transit Times");//changed from "Transit Times" on 4-18-18
@@ -266,13 +263,13 @@ public class WDPA_Functions{
 				if (Packages == "1"){
 					WebDriver_Functions.ElementMatches(By.id(weightElement), Weight, 0);
 				}
-				WebDriver_Functions.takeSnapShot(SCPath + " WGRT page.png");
+				WebDriver_Functions.takeSnapShot("WGRT page.png");
 			}
 			Helper_Functions.PrintOut(AppTested + " button working as expected", true);
 		}
 	}
 	
-	public static void WDPAMyPickupsPage(String Service, String ConfirmationNumber, String Address[], String PackageDetails[], String SCPath) throws Exception{
+	public static void WDPAMyPickupsPage(String Service, String ConfirmationNumber, String Address[], String PackageDetails[]) throws Exception{
 		//navigate to my pickups page
 		WebDriver_Functions.ChangeURL("WDPA_Pickups", Address[6], false);
 		
@@ -299,7 +296,7 @@ public class WDPA_Functions{
 		if (!(DriverFactory.getInstance().getDriver().findElement(By.id("table.pickupHistory._contents._row1._col6")).getText().contains("Cancelled"))){
 			Helper_Functions.PrintOut("    Pickup:" + ConfirmationNumber + " has not been cancelled", true);
 		}
-		WebDriver_Functions.takeSnapShot(SCPath + " Cancellation.png");
+		WebDriver_Functions.takeSnapShot("Cancellation.png");
 	}
 	
 	public static String WDPALTLPickup(String AddressDetails[], String User, String Password, String HandelingUnits, String Weight) throws Exception{
@@ -307,8 +304,7 @@ public class WDPA_Functions{
 		//https://wwwdev.idev.fedex.com/PickupApp/login?locale=en_US
 		
 		String strAccountSelected = "";
-		String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WDPA LTL ";
-	
+		
 		try {
 			//check if logged in flow or not, blank user means non logged in flow.
 			if (User != ""){
@@ -377,7 +373,7 @@ public class WDPA_Functions{
 		    
 		    WebDriver_Functions.Select(By.id("freightPickupInfo.readyTime"), "3:00 pm", "t");
 		    WebDriver_Functions.Select(By.id("freightPickupInfo.closeTime"), "11:00 pm", "t");
-		    WebDriver_Functions.takeSnapShot(SCPath + " Pickup.png");
+		    WebDriver_Functions.takeSnapShot("Pickup.png");
 		    WebDriver_Functions.Click(By.id("button.freightpickup.schedulePickup"));
 		    
 		    WebDriver_Functions.WaitPresent(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
@@ -385,7 +381,7 @@ public class WDPA_Functions{
 		    strConfirmationNumber = strConfirmationNumber.substring(strConfirmationNumber.indexOf(".") + 2);
 		    Helper_Functions.PrintOut("Schedule LTL Pickup:   " + strConfirmationNumber, true);
 		    WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationLeftPanel']/div[1]/div[1]/div/div/label"), "Country/Territory", 116629); 
-		    WebDriver_Functions.takeSnapShot(SCPath + " Confirmation.png");
+		    WebDriver_Functions.takeSnapShot("Confirmation.png");
 		    
 		    if (User != ""){
 			    WebDriver_Functions.Click(By.id("menubar.nav.menu3_div"));
@@ -409,7 +405,7 @@ public class WDPA_Functions{
 			    assertEquals(Weight, WebDriver_Functions.GetText(By.xpath("//div[@id='confirmation.weight']/label")));
 			    assertEquals("3:00pm - 11:00pm", WebDriver_Functions.GetText(By.xpath("//div[@id='confirmation.pickuptime']/label")));
 			    assertEquals(AddressDetails[5], WebDriver_Functions.GetText(By.id("confirmation.lineItems.zipPostal")));
-			    WebDriver_Functions.takeSnapShot(SCPath + "LTLDetails.png");
+			    WebDriver_Functions.takeSnapShot("LTLDetails.png");
 			    Helper_Functions.PrintOut("WDPALTLPickup Completed", true);
 		    }
 		    return strConfirmationNumber;
@@ -425,7 +421,6 @@ public class WDPA_Functions{
 	}//end WDPALTLPickup
 
 	public static void WDPAShipment(String CountryCode, String User, String Password, String Service,  String OriginAddressDetails[], String DestAddressDetails[]) throws Exception{
-		String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " INET ";
 		try {
 			// launch the browser and direct it to the Base URL
 			WebDriver_Functions.Login(User, Password);
@@ -535,7 +530,7 @@ public class WDPA_Functions{
 				WebDriver_Functions.Select(By.id("pdm.truckSize"), "28", "v");
 			}
 			
-			WebDriver_Functions.takeSnapShot(SCPath + "Shipment.png");
+			WebDriver_Functions.takeSnapShot("Shipment.png");
 			WebDriver_Functions.Click(By.id("completeShip.ship.field"));
 			
 			//Enter product/commodity information
@@ -551,7 +546,7 @@ public class WDPA_Functions{
 					WebDriver_Functions.Select(By.id("commodityData.chosenProfile.manufacturingCountry"), "1", "i");
 					WebDriver_Functions.Click(By.id("commodity.button.addCommodity"));
 					WebDriver_Functions.WaitForText(By.id("commodity.summaryTable._contents._row1._col2"), "Generic Description");
-					WebDriver_Functions.takeSnapShot(SCPath + "product_commodity information.png");
+					WebDriver_Functions.takeSnapShot("product_commodity information.png");
 					WebDriver_Functions.Click(By.id("completeShip.ship.field"));
 				}catch (Exception e){}
 			}else{

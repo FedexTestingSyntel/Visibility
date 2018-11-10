@@ -19,13 +19,12 @@ public class WPRL_Functions {
 	public static String[] WPRL_Contact(String User, String Password, String AddressDetails[], String Name[], String Phone[][], String Email) throws Exception{
 	 	String CountryCode = AddressDetails[6];
 		try {
-			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WPRL ";
-			
+
 			WebDriver_Functions.Login(User, Password);
 			WebDriver_Functions.ChangeURL("WPRL", CountryCode, false);
 			//edit the contact information
 	 		WPRL_Contact_Input(AddressDetails, Name, Phone, Email, "ci");
-	 		WebDriver_Functions.takeSnapShot(SCPath + "Login contactEdit.png");
+	 		WebDriver_Functions.takeSnapShot("Login contactEdit.png");
 		}catch (Exception e) {
 			throw e;
 		}
@@ -34,13 +33,12 @@ public class WPRL_Functions {
 	
 	public static String[] WPRL_LoginInformation(String CountryCode, String User, String Password) throws Exception{	
 		try {
-			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WPRL ";
-			
+
 			WebDriver_Functions.Login(User, Password);
 			WebDriver_Functions.ChangeURL("WPRL", CountryCode, false);
 	
 			WPRL_Contact_LoginInformation(Password);
-			WebDriver_Functions.takeSnapShot(SCPath + "Login contactEdit.png");
+			WebDriver_Functions.takeSnapShot("Login contactEdit.png");
 		}catch (Exception e) {
 			throw e;
 		}
@@ -68,7 +66,7 @@ public class WPRL_Functions {
 		return Contact;
 	}//end WPRL_Contact
 	
-	public static boolean WPRL_AccountNickname(boolean PasskeyFlag, String Nickname, String App, String SCPath) throws Exception{
+	public static boolean WPRL_AccountNickname(boolean PasskeyFlag, String Nickname, String App) throws Exception{
 		try{
 			WebDriver_Functions.WaitForText(By.id("nns_moduleHeader"), "Nickname and Security Options");
 			//check if the user has the edit link visible. Administrators will not be able to edit.
@@ -78,7 +76,7 @@ public class WPRL_Functions {
 				WebDriver_Functions.Type(By.id("nns_acctnicknm_input"), Nickname);
 				WebDriver_Functions.Click(By.id("nns_savebtn"));
 				WebDriver_Functions.WaitForText(By.id("nns_update_msg"), "Your updates have been saved.");
-				WebDriver_Functions.takeSnapShot(SCPath + "NicknameEdit.png");
+				WebDriver_Functions.takeSnapShot("NicknameEdit.png");
 				return true;
 			}else{
 				Helper_Functions.PrintOut("Cannot update nickname for passkey users.", true);
@@ -91,7 +89,7 @@ public class WPRL_Functions {
 		}
 	}
 	
-	public static boolean WPRL_Account_ShippingAddress(String Name[], String AddressDetails[], String App, String SCPath) throws Exception{
+	public static boolean WPRL_Account_ShippingAddress(String Name[], String AddressDetails[], String App) throws Exception{
 		try{
 			if (WebDriver_Functions.isPresent(By.cssSelector("#shippingaddress > #show-hide > div.fx-toggler > #moduleHeader"))){
 				assertEquals("Shipping Address", WebDriver_Functions.GetText(By.cssSelector("#shippingaddress > #show-hide > div.fx-toggler > #moduleHeader")));
@@ -122,7 +120,7 @@ public class WPRL_Functions {
 				WebDriver_Functions.Click(By.id("sAddrSaveBtn"));
 				WebDriver_Functions.WaitNotVisable(By.id("LoadingDiv"));//wait for the loading overlay to not be present
 				WebDriver_Functions.WaitForText(By.id("sAddrUpdatedTxt"), "Your updates have been saved.");
-				WebDriver_Functions.takeSnapShot(SCPath + "Shipping Address.png");
+				WebDriver_Functions.takeSnapShot("Shipping Address.png");
 				return true;
 			}else {
 				Helper_Functions.PrintOut("Shipping address section not present.", true);
@@ -135,7 +133,7 @@ public class WPRL_Functions {
 		}
 	}
 	
-	public static boolean WPRL_Account_CreditCard(String Name[], String AddressDetails[], String CardDetails[], String App, String SCPath) throws Exception{
+	public static boolean WPRL_Account_CreditCard(String Name[], String AddressDetails[], String CardDetails[], String App) throws Exception{
 		try{
 			if (WebDriver_Functions.isPresent(By.cssSelector("#creditcardinformation > #show-hide > div.fx-toggler > #moduleHeader"))){
 				assertEquals("Credit Card and Billing Information", WebDriver_Functions.GetText(By.cssSelector("#creditcardinformation > #show-hide > div.fx-toggler > #moduleHeader")));
@@ -175,7 +173,7 @@ public class WPRL_Functions {
 				WebDriver_Functions.Click(By.id("card-continue-save-btn"));
 				WebDriver_Functions.WaitNotVisable(By.id("LoadingDiv"));//wait for the loading overlay to not be present
 				WebDriver_Functions.WaitForText(By.id("cci_update_msg"), "Your updates have been saved.");
-				WebDriver_Functions.takeSnapShot(SCPath + "CC Update.png");
+				WebDriver_Functions.takeSnapShot("CC Update.png");
 				return true;
 			}else {
 				Helper_Functions.PrintOut("Warning: WPRL_Account_CreditCard not executed as the billing section not loaded.", true);
@@ -188,7 +186,7 @@ public class WPRL_Functions {
 		}
 	}
 	
-	public static boolean WPRL_Account_Billing_Address(String Name[], String AddressDetails[], String CardDetails[], String App, String SCPath) throws Exception{
+	public static boolean WPRL_Account_Billing_Address(String Name[], String AddressDetails[], String CardDetails[], String App) throws Exception{
 		try{
 			if (WebDriver_Functions.isPresent(By.cssSelector("#billingaddress > div:nth-child(1) > div:nth-child(1) > span:nth-child(1)"))){
 				WebDriver_Functions.Click(By.cssSelector("#billingaddress > div:nth-child(1) > div:nth-child(1) > span:nth-child(1)"));
@@ -200,7 +198,7 @@ public class WPRL_Functions {
 				WebDriver_Functions.Type(By.id("bAddrContactNameTxtBox"), Name[0] + " " + Name[2]);
 				WebDriver_Functions.Click(By.id("bAddrSaveBtn"));
 				WebDriver_Functions.WaitForTextNot(By.id("bAddrUpdatedTxt"), ("Your updates have been saved."));
-				WebDriver_Functions.takeSnapShot(SCPath + "Invoice Billing Address Update.png");
+				WebDriver_Functions.takeSnapShot("Invoice Billing Address Update.png");
 				return true;
 			}else {
 				Helper_Functions.PrintOut("Warning: WPRL_Account_Billing_Address not executed as the billing section not loaded.", true);
@@ -218,7 +216,6 @@ public class WPRL_Functions {
 		boolean Nickname = false, FedExOnlineSolutions = false, ShippingAddress = false, CreditCard = false, Invoice = false;
 		String CountryCode = AddressDetails[6];
 		try {
-			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WPRL ";
 
 			WebDriver_Functions.Login(User, Password);
 			boolean UserPasskey = WebDriver_Functions.CheckifPasskey();
@@ -239,14 +236,14 @@ public class WPRL_Functions {
 			WebDriver_Functions.WaitPresent(By.id("accountsubheader"));
 			WebDriver_Functions.Click(By.xpath("//a[contains(text(),'View/Edit')]"));
 			//Edit Account Nickname
-			Nickname = WPRL_AccountNickname(UserPasskey, Helper_Functions.CurrentDateTime(), "WPRL", SCPath);
+			Nickname = WPRL_AccountNickname(UserPasskey, Helper_Functions.CurrentDateTime(), "WPRL");
 
 			//FedEx Online Solutions
 			try{
 				if (WebDriver_Functions.isPresent(By.xpath("(//p[@id='moduleHeader'])[3]"))){
 					WebDriver_Functions.ElementMatches(By.xpath("(//p[@id='moduleHeader'])[3]"), "FedEx Online Solutions", 0);
 					WebDriver_Functions.Click(By.cssSelector("#onlinesolutions > #show-hide > div.fx-toggler > #edit"));
-					WebDriver_Functions.takeSnapShot(SCPath + "OnlineSolutionsModel.png");
+					WebDriver_Functions.takeSnapShot("OnlineSolutionsModel.png");
 					WebDriver_Functions.Click(By.id("os_cancelbtn"));
 					FedExOnlineSolutions = true;
 				}else {
@@ -257,25 +254,23 @@ public class WPRL_Functions {
 			}
 
 			//Shipping Address section
-			ShippingAddress = WPRL_Account_ShippingAddress(Name, AddressDetails, "WPRL", SCPath);
+			ShippingAddress = WPRL_Account_ShippingAddress(Name, AddressDetails, "WPRL");
  					
 			//Credit Card and Billing Information
-			CreditCard = WPRL_Account_CreditCard(Name, AddressDetails, CardDetails, "WPRL", SCPath);
+			CreditCard = WPRL_Account_CreditCard(Name, AddressDetails, CardDetails, "WPRL");
 				
 			//Invoice Billing Address
-			Invoice = WPRL_Account_Billing_Address(Name, AddressDetails, CardDetails, "WPRL", SCPath);
+			Invoice = WPRL_Account_Billing_Address(Name, AddressDetails, CardDetails, "WPRL");
 		}catch (Exception e) {
 			throw e;
 		}
 		return new String[] {"Nickname: " + Nickname, "FedExOnlineSolutions: " + FedExOnlineSolutions, "ShippingAddress: " + ShippingAddress, "CreditCard:" + CreditCard, "Invoice:" + Invoice};
 	}//end WPRL_Contact
 
-	
 	public static String[] WPRL_FDM(String CountryCode, String User, String Password, String AddressDetails[], String CardDetails[], String Name[]) throws Exception{
 		//https://wwwdev.idev.fedex.com/apps/myprofile/deliverymanager/?locale=en_us&cntry_code=us
 		
 		try {
-			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WPRL ";
 			WebDriver_Functions.Login(User, Password);
 			WebDriver_Functions.ChangeURL("WPRL_FDM", CountryCode, false);
 			WebDriver_Functions.WaitPresent(By.id("notifAddNotificationsLink"));
@@ -309,7 +304,7 @@ public class WPRL_Functions {
 					throw new Exception();
 				}
 				WebDriver_Functions.WaitForText(By.id("rc_update_msg"), "Your updates have been saved.");
-				WebDriver_Functions.takeSnapShot(SCPath + "FDM contactEdit.png");
+				WebDriver_Functions.takeSnapShot("FDM contactEdit.png");
 			}catch(Exception e){
 				Helper_Functions.PrintOut("Not able to update contact information ", true);
 				WebDriver_Functions.ChangeURL("WPRL_FDM", CountryCode, false);
@@ -328,14 +323,14 @@ public class WPRL_Functions {
 				Assert.assertNotSame("Error Message\nFedEx cannot process your credit card request with the information entered. Please verify all credit card data and resubmit your request.",WebDriver_Functions.GetText(By.cssSelector("#general-errors-creditcard > p")));
 				WebDriver_Functions.WaitForText(By.id("cci_update_msg"), "Your updates have been saved.");
 				WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
-				WebDriver_Functions.takeSnapShot(SCPath + "FDMCC added.png");
+				WebDriver_Functions.takeSnapShot("FDMCC added.png");
 			    
 				//remove the credit card that was just added
 				try{
 					WebDriver_Functions.Click(By.id("cci_remove"));
 					WebDriver_Functions.Click(By.id("dialog-yes"));
 					WebDriver_Functions.WaitForText(By.id("cii_header_info"), "You can store your credit card information for future use when requesting special delivery options for shipments coming to your home address");
-					WebDriver_Functions.takeSnapShot(SCPath + "FDMCC removed.png");
+					WebDriver_Functions.takeSnapShot("FDMCC removed.png");
 				}catch(Exception e){
 					Helper_Functions.PrintOut("Not able to remove newly added CC ", true);
 				}
@@ -403,11 +398,11 @@ public class WPRL_Functions {
 				WebDriver_Functions.WaitPresent(By.id("notifEmailTxt"));
 				WebDriver_Functions.Type(By.id("notifEmailTxt"), Helper_Functions.MyEmail);
 
-				WebDriver_Functions.takeSnapShot(SCPath + "FDMNotif.png");
+				WebDriver_Functions.takeSnapShot("FDMNotif.png");
 				WebDriver_Functions.Click(By.id("notifSaveBtn"));
 				WebDriver_Functions.WaitForText(By.id("notifUpdatedTxt"), "Your updates have been saved.");
 				WebDriver_Functions.WaitForText(By.cssSelector("#notifSummaryNotificationTypesGrp > ul > li"), "An email to " + Helper_Functions.MyEmail + " when FedEx has a package addressed to me.");
-				WebDriver_Functions.takeSnapShot(SCPath + "FDMNotifSaved.png");
+				WebDriver_Functions.takeSnapShot("FDMNotifSaved.png");
 					    
 				// Remove the Notification made above
 	 			WebDriver_Functions.WaitPresent(By.linkText("View/Edit"));
@@ -415,7 +410,7 @@ public class WPRL_Functions {
 	 			WebDriver_Functions.Click(By.id("notifAddressedToMeChkBox"));
 	 			WebDriver_Functions.Click(By.id("notifSaveBtn"));
 	 			WebDriver_Functions.WaitForText(By.id("notifUpdatedTxt"), "Your updates have been saved.");
-				WebDriver_Functions.takeSnapShot(SCPath + "FDMNotifRemoved.png");
+				WebDriver_Functions.takeSnapShot("FDMNotifRemoved.png");
 	 		}catch(Exception e){
 	 			Helper_Functions.PrintOut("Not able to update the notification section " + e.getCause(), true);
 	 			WebDriver_Functions.ChangeURL("WPRL_FDM", CountryCode, false);
@@ -519,7 +514,6 @@ public class WPRL_Functions {
 		return new String[] {"Need to add details"};
 	}//end WPRL_FDM
 	 	
-	
 	public static boolean WPRL_FDM_RemoveNotifications(String CountryCode, String User, String Password){
 		try {
 			WebDriver_Functions.Login(User, Password);
@@ -560,14 +554,12 @@ public class WPRL_Functions {
 
 		return true;		
 	}
+	
 	//will except the Enrollment attempts as either "questions" or "postcard"
 	public static String[] WPRL_FDM_Enrollemnt(String User, String Password, String AddressDetails[], String Enrollment) throws Exception{
-	 		//https://wwwdev.idev.fedex.com/apps/myprofile/deliverymanager/?locale=en_us&cntry_code=us
-
 
 	 		try {
 	 			String CountryCode = AddressDetails[6];
-	 			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WPRL ";
 	 			//need to change login to only take country, and app
 	 			WebDriver_Functions.Login(User, Password);
 	 			// launch the browser and direct it to the Base URL
@@ -575,12 +567,12 @@ public class WPRL_Functions {
 	 			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
 	 			WebDriver_Functions.Click(By.id("signUpNow"));
 	 			if (Enrollment.contentEquals("postcard") && AddressDetails.length >= 8){
-	 				WERL_Enrollment(Enrollment, SCPath, AddressDetails[7]);
+	 				WERL_Enrollment(Enrollment, AddressDetails[7]);
 	 			}else{
 	 				if (Enrollment.contentEquals("postcard")){
 	 					Helper_Functions.PrintOut("Share id is not loaded for this address", true);
 	 				}
-	 				WERL_Enrollment("questions", SCPath, null);
+	 				WERL_Enrollment("questions", null);
 	 			}
 	 			
 
@@ -590,7 +582,7 @@ public class WPRL_Functions {
 		 			WebDriver_Functions.WaitPresent(By.id("regConfModuleEmailValue"));
 		 			WebDriver_Functions.Type(By.id("regConfModuleEmailValue"), Helper_Functions.MyEmail);
 
-		 			WebDriver_Functions.takeSnapShot(SCPath + "FDM Confirmation.png");
+		 			WebDriver_Functions.takeSnapShot("FDM Confirmation.png");
 		 			WebDriver_Functions.Click(By.id("regConfModuleModalSaveValue"));
 	 			}catch (Exception e) {}
 
@@ -614,7 +606,7 @@ public class WPRL_Functions {
 
  		try {
  			String CountryCode = AddressDetails[6];
- 			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WPRL ";
+
  			//need to change login to only take country, and app
  			WebDriver_Functions.Login(User, Password);
  			// launch the browser and direct it to the Base URL
@@ -627,10 +619,10 @@ public class WPRL_Functions {
  			WebDriver_Functions.Type(By.id("da_streettwo_input"), AddressDetails[1]);
  			WebDriver_Functions.Select(By.cssSelector("#da_city_select"), AddressDetails[2].toUpperCase(), "v");
  			WebDriver_Functions.Select(By.cssSelector("#da_state_input"), AddressDetails[4].toUpperCase(), "v");
- 			WebDriver_Functions.takeSnapShot(SCPath + "FDM Add Address.png");
+ 			WebDriver_Functions.takeSnapShot("FDM Add Address.png");
  			WebDriver_Functions.Click(By.id("da_savebtn"));
  			
- 			WERL_Enrollment(Enrollment, SCPath, AddressDetails[7]);
+ 			WERL_Enrollment(Enrollment, AddressDetails[7]);
  			WebDriver_Functions.WaitNotPresent(By.id("werlDialogDiv"));//wait for the WERL loading overlay to not be present
  			WebDriver_Functions.WaitPresent(By.id("regConfModuleDescription"));
  			if (AddressDetails[0].contentEquals("")){
@@ -646,25 +638,25 @@ public class WPRL_Functions {
 
 	public static void WPRL_FDM_CancelEnrollemnt(String User, String Password) throws Exception{
  		try {
- 			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WPRL ";
+
  			//need to change login to only take country, and app
  			WebDriver_Functions.Login(User, Password);
  			
  			WebDriver_Functions.ChangeURL("WPRL_FDM", "US", false);
  			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
  			WebDriver_Functions.Click(By.cssSelector("#cancelEnrollment > a"));
- 			WebDriver_Functions.takeSnapShot(SCPath + "FDM Cancelation.png");
+ 			WebDriver_Functions.takeSnapShot("FDM Cancelation.png");
  			WebDriver_Functions.Click(By.id("dialog-yes"));
  			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
  			WebDriver_Functions.ChangeURL("WPRL_FDM", "US", false);
  			WebDriver_Functions.WaitPresent(By.id("signUpNow"));
- 			WebDriver_Functions.takeSnapShot(SCPath + "FDM Cancelation Confim.png");
+ 			WebDriver_Functions.takeSnapShot("FDM Cancelation Confim.png");
  		}catch (Exception e) {
  			e.printStackTrace();
  		}
  	}//end WPRL_FDM_CancelEnrollemnt
 
-	public static boolean WERL_Enrollment(String Enrollment, String SCPath, String ShareID) throws Exception{
+	public static boolean WERL_Enrollment(String Enrollment, String ShareID) throws Exception{
 		if (Enrollment == null) {
 			Enrollment = "postcard";
 		}
@@ -706,7 +698,7 @@ public class WPRL_Functions {
 			for (int i = 0; i < 4; i++){//select the 4 questions
 				WebDriver_Functions.Click(By.xpath("(//input[@name='answer" + i + "'])[4]"));
 			}
-			WebDriver_Functions.takeSnapShot(SCPath + "FDM Questions.png");
+			WebDriver_Functions.takeSnapShot("FDM Questions.png");
 			WebDriver_Functions.Click(By.id("optionsExamModuleContinueValue"));		
 			break;
 		case "postcard":
@@ -714,7 +706,7 @@ public class WPRL_Functions {
 			Integer PinNumber = AgileApplications.MFAC.IssuePinExternal(uuid + "-" + ShareID, "POSTAL");
 			//confirmation on request submitted
 			WebDriver_Functions.WaitPresent(By.id("postcardConfModuleDescription"));
-			WebDriver_Functions.takeSnapShot(SCPath + "FDM Registration.png");	
+			WebDriver_Functions.takeSnapShot("FDM Registration.png");	
 			//enter the pin number
 			WebDriver_Functions.ChangeURL("WPRL_FDM", "US", false);
 			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present

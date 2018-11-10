@@ -2,11 +2,11 @@ package TestingFunctions;
 
 import org.openqa.selenium.By;
 import SupportClasses.DriverFactory;
-import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
 public class WRTT_Functions {
+	
 	public static String WRTT_Generate(int Service, boolean ZoneChart, boolean PDF, boolean List) throws Exception {
  		// [x][0] Service name
         // [x][1] Xpath of the checkbox of the service 
@@ -33,8 +33,7 @@ public class WRTT_Functions {
 			{"ExpressInternationalPremium","//*[@id='export_module']/div[2]/div/div[2]/div/div[3]/label/input"}
  		};
  		String Title = ""; //this is the title of the attempt <Z><Service><PDF/XLS><List/Retail>
- 		String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " " + Service;
- 		
+
 		try {
 			
 			WebDriver_Functions.ChangeURL("WRTT", "US", true);
@@ -80,7 +79,7 @@ public class WRTT_Functions {
 			}else if (!List && Service > 10){
 				return "international do not have retail rates";
 			}
-			WebDriver_Functions.takeSnapShot(SCPath + Title + ".png");
+			WebDriver_Functions.takeSnapShot(Title + ".png");
 			WebDriver_Functions.Click(By.id("requestsheetbtn"));
 
 			//download the rates
@@ -97,7 +96,7 @@ public class WRTT_Functions {
 					if (!PDF){
 						WebDriver_Functions.WaitForTextNot(By.tagName("body"), (""));
 						String bodyText = DriverFactory.getInstance().getDriver().findElement(By.tagName("body")).getText();
-						Helper_Functions.WriteToFile(bodyText, ".\\EclipseScreenshots\\WRTT\\" + SCPath + Title);
+						Helper_Functions.WriteToFile(bodyText, Helper_Functions.FileSaveDirectory + "\\WRTT\\" + Title);
 					}
 														
 					// Close child windows
@@ -110,11 +109,11 @@ public class WRTT_Functions {
 				if (DriverFactory.getInstance().getDriver().findElement(By.tagName("body")).getText().contains("Retail rates are not available for this service. Please select a different service.")){
 					//SameDay and InternationalNextFlight are not valid for retail rates
 					if ((Service == 0 || Service == 11 || Service == 17) && !List){
-						WebDriver_Functions.takeSnapShot(SCPath + Title + "RetailNotAvailable.png");
+						WebDriver_Functions.takeSnapShot(Title + "RetailNotAvailable.png");
 						Helper_Functions.PrintOut("WRTT " + Title + " Completed successfully since retail not available", true);
 						return Title;
 					}else{
-						WebDriver_Functions.takeSnapShot(SCPath + Title + " SC.png");
+						WebDriver_Functions.takeSnapShot(Title + " SC.png");
 						Helper_Functions.PrintOut("!!!Check for Title why rates not available", true);
 					}
 				}
@@ -131,8 +130,6 @@ public class WRTT_Functions {
  	
  	public static String WRTT_eCRV(String CountryCode) throws Exception {	 
 		try {
-			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WRTT " + CountryCode;
-			
 			try{
 				WebDriver_Functions.ChangeURL("WGRT", CountryCode, true);
 				WebDriver_Functions.Click(By.id("wgrt.rateTools.menu_div"));
@@ -157,7 +154,7 @@ public class WRTT_Functions {
 			WebDriver_Functions.WaitForText(By.xpath("//div[@id='container']/div[3]/div/div/ul/li/label/a[2]"), "FedEx Service Guide");
 			String FedEx_Service_Guide = DriverFactory.getInstance().getDriver().findElement(By.xpath("//div[@id='container']/div[3]/div/div/ul/li/label/a[2]")).getAttribute("href"); 
 			WebDriver_Functions.WaitForText(By.xpath("//div[@id='container']/div[3]/div/div/ul/li[2]/label"), "FedEx reserves the right to modify its services and zone structure without notice.");
-			WebDriver_Functions.takeSnapShot(SCPath + "eCRV.png");
+			WebDriver_Functions.takeSnapShot("eCRV.png");
 			//quick check to see if land on page
 			try{
 				WebDriver_Functions.Click(By.cssSelector("button.fx-btn-primary"));

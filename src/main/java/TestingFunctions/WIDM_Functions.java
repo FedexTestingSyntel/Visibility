@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.openqa.selenium.By;
 import SupportClasses.DriverFactory;
-import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
@@ -13,23 +12,20 @@ public class WIDM_Functions{
 	public static String strPassword = "Test1234";
 	
 	public static String WIDM_Registration(String AddressDetails[], String Name[], String UserId) throws Exception{
-		String Time = Helper_Functions.CurrentDateTime();
 		String CountryCode = AddressDetails[6];
-		String SCPath = Time + " L" + Environment.getInstance().getLevel() + " WIDM ";
-
 		try {
 			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
 			WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
 
 			//Enter all of the form data
 			WIDM_Registration_Input(AddressDetails, Name, UserId);
-			WebDriver_Functions.takeSnapShot(SCPath + "RegistrationConfirmation.png");
+			WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 			WebDriver_Functions.Click(By.id("createUserID"));
 
 			//confirmation page
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b"), UserId);
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-			WebDriver_Functions.takeSnapShot(SCPath + "Registration WIDM Confirmation.png");
+			WebDriver_Functions.takeSnapShot("Registration WIDM Confirmation.png");
 			String ReturnValue[] = new String[] {UserId, strPassword, UUID};
 			Helper_Functions.WriteUserToExcel(UserId, strPassword);
 			
@@ -42,9 +38,7 @@ public class WIDM_Functions{
 	}//end WIDM_Registration
 
 	public static String WIDM_RegistrationEFWS(String AddressDetails[], String Name[], String UserId) throws Exception{
-		String Time = Helper_Functions.CurrentDateTime();
 		String CountryCode = AddressDetails[6];
-		String SCPath = Time + " L" + Environment.getInstance().getLevel() + " WIDM ";
 
 		try {
 			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
@@ -57,12 +51,12 @@ public class WIDM_Functions{
 			String EfwsEmail = "robmus50@yahoo.com";
 			WebDriver_Functions.Type(By.id("email"), EfwsEmail);
 			WebDriver_Functions.Type(By.id("retypeEmail"), EfwsEmail);
-			WebDriver_Functions.takeSnapShot(SCPath + "Registration EFWS.png");
+			WebDriver_Functions.takeSnapShot(".png");
 			WebDriver_Functions.Click(By.id("createUserID"));
 
 			//Check that the correct error message appears.
 			WebDriver_Functions.WaitForText(By.cssSelector("#module\\2e registration\\2e _expanded > table > tbody > tr:nth-child(2) > td > b"), "Your registration request is not approved based on the information submitted.");
-			WebDriver_Functions.takeSnapShot(SCPath + "Registration EFWS Message.png");
+			WebDriver_Functions.takeSnapShot("Message.png");
 			Helper_Functions.PrintOut("WIDM_Registration_EFWS Completed with: " + EfwsEmail, false);
 			return UserId + " " + EfwsEmail;
 		}catch (Exception e) {
@@ -117,9 +111,7 @@ public class WIDM_Functions{
 	}//end WIDM_Registration_Input
 
 	public static String WIDM_Registration_ErrorMessages(String AddressDetails[], String Name[], String UserId) throws Exception{
-		String Time = Helper_Functions.CurrentDateTime();
-		String CountryCode = AddressDetails[6];
-		String SCPath = Time + " L" + Environment.getInstance().getLevel() + " WIDM ";
+		String CountryCode = AddressDetails[6];;
 
 		try {
 			ArrayList<String> ResultsList = new ArrayList<String>();
@@ -131,7 +123,7 @@ public class WIDM_Functions{
 
 			WebDriver_Functions.Type(By.id("firstName"), "!!!First");
 			WebDriver_Functions.Click(By.id("createUserID"));
-			WebDriver_Functions.takeSnapShot(SCPath + "Error Messages.png");
+			WebDriver_Functions.takeSnapShot("Error Messages.png");
 			ResultsList.add(WebDriver_Functions.ElementMatches(By.id("firstspecialchar"), "Invalid character in First name.", 1014978) + " 1014978");
 			ResultsList.add(WebDriver_Functions.ElementMatches(By.id("lastempty"), "Last name is required.", 1014980) + " 1014980");
 			ResultsList.add(WebDriver_Functions.ElementMatches(By.id("emailempty"), "Email address is required.", 1) + " 1");
@@ -178,25 +170,23 @@ public class WIDM_Functions{
 			Helper_Functions.PrintOut("Cannot login with user id as null. Recieved from " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
 			throw new Exception("Userid required.");
 		}
-		String Time = Helper_Functions.CurrentDateTime();
-		String SCPath = Time + " L" + Environment.getInstance().getLevel() + " WIDM ";
 		
 		WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
 
 		WebDriver_Functions.Click(By.name("forgotUidPwd"));//click the forgot password link
 		WebDriver_Functions.Type(By.name("userID"), strUserName);
-		WebDriver_Functions.takeSnapShot(SCPath + "Password Reset " + NewPassword + ".png");
+		WebDriver_Functions.takeSnapShot("Password Reset " + NewPassword + ".png");
 		WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded\']/table/tbody/tr/td[1]/form/table/tbody/tr[6]/td/input[2]"));//click option 1 for reset through user id
 		WebDriver_Functions.Click(By.xpath("//*[@id='module.resetpasswordoptions._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[5]/td/input"));//click the option 1 button and try to answer with secret question
 		WebDriver_Functions.Type(By.name("answer"), SecretAnswer);
-		WebDriver_Functions.takeSnapShot(SCPath + "Reset Password Secret " + NewPassword + ".png");
+		WebDriver_Functions.takeSnapShot("Reset Password Secret " + NewPassword + ".png");
 		WebDriver_Functions.Click(By.name("action1"));
 		
 		//wait for the new password text box appears. If doesn't with throw and error and try the next password
 		WebDriver_Functions.WaitPresent(By.name("password"));
 		WebDriver_Functions.Type(By.name("password"),NewPassword);
 		WebDriver_Functions.Type(By.name("retypePassword"),NewPassword);
-		WebDriver_Functions.takeSnapShot(SCPath + "New Password " + NewPassword + ".png");
+		WebDriver_Functions.takeSnapShot("New Password " + NewPassword + ".png");
 		WebDriver_Functions.Click(By.name("confirm"));
 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td"), "Thank you. Your password has been reset");
 		boolean loginAttempt = WebDriver_Functions.Login(strUserName, NewPassword);
@@ -214,9 +204,6 @@ public class WIDM_Functions{
 	}//end ResetPasswordWIDM
 
 	public static String Reset_Password_WIDM_Email(String strUserName, String Password) throws Exception{
-		String Time = Helper_Functions.CurrentDateTime();
-		String SCPath = Time + " L" + Environment.getInstance().getLevel() + " WIDM ";
-
 		try{
 			WebDriver_Functions.Login(strUserName, Password);
 
@@ -233,7 +220,7 @@ public class WIDM_Functions{
 			//click the option 1 button and try to answer with secret question
 			WebDriver_Functions.Click(By.name("action2"));
 			WebDriver_Functions.WaitPresent(By.id("linkaction"));
-			WebDriver_Functions.takeSnapShot(SCPath + "Password Reset Email.png");
+			WebDriver_Functions.takeSnapShot(".png");
 			Helper_Functions.PrintOut("Completed ResetPasswordWIDM using " + strUserName + ". An email has been triggered to " + Email, false);
 
 			return strUserName + Email;
@@ -244,17 +231,14 @@ public class WIDM_Functions{
 	}//end ResetPasswordWIDM
 
 	public static String Forgot_User_WIDM(String Email) throws Exception{
-		String Time = Helper_Functions.CurrentDateTime();
-		String SCPath = Time + " L" + Environment.getInstance().getLevel() + " WIDM ";
-
 		try{	
 			WebDriver_Functions.ChangeURL("WIDM", "US", true);
 			WebDriver_Functions.Click(By.name("forgotUidPwd"));
 			//wait for text box for user id to appear
 			WebDriver_Functions.Type(By.name("email"),Email);
-			WebDriver_Functions.takeSnapShot(SCPath + "Forgot User Id.png");
+			WebDriver_Functions.takeSnapShot(".png");
 			WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[3]/form/table/tbody/tr[6]/td/input[2]"));
-			WebDriver_Functions.takeSnapShot(SCPath + "Forgot User Confirmation.png");
+			WebDriver_Functions.takeSnapShot("Confirmation.png");
 			
 			Helper_Functions.PrintOut("Completed Forgot User Confirmation using " + Email, false);
 			return "Email sent to + " + Email;

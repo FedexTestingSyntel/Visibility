@@ -26,11 +26,11 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
 public class Helper_Functions{
-	public static String MyEmail = "accept@gmail.com", myPhone = "9011111111";
+	public static String MyEmail = "accept@gmail.com", myPhone = "9011111111", myPassword = "Test1234";
 	//public static String MyEmail = "accept@fedex.com";
 	public static String BaseDirectory = System.getProperty("user.dir").substring(0, System.getProperty("user.dir").lastIndexOf("\\") + 1);
-	public static String FileSaveDirectory = BaseDirectory + "\\EclipseScreenshots";
-	public static String DataDirectory = BaseDirectory + "\\Data";
+	public static String FileSaveDirectory = BaseDirectory + "EclipseScreenshots";
+	public static String DataDirectory = BaseDirectory + "Data";
 	
 	public static String Passed = "Passed", Failed = "Fail", Skipped = "Skipped";
 	
@@ -399,7 +399,7 @@ public class Helper_Functions{
 	
 	public static ArrayList<String[]> LoadTaxInfo(String CountryCode){
 		if (TaxInfoList.isEmpty()) {
-			TaxInfoList = getExcelData(DataDirectory + "\\VatNumbers.xls", "TaxIds"); 
+			TaxInfoList = getExcelData(DataDirectory + "\\TaxData.xls", "TaxIds"); 
 		}
 		
 		ArrayList<String[]> countrySpecificTaxInfo = new ArrayList<String[]>();
@@ -716,6 +716,10 @@ public class Helper_Functions{
 	        if(Character.digit(s.charAt(i),radix) < 0) return false;
 	    }
 	    return true;
+	}
+	
+	public static String ScreenshotBase() {
+		return Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " ";
 	}
 
 }//End Class

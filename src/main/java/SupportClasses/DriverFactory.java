@@ -136,4 +136,21 @@ public class DriverFactory{
      public WebDriverWait getDriverQuickWait(){
   	   return quickwait.get();
      }
+     
+     //This is a thread local reference of teh screenshot directory.
+     //need to implement this later
+    static  ThreadLocal<String> ScreenshotPath = new ThreadLocal<String>(){
+    	   @Override
+    	   synchronized protected String initialValue(){
+    		   return "";
+    	   }
+     };
+     
+     public static String getScreenshotPath(){
+    	 return ScreenshotPath.get();
+     }
+    
+     public static void setScreenshotPath(String SC){
+    	 ScreenshotPath.set(SC);
+     }
 }

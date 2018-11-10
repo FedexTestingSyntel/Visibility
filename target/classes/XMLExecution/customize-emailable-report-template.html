@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+</style>
+</head>
+<body>
+
+	<h2>$TestNG_Custom_Report_Title$</h2>
+	
+    <table>
+      <thead>
+        <tr>
+          <th>Test Name</th>
+          <th># Total Methods</th>
+          <th># Passed</th>
+          <th># Skipped</th>
+          <th># Failed</th>
+          <th>Browser</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Execute Time (hh:mm:ss:ms)</th>
+          <th>Included Groups</th>
+          <th>Excluded Groups</th>
+        </tr>
+       </thead> 
+       $Test_Case_Summary$
+    </table>
+	
+	</br></br></br>
+	
+	<table id="overview">
+      <thead>
+        <tr>
+          <th>Scenarios</th>
+          <th>Status</th>
+          <th>Comments</th>
+        </tr>
+      </thead> 
+      $Test_Case_Overview$
+    </table>
+	
+	</br></br></br>
+	
+    <table id="summary">
+      <thead>
+        <tr>
+          <th>Application</th>
+          <th>Method</th>
+          <th>Start Time</th>
+          <th>Execution Time (hh:mm:ss:ms)</th>
+          <th>Parameter</th>
+          <th>Reporter Message</th>
+        </tr>
+      </thead> 
+      $Test_Case_Detail$
+    </table>
+  </body>
+  </html>

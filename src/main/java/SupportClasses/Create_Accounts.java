@@ -19,12 +19,12 @@ public class Create_Accounts{
 	private static String ECAMuserid;
 	private static String ECAMpassword;
 	static ArrayList<String[]> TaxData = new ArrayList<String[]>();
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "5";
 	
 	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		ArrayList<String[]> PersonalData = new ArrayList<String[]>();
-		PersonalData = Helper_Functions.getExcelData(".\\Data\\Load_Your_UserIds.xls",  "Data");//create your own file with the specific data
+		PersonalData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\Load_Your_UserIds.xls",  "Data");//create your own file with the specific data
 		for(String s[]: PersonalData) {
 			if (s[0].contentEquals("ECAM")) {
 				ECAMuserid = s[1];
@@ -33,11 +33,11 @@ public class Create_Accounts{
 		}
 		
 		//load tax data
-		TaxData = Helper_Functions.getExcelData(".\\Data\\TaxData.xls",  "TaxIds");//create your own file with the specific data
+		TaxData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TaxData.xls",  "TaxIds");//create your own file with the specific data
 			
 		List<Object[]> data = new ArrayList<Object[]>();
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-		AddressDetails = Helper_Functions.getExcelData(".\\Data\\AddressDetails.xls",  "Accounts");//load the relevant information from excel file.
+		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Accounts");//load the relevant information from excel file.
 		
 		for (int i=0; i < LevelsToTest.length(); i++) {
 			String Level = String.valueOf(LevelsToTest.charAt(i));
@@ -57,6 +57,7 @@ public class Create_Accounts{
 				}
 				
 				
+				/*
 				//if need to test single country.
 				if (CountryList[6].contentEquals("US")) {  //use if trying to create for specific country.
 					for (int k = 0 ; k < data.size(); k++) {
@@ -66,6 +67,7 @@ public class Create_Accounts{
 					data.add( new Object[] {Level, CountryList, j});
 					break;
 				}
+				*/
 				 
 				
 				
@@ -115,7 +117,7 @@ public class Create_Accounts{
 
 			Accounts = CreateAccountNumbers(Level, AccountDetails, AddressDetails);
 			Helper_Functions.PrintOut(Accounts, false);
-			Helper_Functions.writeExcelData(".\\Data\\AddressDetails.xls", "Accounts", Accounts, Row, 8 + Integer.valueOf(Level));
+			Helper_Functions.writeExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "Accounts", Accounts, Row, 8 + Integer.valueOf(Level));
 			Helper_Functions.PrintOut(Accounts, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -211,7 +213,9 @@ public class Create_Accounts{
 			if (WebDriver_Functions.isVisable(By.id("nomatch"))) {
 				WebDriver_Functions.Click(By.id("nomatch"));
 			}
+			
 			Helper_Functions.Wait(4); //need to remove later, issue is page not passing the regulatory section.
+			
 			//Regulatory Informaiton page
 			if (WebDriver_Functions.isVisable(By.id("next_reg"))) {
 				String StateTax = null, CountryTax = null;
@@ -238,6 +242,10 @@ public class Create_Accounts{
 			if (WebDriver_Functions.isVisable(By.id("nomatch"))) {
 				WebDriver_Functions.Click(By.id("nomatch"));
 			}
+			
+			//Added due to L5 issue, there could be a {Alert text : Address could not be validated because of internal error.} ignore it
+			Helper_Functions.Wait(4); //need to remove later
+			WebDriver_Functions.CloseAlertPopUp();
 			
 			//Payment Information
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");

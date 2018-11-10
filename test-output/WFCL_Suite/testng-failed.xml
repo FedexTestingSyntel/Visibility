@@ -11,6 +11,7 @@
         <methods>
           <include name="beforeClass"/>
           <include name="AccountRegistration_INET" invocation-numbers="0"/>
+          <include name="AccountRegistration_WDPA" invocation-numbers="0"/>
           <include name="AccountRegistration_Admin" invocation-numbers="0"/>
           <include name="AccountRegistration_Linkage" invocation-numbers="0 1"/>
         </methods>

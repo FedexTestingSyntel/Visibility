@@ -1,4 +1,4 @@
-package TestingFunctions;
+package WFCL_Application;
 
 import java.util.Arrays;
 import org.openqa.selenium.By;
@@ -9,30 +9,29 @@ import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
 public class WFCL_Functions{
-	public static String strPassword = "Test1234";
 	
 	public static String[] CreditCardRegistrationEnroll(String EnrollmentID, String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId, boolean BusinessAccount, String TaxInfo[]) throws Exception{
 		try {
 			String CountryCode = AddressDetails[6];
-			WebDriver_Functions.ChangeURL("INET", CountryCode, true);//go to the INET page just to load the cookies
-			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, CountryCode, false);//go to the INET page just to load the cookies
-			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WFCL " + EnrollmentID + " CC ";
-			WebDriver_Functions.takeSnapShot(SCPath + "Discount Page.png");
+			//go to the INET page just to load the cookies
+			WebDriver_Functions.ChangeURL("INET", CountryCode, true);
+			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, CountryCode, false);
+
+			WebDriver_Functions.takeSnapShot("Discount Page.png");
 			
 			if (WebDriver_Functions.isPresent(By.name("Apply Now"))) {
-				WebDriver_Functions.Click(By.name("Apply Now"));//apply link from marketing page
+				//apply link from marketing page
+				WebDriver_Functions.Click(By.name("Apply Now"));
 			}
 			
 			if (WebDriver_Functions.isPresent(By.linkText("Finish registering for a FedEx account"))) {
-				WebDriver_Functions.Click(By.linkText("Finish registering for a FedEx account"));    //  //*[@id="signupnow"]
+				WebDriver_Functions.Click(By.linkText("Finish registering for a FedEx account"));
 			}else if (WebDriver_Functions.isPresent(By.name("signupnow"))) {
-				WebDriver_Functions.Click(By.name("signupnow"));    //  //*[@id="signupnow"]
+				WebDriver_Functions.Click(By.name("signupnow"));
 			}
 
 			//Step 1: Enter the contact information.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, SCPath + "ContactInformation.png", true); //enters all of the details
-
-			//if ((AddressDetails[6].contentEquals("US") || AddressDetails[6].contentEquals("CA"))){WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'openAccount')]"));//select the open account radio button}
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
 
 			//Step 2: Enter the credit card details
 			WebDriver_Functions.WaitPresent(By.id("CCType"));
@@ -40,48 +39,66 @@ public class WFCL_Functions{
 			if(TaxInfo != null && !TaxInfo[3].contains("Valid")) {
 				Multicard = false;
 			}
-			CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, SCPath + "Information.png", BusinessAccount, Multicard, TaxInfo);
+			CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
 			
 			//Step 3: Confirmation Page
 			//Domestic and international will be different  
 			WebDriver_Functions.WaitOr_TextToBe(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId, By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr[1]/td[2]"),  UserId);
 			String AccountNumber = WebDriver_Functions.GetText(By.xpath("//*[@id='acctNbr']"));
-			WebDriver_Functions.takeSnapShot(SCPath + "Confirmation.png");
+			WebDriver_Functions.takeSnapShot("Confirmation.png");
 
 			boolean InetFlag = false, AdminFlag = false;
 
 			//Check the INET page
-			try{
-				WebDriver_Functions.ChangeURL("INET", CountryCode, false);
-				WebDriver_Functions.WaitForTextPresentIn(By.id("module.from._collapsed"), Name[0] + " " + Name[2]);
-				WebDriver_Functions.takeSnapShot(SCPath + "INET working.png");
-				InetFlag = true;
-			}catch (Exception e2){
-				Helper_Functions.PrintOut("User not registered for INET", true);
-			}
+			InetFlag = Check_INET_Enrolled(CountryCode);
 
 			//Check the Administration page
-			try{
-				WebDriver_Functions.ChangeURL("WADM", CountryCode, false);
-				WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + Name[0] + " " + Name[2]);//note, will be company name if business account.
-				WebDriver_Functions.takeSnapShot(SCPath + "Admin working.png");
-				AdminFlag = true;
-			}catch (Exception e2){
-				Helper_Functions.PrintOut("User not registered for WADM", true);
-			}
-
+			AdminFlag = Check_WADM_Enrolled(CountryCode);
+			
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-			Helper_Functions.PrintOut("Finished CreditCardRegistrationEnroll  " + UserId + "/" + strPassword + "--" + AccountNumber + "--" + UUID, true);
+			Helper_Functions.PrintOut("Finished CreditCardRegistrationEnroll  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
 
 			String LastFourOfCC = CreditCardDetils[1].substring(CreditCardDetils[1].length() - 4, CreditCardDetils[1].length());
 			String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, LastFourOfCC, "INET:" + InetFlag, "Admin:" + AdminFlag};
-			Helper_Functions.WriteUserToExcel(UserId, strPassword);
+			
+			Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
 			return ReturnValue;
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}//end CreditCardRegistrationEnroll
+	
+	public static boolean Check_INET_Enrolled(String CountryCode) {
+		try{
+			WebDriver_Functions.ChangeURL("INET", CountryCode, false);
+			//wait for the from section to be loaded
+			WebDriver_Functions.WaitPresent(By.id("module.from._headerTitle"));
+			//wait for the to section to be loaded
+			WebDriver_Functions.WaitPresent(By.id("module.to._headerTitle"));
+			//wait for the package and shipment details section to load.
+			WebDriver_Functions.WaitPresent(By.id("module.psd._headerTitle"));
+			return true;
+		}catch (Exception e2){
+			Helper_Functions.PrintOut("User not registered for INET", true);
+			return false;
+		}
+	}
+	
+	public static boolean Check_WADM_Enrolled(String CountryCode) {
+		try{
+			WebDriver_Functions.ChangeURL("WADM", CountryCode, false);
+			//wait for the WADM pages to load
+			WebDriver_Functions.WaitPresent(By.id("main"));
+			WebDriver_Functions.WaitPresent(By.id("adminsScrollTable123"));
+			WebDriver_Functions.WaitPresent(By.id("addAdmins"));
+			WebDriver_Functions.WaitPresent(By.id("main"));
+			return true;
+		}catch (Exception e2){
+			Helper_Functions.PrintOut("User not registered for WADM", true);
+			return false;
+		}
+	}
 
 	//will return a string array with 0 as the user id and 1 as the password, 2 is the uuid
 	public static String[] WFCL_UserRegistration(String UserId, String[] Name, String AddressDetails[]) throws Exception{
@@ -90,18 +107,16 @@ public class WFCL_Functions{
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
 			WebDriver_Functions.Click(By.id("registernow"));
 			
-			String Time = Helper_Functions.CurrentDateTime();
-			String SCPath = Time + " L" + Environment.getInstance().getLevel() + CountryCode + " WFCL ";
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId,  SCPath + "ContactInformation.png", true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
 
 			//Confirmation page
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/h2"), "Login Information");
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr/td[2]"), UserId);
-			WebDriver_Functions.takeSnapShot(SCPath + "RegistrationConfirmation.png");
+			WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-			Helper_Functions.PrintOut("Finished WFCL_UserRegistration  " + UserId + "/" + strPassword + " -- " + UUID, true);
+			Helper_Functions.PrintOut("Finished WFCL_UserRegistration  " + UserId + "/" + Helper_Functions.myPassword + " -- " + UUID, true);
 			String ReturnValue[] = new String[]{UserId, UUID};
-			Helper_Functions.WriteUserToExcel(UserId, strPassword);//Write User to file for later reference
+			Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);//Write User to file for later reference
 			return ReturnValue;
 		}catch (Exception e) {
 			if (e.getMessage().contains("[(@name='accountType') and (@value = 'noAccount')]")){
@@ -111,41 +126,38 @@ public class WFCL_Functions{
 		}
 	}//end WFCL_UserRegistration
 	
-	public static String WFCL_AccountRegistration_INET(String Name[], String UserId, String AccountNumber, String AddressDetails[], boolean AdminReg) throws Exception{
-		boolean InetFlag = false, AdminFlag = false;
-		Helper_Functions.PrintOut("Attempting to register with " + AccountNumber, true);
+	public static String WFCL_AccountRegistration_INET(String Name[], String UserId, String AccountNumber, String AddressDetails[]) throws Exception{
+		boolean InetFlag = false;
 		String CountryCode = AddressDetails[6].toUpperCase();
 
-		String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + CountryCode + " WFCL ";
-		
 		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
 			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
 			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, SCPath + "ContactInformation.png", true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
 		}else{
 			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, SCPath + "ContactInformation.png", true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
 		}
 		
 
 		//Step 2 Account information
 		String AccountNickname = AccountNumber + "_" + CountryCode;
-		WFCL_AccountEntryScreen(AccountNumber, AccountNickname, SCPath);
+		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
 
 		if (CountryCode.contains("US")){
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
 			//WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), AccountNumber);    //will need to update due to account masking
 		}
-		WebDriver_Functions.takeSnapShot(SCPath + "RegistrationConfirmation.png");
+		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 		//WebDriver_Functions.ChangeURL("https://" + strLevelURL + "/shipping/shipEntryAction.do?origincountry=" + CountryCode.toLowerCase());
 		WebDriver_Functions.ChangeURL("INET", CountryCode, false);
 		//Register the account number for INET
 		if (CountryCode.contains("US") || CountryCode.contains("CA")){
 			WebDriver_Functions.WaitPresent(By.name("accountNumberOpco"));
 			WebDriver_Functions.Select(By.name("accountNumberOpco"), "1",  "i");
-			WebDriver_Functions.takeSnapShot(SCPath + "INET Account Selection.png");
+			WebDriver_Functions.takeSnapShot("INET Account Selection.png");
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			//need to add clicking continue button
 
@@ -160,71 +172,70 @@ public class WFCL_Functions{
 				Helper_Functions.PrintOut("Not able to Verify data on INET registration page.", true);
 			}
 			
-			WebDriver_Functions.takeSnapShot(SCPath + "INET Confirmation.png");
+			WebDriver_Functions.takeSnapShot("INET Confirmation.png");
 			WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
 			WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
 		}
 
-		if (AdminReg){//register the user to be pass-key 
-			WebDriver_Functions.ChangeURL("AdminReg", CountryCode, false);
-			try{
-				if (WebDriver_Functions.isPresent(By.name("accountNumber"))){ 
-					WebDriver_Functions.Select(By.name("accountNumber"), "1", "i");
-					WebDriver_Functions.Click(By.name("submit"));	
-				}
-
-				if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
-					InvoiceOrCCValidaiton();
-				}
-			}catch (Exception e2){
-				Helper_Functions.PrintOut("Failure with admin registriaton.", true);
-			};
-			WebDriver_Functions.WaitPresent(By.name("companyName"));
-			String CompanyName = "Company" + Helper_Functions.CurrentDateTime();
-			WebDriver_Functions.Type(By.name("companyName"), CompanyName);
-			WebDriver_Functions.takeSnapShot(SCPath + "WADM CompanyName.png");
-			WebDriver_Functions.Click(By.className("buttonpurple"));
-
-			//confirmation page
-			try{
-				WebDriver_Functions.WaitPresent(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > h3"));
-				Helper_Functions.PrintOut("Registered for Admin. Current URL:" + DriverFactory.getInstance().getDriver().getCurrentUrl(), true);
-				WebDriver_Functions.takeSnapShot(SCPath + "WADM Registration Confirmaiton.png");
-				WebDriver_Functions.Click(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > p:nth-child(6) > a"));//click shipping admin link
-				WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + CompanyName);
-				AdminFlag = true;
-				//remove the account number from local storage as it is now locked to the company that was just created.
-				Helper_Functions.RemoveAccountFromExcel(AccountNumber);
-				
-			}catch (Exception e) {
-				Helper_Functions.PrintOut("Not able to register for admin " + DriverFactory.getInstance().getDriver().getCurrentUrl(), true);
-			}
-		}
 		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + strPassword + "--" + AccountNumber + "--" + UUID, true);
-		String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag, "Admin:" + AdminFlag};
-		Helper_Functions.WriteUserToExcel(UserId, strPassword);
+		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
+		String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag};
+		Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
 		return Arrays.toString(ReturnValue);
 	}//end WFCL_AccountRegistration
 
+	public static boolean Admin_Registration(String CountryCode, String AccountNumber) {
+		try{
+			WebDriver_Functions.ChangeURL("AdminReg", CountryCode, false);
+			
+			if (WebDriver_Functions.isPresent(By.name("accountNumber"))){ 
+				WebDriver_Functions.Select(By.name("accountNumber"), "1", "i");
+				WebDriver_Functions.Click(By.name("submit"));	
+			}
+
+			if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
+				InvoiceOrCCValidaiton();
+			}
+			
+			WebDriver_Functions.WaitPresent(By.name("companyName"));
+			String CompanyName = "Company" + Helper_Functions.CurrentDateTime();
+			WebDriver_Functions.Type(By.name("companyName"), CompanyName);
+			WebDriver_Functions.takeSnapShot("WADM CompanyName.png");
+			WebDriver_Functions.Click(By.className("buttonpurple"));
+
+
+			WebDriver_Functions.WaitPresent(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > h3"));
+			Helper_Functions.PrintOut("Registered for Admin. Current URL:" + DriverFactory.getInstance().getDriver().getCurrentUrl(), true);
+			WebDriver_Functions.takeSnapShot("WADM Registration Confirmaiton.png");
+			WebDriver_Functions.Click(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > p:nth-child(6) > a"));//click shipping admin link
+			WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + CompanyName);
+			//remove the account number from local storage as it is now locked to the company that was just created.
+			Helper_Functions.RemoveAccountFromExcel(AccountNumber);
+		}catch (Exception e2){
+			Helper_Functions.PrintOut("Failure with admin registriaton.", true);
+			return false;
+		};
+		
+		return true;
+	}
+	
 	public static String WFCL_AccountLinkage(String Name[], String UserId, String AccountNumber, String AddressDetails[], String AccountNickname) throws Exception{
 		Helper_Functions.PrintOut("Attempting to register with " + AccountNumber, true);
 		String CountryCode = AddressDetails[6].toUpperCase();
 
-		String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + CountryCode + " WFCL ";
 		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
 			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
 			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, SCPath + "ContactInformation.png", true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
 		}else{
 			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, SCPath + "ContactInformation.png", true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
 		}
 
 		//Step 2 Account information
-		WFCL_AccountEntryScreen(AccountNumber, AccountNickname, SCPath);
+		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
 
 		if (CountryCode.contains("US")){
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
@@ -238,12 +249,12 @@ public class WFCL_Functions{
 			//the below was updated due to account masking and story 385883
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), AccountNumberCheck);
 		}
-		WebDriver_Functions.takeSnapShot(SCPath + "RegistrationConfirmation.png");
+		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 		
 		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		Helper_Functions.PrintOut("Finished WFCL_AccountLinkage  " + UserId + "/" + strPassword + "--" + AccountNumber + "--" + UUID, true);
-		Helper_Functions.WriteUserToExcel(UserId, strPassword);
-		String ReturnValue[] = new String[] {UserId, strPassword, AccountNumber, UUID};
+		Helper_Functions.PrintOut("Finished WFCL_AccountLinkage  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
+		Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
+		String ReturnValue[] = new String[] {UserId, Helper_Functions.myPassword, AccountNumber, UUID};
 		return Arrays.toString(ReturnValue);
 	}//end WFCL_AccountRegistration
 
@@ -252,25 +263,24 @@ public class WFCL_Functions{
  			String CountryCode = AddressDetails[6].toUpperCase();
  			WebDriver_Functions.ChangeURL("WDPA", CountryCode, true);
  			WebDriver_Functions.Click(By.name("signupnow"));
- 			String Time = Helper_Functions.CurrentDateTime();
- 			String SCPath = Time + " L" + Environment.getInstance().getLevel() + CountryCode + " WFCL ";
- 			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, SCPath+ "ContactInformation.png", true); //enters all of the details
+ 	
+ 			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
  			
 	 		//Step 2 Account information
 	 		String AccountNickname = AccountNumber + "_" + CountryCode;
-	 		WFCL_AccountEntryScreen(AccountNumber, AccountNickname, SCPath);
+	 		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
 	 		
 	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b"), UserId);
 	 		//*[@id="content"]/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b
-	 		WebDriver_Functions.takeSnapShot(SCPath + "RegistrationConfirmation.png");
+	 		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 		    
 		    WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
 		    WebDriver_Functions.WaitPresent(By.id("module.account._headerTitle"));
 		    
 		    String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_WDPA  " + UserId + "/" + strPassword + "--" + AccountNumber + "--" + UUID, true);
+		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_WDPA  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
 		    String ReturnValue[] = new String[] {UserId, AccountNumber, UUID};
-		    Helper_Functions.WriteUserToExcel(UserId, strPassword);
+		    Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
 		    return ReturnValue;
  		}catch (Exception e) {
  			e.printStackTrace();
@@ -284,10 +294,10 @@ public class WFCL_Functions{
 			WebDriver_Functions.Click(By.name("forgotUidPwd"));
 			//wait for text box for user id to appear
 			WebDriver_Functions.Type(By.name("email"),Email);
-			String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WFCL ";
-			WebDriver_Functions.takeSnapShot(SCPath + "Forgot User Id.png");
+
+			WebDriver_Functions.takeSnapShot("Forgot User Id.png");
 			WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[3]/form/table/tbody/tr[6]/td/input[2]"));
-			WebDriver_Functions.takeSnapShot(SCPath + "Forgot User Confirmation.png");
+			WebDriver_Functions.takeSnapShot("Forgot User Confirmation.png");
 			Helper_Functions.PrintOut("Completed Forgot User Confirmation using " + Email + ". An email has been triggered and that test must be completed manually by to see the user list.", true);
 			return Email;
 		}catch(Exception e){
@@ -298,7 +308,7 @@ public class WFCL_Functions{
 
 	//AddressDetails[] =  {Streetline1 - 0, Streetline2 - 1, City - 2, State - 3, StateCode - 4, postalCode - 5, countryCode - 6};
 	//String Name[] = {FirstName, Middle Name, Last Name}
-	public static boolean WFCL_ContactInfo_Page(String Name[], String AddressDetails[], String UserId, String ScreenshotName, boolean Submit) throws Exception{
+	public static boolean WFCL_ContactInfo_Page(String Name[], String AddressDetails[], String UserId, boolean Submit) throws Exception{
 		WebDriver_Functions.CheckBodyText("Country/Territory");
 		WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
 
@@ -330,8 +340,8 @@ public class WFCL_Functions{
 		String strPhone = Helper_Functions.ValidPhoneNumber(AddressDetails[6]);
 		WebDriver_Functions.Type(By.id("phone"), strPhone);
 		WebDriver_Functions.Type(By.id("uid"), UserId);
-		WebDriver_Functions.Type(By.id("password"), strPassword);
-		WebDriver_Functions.Type(By.id("retypePassword"), strPassword);
+		WebDriver_Functions.Type(By.id("password"), Helper_Functions.myPassword);
+		WebDriver_Functions.Type(By.id("retypePassword"), Helper_Functions.myPassword);
 		WebDriver_Functions.Select(By.id("reminderQuestion"), "What is your mother's first name?", "t");
 		WebDriver_Functions.Type(By.id("reminderAnswer"), "mom");
 
@@ -341,7 +351,7 @@ public class WFCL_Functions{
 
 		Helper_Functions.PrintOut("Name: " + Arrays.toString(Name) + "    UserID:" + UserId, true);
 
-		WebDriver_Functions.takeSnapShot(ScreenshotName + "ContactInformation.png");
+		WebDriver_Functions.takeSnapShot("ContactInformation.png");
 		//if the submit flag is sent as true will submit the page.
 		if (Submit) {
 			if (WebDriver_Functions.isPresent(By.id("iacceptbutton"))) {
@@ -355,7 +365,7 @@ public class WFCL_Functions{
 		return true;
 	}//end WFCL_ContactInfo_Page
 
-	public static String[] WFCL_CC_Page(String[] CreditCardDetils, String ShippingAddress[], String BillingAddress[], String ScreenshotPath, boolean BusinessRegistration, boolean MultiCard, String TaxInfo[]) throws Exception{
+	public static String[] WFCL_CC_Page(String[] CreditCardDetils, String ShippingAddress[], String BillingAddress[], boolean BusinessRegistration, boolean MultiCard, String TaxInfo[]) throws Exception{
 		String CountryCode = BillingAddress[6];
 		Helper_Functions.PrintOut("WFCL_CC_Page recieved: " + CreditCardDetils[0] + ", " + CountryCode + " From: " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
 		WebDriver_Functions.GetCookieValue("fcl_uuid");
@@ -377,7 +387,9 @@ public class WFCL_Functions{
 			if (WebDriver_Functions.isPresent(By.xpath("//*[@id='billing-address']/label[17]/span[1]"))) {
 				WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[17]/span[1]"), "Country/Territory", 116577);
 			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='billing-address']/label[18]/span[1]"))) {//Non US field
-				WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[18]/span[1]"), "Country/Territory", 116577);
+				//not sure if this is valid for other regions WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[18]/span[1]"), "Country/Territory", 116577);
+				//when checking BR seeing 
+				WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[20]/span[1]"), "Country/Territory", 116577);
 			}
 			
 			//if the zip code does not match what was enterd on previous page then update. This was change as part of the TNT features for the Jan19CL.
@@ -397,20 +409,18 @@ public class WFCL_Functions{
 			WebDriver_Functions.Type(By.name("company"), "Company Name Here");
 		}
 
-		if (WebDriver_Functions.isPresent(By.name("indTaxID")) || WebDriver_Functions.isPresent(By.name("indStateTaxID"))) {
-			if (WebDriver_Functions.isPresent(By.name("indTaxID"))) {
-				WebDriver_Functions.Type(By.name("indTaxID"), TaxInfo[1]); 
-			}
-			if (WebDriver_Functions.isPresent(By.name("indStateTaxID"))) {
-				WebDriver_Functions.Type(By.name("indStateTaxID"), TaxInfo[2]);
-			}else if (WebDriver_Functions.isPresent(By.name("vatNo"))) {
-				WebDriver_Functions.Type(By.name("vatNo"), TaxInfo[2]);
-			}
+		if (WebDriver_Functions.isPresent(By.name("indTaxID"))) {
+			WebDriver_Functions.Type(By.name("indTaxID"), TaxInfo[1]); 
+		}
+		if (WebDriver_Functions.isPresent(By.name("indStateTaxID"))) {
+			WebDriver_Functions.Type(By.name("indStateTaxID"), TaxInfo[2]);
+		}else if (WebDriver_Functions.isPresent(By.name("vatNo"))) {
+			WebDriver_Functions.Type(By.name("vatNo"), TaxInfo[2]);
 		}
 
 		WebDriver_Functions.Select(By.id("CCType"), CreditCardDetils[0], "t");
 
-		WebDriver_Functions.takeSnapShot(ScreenshotPath);
+		WebDriver_Functions.takeSnapShot("CreditCard Entry");
 		WebDriver_Functions.Click(By.id("Complete"));
 
 		try {
@@ -422,23 +432,23 @@ public class WFCL_Functions{
 		if (WebDriver_Functions.isPresent(By.id("monthExpiry")) && MultiCard) {
 			Helper_Functions.PrintOut("Error on Credit Card entry screen. Attempting to register with differnet credit card", true);
 			String NewCreditCard[] = Helper_Functions.LoadCreditCard(CreditCardDetils[1]);
-			return WFCL_CC_Page(NewCreditCard, ShippingAddress, BillingAddress, ScreenshotPath, BusinessRegistration, MultiCard, TaxInfo);
+			return WFCL_CC_Page(NewCreditCard, ShippingAddress, BillingAddress, BusinessRegistration, MultiCard, TaxInfo);
 		}
 		//longwait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]")));//check that confirmation page loads
 		return CreditCardDetils; //return the credit card used
 	}//end WFCL_CC_Page
 
-	public static boolean WFCL_AccountEntryScreen(String AccountNumber, String AccountNickname, String Path) throws Exception{
+	public static boolean WFCL_AccountEntryScreen(String AccountNumber, String AccountNickname) throws Exception{
 		if (WebDriver_Functions.isPresent(By.id("accountNumber"))){
 			WebDriver_Functions.Type(By.id("accountNumber"), AccountNumber);
 			WebDriver_Functions.Type(By.id("nickName"), AccountNickname);
-			WebDriver_Functions.takeSnapShot(Path + "AccountInformation.png");
+			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.id("createUserID"));
 			WebDriver_Functions.WaitNotPresent(By.id("nickName"));
 		}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
 			WebDriver_Functions.Type(By.name("newAccountNumber"), AccountNumber);
 			WebDriver_Functions.Type(By.name("newNickName"), AccountNickname);
-			WebDriver_Functions.takeSnapShot(Path + "AccountInformation.png");
+			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.name("submit"));
 			WebDriver_Functions.WaitNotPresent(By.name("newNickName"));
 		}
@@ -487,8 +497,8 @@ public class WFCL_Functions{
     		//click the forgot password link
     		WebDriver_Functions.Click(By.name("forgotUidPwd"));
     		WebDriver_Functions.Type(By.name("userID"), strUserName);
-    		String SCPath = Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " WFCL ";
-    		WebDriver_Functions.takeSnapShot(SCPath + "Password Reset.png");
+    		
+    		WebDriver_Functions.takeSnapShot("Password Reset.png");
             //click the option 1 button and try to answer with secret question
     		//WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[6]/td/input[2]"));//updated the below as not working on 10-29-18
     		WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[6]/td/span[2]/input"));
@@ -497,20 +507,20 @@ public class WFCL_Functions{
     		WebDriver_Functions.Click(By.xpath("//*[@id='module.resetpasswordoptions._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[5]/td/input"));
 
             WebDriver_Functions.Type(By.name("answer"), SecretAnswer);
-            WebDriver_Functions.takeSnapShot(SCPath + "Reset Password Secret.png");
+            WebDriver_Functions.takeSnapShot("Reset Password Secret.png");
             WebDriver_Functions.Click(By.name("action1"));
             
 			WebDriver_Functions.Type(By.name("password"),NewPassword);
 			WebDriver_Functions.Type(By.name("retypePassword"),NewPassword);
-			WebDriver_Functions.takeSnapShot(SCPath + "New Password.png");
+			WebDriver_Functions.takeSnapShot("New Password.png");
 			WebDriver_Functions.Click(By.name("confirm"));
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td/h1"), "Thank you.");
 			boolean loginAttempt = WebDriver_Functions.Login(strUserName, NewPassword);
 			Helper_Functions.PrintOut(strUserName + " has had the password changed to " + NewPassword, true);
-			if (NewPassword.contentEquals(strPassword) && loginAttempt && Thread.currentThread().getStackTrace()[2].getMethodName().contentEquals("WFCL_Secret_Answer")){
+			if (NewPassword.contentEquals(Helper_Functions.myPassword) && loginAttempt && Thread.currentThread().getStackTrace()[2].getMethodName().contentEquals("WFCL_Secret_Answer")){
 		    	return strUserName + " " + NewPassword;
 			}else if (loginAttempt){
-				return WFCL_Secret_Answer(CountryCode, strUserName, strPassword, SecretAnswer);//change the password back
+				return WFCL_Secret_Answer(CountryCode, strUserName, Helper_Functions.myPassword, SecretAnswer);//change the password back
 			}else{
 				throw new Exception("Error.");
 			}
@@ -525,13 +535,13 @@ public class WFCL_Functions{
     		WebDriver_Functions.Login(strUserName, Password);
 
     		String Email = "--Could not retrieve email--";
-    		String SCPath = Helper_Functions.CurrentDateTime()+ " L" + Environment.getInstance().getLevel() + " WFCL ";
+    		
     		try {
     			WebDriver_Functions.ChangeURL("WPRL", CountryCode, false);
     			WebDriver_Functions.WaitPresent(By.id("ci_fullname_val"));
     			String UserDetails = WebDriver_Functions.GetText(By.id("ci_fullname_val"));
     			Email = UserDetails.substring(UserDetails.lastIndexOf('\n') + 1, UserDetails.length());
-    			WebDriver_Functions.takeSnapShot(SCPath + "Password Reset Email UserDetails.png");
+    			WebDriver_Functions.takeSnapShot("Password Reset Email UserDetails.png");
     		}catch (Exception e) {
     			Helper_Functions.PrintOut("Error " + e.getMessage() + "   " + Email, true);
     		}
@@ -545,7 +555,7 @@ public class WFCL_Functions{
     		//*[@id="ada_forgotpwdcontinue"]
     		//click the option 1 button and try to answer with secret question
     		WebDriver_Functions.Click(By.name("action2"));
-    		WebDriver_Functions.takeSnapShot(SCPath + "Password Reset Email.png");
+    		WebDriver_Functions.takeSnapShot("Password Reset Email.png");
     		Helper_Functions.PrintOut("Completed ResetPasswordWFCL using " + strUserName + ". An email has been triggered and that test must be completed manually by " + Email, true);
     					
     		return Email;
@@ -574,15 +584,16 @@ public class WFCL_Functions{
 		try {
 			WebDriver_Functions.Login(UserID, Password);
 			WebDriver_Functions.ChangeURL("WADM", "US", false);
-			String Time = Helper_Functions.CurrentDateTime();
-			String SCPath = Time + " L" + Environment.getInstance().getLevel() + " WFCL ";
-			WebDriver_Functions.takeSnapShot(SCPath + "UserTable before invite.png");
+			
+			WebDriver_Functions.takeSnapShot("UserTable before invite.png");
 			
 			WebDriver_Functions.Click(By.id("createNewUsers"));
 			WebDriver_Functions.WaitNotPresent(By.id("loading-div"));//wait for the loading overlay to not be present
 			WebDriver_Functions.Type(By.name("userfirstName"), Name[0]);
 			WebDriver_Functions.Type(By.name("middleName"), Name[1]);
 			WebDriver_Functions.Type(By.name("userlastName"), Name[2]);
+			
+			String Time = Helper_Functions.CurrentDateTime();
 			String UniqueID = Time.substring(Time.length() - 13, 10);
 			WebDriver_Functions.Type(By.name("userAlias"), UniqueID);//unique filler value as the time stamp of attempt
 			WebDriver_Functions.Type(By.name("email"), Email);
@@ -592,7 +603,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.Click(By.id("addAccounts"));
 			WebDriver_Functions.Select(By.id("userAdminTypeSelect"), "company", "v");//make the user company admin user role
 			WebDriver_Functions.Click(By.id("inviteUsers"));
-			WebDriver_Functions.takeSnapShot(SCPath + "Invitation.png");
+			WebDriver_Functions.takeSnapShot("Invitation.png");
 			WebDriver_Functions.Click(By.id("userSave"));
 			
 			WebDriver_Functions.WaitNotPresent(By.id("loading-div"));//wait for the loading overlay to not be present
@@ -602,7 +613,7 @@ public class WFCL_Functions{
 			//Check if the invited user is listed on user tab
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id=\"tableBody\"]/tr/td[1]"), Name[0]); //check first name
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id=\"tableBody\"]/tr/td[2]"), Name[2]); //check last name
-			WebDriver_Functions.takeSnapShot(SCPath + "Invitation Sent.png");
+			WebDriver_Functions.takeSnapShot("Invitation Sent.png");
 			
 			return new String[] {Email, UniqueID};
 		}catch (Exception e) {
@@ -616,39 +627,38 @@ public class WFCL_Functions{
 		Helper_Functions.PrintOut("Attempting to register with " + AccountNumber, true);
 		String CountryCode = AddressDetails[6].toUpperCase();
 
-		String SCPath = Helper_Functions.CurrentDateTime() + " " + Environment.getInstance().getLevel() + CountryCode + " WFCL ";
 		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
 			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
 			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, SCPath + "ContactInformation.png", true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, true); //enters all of the details
 		}else{
 			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, SCPath + "ContactInformation.png", true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, true); //enters all of the details
 		}
 
 		//Step 2 Account information
 		//String AccountNickname = AccountNumber + "_" + CountryCode;
-		WFCL_AccountEntryScreentemp(AccountNumber, AccountNickname, SCPath);
+		WFCL_AccountEntryScreentemp(AccountNumber, AccountNickname);
 		
 		if (CountryCode.contains("US")){
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
 			//WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), AccountNumber);    //will need to update due to account masking
 		}
-		WebDriver_Functions.takeSnapShot(SCPath + "RegistrationConfirmation.png");
+		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 		//WebDriver_Functions.ChangeURL("https://" + strLevelURL + "/shipping/shipEntryAction.do?origincountry=" + CountryCode.toLowerCase());
 		WebDriver_Functions.ChangeURL("INET", CountryCode, false);
 		//Register the account number for INET
 		if (CountryCode.contains("US") || CountryCode.contains("CA")){
 			WebDriver_Functions.WaitPresent(By.name("accountNumberOpco"));
 			WebDriver_Functions.Select(By.name("accountNumberOpco"), "1",  "i");
-			WebDriver_Functions.takeSnapShot(SCPath + "INET Account Selection.png");
+			WebDriver_Functions.takeSnapShot("INET Account Selection.png");
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			//need to add clicking continue button
 
 			//address mismatch page should appear, enter the correct details.
-			AddressMismatchPage(AddressDetails, SCPath + "INET ");
+			AddressMismatchPage(AddressDetails);
 			
 			//Confirmation from INET registration
 			try{//EACI form
@@ -661,7 +671,7 @@ public class WFCL_Functions{
 				Helper_Functions.PrintOut("Not able to Verify data on INET registration page.", true);
 			}
 			
-			WebDriver_Functions.takeSnapShot(SCPath + "INET Confirmation.png");
+			WebDriver_Functions.takeSnapShot("INET Confirmation.png");
 			WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
 			WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
 		}
@@ -674,7 +684,7 @@ public class WFCL_Functions{
 			}
 
 			//address mismatch page should appear, enter the correct details.
-			AddressMismatchPage(AddressDetails, SCPath + "WADM ");
+			AddressMismatchPage(AddressDetails);
 			
 			if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
 				InvoiceOrCCValidaiton();
@@ -685,14 +695,14 @@ public class WFCL_Functions{
 		WebDriver_Functions.WaitPresent(By.name("companyName"));
 		String CompanyName = "Company" + Helper_Functions.CurrentDateTime();
 		WebDriver_Functions.Type(By.name("companyName"), CompanyName);
-		WebDriver_Functions.takeSnapShot(SCPath + "WADM CompanyName.png");
+		WebDriver_Functions.takeSnapShot("WADM CompanyName.png");
 		WebDriver_Functions.Click(By.className("buttonpurple"));
 
 		//confirmation page
 		try{
 			WebDriver_Functions.WaitPresent(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > h3"));
 			Helper_Functions.PrintOut("Registered for Admin. Current URL:" + DriverFactory.getInstance().getDriver().getCurrentUrl(), true);
-			WebDriver_Functions.takeSnapShot(SCPath + "WADM Registration Confirmaiton.png");
+			WebDriver_Functions.takeSnapShot("WADM Registration Confirmaiton.png");
 			WebDriver_Functions.Click(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > p:nth-child(6) > a"));//click shipping admin link
 			WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + CompanyName);
 			AdminFlag = true;
@@ -704,22 +714,22 @@ public class WFCL_Functions{
 		}
 		
 		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + strPassword + "--" + AccountNumber + "--" + UUID, true);
+		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
 		String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag, "Admin:" + AdminFlag};
-		Helper_Functions.WriteUserToExcel(UserId, strPassword);
+		Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
 		return Arrays.toString(ReturnValue);
 	}//end WFCL_AccountRegistration
     
-	public static boolean WFCL_AccountEntryScreentemp(String AccountNumber, String AccountNickname, String Path) throws Exception{
+	public static boolean WFCL_AccountEntryScreentemp(String AccountNumber, String AccountNickname) throws Exception{
 		if (WebDriver_Functions.isPresent(By.id("accountNumber"))){
 			WebDriver_Functions.Type(By.id("accountNumber"), AccountNumber);
 			WebDriver_Functions.Type(By.id("nickName"), AccountNickname);
-			WebDriver_Functions.takeSnapShot(Path + "AccountInformation.png");
+			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.id("createUserID"));
 		}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
 			WebDriver_Functions.Type(By.name("newAccountNumber"), AccountNumber);
 			WebDriver_Functions.Type(By.name("newNickName"), AccountNickname);
-			WebDriver_Functions.takeSnapShot(Path + "AccountInformation.png");
+			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.name("submit"));
 		}
 
@@ -746,7 +756,7 @@ public class WFCL_Functions{
 		return true;
 	}//end WFCL_AccountEntryScreen
 	
-	public static void AddressMismatchPage(String AddressDetails[], String SCPath) throws Exception {
+	public static void AddressMismatchPage(String AddressDetails[]) throws Exception {
 		WebDriver_Functions.WaitPresent(By.name("address1"));
 		WebDriver_Functions.Type(By.name("address1"), AddressDetails[0]);
 		WebDriver_Functions.Type(By.name("address2"), AddressDetails[1]);
@@ -757,7 +767,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.Select(By.name("country"), AddressDetails[6].toLowerCase(), "v");
 		}catch (Exception e) {}
 		
-		WebDriver_Functions.takeSnapShot(SCPath + "Address Mismatch.png");
+		WebDriver_Functions.takeSnapShot("Address Mismatch.png");
 		WebDriver_Functions.Click(By.name("submit"));
 	}
 	
@@ -772,32 +782,31 @@ public class WFCL_Functions{
  		}
  		
  		try {
- 			String SCPath = Helper_Functions.CurrentDateTime()+ " L" + Environment.getInstance().getLevel() + " WFCL GFBO ";
  			WebDriver_Functions.ChangeURL("GFBO", CountryCode, false);
 
  			//wait for secret questions to load.
  			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));
 
  			//enters all of the details
-	 		WFCL_ContactInfo_Page(Name, AddressDetails, UserId, SCPath + "ContactInformation.png", true);
+	 		WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true);
 		    
 	 		//Step 2 Account information
 	 		String AccountNickname = AccountNumber + "_" + AddressDetails[6];
-	 		WFCL_AccountEntryScreen(AccountNumber, AccountNickname, SCPath);
+	 		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
 	 		
 		    //Confirmation page for FBO
 	 		//wait.until(ExpectedConditions.presenceOfElementLocated(By.id("selectbillingmedium1:j_idt24")));//the header for FBO
 	 		if (WebDriver_Functions.CheckBodyText("FedEx Billing Online Registration")) {
 	 			throw new Exception("Error on Confirmaiton page");
 	 		}
-	 		WebDriver_Functions.takeSnapShot(SCPath + "Confirmation.png");
+	 		WebDriver_Functions.takeSnapShot("Confirmation.png");
 	 		WebDriver_Functions.Click(By.id("selectbillingmedium1:continueId"));  
 	 		
 	 		//Registration Confirmation Page
 	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), UserId);
 	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b"), AccountNumber);
 	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[2]/table/tbody/tr[2]/td/b"), AccountNickname);
-	 		WebDriver_Functions.takeSnapShot(SCPath + "RegistrationConfirmation.png");
+	 		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 
 			//Make sure the link on the confirmation page navigates to the correct page.
 	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td/table/tbody/tr[2]/td"), "        FedEx Billing Online");			
@@ -805,19 +814,19 @@ public class WFCL_Functions{
 			
 			//The GFBO confirmation page based on if account number is set for invoices.
 			if (!DriverFactory.getInstance().getDriver().findElements(By.id("splash2or3optionsForm:splash3OptionsSubmit")).isEmpty()){
-				WebDriver_Functions.takeSnapShot(SCPath + "Congratulations.png");
+				WebDriver_Functions.takeSnapShot("Congratulations.png");
 				WebDriver_Functions.Click(By.id("splash2or3optionsForm:splash3OptionsSubmit"));
 			}
 			
 			//Will now land on the GFBO page
 			//wait for the GFBO page to load
 			WebDriver_Functions.WaitPresent(By.id("mainContentId:accSmyCmdLink"));
-			WebDriver_Functions.takeSnapShot(SCPath + "Page.png");
+			WebDriver_Functions.takeSnapShot("Page.png");
 			
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_GFBO  " + UserId + "/" + strPassword + "--" + AccountNumber + "--" + UUID, false);
+		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_GFBO  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, false);
 		    String ReturnValue[] = new String[] {UserId, AccountNumber, UUID};
-		    Helper_Functions.WriteUserToExcel(UserId, strPassword);
+		    Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
 		    return ReturnValue;
  		}catch (Exception e) {
  			throw e;
@@ -870,7 +879,7 @@ public class WFCL_Functions{
  			
  			//Login with the user.       //need to recheck if this is expected.
  			WebDriver_Functions.Type(By.name("username"), UserId);
- 			WebDriver_Functions.Type(By.name("password"), strPassword);
+ 			WebDriver_Functions.Type(By.name("password"), Helper_Functions.myPassword);
  			WebDriver_Functions.Click(By.name("login"));
  			
  			//The InSight confirmation page
@@ -933,7 +942,7 @@ public class WFCL_Functions{
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.id("mainContentId:accSmyCmdLink")));//wait for the GFBO page to load
 			captureScreenShot("WFCL", WFCLPath + "Page.png");
 	 		
-		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_GFBO  " + UserId + "/" + strPassword + "--" + AccountNumber);
+		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_GFBO  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber);
  		}catch (Exception e) {
  			GeneralFailure(e);
  		}
@@ -1052,7 +1061,7 @@ public class WFCL_Functions{
 		    	Helper_Functions.PrintOut("Warning, Rewards only has connection on L6/Lp unable to validte rewards page.");
 		    }
 		    
-		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + strPassword + "--" + AccountNumber + "--" + UUID);
+		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID);
 		    String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "Rewards:" + RewardsFlag};
 		    WriteUserToFileAppend(ReturnValue);//Write User to file for later reference
 		    return ReturnValue;

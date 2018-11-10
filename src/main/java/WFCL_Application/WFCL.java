@@ -1,4 +1,4 @@
-package AgileApplications;
+package WFCL_Application;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
@@ -22,13 +22,13 @@ public class WFCL{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		
 		CountryList = Environment.getCountryList("smoke");
 		//need to fix this and make dynamic;
 		//CountryList = new String[][]{{"US", "United States"}, {"CA", "Canada"}};
 		//CountryList = new String[][]{{"CA", "Canada"}};
 		//CountryList = new String[][]{{"US", "United States"}};
-		//CountryList = new String[][]{{"BR", "Brazil"}};
+		//CountryList = new String[][]{{"JP", "Japan"}};
+		CountryList = new String[][]{{"BR", "Brazil"}};
 		//CountryList = new String[][]{{"SI", "Slovenia"}, {"RO", "Romania"}};
 	}
 	
@@ -53,7 +53,7 @@ public class WFCL{
 		    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs(TNTValidation[j]);
 		    			ArrayList<String[]> TaxInfo = Helper_Functions.LoadTaxInfo(TNTValidation[j]);
 		    			for (String Tax[]: TaxInfo) {
-		    				data.add(new Object[] {Level, EnrollmentID[0], TNTValidation[j], Tax});
+		    				data.add(new Object[] {Level, EnrollmentID[0], TNTValidation[j], Tax, true});
 		    			}
 					}
 		    		break;
@@ -135,22 +135,23 @@ public class WFCL{
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + Thread.currentThread().getId() + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
-			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, false, null);
+			String TaxInfo[] = Helper_Functions.LoadTaxInfo(CountryCode).get(0);
+
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, false, TaxInfo);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
-	@Test(dataProvider = "dp", enabled = false)
-	public void TNT_Vat_Validation(String Level, String EnrollmentID, String CountryCode, String VatNumber[]) {
+	@Test(dataProvider = "dp", enabled = true)
+	public void TNT_Vat_Validation(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
-			boolean BuisnessAccount = true;
-				//may need to add a check here later for personal or business
+
 			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, BuisnessAccount, VatNumber);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
@@ -177,7 +178,8 @@ public class WFCL{
 			String UserName[] = Helper_Functions.LoadDummyName("INET", Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + Account + CountryCode);
 			String AddressDetails[] = Helper_Functions.AccountDetails(Account);
-			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Account, AddressDetails, true);
+			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Account, AddressDetails);
+			Result += WFCL_Functions.Admin_Registration(CountryCode, Account);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -192,7 +194,7 @@ public class WFCL{
 			String AddressDetails[] = Helper_Functions.AccountDetails(Account);
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + "Inet" + CountryCode);
-			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Account, AddressDetails, false);
+			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Account, AddressDetails);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -261,7 +263,7 @@ public class WFCL{
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + "GFBO" + CountryCode);
 			
-			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Account, AddressDetails, false);
+			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Account, AddressDetails);
 
 			Result = Arrays.toString(WFCL_Functions.WFCL_AccountRegistration_GFBO(ContactName, UserID, Account, AddressDetails));
 			Helper_Functions.PrintOut(Result, false);

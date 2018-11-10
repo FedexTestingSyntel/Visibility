@@ -20,6 +20,8 @@ public class TestNG_TestListener implements ITestListener{
 		for(String s[]: PersonalData) {
 			if(s[0].contentEquals("MYEMAIL")){
 				Helper_Functions.MyEmail = s[1];
+			}else if(s[0].contentEquals("DEFAULTPASSWORD")){
+				Helper_Functions.myPassword = s[1];
 			}
 		}
 		
@@ -38,7 +40,11 @@ public class TestNG_TestListener implements ITestListener{
         		Environment.getInstance().setLevel(inputArgs[0].toString());
             }
         }
-        //Helper_Functions.PrintOut(Environment.getInstance().getLevel(), true);
+        
+		//set the base screenshot name that will be used through the test.
+		DriverFactory.setScreenshotPath(Helper_Functions.ScreenshotBase() + arg0.getName() + " ");
+		Helper_Functions.PrintOut(DriverFactory.getScreenshotPath(), false);
+       // Helper_Functions.PrintOut(Environment.getInstance().getLevel(), true);
     }
 
     @Override

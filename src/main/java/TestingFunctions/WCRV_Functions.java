@@ -13,7 +13,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import SupportClasses.DriverFactory;
-import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
@@ -38,7 +37,6 @@ public class WCRV_Functions{
  		Service = Service.toUpperCase();
 
 		String Time = Helper_Functions.CurrentDateTime();
-		String SCPath = Time + " L" + Environment.getInstance().getLevel() + " WCRV ";
 		try {
 			WebDriver_Functions.Login(User, Password);
 				
@@ -150,7 +148,7 @@ public class WCRV_Functions{
 			}
 			
 			RateSheetName =  WebDriver_Functions.GetValue(By.id("rateSheetName"));//in case the full name may not fit field
-			WebDriver_Functions.takeSnapShot(SCPath + RateSheetName + ".png");
+			WebDriver_Functions.takeSnapShot(RateSheetName + ".png");
 			Helper_Functions.PrintOut("RateSheet " + RateSheetName + " has been attempted", true);
 			WebDriver_Functions.Click(By.id("wcrv-submit"));
 			WebDriver_Functions.WaitForText(By.cssSelector("h1"), "Rate Sheet Request Confirmation");
@@ -158,7 +156,7 @@ public class WCRV_Functions{
 			String RateSheetID = WebDriver_Functions.GetText(By.xpath("//div[@id='modalWindowSuccess']/div/div/div/div[2]/label[2]/b")).substring(2);
 			//.substring(2) is to remove the "# " of the rate sheet id.
 			Helper_Functions.PrintOut(RateSheetName + " was successfully submitted with ID of " + RateSheetID, true);
-			WebDriver_Functions.takeSnapShot(SCPath + " " + RateSheetName + "Conf.png");
+			WebDriver_Functions.takeSnapShot(RateSheetName + "Conf.png");
 
 			WebDriver_Functions.Click(By.id("success-ok"));
 			WebDriver_Functions.WaitPresent(By.cssSelector("th.sorting"));
@@ -172,7 +170,7 @@ public class WCRV_Functions{
 			
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='manageTable']/tbody/tr[1]/td[5]"), RateSheetID);
 			WebDriver_Functions.WaitForText(By.xpath("//table[@id='manageTable']/tbody/tr/td[8]"), "Pending");
-			WebDriver_Functions.takeSnapShot(SCPath + " " + RateSheetName + "RSHT.png");
+			WebDriver_Functions.takeSnapShot(RateSheetName + "RSHT.png");
 		
 			return new String[] {User, RateSheetName, RateSheetID};
 			//need to create a new thread here to wait 10mins then check if rate sheet is completed then download.
