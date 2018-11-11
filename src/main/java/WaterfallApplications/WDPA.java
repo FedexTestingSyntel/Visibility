@@ -19,7 +19,7 @@ import TestingFunctions.WDPA_Functions;
 public class WDPA extends WDPA_Functions{
 	
 	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "5";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -44,17 +44,17 @@ public class WDPA extends WDPA_Functions{
 		    	case "Pickup_ExpressFright"://need to fix this later, not for all countries.
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				//if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WDPA")) {
+		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WDPA")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
-		    				//}
+		    				}
 		    			}
 					}
 		    	break;
 		    	case "Pickup_LTLFreight":    //update this later to restrict based on country
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Freight")) {
+		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Freight") || Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("LTL")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
@@ -131,54 +131,3 @@ public class WDPA extends WDPA_Functions{
 		}
 	}//end WDPAPickup_ExpressFright
 }
-
-
-/*
-
-	
-	@Test
-	public void WDPAPickup_LTLFreight_Anonymous() {
-		String Confirmation = null;
-		try {
-			Confirmation = WDPALTLPickup(LoadAddress("US"), "", "");
-		} catch (Exception e) {
-			Assert.fail();
-		}
-		PassOrFail = true;
-		ResultsList.set(ResultsList.size() - 1, UpdateArrayList(ResultsList.get(ResultsList.size() - 1), 1, "Anonymous " + Confirmation));
-	}
-
-	
-	
-	
-	//@Test
-	public void WDPAPickup_GroundLoop() {
-		for (int i = 1;;i++) {
-			String Result[] = null;
-			try {
-				PrintOut("Attempt: " + i + "  @@@@@@@#######", false);
-				//WDPAPickupDetailed("US", "L3ePRSTest116308843", strPassword, "ground", "CompanyNameHere", "John Doe", "9011111111", LoadAddress("US", "CA", "3901 INGLEWOOD AVE"), null, "INET");
-				WDPAPickupDetailed("US", "L3ePRSTest116308843", strPassword, "ground", "CompanyNameHere", strTodaysDate, "9011111111", LoadAddress("US", "CA", "4252 Camino Del Rio N."), null, "INET");
-				PassOrFail = true;
-				ResultsList.set(ResultsList.size() - 1, UpdateArrayList(ResultsList.get(ResultsList.size() - 1), 1, Arrays.toString(Result)));
-				Thread.sleep(60000);
-	
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	
-	
-	
-	/////////////////////////////////////////////////////////////////////////////////////////
-	//Relevant funcitons for the above
-	////////////////////////////////////////////////////////////////////////////////////////
-	
-
-	
-}
-
-
-*/

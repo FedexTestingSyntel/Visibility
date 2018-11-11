@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="7" total="8" passed="1">
+<testng-results skipped="0" failed="0" ignored="4" total="5" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="86127" started-at="2018-11-10T16:43:12Z" finished-at="2018-11-10T16:44:38Z">
+  <suite name="Default suite" duration-ms="133475" started-at="2018-11-11T05:11:36Z" finished-at="2018-11-11T05:13:50Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="86127" started-at="2018-11-10T16:43:12Z" finished-at="2018-11-10T16:44:38Z">
-      <class name="WFCL_Application.WFCL_SmokeTest">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WFCL_Application.WFCL_SmokeTest@3571b748]" name="beforeClass" is-config="true" duration-ms="158" started-at="2018-11-10T16:43:13Z" finished-at="2018-11-10T16:43:13Z">
+    <test name="Default test" duration-ms="133475" started-at="2018-11-11T05:11:36Z" finished-at="2018-11-11T05:13:50Z">
+      <class name="WaterfallApplications.WDPA">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WaterfallApplications.WDPA@fd07cbb]" name="beforeClass" is-config="true" duration-ms="153" started-at="2018-11-11T05:11:36Z" finished-at="2018-11-11T05:11:37Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="UserRegistration(java.lang.String, java.lang.String)[pri:0, instance:WFCL_Application.WFCL_SmokeTest@3571b748]" name="UserRegistration" duration-ms="83160" started-at="2018-11-10T16:43:13Z" data-provider="dp" finished-at="2018-11-10T16:44:36Z">
+        <test-method status="PASS" signature="Pickup_Express(java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:WaterfallApplications.WDPA@fd07cbb]" name="Pickup_Express" duration-ms="132997" started-at="2018-11-11T05:11:37Z" data-provider="dp" finished-at="2018-11-11T05:13:50Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[2]]>
+                <![CDATA[7]]>
               </value>
             </param>
             <param index="1">
@@ -23,11 +23,21 @@
                 <![CDATA[US]]>
               </value>
             </param>
+            <param index="2">
+              <value>
+                <![CDATA[ProdMacCCSept18]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- UserRegistration -->
-      </class> <!-- WFCL_Application.WFCL_SmokeTest -->
+        </test-method> <!-- Pickup_Express -->
+      </class> <!-- WaterfallApplications.WDPA -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

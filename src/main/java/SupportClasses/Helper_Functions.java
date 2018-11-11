@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 import org.openqa.selenium.By;
+
+import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -720,6 +722,47 @@ public class Helper_Functions{
 	
 	public static String ScreenshotBase() {
 		return Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " ";
+	}
+	
+	public static Account_Data getFreshAccount(String Level, String CountryCode){
+		ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
+
+		for (String CountryArray[] : AccountsAlreadyCreated){
+			//if the correct line for the country and there are account numbers loaded.
+			if (CountryArray[16].contentEquals(CountryCode)) {//position 9 in the L1 accounts
+				Account_Data D = new Account_Data();
+				D.Level = CountryArray[0];
+				D.Shipping_Address_Line_1 = CountryArray[1];
+				D.Shipping_Address_Line_2 = CountryArray[2];
+				D.Shipping_City = CountryArray[3];
+				D.Shipping_State = CountryArray[4];
+				D.Shipping_State_Code = CountryArray[5];
+				D.Shipping_Zip = CountryArray[6];
+				D.Shipping_Country_Code = CountryArray[7];
+				D.Shipping_Region = CountryArray[8];
+				D.Shipping_Country = CountryArray[9];
+				D.Billing_Address_Line_1 = CountryArray[10];
+				D.Billing_Address_Line_2 = CountryArray[11];
+				D.Billing_City = CountryArray[12];
+				D.Billing_State = CountryArray[13];
+				D.Billing_State_Code = CountryArray[14];
+				D.Billing_Zip = CountryArray[15];
+				D.Billing_Country_Code = CountryArray[16];
+				D.Billing_Region = CountryArray[17];
+				D.Billing_Country = CountryArray[18];
+				D.Account_Number = CountryArray[19];
+				D.Credit_Card_Type = CountryArray[20];
+				D.Credit_Card_Numer = CountryArray[21];
+				D.Credit_Card_CVV = CountryArray[22];
+				D.Credit_Card_Expiration_Month = CountryArray[23];
+				D.Credit_Card_Expiration_Year = CountryArray[24];
+				D.Invoice_Number_A = CountryArray[25];
+				D.Invoice_Number_B = CountryArray[26];
+				D.Account_Type = CountryArray[27];
+				return D;
+			}
+		}
+		return null;
 	}
 
 }//End Class

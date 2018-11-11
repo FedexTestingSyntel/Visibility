@@ -21,7 +21,7 @@ public class TestNG_TestListener implements ITestListener{
 			if(s[0].contentEquals("MYEMAIL")){
 				Helper_Functions.MyEmail = s[1];
 			}else if(s[0].contentEquals("DEFAULTPASSWORD")){
-				Helper_Functions.myPassword = s[1];
+				Helper_Functions.myPassword = s[2];
 			}
 		}
 		

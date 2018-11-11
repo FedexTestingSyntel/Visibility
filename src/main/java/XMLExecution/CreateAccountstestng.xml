@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" name="AccountsCreation_Suite" parallel="methods">
+<suite thread-count="1" name="AccountsCreation_Suite">
    <listeners>
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   
-  <test thread-count="8" name="AccountsCreation_Test" parallel="methods">
-    <classes>
-      <class name="TestingFunctions.Create_Accounts"/>
-    </classes>
+  <test thread-count="3" name="AccountsCreation_Test" parallel="methods">
+    <parameter name="Level" value="2" />
+    	<classes>
+    		<class name="SupportClasses.Environment"/>
+      		<class name="SupportClasses.Create_Accounts"/>
+    	</classes>
   </test> <!-- AccountsCreation_Test -->
 </suite> <!-- AccountsCreation_Suite -->

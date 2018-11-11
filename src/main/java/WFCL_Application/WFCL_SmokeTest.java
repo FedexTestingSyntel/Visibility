@@ -1,6 +1,9 @@
 package WFCL_Application;
 
 import org.testng.annotations.Test;
+
+import Data_Structures.Account_Data;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -15,7 +18,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -29,7 +32,8 @@ public class WFCL_SmokeTest{
 		List<Object[]> data = new ArrayList<Object[]>();
 
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
-			String Level = String.valueOf(Environment.LevelsToTest.charAt(i)), Account = null;
+			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
+			Account_Data AccountDetails = null;
 			int intLevel = Integer.parseInt(Level);
 			//int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
@@ -46,14 +50,14 @@ public class WFCL_SmokeTest{
 		    		if (Level == "7") {
 		    			break;
 		    		}
-		    		Account = Helper_Functions.getExcelFreshAccount(Level, "us", true);
-		    		data.add( new Object[] {Level, "US", Account});
+		    		AccountDetails = Helper_Functions.getFreshAccount(Level, "US");
+		    		data.add( new Object[] {Level, AccountDetails});
 		    		break;
 		    	case "AccountRegistration_INET":
 		    	case "AccountRegistration_WDPA":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			Account = Helper_Functions.getExcelFreshAccount(Level, CountryList[j][0], true);
-			    		data.add( new Object[] {Level, CountryList[j][0], Account});
+		    			AccountDetails = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
+			    		data.add( new Object[] {Level, AccountDetails});
 					}
 		    		break;
 		    	case "Forgot_User_Email":
@@ -115,12 +119,15 @@ public class WFCL_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp", priority = 3)//since this method will consume an acocunt number run after others have completed
-	public void AccountRegistration_Admin(String Level, String CountryCode, String Account) {
+	public void AccountRegistration_Admin(String Level, Account_Data AccountDetails) {
 		try {
 			String UserName[] = Helper_Functions.LoadDummyName("INET", Level);
+			String CountryCode = AccountDetails.Billing_Country_Code;
+			String Account = AccountDetails.Account_Number;
+			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
 			String UserID = Helper_Functions.LoadUserID("L" + Level + Account + CountryCode);
-			String AddressDetails[] = Helper_Functions.AccountDetails(Account);
 			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Account, AddressDetails);
+			WFCL_Functions.Admin_Registration(CountryCode, Account);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -128,11 +135,11 @@ public class WFCL_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp", priority = 1)
-	public void AccountRegistration_INET(String Level, String CountryCode, String Account){
+	public void AccountRegistration_INET(String Level, Account_Data AccountDetails){
 		try {
-			//Account = "332082643";
-			//Helper_Functions.MyEmail = "accept@fedex.com";
-			String AddressDetails[] = Helper_Functions.AccountDetails(Account);
+			String CountryCode = AccountDetails.Billing_Country_Code;
+			String Account = AccountDetails.Account_Number;
+			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + "Inet" + CountryCode);
 			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Account, AddressDetails);
@@ -153,12 +160,14 @@ public class WFCL_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void AccountRegistration_WDPA(String Level, String CountryCode, String Account){
+	public void AccountRegistration_WDPA(String Level, Account_Data AccountDetails){
 		try {
-			//Account = "754244860";
-			String AddressDetails[] = Helper_Functions.AccountDetails(Account);
+			String CountryCode = AccountDetails.Billing_Country_Code;
+			String Account = AccountDetails.Account_Number;
+			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
+
 			String ContactName[] = Helper_Functions.LoadDummyName("WDPA", Level);
-			String UserID = Helper_Functions.LoadUserID("L" + Level + Thread.currentThread().getId() + "WDPA");
+			String UserID = Helper_Functions.LoadUserID("L" + Level + CountryCode + Thread.currentThread().getId() + "WDPA");
 			String Result[] = WFCL_Functions.WDPA_Registration(ContactName, UserID, Account, AddressDetails);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {

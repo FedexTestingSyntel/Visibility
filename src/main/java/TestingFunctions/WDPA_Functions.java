@@ -7,13 +7,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import SupportClasses.DriverFactory;
-import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
 public class WDPA_Functions{
-
-	public static String strPhone = "9011111111";//remove this later
 	
 	//Address[] = Streetline1 - 0, Streetline2 - 1, City - 2, State - 3, StateCode - 4, postalCode - 5, CountryCode - 6, ShareID - 7
 	//PackageDetails for express/ground = {String Packages, String Weight, String WeightUnit (L or K), String Date, String ReadyTime, String CloseTime, String Special}
@@ -53,24 +50,7 @@ public class WDPA_Functions{
 			}
 
 			//Check the pickup on confirmation page
-			//need to add a check to see if details are correct
-			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationLeftPanel']/div[8]/div[2]/div/div/label"), Phone, 0);
-			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationRightPanel']/div[3]/div[2]/div/div/label"), PackageDetails[0], 0);//packages
-			String Weight = null;
-			if (PackageDetails[2] == "L") {
-				Weight = PackageDetails[1] + " lbs";
-			}else if (PackageDetails[2] == "K") {
-				Weight = PackageDetails[1] + " kg";
-			}
-			
-
-			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationRightPanel']/div[4]/div[2]/div/div/label"), Weight, 0);//weight
-			WebDriver_Functions.WaitPresent(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
-			String ConfirmationNumber = WebDriver_Functions.GetText(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
-			ConfirmationNumber = ConfirmationNumber.substring(ConfirmationNumber.indexOf(".") + 2);
-			Helper_Functions.PrintOut("Schedule " + Service + " , Pickup: " + ConfirmationNumber, true);
-			
-			WebDriver_Functions.takeSnapShot("Confirmation.png");
+			String ConfirmationNumber = WDPA_Confirmation_Page(Phone, PackageDetails, Service);
 			
 			if (Service.contentEquals("ground") || Service.contentEquals("express")) {
 				WDPAConfirmationLinks(ConfirmationRedirect, PackageDetails[0], PackageDetails[1]);
@@ -127,8 +107,7 @@ public class WDPA_Functions{
 		String Packages = PackageDetails[0], Weight = PackageDetails[1], WeightUnit = PackageDetails[2], ReadyTime = PackageDetails[4], CloseTime = PackageDetails[5], Special = PackageDetails[6];
 		//String Date = PackageDetails[3];
 		
-		String strFieldType;
-		strFieldType = "package." + Service;
+		String strFieldType = "package." + Service;
 		if (!DriverFactory.getInstance().getDriver().findElement(By.id(strFieldType + ".field")).isSelected()){
 			WebDriver_Functions.Click(By.id(strFieldType + ".field"));
 		}
@@ -137,12 +116,10 @@ public class WDPA_Functions{
 		WebDriver_Functions.Type(By.id(strFieldType + ".totalWeight"), Weight);
 		WebDriver_Functions.Select(By.id(strFieldType + ".totalWeight.uom"), WeightUnit, "v");
 
-		//select the last select able day from the calendar.   need to get this working for when testing prod
-//uncomment
-//		WebDriver_Functions.Click(By.id(CalenderDate(strFieldType + ".pickupDate", Date))); //warning, if trying to debug this may fail as the drop down calendar will close.
+		//select the last select able day from the calendar.
 		WebDriver_Functions.WaitForTextPresentIn(By.id(strFieldType + ".closeTime"), "pm");
-		//wait.until(ExpectedConditions.textMatches(By.id(strFieldType + ".closeTime"), Pattern.compile("pm")));//wait for the shipment time label to load
-
+		CalenderDate(strFieldType + ".pickupDate", null);
+		
 		if (ReadyTime != null) {
 			WebDriver_Functions.Select(By.id(strFieldType + ".readyTime"), ReadyTime, "v");
 		}
@@ -273,6 +250,9 @@ public class WDPA_Functions{
 		//navigate to my pickups page
 		WebDriver_Functions.ChangeURL("WDPA_Pickups", Address[6], false);
 		
+		//change to 14 days in the future
+		WebDriver_Functions.Select(By.id("history.futureDaysToDisplayId"), "14", "t");
+		
 		//search for the pickup just created
 		WebDriver_Functions.Type(By.id("history.filterField"), ConfirmationNumber);
 		WebDriver_Functions.Select(By.id("history.filterColumn"), "Confirmation no.", "t");
@@ -325,7 +305,7 @@ public class WDPA_Functions{
 					WebDriver_Functions.Click(By.id("module.address._headerEdit"));
 					WebDriver_Functions.WaitPresent(By.id("address.phoneNumber"));
 			    	WebDriver_Functions.Type(By.id("address.alternate.contactName"), "TestingName");
-			    	WebDriver_Functions.Type(By.id("address.phoneNumber"), strPhone);
+			    	WebDriver_Functions.Type(By.id("address.phoneNumber"), Helper_Functions.myPhone);
 				}else if (WebDriver_Functions.isPresent(By.id("address.accountAddressOne.field1"))) { //if the account number was selected and all the address details are needed.
 					WebDriver_Functions.Type(By.id("address.alternate.company"), "CompanyName");
 			    	WebDriver_Functions.Type(By.id("address.alternate.contactName"), "TestingName");
@@ -334,7 +314,7 @@ public class WDPA_Functions{
 			    	WebDriver_Functions.Type(By.id("address.alternate.city1"), AddressDetails[2]);
 			    	WebDriver_Functions.WaitForTextNot(By.id("address.accountStateProvince.field1"), "");//wait for the states to populate
 			    	WebDriver_Functions.Select(By.id("address.accountStateProvince.field1"), AddressDetails[4], "v");
-			    	WebDriver_Functions.Type(By.id("address.alternate.phoneNumber"), strPhone);
+			    	WebDriver_Functions.Type(By.id("address.alternate.phoneNumber"), Helper_Functions.myPhone);
 			    	WebDriver_Functions.Type(By.id("address.alternate.zipPostal"), AddressDetails[5]);
 				}
 			}else{//user is not logged in
@@ -348,7 +328,7 @@ public class WDPA_Functions{
 			    WebDriver_Functions.Type(By.id("address.alternate.city1"), AddressDetails[2]);
 			    WebDriver_Functions.WaitForTextNot(By.id("address.accountStateProvince.field1"), "");
 			    WebDriver_Functions.Select(By.id("address.accountStateProvince.field1"), AddressDetails[3], "t");
-			    WebDriver_Functions.Type(By.id("address.alternate.phoneNumber"), strPhone);
+			    WebDriver_Functions.Type(By.id("address.alternate.phoneNumber"), Helper_Functions.myPhone);
 			    WebDriver_Functions.Type(By.id("address.alternate.zipPostal"), AddressDetails[5]);
 			}
 
@@ -456,7 +436,7 @@ public class WDPA_Functions{
 				//enter city 
 				WebDriver_Functions.Type(By.id(Loc + "Data.city"), AddressDetails[2]);
 				WebDriver_Functions.Select(By.id(Loc + "Data.stateProvinceCode"), AddressDetails[4], "v");
-				WebDriver_Functions.Type(By.id(Loc + "Data.phoneNumber"), strPhone);
+				WebDriver_Functions.Type(By.id(Loc + "Data.phoneNumber"), Helper_Functions.myPhone);
 			}
 			WebDriver_Functions.Type(By.id("psd.mps.row.weight.0"), "1");
 			
@@ -579,7 +559,8 @@ public class WDPA_Functions{
 				String AttemptDate = IdFormat + "._week" + week + "day" + day;
 				if (WebDriver_Functions.isPresent(By.id(AttemptDate)) && DriverFactory.getInstance().getDriver().findElement(By.id(AttemptDate)).getAttribute("class").contentEquals("enabledDateStyle")) {
 					LastAvailable = AttemptDate;
-					if (WebDriver_Functions.GetText(By.id(LastAvailable)) == Date || Date == null) {//if a date is provided will return once found as a valid option, if date is null will return once finds first avaialbe.
+					if (WebDriver_Functions.GetText(By.id(LastAvailable)) == Date) {//if a date is provided will return once found as a valid option
+						WebDriver_Functions.Click(By.id(LastAvailable));
 						return LastAvailable;
 					}
 				}else if (week == 6){
@@ -595,7 +576,29 @@ public class WDPA_Functions{
 				//else {Helper_Functions.PrintOut(week + "  " + day + "   " + LastAvailable, true);}   //for debug if needed
 			}
 		}
+		WebDriver_Functions.Click(By.id(LastAvailable));
 		return LastAvailable;
 	}
 	
+	public static String WDPA_Confirmation_Page(String Phone, String PackageDetails[], String Service) throws Exception{
+		WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationLeftPanel']/div[8]/div[2]/div/div/label"), Phone, 0);
+		WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationRightPanel']/div[3]/div[2]/div/div/label"), PackageDetails[0], 0);//packages
+		String Weight = null;
+		if (PackageDetails[2] == "L") {
+			Weight = PackageDetails[1] + " lbs";
+		}else if (PackageDetails[2] == "K") {
+			Weight = PackageDetails[1] + " kg";
+		}
+		
+
+		WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationRightPanel']/div[4]/div[2]/div/div/label"), Weight, 0);//weight
+		WebDriver_Functions.WaitPresent(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
+		String ConfirmationNumber = WebDriver_Functions.GetText(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
+		ConfirmationNumber = ConfirmationNumber.substring(ConfirmationNumber.indexOf(".") + 2);
+		Helper_Functions.PrintOut("Schedule " + Service + " , Pickup: " + ConfirmationNumber, true);
+		
+		WebDriver_Functions.takeSnapShot("Confirmation.png");
+		
+		return ConfirmationNumber;
+	}
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WDPA_Suite]" parallel="methods">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WDPA_Suite]">
   <listeners>
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
@@ -10,8 +10,11 @@
       <class name="WaterfallApplications.WDPA">
         <methods>
           <include name="Pickup_ExpressFright" invocation-numbers="0"/>
+          <include name="Pickup_Express" invocation-numbers="0"/>
+          <include name="Pickup_Ground" invocation-numbers="0"/>
           <include name="Pickup_LTLFreight" invocation-numbers="0"/>
           <include name="beforeClass"/>
+          <include name="Pickup_LTLFreight_Anonymous" invocation-numbers="0"/>
         </methods>
       </class> <!-- WaterfallApplications.WDPA -->
     </classes>

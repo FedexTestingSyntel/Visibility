@@ -2,9 +2,7 @@ package WFCL_Application;
 
 import java.util.Arrays;
 import org.openqa.selenium.By;
-
 import SupportClasses.DriverFactory;
-import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
@@ -184,7 +182,7 @@ public class WFCL_Functions{
 		return Arrays.toString(ReturnValue);
 	}//end WFCL_AccountRegistration
 
-	public static boolean Admin_Registration(String CountryCode, String AccountNumber) {
+	public static boolean Admin_Registration(String CountryCode, String AccountNumber) throws Exception {
 		try{
 			WebDriver_Functions.ChangeURL("AdminReg", CountryCode, false);
 			
@@ -193,6 +191,8 @@ public class WFCL_Functions{
 				WebDriver_Functions.Click(By.name("submit"));	
 			}
 
+			Helper_Functions.Wait(2);
+			
 			if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
 				InvoiceOrCCValidaiton();
 			}
@@ -211,9 +211,9 @@ public class WFCL_Functions{
 			WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + CompanyName);
 			//remove the account number from local storage as it is now locked to the company that was just created.
 			Helper_Functions.RemoveAccountFromExcel(AccountNumber);
-		}catch (Exception e2){
+		}catch (Exception e){
 			Helper_Functions.PrintOut("Failure with admin registriaton.", true);
-			return false;
+			throw e;
 		};
 		
 		return true;
@@ -488,6 +488,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("creditCardNumber"));
 		}
+		Helper_Functions.PrintOut("asdf", false);
 	}
 
     public static String WFCL_Secret_Answer(String CountryCode, String strUserName, String NewPassword, String SecretAnswer) throws Exception{

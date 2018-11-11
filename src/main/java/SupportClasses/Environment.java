@@ -2,7 +2,6 @@ package SupportClasses;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.testng.SkipException;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -12,6 +11,8 @@ public class Environment {
 	public static String LevelsToTest;
 	private static Environment instance = new Environment();
 	public static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
+	public static ArrayList<String[]> TaxData = new ArrayList<String[]>();
+	static ArrayList<String[]> AccountsAlreadyCreated_L1, AccountsAlreadyCreated_L2, AccountsAlreadyCreated_L3, AccountsAlreadyCreated_L4, AccountsAlreadyCreated_L5, AccountsAlreadyCreated_L6, AccountsAlreadyCreated_L7;
 	
 	private Environment(){
 		//Do-nothing..Do not allow to initialize this class from outside
@@ -79,6 +80,71 @@ public class Environment {
 	
 	public static void getAddressList() {
 		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Accounts");//load the relevant information from excel file.
-
+	}
+	
+	public static ArrayList<String[]> getTaxData(String CountryCode) {
+		if (TaxData == null) {
+			//Load all data from the excel into the array list
+			TaxData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TaxData.xls",  "TaxIds");
+		
+			//This is a check to see if there have been any changes to the excel data
+			String Column_Headers[] = TaxData.get(0);
+			String Expected_Headers[] = new String[] {"Country_Code", "Tax_ID", "State_Tax_ID", "Error_Code"};
+			for (int j = 0; j < Expected_Headers.length; j++) {
+				if (!Column_Headers[j].contentEquals(Expected_Headers[j])) {
+					System.err.println("WARNING: mismatch with the tax data excel sheet");
+				}
+			}
+		}
+		return TaxData;
+	}
+	
+	public static ArrayList<String[]> getAccountList(String Level){
+  		switch (Level) {
+  		case "1":
+  			if (AccountsAlreadyCreated_L1 == null) {
+  				AccountsAlreadyCreated_L1 = new ArrayList<String[]>();
+  				AccountsAlreadyCreated_L1 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
+  			}
+  			return AccountsAlreadyCreated_L1;
+  	  	case "2":
+  	  		if (AccountsAlreadyCreated_L2 == null) {
+  	  			AccountsAlreadyCreated_L2 = new ArrayList<String[]>();
+				AccountsAlreadyCreated_L2 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
+			}
+			return AccountsAlreadyCreated_L2;
+  		case "3":
+  			if (AccountsAlreadyCreated_L3 == null) {
+  				AccountsAlreadyCreated_L3 = new ArrayList<String[]>();
+  				AccountsAlreadyCreated_L3 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
+  			}
+  			return AccountsAlreadyCreated_L3;
+  		case "4":
+  			if (AccountsAlreadyCreated_L4 == null) {
+  				AccountsAlreadyCreated_L4 = new ArrayList<String[]>();
+  				AccountsAlreadyCreated_L4 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
+  			}
+  			return AccountsAlreadyCreated_L4;
+  		case "5":
+  			if (AccountsAlreadyCreated_L5 == null) {
+  				AccountsAlreadyCreated_L5 = new ArrayList<String[]>();
+  				AccountsAlreadyCreated_L5 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
+  			}
+  			return AccountsAlreadyCreated_L5;
+  		case "6":
+  			if (AccountsAlreadyCreated_L6 == null) {
+  				AccountsAlreadyCreated_L6 = new ArrayList<String[]>();
+  				AccountsAlreadyCreated_L6 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
+  			}
+  			return AccountsAlreadyCreated_L6;
+  		case "7":
+  			if (AccountsAlreadyCreated_L7 == null) {
+  				AccountsAlreadyCreated_L7 = new ArrayList<String[]>();
+  				AccountsAlreadyCreated_L7 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
+  			}
+  			return AccountsAlreadyCreated_L7;
+		}
+  		//invalid input
+  		return null;
 	}
 }

@@ -286,7 +286,10 @@ public class WebDriver_Functions{
 	}
 	
 	public static boolean isVisable(By Ele) {
-		return DriverFactory.getInstance().getDriver().findElement(Ele).isDisplayed();
+		if (isPresent(Ele)) {
+			return DriverFactory.getInstance().getDriver().findElement(Ele).isDisplayed();
+		}
+		return false;
 	}
 	
 	public static boolean WaitNotPresent(By Ele) throws Exception{
@@ -434,7 +437,7 @@ public class WebDriver_Functions{
 			WebElement option = select.getFirstSelectedOption();
 			CurrentText = option.getText();
 			 
-			if (CurrentText != expected) {
+			if (!CurrentText.contentEquals(expected)) {
 				throw new Exception ("does not match");
 			}
 			Helper_Functions.PrintOut("Verified Text: " + DriverFactory.getInstance().getDriver().findElement(bypath).getText() + "     " + bypath, true);

@@ -1,27 +1,31 @@
 package SupportClasses;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.StringTokenizer;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import Data_Structures.Account_Data;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Create_Accounts{
 	private static String ECAMuserid;
 	private static String ECAMpassword;
-	static ArrayList<String[]> TaxData = new ArrayList<String[]>();
-	static String LevelsToTest = "5";
 	
-	@DataProvider //(parallel = true)
+	static String LevelsToTest = "2";
+	
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		ArrayList<String[]> PersonalData = new ArrayList<String[]>();
 		PersonalData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\Load_Your_UserIds.xls",  "Data");//create your own file with the specific data
@@ -31,78 +35,35 @@ public class Create_Accounts{
 				ECAMpassword = s[2];
 			}
 		}
-		
-		//load tax data
-		TaxData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TaxData.xls",  "TaxIds");//create your own file with the specific data
 			
 		List<Object[]> data = new ArrayList<Object[]>();
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Accounts");//load the relevant information from excel file.
-		
+		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
 		for (int i=0; i < LevelsToTest.length(); i++) {
 			String Level = String.valueOf(LevelsToTest.charAt(i));
+			
 			for (int j = 1; j < AddressDetails.size(); j++) {
 				String CountryList[] = AddressDetails.get(j);
-				int intLevel = Integer.parseInt(Level);
-				
-				//pattern to see if the accounts section has at least three account numbers.
-				final Pattern pattern = Pattern.compile(".*,.*,.*");
-				final Matcher matcher = pattern.matcher(CountryList[8 + intLevel]);
-				
-				//check if account number is loaded for this country and the given level
-				if (CountryList[8 + intLevel] == "") {
-					data.add( new Object[] {Level, CountryList, j});
-				}else if (!matcher.matches()) {//check if there are less than three account numbers saved.
-					data.add( new Object[] {Level, CountryList, j});
-				}
-				
-				
-				/*
-				//if need to test single country.
-				if (CountryList[6].contentEquals("US")) {  //use if trying to create for specific country.
-					for (int k = 0 ; k < data.size(); k++) {
-						data.remove(k);
-						k--;
-					}
-					data.add( new Object[] {Level, CountryList, j});
-					break;
-				}
-				*/
-				 
-				
-				
-				
-				/*  //incase need to make mass updates to the column
-				for (int k = 9; k < 15; k++) {
-					if (CountryList[k] != null && CountryList[k].contains(",")) {
-						String AccountsUpdated = CountryList[k].replaceAll(",", ", ");
-						AccountsUpdated = AccountsUpdated.replaceAll(",  ", ", ");
-						PrintOut("Updated: _" + AccountsUpdated, false);
-						Helper_Functions.writeExcelData(".\\Data\\AddressDetails.xls", "Accounts", AccountsUpdated, j, k);
+				ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
+				int ExistingAccounts = 0;
+				for(String Account[]: AccountsAlreadyCreated) {
+					//Compare address line 1
+					if (CountryList[0].contentEquals(Account[10]) && CountryList[6].contentEquals(Account[16])) {
+						ExistingAccounts++;
 					}
 				}
 				
-				//if need to test single country.
-				if (CountryList[6].contentEquals("US")) {  //use if trying to create for specific country.
-					for (int k = 0 ; k < data.size(); k++) {
-						data.remove(k);
-						k--;
-					}
-					data.add( new Object[] {Level, CountryList, j});
-					break;
+				if (ExistingAccounts < 3) {
+					data.add( new Object[] {Level, CountryList});
 				}
-				*/
-				
-				
 			}
 		}
 		return data.iterator();
 	}
 
 	@Test(dataProvider = "dp")
-	public void Account_Creation(String Level, String CountryDetails[], int Row) {
+	public void Account_Creation(String Level, String CountryDetails[]) {
 		try {
-			String Accounts = null;
 			String CountryCode = CountryDetails[6].toLowerCase();
 			String OperatingCompanies = "E";
 			if (CountryCode.contentEquals("us") || CountryCode.contentEquals("ca")) {
@@ -111,22 +72,38 @@ public class Create_Accounts{
 			if (CountryCode.contentEquals("us") || CountryCode.contentEquals("ca") || CountryCode.contentEquals("mx")) {
 				OperatingCompanies += "F";
 			}
-			
-			String AccountDetails[] = new String[] {CountryCode, CountryCode, OperatingCompanies, "10"};
-			String AddressDetails[] = new String[] {CountryDetails[0], CountryDetails[1], CountryDetails[2], CountryDetails[3], CountryDetails[4], CountryDetails[5], CountryCode};
+			Account_Data Account_Details = new Account_Data();
+			Account_Details.Level = Level;
+			Account_Details.Shipping_Address_Line_1 = CountryDetails[0];
+			Account_Details.Shipping_Address_Line_2 = CountryDetails[1];
+			Account_Details.Shipping_City = CountryDetails[2];
+			Account_Details.Shipping_State = CountryDetails[3];
+			Account_Details.Shipping_State_Code = CountryDetails[4];
+			Account_Details.Shipping_Zip = CountryDetails[5];
+			Account_Details.Shipping_Country_Code = CountryDetails[6];
+			Account_Details.Shipping_Region = CountryDetails[7];
+			Account_Details.Shipping_Country = CountryDetails[8];
+			Account_Details.Billing_Address_Line_1 = CountryDetails[0];
+			Account_Details.Billing_Address_Line_2 = CountryDetails[1];
+			Account_Details.Billing_City = CountryDetails[2];
+			Account_Details.Billing_State = CountryDetails[3];
+			Account_Details.Billing_State_Code = CountryDetails[4];
+			Account_Details.Billing_Zip = CountryDetails[5];
+			Account_Details.Billing_Country_Code = CountryDetails[6];
+			Account_Details.Billing_Region = CountryDetails[7];
+			Account_Details.Billing_Country = CountryDetails[8];
 
-			Accounts = CreateAccountNumbers(Level, AccountDetails, AddressDetails);
-			Helper_Functions.PrintOut(Accounts, false);
-			Helper_Functions.writeExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "Accounts", Accounts, Row, 8 + Integer.valueOf(Level));
-			Helper_Functions.PrintOut(Accounts, false);
+			Account_Data[] Accounts = null;
+			Accounts = CreateAccountNumbers(Account_Details, OperatingCompanies);
+			writeAccountsToExcel(Accounts);
+
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
-	
-	public static String CreateAccountNumbers(String Level, String AccountDetails[], String AddressDetails[]) throws Exception{ 
-		Helper_Functions.PrintOut("Attempting to create account number for " + Arrays.toString(AddressDetails), true);
+	public static Account_Data[] CreateAccountNumbers(Account_Data Account_Info, String OperatingCompanies) throws Exception{ 
+		Helper_Functions.PrintOut("Attempting to create account number for "+ Account_Info.Billing_Country + " ---- " + Account_Info.Billing_Address_Line_1, false);
 		try {
 			// AccountDetails Example = 
 			//ShippingCountryCode, BillingCountryCode, OperatingCompanies (E = Express, G = Ground, F = Freight so "EDF" is all three), NumberOfAccounts
@@ -153,31 +130,32 @@ public class Create_Accounts{
 			}
 
 			WebDriver_Functions.WaitPresent(By.id("acct_info_ship_countrylist"));
-			String ShippingCountrCode = AccountDetails[0].toUpperCase(),  BillingCountryCode = AccountDetails[1].toUpperCase();
+			String ShippingCountrCode = Account_Info.Shipping_Country_Code, BillingCountryCode = Account_Info.Billing_Country_Code;
 			WebDriver_Functions.Select(By.id("acct_info_countrylist"), BillingCountryCode, "v");//billing country
 			WebDriver_Functions.Select(By.id("acct_info_ship_countrylist"), ShippingCountrCode, "v");//shipping country
 			WebDriver_Functions.Select(By.id("acct_info_source_grp"), "ALLIANCES","v");//the Source group of the account numbers
 			
 			WebDriver_Functions.WaitPresent(By.id("acctinfo_customertype"));
-			WebDriver_Functions.Select(By.id("acctinfo_customertype") , "BUSINESS","v");//Customer WebDriver_Functions.Type
+			String Account_Type = "BUSINESS";
+			WebDriver_Functions.Select(By.id("acctinfo_customertype") , Account_Type,"v");//Customer WebDriver_Functions.Type
 			
 			//This next section will populate based on the country and the customer type
-			if (AccountDetails[2].contains("E")) {
+			if (OperatingCompanies.contains("E")) {
 				WebDriver_Functions.Click(By.id("check_exp"));
-				WebDriver_Functions.Select(By.id("acct_type_exp") , "BUSINESS","v");//Express WebDriver_Functions.Type
+				WebDriver_Functions.Select(By.id("acct_type_exp") , Account_Type,"v");//Express WebDriver_Functions.Type
 			}
-			if (AccountDetails[2].contains("G")) {
+			if (OperatingCompanies.contains("G")) {
 				WebDriver_Functions.Click(By.id("check_gnd"));
-				WebDriver_Functions.Select(By.id("acct_type_exp") , "BUSINESS","v");//Express WebDriver_Functions.Type
+				WebDriver_Functions.Select(By.id("acct_type_exp") , Account_Type,"v");//Express WebDriver_Functions.Type
 			}
-			if (AccountDetails[2].contains("F")) {
+			if (OperatingCompanies.contains("F")) {
 				WebDriver_Functions.Click(By.id("check_fht"));
 				WebDriver_Functions.Select(By.id("acct_type_fht") , "SHIPPER","v");//Freight WebDriver_Functions.Type
 				WebDriver_Functions.Select(By.id("acct_sub_type_fht") , "DOCK","v");//Freight Sub WebDriver_Functions.Type
 			}
 			
-			String NumAccounts = AccountDetails[3];
-			WebDriver_Functions.Type(By.id("acctinfo_no_acct"), NumAccounts); //number of account numbers that should be created
+			int NumAccounts = 10;
+			WebDriver_Functions.Type(By.id("acctinfo_no_acct"), Integer.toString(NumAccounts)); //number of account numbers that should be created
 			WebDriver_Functions.Click(By.id("next_contact"));
 			
 			//Account Contact Information
@@ -192,22 +170,18 @@ public class Create_Accounts{
 			WebDriver_Functions.Click(By.id("next_address"));
 			
 			//Account Address
-			WebDriver_Functions.Type(By.id("acctinfo_postal_input_info"), AddressDetails[5]);
-			WebDriver_Functions.Type(By.id("add_info_company"), Helper_Functions.CurrentDateTime() + AccountDetails[2]);
+			WebDriver_Functions.Type(By.id("acctinfo_postal_input_info"), Account_Info.Billing_Zip);
+			WebDriver_Functions.Type(By.id("add_info_company"), Helper_Functions.CurrentDateTime());
 			WebDriver_Functions.Type(By.id("address_phn_number"), "9011111111");
-			WebDriver_Functions.Type(By.id("acctinfo_addr_one"), AddressDetails[0]);
-			WebDriver_Functions.Type(By.id("acctinfo_addr_two"), AddressDetails[1]);
+			WebDriver_Functions.Type(By.id("acctinfo_addr_one"), Account_Info.Billing_Address_Line_1);
+			WebDriver_Functions.Type(By.id("acctinfo_addr_two"), Account_Info.Billing_Address_Line_2);
 			
 			//try and select the city, may be only the single city or multiple based on zip code.
-			try {
+			if (WebDriver_Functions.isVisable(By.id("acctinfo_city_input_info_list"))) {
 				WebDriver_Functions.WaitClickable(By.id("acctinfo_city_input_info_list"));
-				WebDriver_Functions.Select(By.id("acctinfo_city_input_info_list"), AddressDetails[2].toUpperCase(), "v");
-			}catch (Exception e) {
-				try {
-					WebDriver_Functions.Type(By.id("acctinfo_city_input_info_box"), AddressDetails[2]);
-				}catch (Exception e2) {
-					Helper_Functions.PrintOut("Warning error enter city name", true);
-				}
+				WebDriver_Functions.Select(By.id("acctinfo_city_input_info_list"), Account_Info.Billing_City.toUpperCase(), "v");
+			}else if (WebDriver_Functions.isVisable(By.id("acctinfo_city_input_info_box"))) {
+				WebDriver_Functions.Type(By.id("acctinfo_city_input_info_box"), Account_Info.Billing_City.toUpperCase());
 			}
 			
 			if (WebDriver_Functions.isVisable(By.id("nomatch"))) {
@@ -215,27 +189,32 @@ public class Create_Accounts{
 			}
 			
 			Helper_Functions.Wait(4); //need to remove later, issue is page not passing the regulatory section.
-			
-			//Regulatory Informaiton page
+			if (WebDriver_Functions.isVisable(By.id("next_payment"))) {
+				WebDriver_Functions.Click(By.id("next_payment"));
+			}
+			//Regulator Information page
 			if (WebDriver_Functions.isVisable(By.id("next_reg"))) {
 				String StateTax = null, CountryTax = null;
-				for (String s[]: TaxData) {
+				for (String s[]: Environment.TaxData) {
 					if (s[0].contentEquals(BillingCountryCode)) {
 						StateTax = s[1];
 						CountryTax = s[2];
+						break;
 					}
 				}
-				if (WebDriver_Functions.isPresent(By.xpath("//*[@id='mand']")) && StateTax != null){//Tax id 1
+				
+				if (WebDriver_Functions.isVisable(By.xpath("//*[@id='mand']")) && StateTax != null){//Tax id 1
 					WebDriver_Functions.Type(By.id("reg_tax_id_one"), StateTax);
 				}
-				if (WebDriver_Functions.isPresent(By.xpath("//*[@id='mand1']")) && CountryTax != null){//Tax id 2
+				if (WebDriver_Functions.isVisable(By.xpath("//*[@id='mand1']")) && CountryTax != null){//Tax id 2
 					WebDriver_Functions.Type(By.id("reg_tax_id_two"), CountryTax);
-					//By.id("reg_tax_id_two")
 				}
 				WebDriver_Functions.Click(By.id("next_reg"));
 			}
 			
-			if (WebDriver_Functions.isPresent(By.id("next_payment"))) {
+			Helper_Functions.Wait(4); //need to remove later
+			
+			if (WebDriver_Functions.isVisable(By.id("next_payment"))) {
 				WebDriver_Functions.Click(By.id("next_payment"));
 			}
 			
@@ -246,6 +225,10 @@ public class Create_Accounts{
 			//Added due to L5 issue, there could be a {Alert text : Address could not be validated because of internal error.} ignore it
 			Helper_Functions.Wait(4); //need to remove later
 			WebDriver_Functions.CloseAlertPopUp();
+			
+			if (WebDriver_Functions.isVisable(By.id("next_reg"))) {
+				WebDriver_Functions.Click(By.id("next_reg"));
+			}
 			
 			//Payment Information
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
@@ -261,13 +244,11 @@ public class Create_Accounts{
 				WebDriver_Functions.Type(By.id("acct_pay_cvv_code"), CreditCard[2]);
 				WebDriver_Functions.Select(By.id("acct_payment_info_card_type") , CreditCard[0].toUpperCase(),"v");   //Auto populated
 				WebDriver_Functions.Click(By.id("next_comments"));
-				WebDriver_Functions.WaitNotPresent(By.id("next_comments"));
 				Payment = CreditCard[1];
+
 			}catch (Exception e){
-				try {
-					WebDriver_Functions.Select(By.id("acct_pay_info_list") , "Invoice","v");	
-					WebDriver_Functions.Click(By.id("next_comments"));
-				}catch (Exception e1){}
+				WebDriver_Functions.Select(By.id("acct_pay_info_list") , "Invoice","v");	
+				WebDriver_Functions.Click(By.id("next_comments"));
 			}
 			
 			//Comment/confirmation page
@@ -278,14 +259,132 @@ public class Create_Accounts{
 	        String AccountNumbers = DriverFactory.getInstance().getDriver().findElement(By.id("dialog-confirm")).getText();
 	        Helper_Functions.PrintOut("AccountNumberstest:   " + AccountNumbers + "     -- " + Payment, false);
 			AccountNumbers = AccountNumbers.replace("Account has been created successfully and Account Numbers are ", "");
-			return AccountNumbers;
+			AccountNumbers = AccountNumbers.replaceAll(" ", "");
+			
+			Account_Data Account_Details[] = new Account_Data[NumAccounts];
+			StringTokenizer tok = new StringTokenizer(AccountNumbers, ",", true);
+
+			for (int i = 0 ; i < NumAccounts; i++) {
+				Account_Details[i] = new Account_Data();
+				String token = tok.nextToken();
+				Account_Details[i].Account_Number = token;
+				Account_Details[i].Level = Account_Info.Level;
+				Account_Details[i].Shipping_Address_Line_1 = Account_Info.Shipping_Address_Line_1;
+				Account_Details[i].Shipping_Address_Line_2 = Account_Info.Shipping_Address_Line_2;
+				Account_Details[i].Shipping_City = Account_Info.Shipping_City;
+				Account_Details[i].Shipping_State = Account_Info.Shipping_State;
+				Account_Details[i].Shipping_State_Code = Account_Info.Shipping_State_Code;
+				Account_Details[i].Shipping_Zip = Account_Info.Shipping_Zip;
+				Account_Details[i].Shipping_Country_Code = Account_Info.Shipping_Country_Code;
+				Account_Details[i].Shipping_Region = Account_Info.Shipping_Region;
+				Account_Details[i].Shipping_Country = Account_Info.Shipping_Country;
+				Account_Details[i].Billing_Address_Line_1 = Account_Info.Billing_Address_Line_1;
+				Account_Details[i].Billing_Address_Line_2 = Account_Info.Billing_Address_Line_2;
+				Account_Details[i].Billing_City = Account_Info.Billing_City;
+				Account_Details[i].Billing_State = Account_Info.Billing_State;
+				Account_Details[i].Billing_State_Code = Account_Info.Billing_State_Code;
+				Account_Details[i].Billing_Zip = Account_Info.Billing_Zip;
+				Account_Details[i].Billing_Country_Code = Account_Info.Billing_Country_Code;
+				Account_Details[i].Billing_Region = Account_Info.Billing_Region;
+				Account_Details[i].Billing_Country = Account_Info.Billing_Country;
+			    Account_Details[i].Account_Type = Account_Type;
+			    if (Payment.contentEquals("Invoice")) {
+			    	//load the dummy invoice numbers.
+			    	Account_Details[i].Invoice_Number_A = "750000000";
+			    	Account_Details[i].Invoice_Number_B = "750000001";
+			    }else {
+			    	Account_Details[i].Credit_Card_CVV = CreditCard[2];
+			    	Account_Details[i].Credit_Card_Expiration_Month = CreditCard[3];
+			    	Account_Details[i].Credit_Card_Expiration_Year = "20" + CreditCard[4];
+			    	Account_Details[i].Credit_Card_Numer = CreditCard[1];
+			    	Account_Details[i].Credit_Card_Type = CreditCard[0].toUpperCase();
+			    }
+			    
+			    if(tok.hasMoreTokens()) {
+			    	tok.nextToken();
+			    }
+			}
+			return Account_Details;
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
-		return null;
 	}
 	
-	
+	public static boolean writeAccountsToExcel(Account_Data Account_Info[]) throws Exception{
+		try {
+			String fileName = Helper_Functions.DataDirectory + "\\AddressDetails.xls", sheetName = "L" + Account_Info[0].Level + "_Account_Numbers"; 
+			
+			//Read the spreadsheet that needs to be updated
+			FileInputStream fsIP= new FileInputStream(new File(fileName));  
+			//Access the workbook                  
+			HSSFWorkbook wb = new HSSFWorkbook(fsIP);
+			//Access the worksheet, so that we can update / modify it. 
+			HSSFSheet worksheet = wb.getSheetAt(0);
+			for(int i = 1; i< wb.getNumberOfSheets() + 1;i++) {
+				//PrintOut("CurrentSheet: " + worksheet.getSheetName(), false);  //for debugging if getting errors with sheet not found
+				if (worksheet.getSheetName().contentEquals(sheetName)) {
+					break;
+				}
+				worksheet = wb.getSheetAt(i);
+			} 
+			
+			int RowtoWrite = 0;
+			while (worksheet.getRow(RowtoWrite) != null) {
+				RowtoWrite++;
+			}
+			
+			for(int i = 0; i < Account_Info.length; i++) {
+				worksheet.createRow(RowtoWrite);
+				for (int j = 0; j < 28; j++) {
+					if (worksheet.getRow(RowtoWrite).getCell(j) == null) {//if cell not present create it
+						worksheet.getRow(RowtoWrite).createCell(j);
+					}
+				}
+				worksheet.getRow(RowtoWrite).getCell(0).setCellValue(Account_Info[i].Level);
+				worksheet.getRow(RowtoWrite).getCell(1).setCellValue(Account_Info[i].Shipping_Address_Line_1);
+				worksheet.getRow(RowtoWrite).getCell(2).setCellValue(Account_Info[i].Shipping_Address_Line_2);
+				worksheet.getRow(RowtoWrite).getCell(3).setCellValue(Account_Info[i].Shipping_City);
+				worksheet.getRow(RowtoWrite).getCell(4).setCellValue(Account_Info[i].Shipping_State);
+				worksheet.getRow(RowtoWrite).getCell(5).setCellValue(Account_Info[i].Shipping_State_Code);
+				worksheet.getRow(RowtoWrite).getCell(6).setCellValue(Account_Info[i].Shipping_Zip);
+				worksheet.getRow(RowtoWrite).getCell(7).setCellValue(Account_Info[i].Shipping_Country_Code);
+				worksheet.getRow(RowtoWrite).getCell(8).setCellValue(Account_Info[i].Shipping_Region);
+				worksheet.getRow(RowtoWrite).getCell(9).setCellValue(Account_Info[i].Shipping_Country);
+				worksheet.getRow(RowtoWrite).getCell(10).setCellValue(Account_Info[i].Billing_Address_Line_1);
+				worksheet.getRow(RowtoWrite).getCell(11).setCellValue(Account_Info[i].Billing_Address_Line_2);
+				worksheet.getRow(RowtoWrite).getCell(12).setCellValue(Account_Info[i].Billing_City);
+				worksheet.getRow(RowtoWrite).getCell(13).setCellValue(Account_Info[i].Billing_State);
+				worksheet.getRow(RowtoWrite).getCell(14).setCellValue(Account_Info[i].Billing_State_Code);
+				worksheet.getRow(RowtoWrite).getCell(15).setCellValue(Account_Info[i].Billing_Zip);
+				worksheet.getRow(RowtoWrite).getCell(16).setCellValue(Account_Info[i].Billing_Country_Code);
+				worksheet.getRow(RowtoWrite).getCell(17).setCellValue(Account_Info[i].Billing_Region);
+				worksheet.getRow(RowtoWrite).getCell(18).setCellValue(Account_Info[i].Billing_Country);
+				worksheet.getRow(RowtoWrite).getCell(19).setCellValue(Account_Info[i].Account_Number);
+				worksheet.getRow(RowtoWrite).getCell(20).setCellValue(Account_Info[i].Credit_Card_Type);
+				worksheet.getRow(RowtoWrite).getCell(21).setCellValue(Account_Info[i].Credit_Card_Numer);
+				worksheet.getRow(RowtoWrite).getCell(22).setCellValue(Account_Info[i].Credit_Card_CVV);
+				worksheet.getRow(RowtoWrite).getCell(23).setCellValue(Account_Info[i].Credit_Card_Expiration_Month);
+				worksheet.getRow(RowtoWrite).getCell(24).setCellValue(Account_Info[i].Credit_Card_Expiration_Year);
+				worksheet.getRow(RowtoWrite).getCell(25).setCellValue(Account_Info[i].Invoice_Number_A);
+				worksheet.getRow(RowtoWrite).getCell(26).setCellValue(Account_Info[i].Invoice_Number_B);
+				worksheet.getRow(RowtoWrite).getCell(27).setCellValue(Account_Info[i].Account_Type);
+				RowtoWrite++;
+			}
+
+			//Close the InputStream  
+			fsIP.close(); 
+			//Open FileOutputStream to write updates
+			FileOutputStream output_file =new FileOutputStream(new File(fileName));  
+			//write changes
+			wb.write(output_file);
+			//close the stream
+			output_file.close();
+			wb.close();
+		}catch (Exception e) {
+			throw e;
+		}
+		return true;
+	}
 }
 	/*
 	
@@ -453,4 +552,18 @@ need to add the below to the address excel sheet.
 			ContactList.add(new String[] {"10, Lorong P Ramlee, Kuala Lumpur", "", "KUALA LUMPUR", "", "", "50250", "MY"});
 			ContactList.add(new String[] {"15 Stevens Cl", "", "Singapore", "", "", "25795", "SG"});
 
+
+
+
+
+//to get declaired variables from a class, look into this later on how it works.
+//https://stackoverflow.com/questions/2466038/how-do-i-iterate-over-class-members
+public int getObject(Object obj) {
+    for (Field field : obj.getClass().getDeclaredFields()) {
+        //field.setAccessible(true); // if you want to modify private fields
+        System.out.println(field.getName()
+                 + " - " + field.getType()
+                 + " - " + field.get(obj));
+    }
+}
  */
