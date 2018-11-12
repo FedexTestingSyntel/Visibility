@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>WCRV_Test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>0/0/2</td>
+<td>Tests passed/Failed/Skipped:</td><td>0/0/0</td>
 </tr><tr>
-<td>Started on:</td><td>Fri Nov 02 15:42:24 CDT 2018</td>
+<td>Started on:</td><td>Sat Nov 10 23:44:23 CST 2018</td>
 </tr>
-<tr><td>Total time:</td><td>0 seconds (648 ms)</td>
+<tr><td>Total time:</td><td>0 seconds (564 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -75,23 +75,23 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='SupportClasses.Environment.SetEvironmentLevel()'><b>SetEvironmentLevel</b><br>Test class: SupportClasses.Environment<br>Parameters: 2</td>
+<td title='SupportClasses.Environment.SetEvironmentLevel()'><b>SetEvironmentLevel</b><br>Test class: SupportClasses.Environment<br>Parameters: 7</td>
 <td><div><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
-	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:55)
+	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:61)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace104044670", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace104044670'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
-	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:55)
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace146639847", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace146639847'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
+	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:61)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
 	at java.lang.reflect.Method.invoke(Unknown Source)
 	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-	at org.testng.internal.Invoker.invokeMethod(Invoker.java:583)
-	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:719)
-	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:989)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:988)
 	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
 	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
@@ -99,42 +99,7 @@ function toggleAllBoxes() {
 	at java.lang.Thread.run(Unknown Source)
 </pre></div></td>
 <td>0</td>
-<td>SupportClasses.Environment@3d0f8e03</td></tr>
-<tr>
-<td title='WaterfallApplications.WCRV.WCRV_Generate_RateSheet()'><b>WCRV_Generate_RateSheet</b><br>Test class: WaterfallApplications.WCRV</td>
-<td><div><pre>java.lang.RuntimeException: java.lang.NullPointerException
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-Caused by: java.lang.NullPointerException
-	at WaterfallApplications.WCRV.dp(WCRV.java:50)
-	... 10 more
-... Removed 15 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1694159664", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace1694159664'><pre>java.lang.RuntimeException: java.lang.NullPointerException
-	at org.testng.internal.MethodInvocationHelper.invokeMethodNoCheckedException(MethodInvocationHelper.java:49)
-	at org.testng.internal.MethodInvocationHelper.invokeDataProvider(MethodInvocationHelper.java:131)
-	at org.testng.internal.Parameters.handleParameters(Parameters.java:706)
-	at org.testng.internal.ParameterHandler.handleParameters(ParameterHandler.java:49)
-	at org.testng.internal.ParameterHandler.createParameters(ParameterHandler.java:37)
-	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:924)
-	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
-	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-Caused by: java.lang.NullPointerException
-	at WaterfallApplications.WCRV.dp(WCRV.java:50)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:74)
-	at org.testng.internal.MethodInvocationHelper.invokeMethodNoCheckedException(MethodInvocationHelper.java:45)
-	... 10 more
-</pre></div></td>
-<td>0</td>
-<td>WaterfallApplications.WCRV@6366ebe0</td></tr>
+<td>SupportClasses.Environment@3bd94634</td></tr>
 </table><p>
 </body>
 </html>

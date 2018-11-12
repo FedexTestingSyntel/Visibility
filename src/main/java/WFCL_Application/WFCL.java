@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import TestingFunctions.*;
 import SupportClasses.*;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
@@ -23,12 +22,14 @@ public class WFCL{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
+		//CountryList = Environment.getCountryList("full");
 		//need to fix this and make dynamic;
 		//CountryList = new String[][]{{"US", "United States"}, {"CA", "Canada"}};
-		//CountryList = new String[][]{{"CA", "Canada"}};
+		CountryList = new String[][]{{"CA", "Canada"}};
 		//CountryList = new String[][]{{"US", "United States"}};
 		//CountryList = new String[][]{{"JP", "Japan"}};
-		CountryList = new String[][]{{"BR", "Brazil"}};
+		//CountryList = new String[][]{{"BR", "Brazil"}};
+		//CountryList = new String[][]{{"GB", "Great Brittan"}};
 		//CountryList = new String[][]{{"SI", "Slovenia"}, {"RO", "Romania"}};
 	}
 	
@@ -44,14 +45,16 @@ public class WFCL{
 		    	case "CreditCardRegistrationEnroll":
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs(CountryList[j][0]);
-		    			data.add( new Object[] {Level, EnrollmentID[0], CountryList[j][0]});
+		    			if (EnrollmentID != null) {
+		    				data.add( new Object[] {Level, EnrollmentID[0], CountryList[j][0]});
+		    			}
 					}
 		    		break;
 		    	case "TNT_Vat_Validation":
 		    		String TNTValidation[] = {"GB", "NL", "CL", "FR", "BE", "LU"};
 		    		for (int j = 0; j < TNTValidation.length; j++) {
 		    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs(TNTValidation[j]);
-		    			ArrayList<String[]> TaxInfo = Helper_Functions.LoadTaxInfo(TNTValidation[j]);
+		    			ArrayList<String[]> TaxInfo = Helper_Functions.getTaxInfo(TNTValidation[j]);
 		    			for (String Tax[]: TaxInfo) {
 		    				data.add(new Object[] {Level, EnrollmentID[0], TNTValidation[j], Tax, true});
 		    			}
@@ -135,8 +138,7 @@ public class WFCL{
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + Thread.currentThread().getId() + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
-			String TaxInfo[] = Helper_Functions.LoadTaxInfo(CountryCode).get(0);
-
+			String[] TaxInfo = Helper_Functions.getTaxInfo(CountryCode).get(0);
 			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, false, TaxInfo);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
@@ -144,7 +146,22 @@ public class WFCL{
 		}
 	}
 	
-	@Test(dataProvider = "dp", enabled = true)
+	@Test(dataProvider = "dp", description = "349582")
+	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
+		try {
+			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
+			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
+			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
+			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
+
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, BuisnessAccount, VatNumber);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp")
 	public void TNT_Vat_Validation(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");

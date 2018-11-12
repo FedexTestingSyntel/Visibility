@@ -18,7 +18,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -97,7 +97,7 @@ public class WFCL_SmokeTest{
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + Thread.currentThread().getId() + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
-			String TaxInfo[] = Helper_Functions.LoadTaxInfo(CountryCode).get(0);
+			String TaxInfo[] = Helper_Functions.getTaxInfo(CountryCode).get(0);
 			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, false, TaxInfo);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {

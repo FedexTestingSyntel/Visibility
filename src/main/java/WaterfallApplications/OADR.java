@@ -15,9 +15,8 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class OADR{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "7";
 	final static boolean SmokeTest = true; // will limit the test cases to high level
-	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -27,9 +26,6 @@ public class OADR{
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			Helper_Functions.LoadUserIds(Integer.parseInt(Level));
 		}
-		
-		AddressDetails = Helper_Functions.getExcelData(".\\Data\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
-
 		//if (SmokeTest) 
 		CountryList = new String[][]{{"US", "United States"}};
 	}

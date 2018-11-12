@@ -1,43 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="4" total="5" passed="1">
+<testng-results skipped="0" failed="0" ignored="2" total="2" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="133475" started-at="2018-11-11T05:11:36Z" finished-at="2018-11-11T05:13:50Z">
+  <suite name="Default suite" duration-ms="725" started-at="2018-11-12T20:59:13Z" finished-at="2018-11-12T20:59:14Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="133475" started-at="2018-11-11T05:11:36Z" finished-at="2018-11-11T05:13:50Z">
-      <class name="WaterfallApplications.WDPA">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WaterfallApplications.WDPA@fd07cbb]" name="beforeClass" is-config="true" duration-ms="153" started-at="2018-11-11T05:11:36Z" finished-at="2018-11-11T05:11:37Z">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="Pickup_Express(java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:WaterfallApplications.WDPA@fd07cbb]" name="Pickup_Express" duration-ms="132997" started-at="2018-11-11T05:11:37Z" data-provider="dp" finished-at="2018-11-11T05:13:50Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[7]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[US]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[ProdMacCCSept18]]>
-              </value>
-            </param>
-            <param index="3">
-              <value>
-                <![CDATA[Test1234]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- Pickup_Express -->
-      </class> <!-- WaterfallApplications.WDPA -->
+    <test name="Default test" duration-ms="725" started-at="2018-11-12T20:59:13Z" finished-at="2018-11-12T20:59:14Z">
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

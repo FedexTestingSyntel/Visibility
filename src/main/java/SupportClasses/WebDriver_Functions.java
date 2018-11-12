@@ -440,7 +440,7 @@ public class WebDriver_Functions{
 			if (!CurrentText.contentEquals(expected)) {
 				throw new Exception ("does not match");
 			}
-			Helper_Functions.PrintOut("Verified Text: " + DriverFactory.getInstance().getDriver().findElement(bypath).getText() + "     " + bypath, true);
+			Helper_Functions.PrintOut("Verified Text: " + expected + "     " + bypath, true);
 			return true;
 		}catch (Exception e){
 			Helper_Functions.PrintOut("FAILURE: _" + expected + "_ is not present. ID " + requirement + ". Current _" + CurrentText + "_", true);

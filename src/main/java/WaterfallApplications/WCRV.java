@@ -19,7 +19,6 @@ import TestingFunctions.*;
 
 public class WCRV{
 	static ArrayList<String[]> ResultsList = new ArrayList<String[]>();
-	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 	static String LevelsToTest = "3";
 	static String CountryList[][];
 
@@ -31,9 +30,7 @@ public class WCRV{
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			Helper_Functions.LoadUserIds(Integer.parseInt(Level));
 		}
-		
-		AddressDetails = Helper_Functions.getExcelData(".\\Data\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
-
+	
 		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
 	}

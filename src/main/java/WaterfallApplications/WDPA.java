@@ -19,7 +19,7 @@ import TestingFunctions.WDPA_Functions;
 public class WDPA extends WDPA_Functions{
 	
 	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -28,6 +28,7 @@ public class WDPA extends WDPA_Functions{
 
 		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
+		//CountryList = new String[][]{{"CA", "Canada"}};
 	}
 	
 	@DataProvider (parallel = true)
@@ -98,7 +99,7 @@ public class WDPA extends WDPA_Functions{
 	public static void Pickup_ExpressFright(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule an express freight pickup.", false);
 		try {
-			String PackageDetails[] = {"1", "444", "L", "1500", "1800", "ExpLTL Attempt", "FedEx 1Day Freight", "ConfFiller", "side of barn", "5", "6", "7"};
+			String PackageDetails[] = {"1", "444", "L", "1400", "1800", "ExpLTL Attempt", "FedEx 1Day Freight", "ConfFiller", "side of barn", "5", "6", "7"};
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String Result = Arrays.toString(WDPAPickupDetailed("US", UserID, Password, "expFreight", "ExpressLTL Testing", "ExpressLTL Attempt", "9011111111", Address, PackageDetails, "INET"));
 			Helper_Functions.PrintOut(Result, false);

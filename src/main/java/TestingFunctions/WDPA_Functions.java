@@ -293,6 +293,7 @@ public class WDPA_Functions{
 				WebDriver_Functions.ChangeURL("WDPA_LTL", CountryCode, false);
 				//wait for the WDPA page to load
 				WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
+				WebDriver_Functions.Select(By.id("account.freight.accountBox._LookupButton"), "1", "i");
 				strAccountSelected = WebDriver_Functions.GetText(By.xpath("//option"));
 				WebDriver_Functions.Click(By.xpath("//option"));
 				

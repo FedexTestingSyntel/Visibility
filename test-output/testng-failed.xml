@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="WaterfallApplications.WDPA">
+      <class name="WFCL_Application.WFCL_PI_1">
         <methods>
-          <include name="Pickup_Express" invocation-numbers="0"/>
+          <include name="BR_TaxID" invocation-numbers="0 1"/>
           <include name="beforeClass"/>
         </methods>
-      </class> <!-- WaterfallApplications.WDPA -->
+      </class> <!-- WFCL_Application.WFCL_PI_1 -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

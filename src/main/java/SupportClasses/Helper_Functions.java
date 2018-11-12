@@ -399,7 +399,7 @@ public class Helper_Functions{
 	}
 	
 	
-	public static ArrayList<String[]> LoadTaxInfo(String CountryCode){
+	public static ArrayList<String[]> getTaxInfo(String CountryCode){
 		if (TaxInfoList.isEmpty()) {
 			TaxInfoList = getExcelData(DataDirectory + "\\TaxData.xls", "TaxIds"); 
 		}
@@ -409,6 +409,9 @@ public class Helper_Functions{
 			if (TaxInfo[0] != null && TaxInfo[0].contentEquals(CountryCode)) {
 				countrySpecificTaxInfo.add(TaxInfo);
 			}
+		}
+		if (countrySpecificTaxInfo.isEmpty()) {
+			countrySpecificTaxInfo.add(null);
 		}
 		return countrySpecificTaxInfo;
 	}
