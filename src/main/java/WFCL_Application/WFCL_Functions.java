@@ -76,6 +76,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.WaitPresent(By.id("module.to._headerTitle"));
 			//wait for the package and shipment details section to load.
 			WebDriver_Functions.WaitPresent(By.id("module.psd._headerTitle"));
+			WebDriver_Functions.takeSnapShot("INET page.png");
 			return true;
 		}catch (Exception e2){
 			Helper_Functions.PrintOut("User not registered for INET", true);
@@ -91,6 +92,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.WaitPresent(By.id("adminsScrollTable123"));
 			WebDriver_Functions.WaitPresent(By.id("addAdmins"));
 			WebDriver_Functions.WaitPresent(By.id("main"));
+			WebDriver_Functions.takeSnapShot("WADM Page.png");
 			return true;
 		}catch (Exception e2){
 			Helper_Functions.PrintOut("User not registered for WADM", true);
@@ -342,7 +344,7 @@ public class WFCL_Functions{
 		WebDriver_Functions.Type(By.id("uid"), UserId);
 		WebDriver_Functions.Type(By.id("password"), Helper_Functions.myPassword);
 		WebDriver_Functions.Type(By.id("retypePassword"), Helper_Functions.myPassword);
-		WebDriver_Functions.Select(By.id("reminderQuestion"), "What is your mother's first name?", "t");
+		WebDriver_Functions.Select(By.id("reminderQuestion"), "SP2Q1", "v"); //"What is your mother's first name?"
 		WebDriver_Functions.Type(By.id("reminderAnswer"), "mom");
 
 		if (WebDriver_Functions.isPresent(By.id("acceptterms")) && DriverFactory.getInstance().getDriver().findElement(By.id("acceptterms")).isSelected() == false) {
@@ -420,7 +422,7 @@ public class WFCL_Functions{
 
 		WebDriver_Functions.Select(By.id("CCType"), CreditCardDetils[0], "t");
 
-		WebDriver_Functions.takeSnapShot("CreditCard Entry");
+		WebDriver_Functions.takeSnapShot("CreditCard Entry.png");
 		WebDriver_Functions.Click(By.id("Complete"));
 
 		try {
@@ -438,41 +440,6 @@ public class WFCL_Functions{
 		return CreditCardDetils; //return the credit card used
 	}//end WFCL_CC_Page
 
-	public static boolean WFCL_AccountEntryScreen(String AccountNumber, String AccountNickname) throws Exception{
-		if (WebDriver_Functions.isPresent(By.id("accountNumber"))){
-			WebDriver_Functions.Type(By.id("accountNumber"), AccountNumber);
-			WebDriver_Functions.Type(By.id("nickName"), AccountNickname);
-			WebDriver_Functions.takeSnapShot("AccountInformation.png");
-			WebDriver_Functions.Click(By.id("createUserID"));
-			WebDriver_Functions.WaitNotPresent(By.id("nickName"));
-		}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
-			WebDriver_Functions.Type(By.name("newAccountNumber"), AccountNumber);
-			WebDriver_Functions.Type(By.name("newNickName"), AccountNickname);
-			WebDriver_Functions.takeSnapShot("AccountInformation.png");
-			WebDriver_Functions.Click(By.name("submit"));
-			WebDriver_Functions.WaitNotPresent(By.name("newNickName"));
-		}
-
-		if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
-			InvoiceOrCCValidaiton();
-		}
-
-		if (WebDriver_Functions.isPresent(By.id("accountNumber"))|| WebDriver_Functions.isPresent(By.name("newAccountNumber"))) {
-			WebDriver_Functions.Click(By.name("submit"));
-			Helper_Functions.PrintOut("Warning, still on account entry screen. The address entered may be incorrect.", true);
-			//return WFCL_AccountEntryScreen(AccountNumber, AccountNickname, Path);//this is an issue, need to fix later as link is an issue for AU 
-		}else if (WebDriver_Functions.CheckBodyText("Request Access from the Account Administrator")) {
-			//remove the account number from local storage as it is now locked to the company that was just created.
-			Helper_Functions.RemoveAccountFromExcel(AccountNumber);
-			Helper_Functions.PrintOut("Request Access from the Account Administrator", true);
-			throw new Exception("Request Access from the Account Administrator");
-		}
-		
-
-		WebDriver_Functions.WaitNotPresent(By.id("createUserID"));
-		return true;
-	}//end WFCL_AccountEntryScreen
-
 	private static void InvoiceOrCCValidaiton() throws Exception{
 		InvoiceOrCCValidaiton("4460", "750000000", "750000001");
 	}
@@ -488,7 +455,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("creditCardNumber"));
 		}
-		Helper_Functions.PrintOut("asdf", false);
+		Helper_Functions.PrintOut("breakpoint", false);
 	}
 
     public static String WFCL_Secret_Answer(String CountryCode, String strUserName, String NewPassword, String SecretAnswer) throws Exception{
@@ -624,7 +591,7 @@ public class WFCL_Functions{
     }
     
 	public static String WFCL_AdminReg_WithMismatch(String Name[], String UserId, String AccountNumber, String AddressDetails[], String AddressMismatch[], String AccountNickname) throws Exception{
-		boolean InetFlag = false, AdminFlag = false;
+		boolean InetFlag = false;
 		Helper_Functions.PrintOut("Attempting to register with " + AccountNumber, true);
 		String CountryCode = AddressDetails[6].toUpperCase();
 
@@ -641,7 +608,7 @@ public class WFCL_Functions{
 
 		//Step 2 Account information
 		//String AccountNickname = AccountNumber + "_" + CountryCode;
-		WFCL_AccountEntryScreentemp(AccountNumber, AccountNickname);
+		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
 		
 		if (CountryCode.contains("US")){
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
@@ -693,52 +660,34 @@ public class WFCL_Functions{
 		}catch (Exception e2){
 			Helper_Functions.PrintOut("Failure with admin registriaton.", true);
 		};
-		WebDriver_Functions.WaitPresent(By.name("companyName"));
-		String CompanyName = "Company" + Helper_Functions.CurrentDateTime();
-		WebDriver_Functions.Type(By.name("companyName"), CompanyName);
-		WebDriver_Functions.takeSnapShot("WADM CompanyName.png");
-		WebDriver_Functions.Click(By.className("buttonpurple"));
-
-		//confirmation page
-		try{
-			WebDriver_Functions.WaitPresent(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > h3"));
-			Helper_Functions.PrintOut("Registered for Admin. Current URL:" + DriverFactory.getInstance().getDriver().getCurrentUrl(), true);
-			WebDriver_Functions.takeSnapShot("WADM Registration Confirmaiton.png");
-			WebDriver_Functions.Click(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > p:nth-child(6) > a"));//click shipping admin link
-			WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + CompanyName);
-			AdminFlag = true;
-			//remove the account number from local storage as it is now locked to the company that was just created.
-			Helper_Functions.RemoveAccountFromExcel(AccountNumber);
-			
-		}catch (Exception e) {
-			Helper_Functions.PrintOut("Not able to register for admin " + DriverFactory.getInstance().getDriver().getCurrentUrl(), true);
-		}
 		
 		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
 		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
-		String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag, "Admin:" + AdminFlag};
+		String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag};
 		Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
 		return Arrays.toString(ReturnValue);
 	}//end WFCL_AccountRegistration
     
-	public static boolean WFCL_AccountEntryScreentemp(String AccountNumber, String AccountNickname) throws Exception{
+	public static boolean WFCL_AccountEntryScreen(String AccountNumber, String AccountNickname) throws Exception{
 		if (WebDriver_Functions.isPresent(By.id("accountNumber"))){
 			WebDriver_Functions.Type(By.id("accountNumber"), AccountNumber);
 			WebDriver_Functions.Type(By.id("nickName"), AccountNickname);
 			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.id("createUserID"));
+			WebDriver_Functions.WaitNotPresent(By.id("nickName"));
 		}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
 			WebDriver_Functions.Type(By.name("newAccountNumber"), AccountNumber);
 			WebDriver_Functions.Type(By.name("newNickName"), AccountNickname);
 			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.name("submit"));
+			WebDriver_Functions.WaitNotPresent(By.name("newNickName"));
 		}
 
 		//need to add a dynamic wait here for the processing
 		Helper_Functions.Wait(5);
-		
+				
 		if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
-			InvoiceOrCCValidaiton(); 
+			InvoiceOrCCValidaiton();
 		}
 
 		if (WebDriver_Functions.isPresent(By.id("accountNumber"))|| WebDriver_Functions.isPresent(By.name("newAccountNumber"))) {

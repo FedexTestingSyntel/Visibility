@@ -7,6 +7,8 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import Data_Structures.Account_Data;
+
 public class Environment {
 	public static String LevelsToTest;
 	private static Environment instance = new Environment();
@@ -62,16 +64,25 @@ public class Environment {
 	}
 	
 	public static String[][] getCountryList(String Identifier){
-		Identifier = Identifier.toLowerCase();
+		Identifier = Identifier.toUpperCase();
 		String FullCountryList[][] = new String[][]{{"US", "United States"}, {"AF", "Afghanistan"}, {"AL", "Albania"}, {"DZ", "Algeria"}, {"AS", "American Samoa"}, {"AD", "Andorra"}, {"AO", "Angola"}, {"AI", "Anguilla"}, {"AG", "Antigua and Barbuda"}, {"AR", "Argentina"}, {"AM", "Armenia"}, {"AW", "Aruba"}, {"AU", "Australia"}, {"AT", "Austria"}, {"AZ", "Azerbaijan"}, {"BS", "Bahamas"}, {"BH", "Bahrain"}, {"BD", "Bangladesh"}, {"BB", "Barbados"}, {"BY", "Belarus"}, {"BE", "Belgium"}, {"BZ", "Belize"}, {"BJ", "Benin"}, {"BM", "Bermuda"}, {"BT", "Bhutan"}, {"BO", "Bolivia"}, {"BQ", "Bonaire/Saba/Sint Eustatius"}, {"BA", "Bosnia-Herzegovina"}, {"BW", "Botswana"}, {"BR", "Brazil"}, {"VG", "Britain Virgin Islands"}, {"BN", "Brunei"}, {"BG", "Bulgaria"}, {"BF", "Burkina Faso"}, {"BI", "Burundi"}, {"KH", "Cambodia"}, {"CM", "Cameroon"}, {"CA", "Canada"}, {"CV", "Cape Verde Islands"}, {"KY", "Cayman Islands"}, {"CF", "Central African Republic"}, {"TD", "Chad"}, {"CL", "Chile"}, {"CN", "China"}, {"CO", "Colombia"}, {"KM", "Comoros"}, {"CG", "Congo"}, {"CK", "Cook Islands"}, {"CR", "Costa Rica"}, {"HR", "Croatia"}, {"CU", "Cuba"}, {"CW", "Curacao"}, {"CY", "Cyprus"}, {"CZ", "Czech Republic"}, {"CD", "Democratic Republic of Congo"}, {"DK", "Denmark"}, {"DJ", "Djibouti"}, {"DM", "Dominica"}, {"DO", "Dominican Republic"}, {"TL", "East Timor"}, {"EC", "Ecuador"}, {"EG", "Egypt"}, {"SV", "El Salvador"}, {"GQ", "Equatorial Guinea"}, {"ER", "Eritrea"}, {"EE", "Estonia"}, {"ET", "Ethiopia"}, {"FO", "Faroe Islands"}, {"FJ", "Fiji"}, {"FI", "Finland"}, {"FR", "France"}, {"GF", "French Guiana"}, {"PF", "French Polynesia"}, {"GA", "Gabon"}, {"GM", "Gambia"}, {"GE", "Georgia, Republic of"}, {"DE", "Germany"}, {"GH", "Ghana"}, {"GI", "Gibraltar"}, {"GR", "Greece"}, {"GL", "Greenland"}, {"GD", "Grenada"}, {"GP", "Guadeloupe"}, {"GU", "Guam"}, {"GT", "Guatemala"}, {"GN", "Guinea"}, {"GW", "Guinea-Bissau"}, {"GY", "Guyana"}, {"HT", "Haiti"}, {"HN", "Honduras"}, {"HK", "Hong Kong"}, {"HU", "Hungary"}, {"IS", "Iceland"}, {"IN", "India"}, {"ID", "Indonesia"}, {"IR", "Iran"}, {"IQ", "Iraq Republic"}, {"IE", "Ireland"}, {"IL", "Israel"}, {"IT", "Italy"}, {"CI", "Ivory Coast"}, {"JM", "Jamaica"}, {"JP", "Japan"}, {"JO", "Jordan"}, {"KZ", "Kazakhstan"}, {"KE", "Kenya"}, {"KI", "Kiribati"}, {"KW", "Kuwait"}, {"KG", "Kyrgyzstan"}, {"LA", "Laos"}, {"LV", "Latvia"}, {"LB", "Lebanon"}, {"LS", "Lesotho"}, {"LR", "Liberia"}, {"LY", "Libya"}, {"LI", "Liechtenstein"}, {"LT", "Lithuania"}, {"LU", "Luxembourg"}, {"MO", "Macau"}, {"MK", "Macedonia"}, {"MG", "Madagascar"}, {"MW", "Malawi"}, {"MY", "Malaysia"}, {"MV", "Maldives"}, {"ML", "Mali"}, {"MT", "Malta"}, {"MH", "Marshall Islands"}, {"MQ", "Martinique"}, {"MR", "Mauritania"}, {"MU", "Mauritius"}, {"MX", "Mexico"}, {"FM", "Micronesia"}, {"MD", "Moldova"}, {"MC", "Monaco"}, {"MN", "Mongolia"}, {"ME", "Montenegro"}, {"MS", "Montserrat"}, {"MA", "Morocco"}, {"MZ", "Mozambique"}, {"MM", "Myanmar/Burma"}, {"NA", "Namibia"}, {"NR", "Nauru"}, {"NP", "Nepal"}, {"NL", "Netherlands"}, {"AN", "Netherlands Antilles"}, {"NC", "New Caledonia"}, {"NZ", "New Zealand"}, {"NI", "Nicaragua"}, {"NE", "Niger"}, {"NG", "Nigeria"}, {"NU", "Niue"}, {"NO", "Norway"}, {"OM", "Oman"}, {"PK", "Pakistan"}, {"PW", "Palau"}, {"PS", "Palestine"}, {"PA", "Panama"}, {"PG", "Papua New Guinea"}, {"PY", "Paraguay"}, {"PE", "Peru"}, {"PH", "Philippines"}, {"PL", "Poland"}, {"PT", "Portugal"}, {"PR", "Puerto Rico"}, {"QA", "Qatar"}, {"RE", "Reunion Island"}, {"RO", "Romania"}, {"RU", "Russia"}, {"RW", "Rwanda"}, {"MF", "Saint Martin"}, {"MP", "Saipan"}, {"WS", "Samoa"}, {"SM", "San Marino"}, {"ST", "Sao Tome & Principe"}, {"SA", "Saudi Arabia"}, {"SN", "Senegal"}, {"RS", "Serbia"}, {"SC", "Seychelles"}, {"SL", "Sierra Leone"}, {"SG", "Singapore"}, {"SK", "Slovak Republic"}, {"SI", "Slovenia"}, {"SB", "Solomon Islands"}, {"SO", "Somalia"}, {"ZA", "South Africa"}, {"KR", "South Korea"}, {"ES", "Spain"}, {"LK", "Sri Lanka"}, {"KN", "St Kitts and Nevis"}, {"LC", "St Lucia"}, {"SX", "St Maarten"}, {"VC", "St Vincent"}, {"GP", "St. Barthelemy"}, {"SD", "Sudan"}, {"SR", "Suriname"}, {"SZ", "Swaziland"}, {"SE", "Sweden"}, {"CH", "Switzerland"}, {"SY", "Syria"}, {"TW", "Taiwan"}, {"TJ", "Tajikistan"}, {"TZ", "Tanzania"}, {"TH", "Thailand"}, {"TG", "Togo"}, {"TK", "Tokelau Is."}, {"TO", "Tonga"}, {"TT", "Trinidad And Tobago"}, {"TN", "Tunisia"}, {"TR", "Turkey"}, {"TM", "Turkmenistan"}, {"TC", "Turks And Caicos"}, {"TV", "Tuvalu"}, {"UG", "Uganda"}, {"UA", "Ukraine"}, {"AE", "United Arab Emirates"}, {"GB", "United Kingdom"}, {"UY", "Uruguay"}, {"VI", "US Virgin Islands/St John/St Thomas"}, {"UZ", "Uzbekistan"}, {"VU", "Vanuatu"}, {"VA", "Vatican City State"}, {"VE", "Venezuela"}, {"VN", "Vietnam"}, {"WF", "Wallis and Futuna"}, {"YE", "Yemen"}, {"ZM", "Zambia"}, {"ZW", "Zimbabwe"}};
 		String SmokeCountryList[][] = new String[][]{{"US", "United States"}};
 		
 		//return smoke list by default
-		String ReturnList[][] = SmokeCountryList;
-		if (Identifier.contentEquals("smoke")){
+		String ReturnList[][] = SmokeCountryList;		//will return smoke test by default 
+		if (Identifier.contentEquals("SMOKE")){
 			ReturnList = SmokeCountryList;
-		}else if (Identifier.contentEquals("full")){
+		}else if (Identifier.contentEquals("FULL")){
 			ReturnList = FullCountryList;
+		}else {
+			// if the country code is sent
+			if (Identifier.length() == 2) {
+				for (int i = 0; i < FullCountryList.length; i++) {
+					if (FullCountryList[i][0].contentEquals(Identifier)) {
+						ReturnList[0] = FullCountryList[i];
+					}
+				}
+			}
 		}
 		
 		System.out.println("getCountryList is returning - " + Arrays.deepToString(ReturnList));
@@ -146,5 +157,107 @@ public class Environment {
 		}
   		//invalid input
   		return null;
+	}
+	
+	public static Account_Data[] getAccountDetails(String Level){
+		ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
+		Account_Data Account_Details[] = new Account_Data[AccountsAlreadyCreated.size()];
+		String Headers[] = AccountsAlreadyCreated.get(0);
+		for (int i = 1; i < AccountsAlreadyCreated.size(); i++) {
+			String Row[] = AccountsAlreadyCreated.get(i);
+			//Helper_Functions.PrintOut(Arrays.toString(Row), false);
+			Account_Details[i -1] = new Account_Data();
+			for (int j = 0; j <Headers.length; j++) {
+				switch (Headers[j]) {
+		  		case "Level":
+		  			Account_Details[i - 1].Level = Row[j];
+		  			break;
+		  		case "Shipping_Address_Line_1":
+		  			Account_Details[i - 1].Shipping_Address_Line_1 = Row[j];
+		  			break;
+		  		case "Shipping_Address_Line_2":
+		  			Account_Details[i - 1].Shipping_Address_Line_2 = Row[j];
+		  			break;
+		  		case "Shipping_City":
+		  			Account_Details[i - 1].Shipping_City = Row[j];
+		  			break;
+		  		case "Shipping_State":
+		  			Account_Details[i - 1].Shipping_State = Row[j];
+		  			break;
+		  		case "Shipping_State_Code":
+		  			Account_Details[i - 1].Shipping_State_Code = Row[j];
+		  			break;
+		  		case "Shipping_Zip":
+		  			Account_Details[i - 1].Shipping_Zip = Row[j];
+		  			break;
+		  		case "Shipping_Country_Code":
+		  			Account_Details[i - 1].Shipping_Country_Code = Row[j];
+		  			break;
+		  		case "Shipping_Region":
+		  			Account_Details[i - 1].Shipping_Region = Row[j];
+		  			break;
+		  		case "Shipping_Country":
+		  			Account_Details[i - 1].Shipping_Country = Row[j];
+		  			break;
+		  		case "Billing_Address_Line_1":
+		  			Account_Details[i - 1].Billing_Address_Line_1 = Row[j];
+		  			break;
+		  		case "Billing_Address_Line_2":
+		  			Account_Details[i - 1].Billing_Address_Line_2 = Row[j];
+		  			break;
+		  		case "Billing_City":
+		  			Account_Details[i - 1].Billing_City = Row[j];
+		  			break;
+		  		case "Billing_State":
+		  			Account_Details[i - 1].Billing_State = Row[j];
+		  			break;
+		  		case "Billing_State_Code":
+		  			Account_Details[i - 1].Billing_State_Code = Row[j];
+		  			break;
+		  		case "Billing_Zip":
+		  			Account_Details[i - 1].Billing_Zip = Row[j];
+		  			break;
+		  		case "Billing_Country_Code":
+		  			Account_Details[i - 1].Billing_Country_Code = Row[j];
+		  			break;
+		  		case "Billing_Region":
+		  			Account_Details[i - 1].Billing_Region = Row[j];
+		  			break;
+		  		case "Billing_Country":
+		  			Account_Details[i - 1].Billing_Country = Row[j];
+		  			break;
+		  		case "Account_Number":
+		  			Account_Details[i - 1].Account_Number = Row[j];
+		  			break;
+		  		case "Credit_Card_Type":
+		  			Account_Details[i - 1].Credit_Card_Type = Row[j];
+		  			break;
+		  		case "Credit_Card_Numer":
+		  			Account_Details[i - 1].Credit_Card_Numer = Row[j];
+		  			break;
+		  		case "Credit_Card_CVV":
+		  			Account_Details[i - 1].Credit_Card_CVV = Row[j];
+		  			break;
+		  		case "Credit_Card_Expiration_Month":
+		  			Account_Details[i - 1].Credit_Card_Expiration_Month = Row[j];
+		  			break;
+		  		case "Credit_Card_Expiration_Year":
+		  			Account_Details[i - 1].Credit_Card_Expiration_Year = Row[j];
+		  			break;
+		  		case "Invoice_Number_A":
+		  			Account_Details[i - 1].Invoice_Number_A = Row[j];
+		  			break;
+		  		case "Invoice_Number_B":
+		  			Account_Details[i - 1].Invoice_Number_B = Row[j];
+		  			break;
+		  		case "Account_Type":
+		  			Account_Details[i - 1].Account_Type = Row[j];
+		  			break;
+				}//end switch
+				
+			}
+		}
+  		//invalid input
+  		return Account_Details;
 	}
 }

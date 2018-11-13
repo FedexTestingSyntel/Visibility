@@ -22,10 +22,11 @@ public class WFCL{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
+		//CountryList = Environment.getCountryList("IN");
 		//CountryList = Environment.getCountryList("full");
 		//need to fix this and make dynamic;
 		//CountryList = new String[][]{{"US", "United States"}, {"CA", "Canada"}};
-		CountryList = new String[][]{{"CA", "Canada"}};
+		//CountryList = new String[][]{{"CA", "Canada"}};
 		//CountryList = new String[][]{{"US", "United States"}};
 		//CountryList = new String[][]{{"JP", "Japan"}};
 		//CountryList = new String[][]{{"BR", "Brazil"}};
@@ -75,8 +76,13 @@ public class WFCL{
 		    		if (Level == "7") {
 		    			break;
 		    		}
-		    		Account = Helper_Functions.getExcelFreshAccount(Level, "us", true);
-		    		data.add( new Object[] {Level, "US", Account});
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			Account = Helper_Functions.getExcelFreshAccount(Level, CountryList[j][0], true);
+		    			if (Account != null) {
+		    				data.add( new Object[] {Level, CountryList[j][0], Account});
+		    			}
+					}
+		    		//data.add( new Object[] {Level, "IN", "781428280"});///need to delete
 		    		break;
 		    	case "AccountRegistration_INET":
 		    	case "AccountRegistration_WDPA":

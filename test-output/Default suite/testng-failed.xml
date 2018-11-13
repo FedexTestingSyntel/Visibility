@@ -5,7 +5,7 @@
     <classes>
       <class name="WFCL_Application.WFCL_PI_1">
         <methods>
-          <include name="BR_TaxID" invocation-numbers="0 1"/>
+          <include name="Account_Number_Masking" invocation-numbers="1 0"/>
           <include name="beforeClass"/>
         </methods>
       </class> <!-- WFCL_Application.WFCL_PI_1 -->

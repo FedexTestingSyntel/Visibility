@@ -24,7 +24,7 @@
     <div class="top-banner-root">
       <span class="top-banner-title-font">Test results</span>
       <br/>
-      <span class="top-banner-font-1">1 suite</span>
+      <span class="top-banner-font-1">1 suite, 2 failed tests</span>
     </div> <!-- top-banner-root -->
     <div class="navigator-root">
       <div class="navigator-suite-header">
@@ -38,7 +38,7 @@
         <div class="rounded-window">
           <div class="suite-header light-rounded-window-top">
             <a href="#" class="navigator-link" panel-name="suite-Default_suite">
-              <span class="suite-name border-passed">Default suite</span>
+              <span class="suite-name border-failed">Default suite</span>
             </a> <!-- navigator-link -->
           </div> <!-- suite-header light-rounded-window-top -->
           <div class="navigator-suite-content">
@@ -49,7 +49,7 @@
               <ul>
                 <li>
                   <a href="#" class="navigator-link " panel-name="test-xml-Default_suite">
-                    <span>C:\Users\5159473\AppData\Local\Temp\testng-eclipse-2058454038\testng-customsuite.xml</span>
+                    <span>C:\Users\5159473\AppData\Local\Temp\testng-eclipse--1038484855\testng-customsuite.xml</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
@@ -91,7 +91,45 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">0 methods,   </span>
+                    <span class="method-stats">4 methods, 2 failed,   2 passed</span>
+                  </li>
+                  <li>
+                    <span class="method-list-title failed">Failed methods</span>
+                    <span class="show-or-hide-methods failed">
+                      <a href="#" panel-name="suite-Default_suite" class="hide-methods failed suite-Default_suite"> (hide)</a> <!-- hide-methods failed suite-Default_suite -->
+                      <a href="#" panel-name="suite-Default_suite" class="show-methods failed suite-Default_suite"> (show)</a> <!-- show-methods failed suite-Default_suite -->
+                    </span>
+                    <div class="method-list-content failed suite-Default_suite">
+                      <span>
+                        <img width="3%" src="failed.png"/>
+                        <a href="#" class="method navigator-link" panel-name="suite-Default_suite" title="WFCL_Application.WFCL_PI_1" hash-for-method="Account_Number_Masking(2, US, 751236000, )">Account_Number_Masking(2, US, 751236000, )</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img width="3%" src="failed.png"/>
+                        <a href="#" class="method navigator-link" panel-name="suite-Default_suite" title="WFCL_Application.WFCL_PI_1" hash-for-method="Account_Number_Masking(2, US, 751236000, Nickname)">Account_Number_Masking(2, US, 751236000, Nickname)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content failed suite-Default_suite -->
+                  </li>
+                  <li>
+                    <span class="method-list-title passed">Passed methods</span>
+                    <span class="show-or-hide-methods passed">
+                      <a href="#" panel-name="suite-Default_suite" class="hide-methods passed suite-Default_suite"> (hide)</a> <!-- hide-methods passed suite-Default_suite -->
+                      <a href="#" panel-name="suite-Default_suite" class="show-methods passed suite-Default_suite"> (show)</a> <!-- show-methods passed suite-Default_suite -->
+                    </span>
+                    <div class="method-list-content passed suite-Default_suite">
+                      <span>
+                        <img width="3%" src="passed.png"/>
+                        <a href="#" class="method navigator-link" panel-name="suite-Default_suite" title="WFCL_Application.WFCL_PI_1" hash-for-method="Account_Number_Masking(2, US, 751237120, Nickname)">Account_Number_Masking(2, US, 751237120, Nickname)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img width="3%" src="passed.png"/>
+                        <a href="#" class="method navigator-link" panel-name="suite-Default_suite" title="WFCL_Application.WFCL_PI_1" hash-for-method="Account_Number_Masking(2, US, 751237120, )">Account_Number_Masking(2, US, 751237120, )</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content passed suite-Default_suite -->
                   </li>
                 </ul>
               </div> <!-- suite-section-content -->
@@ -103,10 +141,98 @@
     <div class="wrapper">
       <div class="main-panel-root">
         <div panel-name="suite-Default_suite" class="panel Default_suite">
+          <div class="suite-Default_suite-class-failed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="failed.png"/>
+              <span class="class-name">WFCL_Application.WFCL_PI_1</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="Account_Number_Masking(2, US, 751236000, )">
+                  </a> <!-- Account_Number_Masking(2, US, 751236000, ) -->
+                  <span class="method-name">Account_Number_Masking</span>
+                  <span class="parameters">(2, US, 751236000, )</span>
+                  <div class="stack-trace">java.lang.AssertionError: Request Access from the Account Administrator
+	at org.testng.Assert.fail(Assert.java:96)
+	at WFCL_Application.WFCL_PI_1.Account_Number_Masking(WFCL_PI_1.java:102)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+
+</div> <!-- stack-trace -->
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="Account_Number_Masking(2, US, 751236000, Nickname)">
+                  </a> <!-- Account_Number_Masking(2, US, 751236000, Nickname) -->
+                  <span class="method-name">Account_Number_Masking</span>
+                  <span class="parameters">(2, US, 751236000, Nickname)</span>
+                  <div class="stack-trace">java.lang.AssertionError: Request Access from the Account Administrator
+	at org.testng.Assert.fail(Assert.java:96)
+	at WFCL_Application.WFCL_PI_1.Account_Number_Masking(WFCL_PI_1.java:102)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+
+</div> <!-- stack-trace -->
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Default_suite-class-failed -->
+          <div class="suite-Default_suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">WFCL_Application.WFCL_PI_1</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="Account_Number_Masking(2, US, 751237120, Nickname)">
+                  </a> <!-- Account_Number_Masking(2, US, 751237120, Nickname) -->
+                  <span class="method-name">Account_Number_Masking</span>
+                  <span class="parameters">(2, US, 751237120, Nickname)</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="Account_Number_Masking(2, US, 751237120, )">
+                  </a> <!-- Account_Number_Masking(2, US, 751237120, ) -->
+                  <span class="method-name">Account_Number_Masking</span>
+                  <span class="parameters">(2, US, 751237120, )</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Default_suite-class-passed -->
         </div> <!-- panel Default_suite -->
         <div panel-name="test-xml-Default_suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">C:\Users\5159473\AppData\Local\Temp\testng-eclipse-2058454038\testng-customsuite.xml</span>
+            <span class="header-content">C:\Users\5159473\AppData\Local\Temp\testng-eclipse--1038484855\testng-customsuite.xml</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <pre>
@@ -117,7 +243,7 @@
     &lt;classes&gt;
       &lt;class name=&quot;WFCL_Application.WFCL_PI_1&quot;&gt;
         &lt;methods&gt;
-          &lt;include name=&quot;Address_Mismatch&quot;/&gt;
+          &lt;include name=&quot;Account_Number_Masking&quot;/&gt;
         &lt;/methods&gt;
       &lt;/class&gt; &lt;!-- WFCL_Application.WFCL_PI_1 --&gt;
     &lt;/classes&gt;
@@ -159,11 +285,28 @@ data.addColumn('number', 'Number');
 data.addColumn('string', 'Method');
 data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
-data.addRows(0);
+data.addRows(4);
+data.setCell(0, 0, 0)
+data.setCell(0, 1, 'Account_Number_Masking')
+data.setCell(0, 2, 'WFCL_Application.WFCL_PI_1')
+data.setCell(0, 3, 852131);
+data.setCell(1, 0, 1)
+data.setCell(1, 1, 'Account_Number_Masking')
+data.setCell(1, 2, 'WFCL_Application.WFCL_PI_1')
+data.setCell(1, 3, 852116);
+data.setCell(2, 0, 2)
+data.setCell(2, 1, 'Account_Number_Masking')
+data.setCell(2, 2, 'WFCL_Application.WFCL_PI_1')
+data.setCell(2, 3, 128103);
+data.setCell(3, 0, 3)
+data.setCell(3, 1, 'Account_Number_Masking')
+data.setCell(3, 2, 'WFCL_Application.WFCL_PI_1')
+data.setCell(3, 3, 112740);
 window.suiteTableData['Default_suite']= { tableData: data, tableDiv: 'times-div-Default_suite'}
 return data;
 }
               </script>
+              <span class="suite-total-time">Total running time: 32 minutes</span>
               <div id="times-div-Default_suite">
               </div> <!-- times-div-Default_suite -->
             </div> <!-- times-div -->
@@ -178,14 +321,12 @@ return data;
         </div> <!-- panel -->
         <div panel-name="ignored-methods-Default_suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">2 ignored methods</span>
+            <span class="header-content">1 ignored method</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <div class="ignored-class-div">
               <span class="ignored-class-name">WFCL_Application.WFCL_PI_1</span>
               <div class="ignored-methods-div">
-                <span class="ignored-method-name">Address_Mismatch</span>
-                <br/>
                 <span class="ignored-method-name">BR_TaxID</span>
                 <br/>
               </div> <!-- ignored-methods-div -->
@@ -197,6 +338,32 @@ return data;
             <span class="header-content">Methods in chronological order</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
+            <div class="chronological-class">
+              <div class="chronological-class-name">WFCL_Application.WFCL_PI_1</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <span class="method-name">beforeClass</span>
+                <span class="method-start">0 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="test-method">
+                <img src="failed.png">
+                </img>
+                <span class="method-name">Account_Number_Masking(2, US, 751236000, Nickname)</span>
+                <span class="method-start">544622 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <img src="failed.png">
+                </img>
+                <span class="method-name">Account_Number_Masking(2, US, 751236000, )</span>
+                <span class="method-start">544622 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">Account_Number_Masking(2, US, 751237120, Nickname)</span>
+                <span class="method-start">544622 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">Account_Number_Masking(2, US, 751237120, )</span>
+                <span class="method-start">544637 ms</span>
+              </div> <!-- test-method -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
       </div> <!-- main-panel-root -->

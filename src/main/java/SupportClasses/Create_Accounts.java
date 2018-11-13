@@ -25,7 +25,7 @@ public class Create_Accounts{
 	
 	static String LevelsToTest = "2";
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		ArrayList<String[]> PersonalData = new ArrayList<String[]>();
 		PersonalData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\Load_Your_UserIds.xls",  "Data");//create your own file with the specific data
@@ -55,7 +55,9 @@ public class Create_Accounts{
 				
 				if (ExistingAccounts < 3) {
 					data.add( new Object[] {Level, CountryList});
-				}
+				}	
+				
+				//if (CountryList[6].contentEquals("US")) {data.add( new Object[] {Level, CountryList});}
 			}
 		}
 		return data.iterator();
@@ -192,6 +194,13 @@ public class Create_Accounts{
 			if (WebDriver_Functions.isVisable(By.id("next_payment"))) {
 				WebDriver_Functions.Click(By.id("next_payment"));
 			}
+			
+			//if the address validation page is displayed.
+			if(WebDriver_Functions.isVisable(By.id("adrs_val_non_modified"))){
+				WebDriver_Functions.Select(By.id("addr_validation_override_input_info"), "CUSTOMER_PROVIDED_PROOF", "v");
+				WebDriver_Functions.Click(By.id("adrs_val_non_modified"));
+			}
+			
 			//Regulator Information page
 			if (WebDriver_Functions.isVisable(By.id("next_reg"))) {
 				String StateTax = null, CountryTax = null;

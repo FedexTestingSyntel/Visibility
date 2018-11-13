@@ -1,4 +1,4 @@
-package WaterfallApplications;
+package WDPA_Application;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
-import TestingFunctions.WDPA_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 

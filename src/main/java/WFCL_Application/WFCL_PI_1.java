@@ -1,6 +1,9 @@
 package WFCL_Application;
 
 import org.testng.annotations.Test;
+
+import Data_Structures.Account_Data;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -42,10 +45,24 @@ public class WFCL_PI_1{
 		    				
 		    			}
 		    		break;
-		    	case "Address_Mismatch":
-		    		String Account = Helper_Functions.getExcelFreshAccount(Level, "us", true);
-		    		data.add( new Object[] {Level, "US", Account, ""});
-		    		data.add( new Object[] {Level, "US", Account, "Nickname"});
+		    	case "Account_Number_Masking":
+		    		Account_Data[] Accounts = Environment.getAccountDetails(Level);
+		    		boolean invoiceflag = false, creditcardflag = false;
+		    		for (int j = 0; j< Accounts.length; j++) {
+		    			if (!invoiceflag && Accounts[j].Billing_Country_Code.contentEquals("US") && Accounts[j].Credit_Card_Type.isEmpty()) {
+		    				data.add( new Object[] {Level, "US", Accounts[j].Account_Number, ""});
+				    		data.add( new Object[] {Level, "US", Accounts[j].Account_Number, "Nickname"});
+				    		invoiceflag = true;
+		    			}else if (!creditcardflag && Accounts[j].Billing_Country_Code.contentEquals("US") && Accounts[j].Invoice_Number_A.isEmpty()) {
+		    				data.add( new Object[] {Level, "US", Accounts[j].Account_Number, ""});
+				    		data.add( new Object[] {Level, "US", Accounts[j].Account_Number, "Nickname"});
+				    		creditcardflag = true;
+		    			}
+		    			
+		    			if (creditcardflag && invoiceflag) {
+		    				break;
+		    			}
+		    		}
 		    		break;
 			}
 		}	
@@ -67,15 +84,15 @@ public class WFCL_PI_1{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 3)//since this method will consume an acocunt number run after others have completed
-	public void Address_Mismatch(String Level, String CountryCode, String FreshAccount, String Nickname) {
+	@Test(dataProvider = "dp", priority = 3)//since this method will consume an account number run after others have completed
+	public void Account_Number_Masking(String Level, String CountryCode, String FreshAccount, String Nickname) {
 		try {
 			String UserName[] = Helper_Functions.LoadDummyName("INET", Level);
-			String UserID = Helper_Functions.LoadUserID("L" + Level + FreshAccount + CountryCode + Nickname);
+			String UserID = Helper_Functions.LoadUserID("L" + Level + CountryCode);
 			String AddressDetails[] = Helper_Functions.AccountDetails(FreshAccount);
 			String AddressMismatch[] = new String[AddressDetails.length];
 			System.arraycopy( AddressDetails, 0, AddressMismatch, 0, AddressDetails.length );
-			//update the address with different data
+			//update the address with different data, currently only configured for US account
 			AddressMismatch[2] = "MEMPHIS";
 			AddressMismatch[4] = "TN";
 			AddressMismatch[5] = "38119";
