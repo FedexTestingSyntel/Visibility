@@ -15,7 +15,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class OADR{
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "3";
 	final static boolean SmokeTest = true; // will limit the test cases to high level
 	static String CountryList[][];
 	

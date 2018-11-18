@@ -14,7 +14,7 @@ public class Environment {
 	private static Environment instance = new Environment();
 	public static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 	public static ArrayList<String[]> TaxData = new ArrayList<String[]>();
-	static ArrayList<String[]> AccountsAlreadyCreated_L1, AccountsAlreadyCreated_L2, AccountsAlreadyCreated_L3, AccountsAlreadyCreated_L4, AccountsAlreadyCreated_L5, AccountsAlreadyCreated_L6, AccountsAlreadyCreated_L7;
+	public static Account_Data Account_Details[][] = new Account_Data[8][];
 	
 	private Environment(){
 		//Do-nothing..Do not allow to initialize this class from outside
@@ -111,55 +111,40 @@ public class Environment {
 	}
 	
 	public static ArrayList<String[]> getAccountList(String Level){
-  		switch (Level) {
-  		case "1":
-  			if (AccountsAlreadyCreated_L1 == null) {
-  				AccountsAlreadyCreated_L1 = new ArrayList<String[]>();
-  				AccountsAlreadyCreated_L1 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
-  			}
-  			return AccountsAlreadyCreated_L1;
-  	  	case "2":
-  	  		if (AccountsAlreadyCreated_L2 == null) {
-  	  			AccountsAlreadyCreated_L2 = new ArrayList<String[]>();
-				AccountsAlreadyCreated_L2 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
+		//load the data from excel
+		ArrayList<String[]> AccountsAlreadyCreated = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "Account_Numbers");
+		//get the headers of the excel that will be the first line
+		String Headers[] = AccountsAlreadyCreated.get(0);
+		int LevelPosition = -1;
+		
+		//find the position of the excel where the level is stored
+		for (String s: Headers) {
+			LevelPosition++;
+			if (s.contentEquals("Level")) {
+				break;
 			}
-			return AccountsAlreadyCreated_L2;
-  		case "3":
-  			if (AccountsAlreadyCreated_L3 == null) {
-  				AccountsAlreadyCreated_L3 = new ArrayList<String[]>();
-  				AccountsAlreadyCreated_L3 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
-  			}
-  			return AccountsAlreadyCreated_L3;
-  		case "4":
-  			if (AccountsAlreadyCreated_L4 == null) {
-  				AccountsAlreadyCreated_L4 = new ArrayList<String[]>();
-  				AccountsAlreadyCreated_L4 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
-  			}
-  			return AccountsAlreadyCreated_L4;
-  		case "5":
-  			if (AccountsAlreadyCreated_L5 == null) {
-  				AccountsAlreadyCreated_L5 = new ArrayList<String[]>();
-  				AccountsAlreadyCreated_L5 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
-  			}
-  			return AccountsAlreadyCreated_L5;
-  		case "6":
-  			if (AccountsAlreadyCreated_L6 == null) {
-  				AccountsAlreadyCreated_L6 = new ArrayList<String[]>();
-  				AccountsAlreadyCreated_L6 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
-  			}
-  			return AccountsAlreadyCreated_L6;
-  		case "7":
-  			if (AccountsAlreadyCreated_L7 == null) {
-  				AccountsAlreadyCreated_L7 = new ArrayList<String[]>();
-  				AccountsAlreadyCreated_L7 = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "L" + Level + "_Account_Numbers");//load the relevant information from excel file.
-  			}
-  			return AccountsAlreadyCreated_L7;
 		}
-  		//invalid input
-  		return null;
+		
+		//remove all rows that are not the same as the level that is being sent to this function
+		//please note that starting at position 1 since the headers will remain.
+		for (int i = 1; i < AccountsAlreadyCreated.size(); i++) {
+			if (!AccountsAlreadyCreated.get(i)[LevelPosition].contentEquals(Level)) {
+				AccountsAlreadyCreated.remove(i);
+				i--;
+			}
+		}
+		
+		//return the list of accounts specific to the level sent.
+		return AccountsAlreadyCreated;
 	}
 	
 	public static Account_Data[] getAccountDetails(String Level){
+		int intLevel = Integer.parseInt(Level);
+		//if the data is already loaded then return the values
+		if (Account_Details[intLevel] != null) {
+			return Account_Details[intLevel];
+		}
+		
 		ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
 		Account_Data Account_Details[] = new Account_Data[AccountsAlreadyCreated.size()];
 		String Headers[] = AccountsAlreadyCreated.get(0);
@@ -168,90 +153,103 @@ public class Environment {
 			//Helper_Functions.PrintOut(Arrays.toString(Row), false);
 			Account_Details[i -1] = new Account_Data();
 			for (int j = 0; j <Headers.length; j++) {
+				int pos = i - 1;
 				switch (Headers[j]) {
 		  		case "Level":
-		  			Account_Details[i - 1].Level = Row[j];
+		  			Account_Details[pos].Level = Row[j];
 		  			break;
 		  		case "Shipping_Address_Line_1":
-		  			Account_Details[i - 1].Shipping_Address_Line_1 = Row[j];
+		  			Account_Details[pos].Shipping_Address_Line_1 = Row[j];
 		  			break;
 		  		case "Shipping_Address_Line_2":
-		  			Account_Details[i - 1].Shipping_Address_Line_2 = Row[j];
+		  			Account_Details[pos].Shipping_Address_Line_2 = Row[j];
 		  			break;
 		  		case "Shipping_City":
-		  			Account_Details[i - 1].Shipping_City = Row[j];
+		  			Account_Details[pos].Shipping_City = Row[j];
 		  			break;
 		  		case "Shipping_State":
-		  			Account_Details[i - 1].Shipping_State = Row[j];
+		  			Account_Details[pos].Shipping_State = Row[j];
 		  			break;
 		  		case "Shipping_State_Code":
-		  			Account_Details[i - 1].Shipping_State_Code = Row[j];
+		  			Account_Details[pos].Shipping_State_Code = Row[j];
+		  			break;
+		  		case "Shipping_Phone_Number":
+		  			Account_Details[pos].Shipping_Phone_Number = Row[j];
 		  			break;
 		  		case "Shipping_Zip":
-		  			Account_Details[i - 1].Shipping_Zip = Row[j];
+		  			Account_Details[pos].Shipping_Zip = Row[j];
 		  			break;
 		  		case "Shipping_Country_Code":
-		  			Account_Details[i - 1].Shipping_Country_Code = Row[j];
+		  			Account_Details[pos].Shipping_Country_Code = Row[j];
 		  			break;
 		  		case "Shipping_Region":
-		  			Account_Details[i - 1].Shipping_Region = Row[j];
+		  			Account_Details[pos].Shipping_Region = Row[j];
 		  			break;
 		  		case "Shipping_Country":
-		  			Account_Details[i - 1].Shipping_Country = Row[j];
+		  			Account_Details[pos].Shipping_Country = Row[j];
 		  			break;
 		  		case "Billing_Address_Line_1":
-		  			Account_Details[i - 1].Billing_Address_Line_1 = Row[j];
+		  			Account_Details[pos].Billing_Address_Line_1 = Row[j];
 		  			break;
 		  		case "Billing_Address_Line_2":
-		  			Account_Details[i - 1].Billing_Address_Line_2 = Row[j];
+		  			Account_Details[pos].Billing_Address_Line_2 = Row[j];
 		  			break;
 		  		case "Billing_City":
-		  			Account_Details[i - 1].Billing_City = Row[j];
+		  			Account_Details[pos].Billing_City = Row[j];
 		  			break;
 		  		case "Billing_State":
-		  			Account_Details[i - 1].Billing_State = Row[j];
+		  			Account_Details[pos].Billing_State = Row[j];
 		  			break;
 		  		case "Billing_State_Code":
-		  			Account_Details[i - 1].Billing_State_Code = Row[j];
+		  			Account_Details[pos].Billing_State_Code = Row[j];
+		  			break;
+		  		case "Billing_Phone_Number":
+		  			Account_Details[pos].Billing_Phone_Number = Row[j];
 		  			break;
 		  		case "Billing_Zip":
-		  			Account_Details[i - 1].Billing_Zip = Row[j];
+		  			Account_Details[pos].Billing_Zip = Row[j];
 		  			break;
 		  		case "Billing_Country_Code":
-		  			Account_Details[i - 1].Billing_Country_Code = Row[j];
+		  			Account_Details[pos].Billing_Country_Code = Row[j];
 		  			break;
 		  		case "Billing_Region":
-		  			Account_Details[i - 1].Billing_Region = Row[j];
+		  			Account_Details[pos].Billing_Region = Row[j];
 		  			break;
 		  		case "Billing_Country":
-		  			Account_Details[i - 1].Billing_Country = Row[j];
+		  			Account_Details[pos].Billing_Country = Row[j];
 		  			break;
 		  		case "Account_Number":
-		  			Account_Details[i - 1].Account_Number = Row[j];
+		  			Account_Details[pos].Account_Number = Row[j];
 		  			break;
 		  		case "Credit_Card_Type":
-		  			Account_Details[i - 1].Credit_Card_Type = Row[j];
+		  			Account_Details[pos].Credit_Card_Type = Row[j];
 		  			break;
-		  		case "Credit_Card_Numer":
-		  			Account_Details[i - 1].Credit_Card_Numer = Row[j];
+		  		case "Credit_Card_Number":
+		  			Account_Details[pos].Credit_Card_Number = Row[j];
 		  			break;
 		  		case "Credit_Card_CVV":
-		  			Account_Details[i - 1].Credit_Card_CVV = Row[j];
+		  			Account_Details[pos].Credit_Card_CVV = Row[j];
 		  			break;
 		  		case "Credit_Card_Expiration_Month":
-		  			Account_Details[i - 1].Credit_Card_Expiration_Month = Row[j];
+		  			Account_Details[pos].Credit_Card_Expiration_Month = Row[j];
 		  			break;
 		  		case "Credit_Card_Expiration_Year":
-		  			Account_Details[i - 1].Credit_Card_Expiration_Year = Row[j];
+		  			Account_Details[pos].Credit_Card_Expiration_Year = Row[j];
 		  			break;
 		  		case "Invoice_Number_A":
-		  			Account_Details[i - 1].Invoice_Number_A = Row[j];
+		  			Account_Details[pos].Invoice_Number_A = Row[j];
 		  			break;
 		  		case "Invoice_Number_B":
-		  			Account_Details[i - 1].Invoice_Number_B = Row[j];
+		  			Account_Details[pos].Invoice_Number_B = Row[j];
 		  			break;
 		  		case "Account_Type":
-		  			Account_Details[i - 1].Account_Type = Row[j];
+		  			Account_Details[pos].Account_Type = Row[j];
+		  			break;
+		  		case "Tax_ID_One":
+		  			Account_Details[pos].Account_Type = Row[j];
+		  			break;
+		  		case "Tax_ID_Two":
+		  			Account_Details[pos].Account_Type = Row[j];
 		  			break;
 				}//end switch
 				

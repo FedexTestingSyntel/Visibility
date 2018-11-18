@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="2" ignored="1" total="5" passed="2">
+<testng-results skipped="0" failed="1" ignored="5" total="6" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="1397100" started-at="2018-11-13T22:34:39Z" finished-at="2018-11-13T22:57:56Z">
+  <suite name="Default suite" duration-ms="28966" started-at="2018-11-18T05:58:36Z" finished-at="2018-11-18T05:59:05Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="1397100" started-at="2018-11-13T22:34:39Z" finished-at="2018-11-13T22:57:56Z">
-      <class name="WFCL_Application.WFCL_PI_1">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WFCL_Application.WFCL_PI_1@2b4bac49]" name="beforeClass" is-config="true" duration-ms="186" started-at="2018-11-13T22:34:39Z" finished-at="2018-11-13T22:34:40Z">
+    <test name="Default test" duration-ms="28966" started-at="2018-11-18T05:58:36Z" finished-at="2018-11-18T05:59:05Z">
+      <class name="WDPA_Application.WDPA">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WDPA_Application.WDPA@fd07cbb]" name="beforeClass" is-config="true" duration-ms="185" started-at="2018-11-18T05:58:36Z" finished-at="2018-11-18T05:58:37Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="FAIL" signature="Account_Number_Masking(java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:3, instance:WFCL_Application.WFCL_PI_1@2b4bac49]" name="Account_Number_Masking" duration-ms="128103" started-at="2018-11-13T22:43:44Z" data-provider="dp" finished-at="2018-11-13T22:45:52Z">
+        <test-method status="FAIL" signature="Pickup_Ground(java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:WDPA_Application.WDPA@fd07cbb]" name="Pickup_Ground" duration-ms="28442" started-at="2018-11-18T05:58:37Z" data-provider="dp" finished-at="2018-11-18T05:59:05Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[2]]>
+                <![CDATA[7]]>
               </value>
             </param>
             <param index="1">
@@ -25,23 +25,29 @@
             </param>
             <param index="2">
               <value>
-                <![CDATA[751236000]]>
+                <![CDATA[LPWDPALTL917198381]]>
               </value>
             </param>
             <param index="3">
               <value>
-                <![CDATA[]]>
+                <![CDATA[Test1234]]>
               </value>
             </param>
           </params>
           <exception class="java.lang.AssertionError">
             <message>
-              <![CDATA[Request Access from the Account Administrator]]>
+              <![CDATA[Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure.
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'WTC-5159473-l2', ip: '172.27.142.145', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: driver.version: ChromeDriver]]>
             </message>
             <full-stacktrace>
-              <![CDATA[java.lang.AssertionError: Request Access from the Account Administrator
+              <![CDATA[java.lang.AssertionError: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure.
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'WTC-5159473-l2', ip: '172.27.142.145', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: driver.version: ChromeDriver
 at org.testng.Assert.fail(Assert.java:96)
-at WFCL_Application.WFCL_PI_1.Account_Number_Masking(WFCL_PI_1.java:102)
+at WDPA_Application.WDPA.Pickup_Ground(WDPA.java:82)
 at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -62,112 +68,8 @@ at java.lang.Thread.run(Unknown Source)
           </exception> <!-- java.lang.AssertionError -->
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- Account_Number_Masking -->
-        <test-method status="PASS" signature="Account_Number_Masking(java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:3, instance:WFCL_Application.WFCL_PI_1@2b4bac49]" name="Account_Number_Masking" duration-ms="852131" started-at="2018-11-13T22:43:44Z" data-provider="dp" finished-at="2018-11-13T22:57:56Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[US]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[751237120]]>
-              </value>
-            </param>
-            <param index="3">
-              <value>
-                <![CDATA[Nickname]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- Account_Number_Masking -->
-        <test-method status="FAIL" signature="Account_Number_Masking(java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:3, instance:WFCL_Application.WFCL_PI_1@2b4bac49]" name="Account_Number_Masking" duration-ms="112740" started-at="2018-11-13T22:43:44Z" data-provider="dp" finished-at="2018-11-13T22:45:37Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[US]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[751236000]]>
-              </value>
-            </param>
-            <param index="3">
-              <value>
-                <![CDATA[Nickname]]>
-              </value>
-            </param>
-          </params>
-          <exception class="java.lang.AssertionError">
-            <message>
-              <![CDATA[Request Access from the Account Administrator]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[java.lang.AssertionError: Request Access from the Account Administrator
-at org.testng.Assert.fail(Assert.java:96)
-at WFCL_Application.WFCL_PI_1.Account_Number_Masking(WFCL_PI_1.java:102)
-at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-at java.lang.reflect.Method.invoke(Unknown Source)
-at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
-at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
-at java.util.concurrent.FutureTask.run(Unknown Source)
-at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-at java.util.concurrent.FutureTask.run(Unknown Source)
-at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-at java.lang.Thread.run(Unknown Source)
-]]>
-            </full-stacktrace>
-          </exception> <!-- java.lang.AssertionError -->
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- Account_Number_Masking -->
-        <test-method status="PASS" signature="Account_Number_Masking(java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:3, instance:WFCL_Application.WFCL_PI_1@2b4bac49]" name="Account_Number_Masking" duration-ms="852116" started-at="2018-11-13T22:43:44Z" data-provider="dp" finished-at="2018-11-13T22:57:56Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[US]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[751237120]]>
-              </value>
-            </param>
-            <param index="3">
-              <value>
-                <![CDATA[]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- Account_Number_Masking -->
-      </class> <!-- WFCL_Application.WFCL_PI_1 -->
+        </test-method> <!-- Pickup_Ground -->
+      </class> <!-- WDPA_Application.WDPA -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 public class WDPA_SmokeTest{
 	
 	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass

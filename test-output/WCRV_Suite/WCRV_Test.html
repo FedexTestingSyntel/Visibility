@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>WCRV_Test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>0/0/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>0/2/0</td>
 </tr><tr>
-<td>Started on:</td><td>Sat Nov 10 23:44:23 CST 2018</td>
+<td>Started on:</td><td>Wed Nov 14 18:42:51 CST 2018</td>
 </tr>
-<tr><td>Total time:</td><td>0 seconds (564 ms)</td>
+<tr><td>Total time:</td><td>194 seconds (194796 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -67,6 +67,88 @@ function toggleAllBoxes() {
 </tr>
 </table><p/>
 <small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-failed'>
+<tr><td colspan='4' align='center'><b>FAILED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='WaterfallApplications.WCRV.WCRV_Generate_RateSheet()'><b>WCRV_Generate_RateSheet</b><br>Test class: WaterfallApplications.WCRV<br>Parameters: 3, US, L3WCRVNonPriUSA1, Test1234, intra</td>
+<td><div><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for presence of element located by: By.id: account
+Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
+System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55112}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir1148_5047}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: ef8b2ae2f9742d218d3e5653d7a67548
+	at WaterfallApplications.WCRV.WCRV_Generate_RateSheet(WCRV.java:69)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 11 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace841884413", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace841884413'><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for presence of element located by: By.id: account
+Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
+System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55112}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir1148_5047}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: ef8b2ae2f9742d218d3e5653d7a67548
+	at org.testng.Assert.fail(Assert.java:96)
+	at WaterfallApplications.WCRV.WCRV_Generate_RateSheet(WCRV.java:69)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:988)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>111</td>
+<td>WaterfallApplications.WCRV@58a90037</td></tr>
+<tr>
+<td title='WaterfallApplications.WCRV.WCRV_Generate_RateSheet()'><b>WCRV_Generate_RateSheet</b><br>Test class: WaterfallApplications.WCRV<br>Parameters: 3, US, L3WCRVNonPriUSA1, Test1234, notintra</td>
+<td><div><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for presence of element located by: By.id: account
+Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
+System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55112}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir1148_5047}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: ef8b2ae2f9742d218d3e5653d7a67548
+	at WaterfallApplications.WCRV.WCRV_Generate_RateSheet(WCRV.java:69)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 11 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace983523693", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace983523693'><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for presence of element located by: By.id: account
+Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
+System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55112}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir1148_5047}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: ef8b2ae2f9742d218d3e5653d7a67548
+	at org.testng.Assert.fail(Assert.java:96)
+	at WaterfallApplications.WCRV.WCRV_Generate_RateSheet(WCRV.java:69)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:988)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>79</td>
+<td>WaterfallApplications.WCRV@58a90037</td></tr>
+</table><p>
 <table width='100%' border='1' class='invocation-skipped'>
 <tr><td colspan='4' align='center'><b>SKIPPED TESTS</b></td></tr>
 <tr><td><b>Test method</b></td>
@@ -75,15 +157,15 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='SupportClasses.Environment.SetEvironmentLevel()'><b>SetEvironmentLevel</b><br>Test class: SupportClasses.Environment<br>Parameters: 7</td>
+<td title='SupportClasses.Environment.SetEvironmentLevel()'><b>SetEvironmentLevel</b><br>Test class: SupportClasses.Environment<br>Parameters: 3</td>
 <td><div><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
-	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:61)
+	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:63)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace146639847", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace146639847'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
-	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:61)
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace2069476961", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace2069476961'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
+	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:63)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)

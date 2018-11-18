@@ -15,14 +15,14 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
-		//CountryList = Environment.getCountryList("IN");
+		//CountryList = Environment.getCountryList("BR");
 		//CountryList = Environment.getCountryList("full");
 		//need to fix this and make dynamic;
 		//CountryList = new String[][]{{"US", "United States"}, {"CA", "Canada"}};
@@ -213,7 +213,7 @@ public class WFCL{
 	public void AccountRegistration_INET(String Level, String CountryCode, String Account){
 		try {
 			//Account = "332082643";
-			//Helper_Functions.MyEmail = "accept@fedex.com";
+			Helper_Functions.MyEmail = "accept@fedex.com";
 			String AddressDetails[] = Helper_Functions.AccountDetails(Account);
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + "Inet" + CountryCode);

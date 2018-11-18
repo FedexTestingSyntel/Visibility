@@ -313,6 +313,9 @@ public class Helper_Functions{
 				}
 				PrintOut("CreditCard: " + Arrays.toString(CreditCard), false);
 				return CreditCard;
+			}else if (CardDetails.length() == 4 && CreditCard[1].contains(CardDetails)) {
+				PrintOut("CreditCard: " + Arrays.toString(CreditCard), false);
+				return CreditCard;
 			}
 		}
 		
@@ -728,6 +731,16 @@ public class Helper_Functions{
 	}
 	
 	public static Account_Data getFreshAccount(String Level, String CountryCode){
+		Account_Data D[] = Environment.getAccountDetails(Level);
+		for (Account_Data Current: D) {
+			if (Current.Billing_Country_Code.contentEquals(CountryCode)) {
+				return Current;
+			}
+		}
+		return null;
+		
+		/*
+		
 		ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
 
 		for (String CountryArray[] : AccountsAlreadyCreated){
@@ -766,6 +779,7 @@ public class Helper_Functions{
 			}
 		}
 		return null;
+		*/
 	}
 
 }//End Class

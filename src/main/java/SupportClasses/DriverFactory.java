@@ -54,7 +54,7 @@ public class DriverFactory{
    public WebDriver CreateDriver() {
 	   WebDriver Locdriver = null;
 	   //make sure driver in the project folder
-	   System.setProperty("webdriver.chrome.driver",".\\chromedriver.exe");
+	   System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir") + "\\chromedriver.exe");
 	   
 	   ChromeOptions options = new ChromeOptions();
 	   //this is used to remove the "Chrome is being controlled by automated test software" banner

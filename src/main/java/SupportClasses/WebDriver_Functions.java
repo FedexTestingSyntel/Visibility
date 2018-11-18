@@ -53,6 +53,9 @@ public class WebDriver_Functions{
     		case "JSP":  		
     			AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp";//independent of level
 				break;
+    		case "JSP_Express":
+    			AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/express.jsp";
+    			break;
     		case "ECAM":			
     			if (Environment.getInstance().getLevel().contentEquals("2")) {
     				AppUrl = "https://ecamdev.idev.fedex.com/ecam/index.html";
@@ -173,6 +176,7 @@ public class WebDriver_Functions{
 	public static void Click(By Ele) throws Exception{
 		JavascriptExecutor js = ((JavascriptExecutor) DriverFactory.getInstance().getDriver());
 		Actions a = new Actions(DriverFactory.getInstance().getDriver());
+		Helper_Functions.PrintOut("    E--Element Clicked " + Ele.toString(), true);
 		try {
 			//set the timeout to 1 second, this is to reduce wait time for this method.
 			DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
@@ -194,7 +198,7 @@ public class WebDriver_Functions{
 			//set the timeout back to the original value.
 			DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.SECONDS);
 		}
-		Helper_Functions.PrintOut("    E--Element Clicked " + Ele.toString(), true);
+		
 		// js.executeScript("window.scrollBy(0, -100)");//scroll down
 		//js.executeScript("window.scrollBy(0,-2000)");// This  will scroll up the page by 500 pixel vertical	
 		//js.executeScript("window.scrollTo(0, document.body.scrollHeight)");  //scroll to bottom of the page
@@ -523,6 +527,7 @@ public class WebDriver_Functions{
   	
   	public static String LevelUrlReturn() {
   		String LevelURL = null;
+  		//Helper_Functions.PrintOut(Environment.getInstance().getLevel(), false);
   		switch (Integer.valueOf(Environment.getInstance().getLevel())) {
       		case 1:
       			LevelURL = "https://wwwbase.idev.fedex.com"; break;

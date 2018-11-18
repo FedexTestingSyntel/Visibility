@@ -16,7 +16,7 @@ import TestingFunctions.WIDM_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM extends Helper_Functions{
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	
 	@BeforeClass

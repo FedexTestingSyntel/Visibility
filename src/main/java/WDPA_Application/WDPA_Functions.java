@@ -357,6 +357,10 @@ public class WDPA_Functions{
 		    WebDriver_Functions.takeSnapShot("Pickup.png");
 		    WebDriver_Functions.Click(By.id("button.freightpickup.schedulePickup"));
 		    
+		    if (WebDriver_Functions.CheckBodyText("The system has experienced an unexpected problem and is unable to complete your request.")) {
+		    	throw new Exception ("The system has experienced an unexpected problem and is unable to complete your request.");
+		    }
+		    
 		    WebDriver_Functions.WaitPresent(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
 		    String strConfirmationNumber = WebDriver_Functions.GetText(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
 		    strConfirmationNumber = strConfirmationNumber.substring(strConfirmationNumber.indexOf(".") + 2);

@@ -16,7 +16,7 @@ import TestingFunctions.WRTT_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WRTT{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	static boolean SmokeTest = true;
 	

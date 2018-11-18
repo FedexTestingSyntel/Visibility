@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WPRL_Suite]" parallel="methods">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="WPRL_Test(failed)" parallel="methods">
+    <parameter name="Level" value="3"/>
+    <classes>
+      <class name="WaterfallApplications.WPRL">
+        <methods>
+          <include name="WPRL_AccountManagement_Passkey" invocation-numbers="0"/>
+          <include name="WPRL_Contact_Admin" invocation-numbers="0"/>
+          <include name="beforeClass"/>
+          <include name="WPRL_Contact_NonAdmin" invocation-numbers="0"/>
+          <include name="WPRL_FDM" invocation-numbers="0"/>
+        </methods>
+      </class> <!-- WaterfallApplications.WPRL -->
+    </classes>
+  </test> <!-- WPRL_Test(failed) -->
+</suite> <!-- Failed suite [WPRL_Suite] -->

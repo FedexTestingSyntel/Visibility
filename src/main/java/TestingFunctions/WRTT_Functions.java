@@ -121,6 +121,9 @@ public class WRTT_Functions {
 				
 			//switch back to main window
 			DriverFactory.getInstance().getDriver().switchTo().window(mainWindowHandle);
+			 if (WebDriver_Functions.CheckBodyText("Error 500")) {
+				 throw new Exception("Error 500");
+			 }
 			Helper_Functions.PrintOut("WRTT " + Title + " Completed successfully", true);
 			return Title;
 		}catch (Exception e) {

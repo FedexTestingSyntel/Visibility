@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 public class WDPA extends WDPA_Functions{
 	
 	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -130,4 +130,25 @@ public class WDPA extends WDPA_Functions{
 			Assert.fail(e.getMessage());
 		}
 	}//end WDPAPickup_ExpressFright
+	
+	@Test
+	public static void Looping_LTL() {
+		Environment.getInstance().setLevel("6");
+		boolean breakout = false;
+		while  (!breakout) {
+			try {
+				String Address[] = Helper_Functions.LoadAddress("US");
+				String Result = WDPALTLPickup(Address, "", "", "10", "400");
+				Helper_Functions.PrintOut(Result, false);
+				
+			}catch (Exception e) {
+				Helper_Functions.PrintOut("FAIL\n\n", false);
+			}
+			
+			//Helper_Functions.Wait(60);
+		}
+		
+	}
+	
+	
 }

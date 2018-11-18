@@ -18,13 +18,13 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("smoke");
+		CountryList = Environment.getCountryList("CA");
 	}
 	
 	@DataProvider (parallel = true)
