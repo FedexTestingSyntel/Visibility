@@ -15,17 +15,13 @@ import TestingFunctions.WIDM_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
-public class WIDM extends Helper_Functions{
+public class WIDM{
 	static String LevelsToTest = "3";
 	static String CountryList[][];
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		for (int i=0; i < LevelsToTest.length(); i++) {
-			String Level = String.valueOf(LevelsToTest.charAt(i));
-			LoadUserIds(Integer.parseInt(Level));
-		}
 		
 		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
@@ -41,12 +37,17 @@ public class WIDM extends Helper_Functions{
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WIDM_ResetPasswordSecret":
-		    		for (int j=0; j < CountryList.length; j++) {
-						data.add( new Object[] {Level, CountryList[j][0], DataClass[intLevel][1].SSO_LOGIN_DESC, DataClass[intLevel][1].USER_PASSWORD_DESC, DataClass[intLevel][1].SECRET_ANSWER_DESC}); 
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
+		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WIDM")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC + "5", Helper_Functions.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    					break;
+		    				}
+		    			}
 					}
 		    		break;
 				case "WIDM_ForgotUserID":
-					data.add( new Object[] {Level, MyEmail});   //level, email
+					data.add( new Object[] {Level, Helper_Functions.MyEmail});   //level, email
 					break;
 				case "WIDM_Registration":
 				case "WIDM_Registration_ErrorMessages":
@@ -62,7 +63,14 @@ public class WIDM extends Helper_Functions{
 					data.add( new Object[] {Level, CountryList[0][0]});
 					break;
 				case "ResetPasswordWIDM_Email":
-					data.add( new Object[] {Level, DataClass[intLevel][1].SSO_LOGIN_DESC, DataClass[intLevel][1].USER_PASSWORD_DESC});
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
+		    				if (Helper_Functions.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    					break;
+		    				}
+		    			}
+					}
 					break;
 			}
 		}	
@@ -72,11 +80,11 @@ public class WIDM extends Helper_Functions{
 	@Test(dataProvider = "dp")
 	public void WIDM_Registration(String Level, String CountryCode){
 		try {
-			String Address[] = LoadAddress(CountryCode);
+			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			//Address = Helper_Functions.AccountDetails("761391020");
-			String UserName[] = LoadDummyName("WIDM", Level);
-			String UserId = LoadUserID("L" + Level + "WIDM" + CountryCode);
-			WIDM_Functions.WIDM_Registration(Address, UserName, UserId);
+			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
+			String UserId = Helper_Functions.LoadUserID("L" + Level + "WIDM" + CountryCode);
+			WIDM_Functions.WIDM_Registration(Address, UserName, UserId, Helper_Functions.MyEmail);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -85,9 +93,9 @@ public class WIDM extends Helper_Functions{
 	@Test(dataProvider = "dp")
 	public void WIDM_RegistrationEFWS(String Level, String CountryCode){
 		try {
-			String Address[] = LoadAddress(CountryCode);
-			String UserName[] = LoadDummyName("WIDM", Level);
-			String UserId = LoadUserID("L" + Level + "EFWS");
+			String Address[] = Helper_Functions.LoadAddress(CountryCode);
+			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
+			String UserId = Helper_Functions.LoadUserID("L" + Level + "EFWS");
 			WIDM_Functions.WIDM_RegistrationEFWS(Address, UserName, UserId);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -124,9 +132,9 @@ public class WIDM extends Helper_Functions{
 	@Test(dataProvider = "dp")
 	public void WIDM_Registration_ErrorMessages(String Level, String CountryCode){
 		try {
-			String Address[] = LoadAddress(CountryCode);
-			String Name[] = LoadDummyName(CountryCode, Level);
-			String UserID = LoadUserID("L" + Level + "T");
+			String Address[] = Helper_Functions.LoadAddress(CountryCode);
+			String Name[] = Helper_Functions.LoadDummyName(CountryCode, Level);
+			String UserID = Helper_Functions.LoadUserID("L" + Level + "T");
 			WIDM_Functions.WIDM_Registration_ErrorMessages(Address, Name, UserID) ;
 		}catch (Exception e) {
 			e.printStackTrace();

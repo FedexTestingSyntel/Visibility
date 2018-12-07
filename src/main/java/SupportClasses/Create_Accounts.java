@@ -25,7 +25,7 @@ public class Create_Accounts{
 	
 	static String LevelsToTest = "3";
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		ArrayList<String[]> PersonalData = new ArrayList<String[]>();
 		PersonalData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\Load_Your_UserIds.xls",  "Data");//create your own file with the specific data
@@ -47,17 +47,19 @@ public class Create_Accounts{
 				ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
 				int ExistingAccounts = 0;
 				for(String Account[]: AccountsAlreadyCreated) {
-					//Compare address line 1
-					if (CountryList[0].contentEquals(Account[10]) && CountryList[6].contentEquals(Account[16])) {
+					//Compare address line 1 vs billing address L1	//compare country code vs billing country code
+					if (CountryList[0].contentEquals(Account[11]) && CountryList[6].contentEquals(Account[18])) {
 						ExistingAccounts++;
 					}
 				}
 				
-				if (ExistingAccounts < 3 && (CountryList[6].contentEquals("US"))) {
+				if (ExistingAccounts < 3 || (CountryList[6].contentEquals("US") && ExistingAccounts < 8)) {
 					data.add( new Object[] {Level, CountryList});
+					//break;
 				}	
 				
-				//if (CountryList[6].contentEquals("US")) {data.add( new Object[] {Level, CountryList});}
+				//if doing a single country
+				if (CountryList[6].contentEquals("IN")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
 			}
 		}
 		return data.iterator();

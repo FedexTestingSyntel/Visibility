@@ -23,13 +23,15 @@ import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
 import jxl.Sheet;
 import jxl.Workbook;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
 public class Helper_Functions{
 	public static String MyEmail = "accept@gmail.com", myPhone = "9011111111", myPassword = "Test1234";
-	//public static String MyEmail = "accept@fedex.com";
+	public static String MyFakeEmail = "accept@fedex.com";
 	public static String BaseDirectory = System.getProperty("user.dir").substring(0, System.getProperty("user.dir").lastIndexOf("\\") + 1);
 	public static String FileSaveDirectory = BaseDirectory + "EclipseScreenshots";
 	public static String DataDirectory = BaseDirectory + "Data";
@@ -590,6 +592,56 @@ public class Helper_Functions{
 		return false;
 	}
 	
+	public static boolean RemoveAccountFromAccount_Numbers(String Level, String Account_to_Delete) {
+		try {
+			String fileName = DataDirectory + "\\AddressDetails.xls";
+			String sheetName = "Account_Numbers";
+			//Read the spreadsheet that needs to be updated
+			FileInputStream fsIP= new FileInputStream(new File(fileName));  
+			//Access the workbook                  
+			HSSFWorkbook wb = new HSSFWorkbook(fsIP);
+			//Access the worksheet, so that we can update / modify it. 
+			HSSFSheet worksheet = wb.getSheetAt(0);
+			for(int i = 1; i< wb.getNumberOfSheets() + 1;i++) {
+				//PrintOut("CurrentSheet: " + worksheet.getSheetName(), false);  //for debugging if getting errors with sheet not found
+				if (worksheet.getSheetName().contentEquals(sheetName)) {
+					break;
+				}
+				worksheet = wb.getSheetAt(i);
+			}
+			
+			for (int j = 0 ; j < worksheet.getLastRowNum(); j++) {
+				try {
+					HSSFRow removingRow = worksheet.getRow(j);
+					if(removingRow != null){
+						DataFormatter formatter = new DataFormatter();
+						String Lvl = formatter.formatCellValue(removingRow.getCell(0));
+						String Account = formatter.formatCellValue(removingRow.getCell(21));
+						if (Lvl.contentEquals(Level) && Account.contentEquals(Account_to_Delete)) {
+							worksheet.removeRow(removingRow);
+							break;
+						}
+					}	
+				}catch (Exception e) {}
+				
+			}
+		
+			//Close the InputStream  
+			fsIP.close(); 
+			//Open FileOutputStream to write updates
+			FileOutputStream output_file =new FileOutputStream(new File(fileName));  
+			//write changes
+			wb.write(output_file);
+			//close the stream
+			output_file.close();
+			wb.close();
+		}catch (Exception e) {
+			PrintOut("WARNING, Unble to remove account from excel.", true);
+			return false;
+		}
+		return true;
+	}
+	
 	public static boolean writeExcelData(String fileName, String sheetName, String CellData, int RowtoWrite, int ColumntoWrite){
 		try {
 			//Read the spreadsheet that needs to be updated
@@ -733,53 +785,11 @@ public class Helper_Functions{
 	public static Account_Data getFreshAccount(String Level, String CountryCode){
 		Account_Data D[] = Environment.getAccountDetails(Level);
 		for (Account_Data Current: D) {
-			if (Current.Billing_Country_Code.contentEquals(CountryCode)) {
+			if (Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
 				return Current;
 			}
 		}
 		return null;
-		
-		/*
-		
-		ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
-
-		for (String CountryArray[] : AccountsAlreadyCreated){
-			//if the correct line for the country and there are account numbers loaded.
-			if (CountryArray[16].contentEquals(CountryCode)) {//position 9 in the L1 accounts
-				Account_Data D = new Account_Data();
-				D.Level = CountryArray[0];
-				D.Shipping_Address_Line_1 = CountryArray[1];
-				D.Shipping_Address_Line_2 = CountryArray[2];
-				D.Shipping_City = CountryArray[3];
-				D.Shipping_State = CountryArray[4];
-				D.Shipping_State_Code = CountryArray[5];
-				D.Shipping_Zip = CountryArray[6];
-				D.Shipping_Country_Code = CountryArray[7];
-				D.Shipping_Region = CountryArray[8];
-				D.Shipping_Country = CountryArray[9];
-				D.Billing_Address_Line_1 = CountryArray[10];
-				D.Billing_Address_Line_2 = CountryArray[11];
-				D.Billing_City = CountryArray[12];
-				D.Billing_State = CountryArray[13];
-				D.Billing_State_Code = CountryArray[14];
-				D.Billing_Zip = CountryArray[15];
-				D.Billing_Country_Code = CountryArray[16];
-				D.Billing_Region = CountryArray[17];
-				D.Billing_Country = CountryArray[18];
-				D.Account_Number = CountryArray[19];
-				D.Credit_Card_Type = CountryArray[20];
-				D.Credit_Card_Numer = CountryArray[21];
-				D.Credit_Card_CVV = CountryArray[22];
-				D.Credit_Card_Expiration_Month = CountryArray[23];
-				D.Credit_Card_Expiration_Year = CountryArray[24];
-				D.Invoice_Number_A = CountryArray[25];
-				D.Invoice_Number_B = CountryArray[26];
-				D.Account_Type = CountryArray[27];
-				return D;
-			}
-		}
-		return null;
-		*/
 	}
 
 }//End Class

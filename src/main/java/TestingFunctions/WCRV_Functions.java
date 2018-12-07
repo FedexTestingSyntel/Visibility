@@ -18,14 +18,14 @@ import SupportClasses.WebDriver_Functions;
 
 public class WCRV_Functions{
 	public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"},{"IMPORT","I"},{"IMPORT_INBOUND","II"},{"LEGACY_THIRD_PARTY","LT"},{"GLOBAL_THIRD_PARTY","GT"}};
+	//public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"}};
+	
 	//{Service Code,   Brief service name,      full service name}
 	public static String serviceBaseCode[][] = {{"SL","Sp", "SmartPost"},{"FE","Fec", "NEED TO ADD NAME"},{"FP","fp", "NEED TO ADD NAME"},{"92","Gd", "Ground"},{"90","Hd", "Home Delivery"},
 												{"88","SD", "Intra-MX SD-Letter"},{"87","SDci", "Intra-MX SD City LTR"},{"86","IEF", "Economy Freight"},{"84","IPddf", "Priority DirectDistribution Freight"},{"83","3Df", "3Day Freight"},
 												{"80","2Df", "2Day Freight"},{"70","1Df", "1Day Freight"},{"49","2DAm", "2Day AM"},{"39","Ff", "First Overnight® Freight"},{"26", "Econ", "FedEx Economy"},
 												{"24","Ndnoon", "FedEx Next Day by 12 Noon, GB to GB"},{"20","Es", "Express Saver"},{"18","IPdd", "Priority DirectDistribution"},{"17","IEdd", "Economy DirectDistribution"},{"06","Fo", "First Overnight/International"},
 												{"05","So", "Standard Overnight"},{"04","Iec", "International Economy"},{"03","2Da", "2Day"},{"01","Po", "Priority Overnight/International"}};
-	
-	
 	
 	public static String[] WCRV_Generate(String CountryCode, String User, String Password) throws Exception{
 		return WCRV_Generate(CountryCode, User, Password, "any");

@@ -22,10 +22,10 @@ public class OADR{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
-			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-			Helper_Functions.LoadUserIds(Integer.parseInt(Level));
-		}
+		//for (int i=0; i < Environment.LevelsToTest.length(); i++) {
+		//	String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
+		//	Helper_Functions.LoadUserIds(Integer.parseInt(Level));
+		//}
 		//if (SmokeTest) 
 		CountryList = new String[][]{{"US", "United States"}};
 	}

@@ -32,6 +32,8 @@ public class WFCL{
 		//CountryList = new String[][]{{"BR", "Brazil"}};
 		//CountryList = new String[][]{{"GB", "Great Brittan"}};
 		//CountryList = new String[][]{{"SI", "Slovenia"}, {"RO", "Romania"}};
+		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
+		//CountryList = new String[][]{{"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TH", "Thailand"}};
 	}
 	
 	@DataProvider (parallel = true)
@@ -142,7 +144,7 @@ public class WFCL{
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
-			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + Thread.currentThread().getId() + "CC");
+			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + Thread.currentThread().getId() + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
 			String[] TaxInfo = Helper_Functions.getTaxInfo(CountryCode).get(0);
 			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, false, TaxInfo);
@@ -152,7 +154,7 @@ public class WFCL{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "349582")
+	@Test(dataProvider = "dp", description = "349582", enabled = false)
 	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
@@ -167,7 +169,7 @@ public class WFCL{
 		}
 	}
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = false)
 	public void TNT_Vat_Validation(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
@@ -212,6 +214,8 @@ public class WFCL{
 	@Test(dataProvider = "dp", priority = 1)
 	public void AccountRegistration_INET(String Level, String CountryCode, String Account){
 		try {
+			
+			Account = "167267025";
 			//Account = "332082643";
 			Helper_Functions.MyEmail = "accept@fedex.com";
 			String AddressDetails[] = Helper_Functions.AccountDetails(Account);
@@ -295,7 +299,7 @@ public class WFCL{
 		}
 	};
 	
-	@Test(dataProvider = "dp", priority = 3, enabled = false)//since this method will consume an acocunt number run after others have completed
+	@Test(dataProvider = "dp", priority = 3, enabled = true)//since this method will consume an acocunt number run after others have completed
 	public void Address_Mismatch(String Level, String CountryCode, String FreshAccount, String Nickname) {
 		try {
 			String UserName[] = Helper_Functions.LoadDummyName("INET", Level);

@@ -1,4 +1,4 @@
-package TestingFunctions;
+package WPRL_Application;
 
 import static org.testng.Assert.assertEquals;
 
@@ -14,12 +14,9 @@ import SupportClasses.WebDriver_Functions;
 
 public class WPRL_Functions {
 	
-	//need to redo this whole class
-
 	public static String[] WPRL_Contact(String User, String Password, String AddressDetails[], String Name[], String Phone[][], String Email) throws Exception{
 	 	String CountryCode = AddressDetails[6];
 		try {
-
 			WebDriver_Functions.Login(User, Password);
 			WebDriver_Functions.ChangeURL("WPRL", CountryCode, false);
 			//edit the contact information
@@ -116,7 +113,7 @@ public class WPRL_Functions {
 				}
 				
 				WebDriver_Functions.Type(By.id("sAddrPrimaryPhoneTxtBox"), "9011111111");////////Update dynamic later
-				WebDriver_Functions.Type(By.id("sAddrEmailTxtBox"), Helper_Functions.MyEmail);
+				WebDriver_Functions.Type(By.id("sAddrEmailTxtBox"), Helper_Functions.MyFakeEmail);
 				WebDriver_Functions.Click(By.id("sAddrSaveBtn"));
 				WebDriver_Functions.WaitNotVisable(By.id("LoadingDiv"));//wait for the loading overlay to not be present
 				WebDriver_Functions.WaitForText(By.id("sAddrUpdatedTxt"), "Your updates have been saved.");
@@ -167,8 +164,8 @@ public class WPRL_Functions {
 				WebDriver_Functions.Select(By.id("card-state-fld"), AddressDetails[3], "t");
 				
 				WebDriver_Functions.Type(By.id("card-phone-fld"), "9011111111");/////////update later, dynamic
-				WebDriver_Functions.Type(By.id("card-email-fld"), Helper_Functions.MyEmail);
-				WebDriver_Functions.Type(By.id("card-email-retype-fld"), Helper_Functions.MyEmail);
+				WebDriver_Functions.Type(By.id("card-email-fld"), Helper_Functions.MyFakeEmail);
+				WebDriver_Functions.Type(By.id("card-email-retype-fld"), Helper_Functions.MyFakeEmail);
 				
 				WebDriver_Functions.Click(By.id("card-continue-save-btn"));
 				WebDriver_Functions.WaitNotVisable(By.id("LoadingDiv"));//wait for the loading overlay to not be present
@@ -292,7 +289,7 @@ public class WPRL_Functions {
 			try{
 				WebDriver_Functions.WaitForTextNot(By.id("rc_country_val"), (""));
 				WebDriver_Functions.Click(By.xpath("//*[@id='edit']"));
-				WPRL_Contact_Input(AddressDetails, Name, Helper_Functions.LoadPhone_Mobile_Fax_Email("US"), Helper_Functions.MyEmail, "rc");
+				WPRL_Contact_Input(AddressDetails, Name, Helper_Functions.LoadPhone_Mobile_Fax_Email("US"), Helper_Functions.MyFakeEmail, "rc");
 				WebDriver_Functions.Click(By.id("rc_savebtn"));
 			
 				//confirm that updates have been made
@@ -316,7 +313,7 @@ public class WPRL_Functions {
 			try{
 				WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
 				WebDriver_Functions.Click(By.cssSelector("#creditcardinformation > #show-hide > div.fx-toggler > #edit"));
-				WPRL_CreditCard_Input(AddressDetails, CardDetails, Name, Helper_Functions.myPhone, Helper_Functions.MyEmail);
+				WPRL_CreditCard_Input(AddressDetails, CardDetails, Name, Helper_Functions.myPhone, Helper_Functions.MyFakeEmail);
 				WebDriver_Functions.Click(By.id("card-continue-save-btn"));
 				WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
 				WebDriver_Functions.WaitPresent(By.cssSelector("#general-errors-creditcard > p"));
@@ -396,12 +393,12 @@ public class WPRL_Functions {
 				WebDriver_Functions.WaitPresent(By.cssSelector("#notifAddressedToMeNotifySelect option[value=EMAIL]"));//WebDriver_Functions.WaitForTextPresentInElement(By.id("notifAddressedToMeNotifySelect"), "Email"));
 				WebDriver_Functions.Select(By.id("notifAddressedToMeNotifySelect"), "Email", "t");
 				WebDriver_Functions.WaitPresent(By.id("notifEmailTxt"));
-				WebDriver_Functions.Type(By.id("notifEmailTxt"), Helper_Functions.MyEmail);
+				WebDriver_Functions.Type(By.id("notifEmailTxt"), Helper_Functions.MyFakeEmail);
 
 				WebDriver_Functions.takeSnapShot("FDMNotif.png");
 				WebDriver_Functions.Click(By.id("notifSaveBtn"));
 				WebDriver_Functions.WaitForText(By.id("notifUpdatedTxt"), "Your updates have been saved.");
-				WebDriver_Functions.WaitForText(By.cssSelector("#notifSummaryNotificationTypesGrp > ul > li"), "An email to " + Helper_Functions.MyEmail + " when FedEx has a package addressed to me.");
+				WebDriver_Functions.WaitForText(By.cssSelector("#notifSummaryNotificationTypesGrp > ul > li"), "An email to " + Helper_Functions.MyFakeEmail + " when FedEx has a package addressed to me.");
 				WebDriver_Functions.takeSnapShot("FDMNotifSaved.png");
 					    
 				// Remove the Notification made above
@@ -580,7 +577,7 @@ public class WPRL_Functions {
 	 			try{
 		 			WebDriver_Functions.WaitNotPresent(By.id("werlDialogDiv"));//wait for the WERL loading overlay to not be present
 		 			WebDriver_Functions.WaitPresent(By.id("regConfModuleEmailValue"));
-		 			WebDriver_Functions.Type(By.id("regConfModuleEmailValue"), Helper_Functions.MyEmail);
+		 			WebDriver_Functions.Type(By.id("regConfModuleEmailValue"), Helper_Functions.MyFakeEmail);
 
 		 			WebDriver_Functions.takeSnapShot("FDM Confirmation.png");
 		 			WebDriver_Functions.Click(By.id("regConfModuleModalSaveValue"));

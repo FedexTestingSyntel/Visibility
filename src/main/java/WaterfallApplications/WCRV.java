@@ -25,17 +25,12 @@ public class WCRV{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		
-		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
-			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-			Helper_Functions.LoadUserIds(Integer.parseInt(Level));
-		}
 	
 		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
 	}
 	
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -45,6 +40,7 @@ public class WCRV{
 			//int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WCRV_Generate_RateSheet":
+		    		/*
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
 		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WCRV") && Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains(CountryList[j][0]) ) {
@@ -54,6 +50,14 @@ public class WCRV{
 		    				}
 		    			}
 		    		}
+		    		*/
+		    		//data.add( new Object[] {Level, "US", "L3GtcAdmin", "Test1234", "intra"});
+					data.add( new Object[] {Level, "US", "L3GtcAdmin", "Test1234", "notintra"});
+		    		
+					data.add( new Object[] {Level, "US", "L3UsNonAdminOwner", "Test1234", "intra"});
+					data.add( new Object[] {Level, "US", "L3UsNonAdminOwner", "Test1234", "notintra"});
+		    		
+					
 		    	break;
 			}
 		}	

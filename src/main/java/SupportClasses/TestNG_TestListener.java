@@ -128,9 +128,10 @@ public class TestNG_TestListener implements ITestListener{
     		}else {
     			TestCompleteData += System.lineSeparator() + CurrentLogs.get(i);
     		}
-		    
 		}
     	ThreadLogger.ThreadLog.add(TestCompleteData + System.lineSeparator());
-    	DriverFactory.getInstance().releaseDriver();
+    	if (DriverFactory.BrowserCurrent > 0) {//need to add a better way to check if should close browser
+    		DriverFactory.getInstance().releaseDriver();
+    	}
     }
 }

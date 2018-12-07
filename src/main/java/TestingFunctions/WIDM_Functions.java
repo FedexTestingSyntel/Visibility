@@ -11,14 +11,14 @@ public class WIDM_Functions{
 	
 	public static String strPassword = "Test1234";
 	
-	public static String WIDM_Registration(String AddressDetails[], String Name[], String UserId) throws Exception{
+	public static String WIDM_Registration(String AddressDetails[], String Name[], String UserId, String Email_Address) throws Exception{
 		String CountryCode = AddressDetails[6];
 		try {
 			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
 			WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
 
 			//Enter all of the form data
-			WIDM_Registration_Input(AddressDetails, Name, UserId);
+			WIDM_Registration_Input(AddressDetails, Name, UserId, Email_Address);
 			WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 			WebDriver_Functions.Click(By.id("createUserID"));
 
@@ -45,12 +45,8 @@ public class WIDM_Functions{
 			WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
 			
 			//Enter all of the form data
-			WIDM_Registration_Input(AddressDetails, Name, UserId);
-
-			//enter the invalid email address
 			String EfwsEmail = "robmus50@yahoo.com";
-			WebDriver_Functions.Type(By.id("email"), EfwsEmail);
-			WebDriver_Functions.Type(By.id("retypeEmail"), EfwsEmail);
+			WIDM_Registration_Input(AddressDetails, Name, UserId, EfwsEmail);
 			WebDriver_Functions.takeSnapShot(".png");
 			WebDriver_Functions.Click(By.id("createUserID"));
 
@@ -65,11 +61,11 @@ public class WIDM_Functions{
 		}
 	}//end WIDM_Registration_EFWS
 	
-	public static void WIDM_Registration_Input(String AddressDetails[], String Name[], String UserId) throws Exception{
+	public static void WIDM_Registration_Input(String AddressDetails[], String Name[], String UserId, String Email_Address) throws Exception{
 		WebDriver_Functions.Type(By.id("firstName"), Name[0]);
 		WebDriver_Functions.Type(By.id("lastName"), Name[2]);
-		WebDriver_Functions.Type(By.id("email"), Helper_Functions.MyEmail);
-		WebDriver_Functions.Type(By.id("retypeEmail"), Helper_Functions.MyEmail);
+		WebDriver_Functions.Type(By.id("email"), Email_Address);
+		WebDriver_Functions.Type(By.id("retypeEmail"), Email_Address);
 		WebDriver_Functions.Type(By.id("address1"), AddressDetails[0]);
 		WebDriver_Functions.Type(By.id("address2"), AddressDetails[1]);
 		if (WebDriver_Functions.isPresent(By.id("city"))) {

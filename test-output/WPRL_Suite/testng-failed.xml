@@ -12,7 +12,6 @@
           <include name="WPRL_AccountManagement_Passkey" invocation-numbers="0"/>
           <include name="WPRL_Contact_Admin" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="WPRL_Contact_NonAdmin" invocation-numbers="0"/>
           <include name="WPRL_FDM" invocation-numbers="0"/>
         </methods>
       </class> <!-- WaterfallApplications.WPRL -->

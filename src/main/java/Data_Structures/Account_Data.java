@@ -114,4 +114,11 @@ public class Account_Data {
 		}
 		return Account_Info;
 	}
+	
+	public static String Last_Four_of_Credit_Card(Account_Data Account_Info) {
+		if (Account_Info.Credit_Card_Number != null && !Account_Info.Credit_Card_Number.contentEquals("")) {
+			return Account_Info.Credit_Card_Number.substring(Account_Info.Credit_Card_Number.length() - 4, Account_Info.Credit_Card_Number.length());
+		}
+		return null;
+	}
 }

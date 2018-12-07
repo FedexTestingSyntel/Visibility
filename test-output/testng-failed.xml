@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="WDPA_Application.WDPA">
+      <class name="WFCL_Application.WFCL_New">
         <methods>
+          <include name="AccountRegistration_INET_Test" invocation-numbers="2 1 0"/>
           <include name="beforeClass"/>
-          <include name="Pickup_Ground" invocation-numbers="0"/>
         </methods>
-      </class> <!-- WDPA_Application.WDPA -->
+      </class> <!-- WFCL_Application.WFCL_New -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

@@ -1,4 +1,4 @@
-package WaterfallApplications;
+package WPRL_Application;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -12,28 +12,23 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
-import TestingFunctions.WPRL_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WPRL {
 
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		for (int i=0; i < LevelsToTest.length(); i++) {
-			String Level = String.valueOf(LevelsToTest.charAt(i));
-			Helper_Functions.LoadUserIds(Integer.parseInt(Level));
-		}
-		
+	
 		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -58,7 +53,7 @@ public class WPRL {
 		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
 		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("FDM")) {
 		    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
-		    					break;
+		    					//break;
 		    				}
 		    			}
 					}
@@ -77,6 +72,12 @@ public class WPRL {
 		    	case "WPRL_AccountManagement_BillingInvoice":
 		    			///need to update on this, needs specific data
 		    	break;
+		    	
+		    	case "WPRL_FDM_Enroll":
+	    			for (int j = 0; j < 29; j++) {
+	    				data.add( new Object[] {Level, j});
+	    			}
+		    		break;
 		    	
 		    	
 			}
@@ -156,6 +157,17 @@ public class WPRL {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
 			String Result[] =  WPRL_Functions.WPRL_FDM(CountryCode, UserID, Password, Address, CreditCard, ContactName);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp")
+	public void WPRL_FDM_Enroll(String Level, int ContactDetails) {
+		try {
+			String UserId = Helper_Functions.LoadUserID("L" + Level + "FDM");
+			String Result[] =  WERL_Functions.WERL_Postal_FDM(ContactDetails, UserId, Helper_Functions.myPassword);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

@@ -18,7 +18,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_PI_1{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 
 	@BeforeClass
 	public void beforeClass() {
@@ -31,7 +31,6 @@ public class WFCL_PI_1{
 
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-			//int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "BR_TaxID":
 		    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs("BR");
@@ -64,12 +63,56 @@ public class WFCL_PI_1{
 		    			}
 		    		}
 		    		break;
+		    	case "TNT_Vat_Validation":
+		    		String Vat_Validation[] = {"GB", "FR", "BE", "NL", "LU"};
+		    		for (int j = 0; j < Vat_Validation.length; j++) {
+		    			EnrollmentID = Helper_Functions.LoadEnrollmentIDs(Vat_Validation[j]);
+		    			ArrayList<String[]> TaxInfoLoc = Helper_Functions.getTaxInfo(Vat_Validation[j]);
+		    			//for each vat example of the country add a test
+		    			for (String Tax[]: TaxInfoLoc) {
+		    				if (Tax[4].contentEquals("B")) {//business account
+		    					data.add(new Object[] {Level, EnrollmentID[0], Vat_Validation[j], Tax, true});
+		    				}else {
+		    					data.add(new Object[] {Level, EnrollmentID[0], Vat_Validation[j], Tax, false});
+		    				}
+		    			}
+					}
+		    		break;
+		    	case "TNT_Zip_Validation":
+		    		String Zip_Validation[] = {"GB", "NL", "CL"};
+		    		for (int j = 0; j < Zip_Validation.length; j++) {
+		    			EnrollmentID = Helper_Functions.LoadEnrollmentIDs(Zip_Validation[j]);
+		    			ArrayList<String[]> TaxInfoLoc = Helper_Functions.getTaxInfo(Zip_Validation[j]);
+		    			//find a valid vat id numbers and 
+		    			for (String Tax[]: TaxInfoLoc) {
+		    				if (Tax[3].contentEquals("Valid")) {
+		    					String Address[] = Helper_Functions.LoadAddress(Zip_Validation[j]);
+		    					boolean BusinessAccount = false;
+		    					if (Tax[4].contentEquals("B")) {//business account
+		    						BusinessAccount = true;
+			    				}
+		    					String ZipCode = Address[5];
+		    					//attempt with no spaces
+		    					if (ZipCode.contains(" ")) {
+		    						data.add(new Object[] {Level, EnrollmentID[0], Address, ZipCode.replaceAll(" ", ""), Tax, BusinessAccount});
+		    					}
+		    					//add a random character to the zip
+		    					data.add(new Object[] {Level, EnrollmentID[0], Address, ZipCode + Helper_Functions.getRandomString(1), Tax, BusinessAccount});
+		    					//remove last character from zip
+		    					data.add(new Object[] {Level, EnrollmentID[0], Address, ZipCode.substring(0, ZipCode.length() - 1), Tax, BusinessAccount});
+		    					//remove first character from zip
+		    					data.add(new Object[] {Level, EnrollmentID[0], Address, ZipCode.substring(1, ZipCode.length()), Tax, BusinessAccount});
+		    					break;
+		    				}
+		    			}
+					}
+		    		break;
 			}
 		}	
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp", description = "349582")
+	@Test(dataProvider = "dp", description = "349582", enabled = false)
 	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
@@ -84,7 +127,7 @@ public class WFCL_PI_1{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 3)//since this method will consume an account number run after others have completed
+	@Test(dataProvider = "dp", priority = 3, enabled = false)//since this method will consume an account number run after others have completed
 	public void Account_Number_Masking(String Level, Account_Data Account_Info, String Nickname) {
 		try {
 			String UserName[] = Helper_Functions.LoadDummyName("INET", Level);
@@ -105,6 +148,40 @@ public class WFCL_PI_1{
 			
 			String Result = WFCL_Functions_UsingData.Account_Number_Masking(Account_Info, Account_Info_Mismatch);
 			Helper_Functions.PrintOut(Result, false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test(dataProvider = "dp", enabled = true)
+	public void TNT_Vat_Validation(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
+		try {
+			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
+			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
+			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
+			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
+			//print out VAT for reference
+			Helper_Functions.PrintOut("Vat: " + Arrays.toString(VatNumber), false);
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, BuisnessAccount, VatNumber);
+			
+ 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", enabled = false)
+	public void TNT_Zip_Validation(String Level, String EnrollmentID, String Address[], String ZipCode, String VatNumber[], boolean BuisnessAccount) {
+		try {
+			String CountryCode = Address[6];
+			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
+			String ShippingAddress[] = Address, BillingAddress[] = ShippingAddress;
+			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
+			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
+			Helper_Functions.PrintOut("ZipCode Attempt: " + ZipCode, false);
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, BuisnessAccount, VatNumber);
+			
+ 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

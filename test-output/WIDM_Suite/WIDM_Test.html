@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>WIDM_Test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>3/3/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>5/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Wed Nov 14 17:24:48 CST 2018</td>
+<td>Started on:</td><td>Thu Dec 06 11:58:50 CST 2018</td>
 </tr>
-<tr><td>Total time:</td><td>169 seconds (169323 ms)</td>
+<tr><td>Total time:</td><td>136 seconds (136568 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -75,29 +75,19 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='AgileApplications.WIDM.WIDM_Registration()'><b>WIDM_Registration</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, US</td>
-<td><div><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for text to be &quot;L3WIDMUS111418T172449cn&quot;. Current text: &quot;null&quot;
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49305}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir14796_24664}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 3580b4dc22216f1eb5dfc446da4ae2c2
-	at AgileApplications.WIDM.WIDM_Registration(WIDM.java:81)
+<td title='AgileApplications.WIDM.ResetPasswordWIDM_Email()'><b>ResetPasswordWIDM_Email</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, L3080618T100257, mom</td>
+<td><div><pre>java.lang.AssertionError: User not working.
+	at AgileApplications.WIDM.ResetPasswordWIDM_Email(WIDM.java:128)
 	at java.util.concurrent.FutureTask.run(Unknown Source)
 	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
 	at java.util.concurrent.FutureTask.run(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace117226746", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace117226746'><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for text to be &quot;L3WIDMUS111418T172449cn&quot;. Current text: &quot;null&quot;
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49305}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir14796_24664}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 3580b4dc22216f1eb5dfc446da4ae2c2
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1293428525", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1293428525'><pre>java.lang.AssertionError: User not working.
 	at org.testng.Assert.fail(Assert.java:96)
-	at AgileApplications.WIDM.WIDM_Registration(WIDM.java:81)
+	at AgileApplications.WIDM.ResetPasswordWIDM_Email(WIDM.java:128)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -114,92 +104,8 @@ Session ID: 3580b4dc22216f1eb5dfc446da4ae2c2
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
 </pre></div></td>
-<td>122</td>
-<td>AgileApplications.WIDM@101df177</td></tr>
-<tr>
-<td title='AgileApplications.WIDM.WIDM_RegistrationEFWS()'><b>WIDM_RegistrationEFWS</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, US</td>
-<td><div><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for text to be &quot;Your registration request is not approved based on the information submitted.&quot;. Current text: &quot;null&quot;
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49320}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir17624_2324}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: e95b88db669978e14326902cfc95f50b
-	at AgileApplications.WIDM.WIDM_RegistrationEFWS(WIDM.java:93)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1216680552", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace1216680552'><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for text to be &quot;Your registration request is not approved based on the information submitted.&quot;. Current text: &quot;null&quot;
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49320}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir17624_2324}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: e95b88db669978e14326902cfc95f50b
-	at org.testng.Assert.fail(Assert.java:96)
-	at AgileApplications.WIDM.WIDM_RegistrationEFWS(WIDM.java:93)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-</pre></div></td>
-<td>100</td>
-<td>AgileApplications.WIDM@101df177</td></tr>
-<tr>
-<td title='AgileApplications.WIDM.WIDM_ResetPasswordSecret()'><b>WIDM_ResetPasswordSecret</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, US, L3usCC201701127152330, Test1234, mom</td>
-<td><div><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for presence of element located by: By.name: password
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49320}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir17624_2324}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: e95b88db669978e14326902cfc95f50b
-	at AgileApplications.WIDM.WIDM_ResetPasswordSecret(WIDM.java:102)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1446355532", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace1446355532'><pre>java.lang.AssertionError: Timed out after 30 seconds waiting for presence of element located by: By.name: password
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49320}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.43.600210 (68dcf5eebde37173d4027fa8635e332711d2874a), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir17624_2324}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=70.0.3538.102, browserConnectionEnabled=false, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: e95b88db669978e14326902cfc95f50b
-	at org.testng.Assert.fail(Assert.java:96)
-	at AgileApplications.WIDM.WIDM_ResetPasswordSecret(WIDM.java:102)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-</pre></div></td>
-<td>167</td>
-<td>AgileApplications.WIDM@101df177</td></tr>
+<td>134</td>
+<td>AgileApplications.WIDM@58a90037</td></tr>
 </table><p>
 <table width='100%' border='1' class='invocation-passed'>
 <tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
@@ -209,20 +115,30 @@ Session ID: e95b88db669978e14326902cfc95f50b
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='AgileApplications.WIDM.ResetPasswordWIDM_Email()'><b>ResetPasswordWIDM_Email</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, L3usCC201701127152330, Test1234</td>
-<td></td>
-<td>126</td>
-<td>AgileApplications.WIDM@101df177</td></tr>
-<tr>
 <td title='AgileApplications.WIDM.WIDM_ForgotUserID()'><b>WIDM_ForgotUserID</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, sean.kauffman.osv@fedex.com</td>
 <td></td>
-<td>150</td>
-<td>AgileApplications.WIDM@101df177</td></tr>
+<td>104</td>
+<td>AgileApplications.WIDM@58a90037</td></tr>
+<tr>
+<td title='AgileApplications.WIDM.WIDM_Registration()'><b>WIDM_Registration</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, US</td>
+<td></td>
+<td>111</td>
+<td>AgileApplications.WIDM@58a90037</td></tr>
+<tr>
+<td title='AgileApplications.WIDM.WIDM_RegistrationEFWS()'><b>WIDM_RegistrationEFWS</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, US</td>
+<td></td>
+<td>87</td>
+<td>AgileApplications.WIDM@58a90037</td></tr>
 <tr>
 <td title='AgileApplications.WIDM.WIDM_Registration_ErrorMessages()'><b>WIDM_Registration_ErrorMessages</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, US</td>
 <td></td>
-<td>59</td>
-<td>AgileApplications.WIDM@101df177</td></tr>
+<td>67</td>
+<td>AgileApplications.WIDM@58a90037</td></tr>
+<tr>
+<td title='AgileApplications.WIDM.WIDM_ResetPasswordSecret()'><b>WIDM_ResetPasswordSecret</b><br>Test class: AgileApplications.WIDM<br>Parameters: 3, US, L3WIDMWgtm072418T130916, Test12345, mom</td>
+<td></td>
+<td>126</td>
+<td>AgileApplications.WIDM@58a90037</td></tr>
 </table><p>
 <table width='100%' border='1' class='invocation-skipped'>
 <tr><td colspan='4' align='center'><b>SKIPPED TESTS</b></td></tr>
@@ -238,8 +154,8 @@ Session ID: e95b88db669978e14326902cfc95f50b
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace5965703", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace5965703'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1237395781", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1237395781'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
 	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:63)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
@@ -256,7 +172,7 @@ Session ID: e95b88db669978e14326902cfc95f50b
 	at java.lang.Thread.run(Unknown Source)
 </pre></div></td>
 <td>0</td>
-<td>SupportClasses.Environment@2f490758</td></tr>
+<td>SupportClasses.Environment@3bd94634</td></tr>
 </table><p>
 </body>
 </html>

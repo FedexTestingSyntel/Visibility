@@ -23,15 +23,12 @@ public class WebDriver_Functions{
 		String LevelURL = null, AppUrl = null, CCL = CountryCode.toLowerCase(),CCU = CountryCode.toUpperCase();
 		
 		LevelURL = LevelUrlReturn();
-
+		//String caller = Thread.currentThread().getStackTrace()[2].getMethodName();
 		switch (AppDesignation) {
-    		case "INET":		
-    			AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";;
-    			break;
-    		case "WADM":
-    			AppUrl = LevelURL + "/apps/shipadmin/";
+			case "AdminReg":  	
+    			AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?appName=fclpasskey&registration=true&countryCode=" + CCL + "&languageCode=en&fclHost=" + LevelURL + "&step3URL=" + LevelURL + "%2Fapps%2Fshipadmin&afterwardsURL=" + LevelURL + "%2Fapps%2Fshipadmin&locale=en_" + CCU + "&programIndicator=1";
 				break;
-    		case "FCLCreate":  	
+			case "FCLCreate":  	
     			//AppUrl = LevelURL + "/fcl/web/jsp/signup.jsp";
     			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=oadr&locale=" + CCL + "_en&step3URL=https%3A%2F%2F.fedex.com%3A443%2Ffcl%2Fweb%2Fjsp%2FfclValidateAndCreate.jsp&afterwardsURL=" + LevelURL + "%3A443%2Ffcl%2Fweb%2Fjsp%2Foadr.jsp&programIndicator=p314t9n1ey&accountOption=link";
 				break;
@@ -44,9 +41,15 @@ public class WebDriver_Functions{
 					AppUrl = AppUrl.replaceAll("%2Fship%2", "%2Fshipping_apac%2");
  	 			}
     			break;	
-    		case "AdminReg":  	
-    			AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?appName=fclpasskey&registration=true&countryCode=" + CCL + "&languageCode=en&fclHost=" + LevelURL + "&step3URL=" + LevelURL + "%2Fapps%2Fshipadmin&afterwardsURL=" + LevelURL + "%2Fapps%2Fshipadmin&locale=en_" + CCU + "&programIndicator=1";
+				
+    		case "INET":		
+    			AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";;
+    			break;
+    		case "WADM":
+    			AppUrl = LevelURL + "/apps/shipadmin/";
 				break;
+    			
+    		
     		case "Pref":  		
     			AppUrl = LevelURL + "/preferences";
     			break;		
@@ -110,6 +113,9 @@ public class WebDriver_Functions{
 				break;
     		case "WGRT":  	
     			AppUrl = LevelURL + "/ratefinder/home?cc=" + CCU + "&language=en&locId=express";
+				break;
+    		case "WERL":  	
+    			AppUrl = LevelURL + "/apps/fdmenrollment/";
 				break;
     		case "GFBO":  	
     			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo.jsp?appName=fclgfbo&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Ffedexbillingonline%2Fregistration.jsp%3FuserRegistration%3DY%26locale%3Den_" + CCU + "&afterwardsURL=" + LevelURL + "%2Ffedexbillingonline%3F%26locale%3Den_" + CCU + "&programIndicator";
@@ -206,33 +212,33 @@ public class WebDriver_Functions{
 	
 	//takes is the element, value, and selectByType
 	public static void Select(By Ele, String Value, String SelectBy) throws Exception {
-		SelectBy = SelectBy.toLowerCase(); //just in case wrong font is sent.
-		JavascriptExecutor js = ((JavascriptExecutor) DriverFactory.getInstance().getDriver());
-		Actions a = new Actions(DriverFactory.getInstance().getDriver());
-		js.executeScript("window.scrollBy(0, -300)");//scroll up
-		a.moveToElement(DriverFactory.getInstance().getDriver().findElement(Ele)).perform();
-		DriverFactory.getInstance().getDriver().findElement(Ele).click();
-		String Message = null;
 		
-		if (SelectBy.contentEquals("i")) {
-			new Select(DriverFactory.getInstance().getDriver().findElement(Ele)).selectByIndex(Integer.parseInt(Value));
-			Message = "by index " + Value;//Add to this later to show the item selected.
-		}else if (SelectBy.contentEquals("v")) {
-			new Select(DriverFactory.getInstance().getDriver().findElement(Ele)).selectByValue(Value);
-			Message = "by value " + Value;
-		}else if (SelectBy.contentEquals("t")) {
-			new Select(DriverFactory.getInstance().getDriver().findElement(Ele)).selectByVisibleText(Value);
-			Message = "by visible text " + Value;
+		if (WebDriver_Functions.isPresent(Ele) && WebDriver_Functions.isVisable(Ele)) {
+			SelectBy = SelectBy.toLowerCase(); //just in case wrong font is sent.
+			JavascriptExecutor js = ((JavascriptExecutor) DriverFactory.getInstance().getDriver());
+			Actions a = new Actions(DriverFactory.getInstance().getDriver());
+			js.executeScript("window.scrollBy(0, -300)");//scroll up
+			a.moveToElement(DriverFactory.getInstance().getDriver().findElement(Ele)).perform();
+			DriverFactory.getInstance().getDriver().findElement(Ele).click();
+			String Message = null;
+			
+			if (SelectBy.contentEquals("i")) {
+				new Select(DriverFactory.getInstance().getDriver().findElement(Ele)).selectByIndex(Integer.parseInt(Value));
+				Message = "by index " + Value;//Add to this later to show the item selected.
+			}else if (SelectBy.contentEquals("v")) {
+				new Select(DriverFactory.getInstance().getDriver().findElement(Ele)).selectByValue(Value);
+				Message = "by value " + Value;
+			}else if (SelectBy.contentEquals("t")) {
+				new Select(DriverFactory.getInstance().getDriver().findElement(Ele)).selectByVisibleText(Value);
+				Message = "by visible text " + Value;
+			}else {
+				Helper_Functions.PrintOut("Not able to select by " + SelectBy, true);
+				throw new Exception("Invalid SelectBy sent to Select(By Ele, String Value, String SelectBy)");
+			}
+			Helper_Functions.PrintOut("    S--Selected Element " + Ele.toString() + "   " + Message, true);
 		}else {
-			Helper_Functions.PrintOut("Not able to select by " + SelectBy, true);
-			throw new Exception("Invalid SelectBy sent to Select(By Ele, String Value, String SelectBy)");
+			Helper_Functions.PrintOut("    Element not present on page, failing Select option", true);
 		}
-		Helper_Functions.PrintOut("    S--Selected Element " + Ele.toString() + "   " + Message, true);
-		
-		
-		
-
-		
 	}
 	
     public static void takeSnapShot(String FileName) throws Exception{
@@ -278,7 +284,8 @@ public class WebDriver_Functions{
 		boolean result = true;
 	    try {
 	    	DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.MICROSECONDS); //sets the timeout for short to make reduce delay
-	        DriverFactory.getInstance().getDriver().findElement(Ele);
+	    	DriverFactory.getInstance().getDriver().findElement(Ele);
+	    	result = DriverFactory.getInstance().getDriver().findElement(Ele).isDisplayed();
 	    }catch (Exception e) {
 	    	result = false;
 	    	//Helper_Functions.PrintOut(Ele.toString() + " is not present");
@@ -429,7 +436,7 @@ public class WebDriver_Functions{
 				return false;
 			}
 		}catch (Exception e){
-			e.printStackTrace();
+			Helper_Functions.PrintOut("FAILURE: Unble to validate element " + bypath + " for " + expected, true);
 		} 
 		return false;
 	}

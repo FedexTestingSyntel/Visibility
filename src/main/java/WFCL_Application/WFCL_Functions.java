@@ -3,6 +3,7 @@ package WFCL_Application;
 import java.util.Arrays;
 import org.openqa.selenium.By;
 import SupportClasses.DriverFactory;
+import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
@@ -15,6 +16,9 @@ public class WFCL_Functions{
 			WebDriver_Functions.ChangeURL("INET", CountryCode, true);
 			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, CountryCode, false);
 
+			//add the country code to the screenshot name
+			DriverFactory.setScreenshotPath(DriverFactory.getScreenshotPath() + CountryCode + " ");
+			
 			WebDriver_Functions.takeSnapShot("Discount Page.png");
 			
 			if (WebDriver_Functions.isPresent(By.name("Apply Now"))) {
@@ -36,6 +40,8 @@ public class WFCL_Functions{
 			boolean Multicard = true;
 			if(TaxInfo != null && !TaxInfo[3].contains("Valid")) {
 				Multicard = false;
+				CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
+				return new String[] {"Invalid attempt : " +  TaxInfo[3] };
 			}
 			CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
 			
@@ -212,7 +218,8 @@ public class WFCL_Functions{
 			WebDriver_Functions.Click(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > p:nth-child(6) > a"));//click shipping admin link
 			WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + CompanyName);
 			//remove the account number from local storage as it is now locked to the company that was just created.
-			Helper_Functions.RemoveAccountFromExcel(AccountNumber);
+			//Helper_Functions.RemoveAccountFromExcel(AccountNumber);
+			Helper_Functions.RemoveAccountFromAccount_Numbers(Environment.getInstance().getLevel(), AccountNumber);
 		}catch (Exception e){
 			Helper_Functions.PrintOut("Failure with admin registriaton.", true);
 			throw e;
@@ -372,7 +379,7 @@ public class WFCL_Functions{
 		Helper_Functions.PrintOut("WFCL_CC_Page recieved: " + CreditCardDetils[0] + ", " + CountryCode + " From: " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
 		WebDriver_Functions.GetCookieValue("fcl_uuid");
 
-		WebDriver_Functions.WaitForTextPresentIn(By.cssSelector("#CCType"), CreditCardDetils[0]);//wait for the credit card types to load
+		WebDriver_Functions.WaitForTextPresentIn(By.cssSelector("#CCType"), CreditCardDetils[0].substring(0,1).toUpperCase());//wait for the credit card types to load
 
 		WebDriver_Functions.Type(By.id("creditCardNumber"), CreditCardDetils[1]);
 		WebDriver_Functions.Type(By.id("creditCardIDNumber"), CreditCardDetils[2]);
@@ -388,11 +395,9 @@ public class WFCL_Functions{
 			WebDriver_Functions.Click(By.name("editccinfo"));//edit the billing address
 			if (WebDriver_Functions.isPresent(By.xpath("//*[@id='billing-address']/label[17]/span[1]"))) {
 				WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[17]/span[1]"), "Country/Territory", 116577);
-			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='billing-address']/label[18]/span[1]"))) {//Non US field
-				//not sure if this is valid for other regions WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[18]/span[1]"), "Country/Territory", 116577);
-				//when checking BR seeing 
+			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='billing-address']/label[20]/span[1]"))) {//Non US field    changed from 18 to 20 for emea
 				WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[20]/span[1]"), "Country/Territory", 116577);
-			}
+			} 
 			
 			//if the zip code does not match what was enterd on previous page then update. This was change as part of the TNT features for the Jan19CL.
 			if (WebDriver_Functions.isPresent(By.id("creditCardZipCode")) && !WebDriver_Functions.GetText(By.id("creditCardZipCode")).contentEquals(BillingAddress[5])) {
@@ -418,9 +423,17 @@ public class WFCL_Functions{
 			WebDriver_Functions.Type(By.name("indStateTaxID"), TaxInfo[2]);
 		}else if (WebDriver_Functions.isPresent(By.name("vatNo"))) {
 			WebDriver_Functions.Type(By.name("vatNo"), TaxInfo[2]);
+			WebDriver_Functions.Type(By.name("company"), "Vat " + TaxInfo[2]);
 		}
 
-		WebDriver_Functions.Select(By.id("CCType"), CreditCardDetils[0], "t");
+		try {
+			WebDriver_Functions.Select(By.id("CCType"), CreditCardDetils[0], "t");
+		}catch (Exception e) {
+			if (CreditCardDetils[0].contains("MasterCard")) {
+				WebDriver_Functions.Select(By.id("CCType"), "Mastercard", "t");
+			}
+		}
+		
 
 		WebDriver_Functions.takeSnapShot("CreditCard Entry.png");
 		WebDriver_Functions.Click(By.id("Complete"));
@@ -431,7 +444,21 @@ public class WFCL_Functions{
 		}catch (Exception e) {}
 
 		//If the user is still on the CC entry page will try and enter a different credit card type.
-		if (WebDriver_Functions.isPresent(By.id("monthExpiry")) && MultiCard) {
+		if (TaxInfo != null && !TaxInfo[3].contains("Valid")) {
+			boolean VatCheck = false;
+			if (WebDriver_Functions.isPresent(By.xpath("//*[@id='vatNo']/label[1]/b"))) {
+				VatCheck = WebDriver_Functions.ElementMatches(By.xpath("//*[@id='vatNo']/label[1]/b"), TaxInfo[3], Integer.parseInt(TaxInfo[5]));
+			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='taxInformation']/label/b/text()"))) {   
+				VatCheck = WebDriver_Functions.ElementMatches(By.xpath("//*[@id='taxInformation']/label/b/text()"), TaxInfo[3], Integer.parseInt(TaxInfo[5]));
+			}
+			if (!VatCheck){
+				throw new Exception("Vat error is not present on page"); 
+			}else {
+				WebDriver_Functions.takeSnapShot("Vat Error Page.png");
+			}
+			
+			//*[@id="vatNo"]/label[1]/b
+		}else if (WebDriver_Functions.isPresent(By.id("monthExpiry")) && MultiCard) {
 			Helper_Functions.PrintOut("Error on Credit Card entry screen. Attempting to register with differnet credit card", true);
 			String NewCreditCard[] = Helper_Functions.LoadCreditCard(CreditCardDetils[1]);
 			return WFCL_CC_Page(NewCreditCard, ShippingAddress, BillingAddress, BusinessRegistration, MultiCard, TaxInfo);
@@ -455,7 +482,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("creditCardNumber"));
 		}
-		Helper_Functions.PrintOut("breakpoint", false);
+		//Helper_Functions.PrintOut("breakpoint", false);
 	}
 
     public static String WFCL_Secret_Answer(String CountryCode, String strUserName, String NewPassword, String SecretAnswer) throws Exception{
@@ -721,6 +748,70 @@ public class WFCL_Functions{
 		WebDriver_Functions.Click(By.name("submit"));
 	}
 	
+	public static String[] Zip_TNT_Validation(String EnrollmentID, String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId, boolean BusinessAccount, String TaxInfo[]) throws Exception{
+		try {
+			String CountryCode = AddressDetails[6];
+			//go to the INET page just to load the cookies
+			WebDriver_Functions.ChangeURL("INET", CountryCode, true);
+			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, CountryCode, false);
+
+			//add the country code to the screenshot name
+			DriverFactory.setScreenshotPath(DriverFactory.getScreenshotPath() + CountryCode + " ");
+			
+			WebDriver_Functions.takeSnapShot("Discount Page.png");
+			
+			if (WebDriver_Functions.isPresent(By.name("Apply Now"))) {
+				//apply link from marketing page
+				WebDriver_Functions.Click(By.name("Apply Now"));
+			}
+			
+			if (WebDriver_Functions.isPresent(By.linkText("Finish registering for a FedEx account"))) {
+				WebDriver_Functions.Click(By.linkText("Finish registering for a FedEx account"));
+			}else if (WebDriver_Functions.isPresent(By.name("signupnow"))) {
+				WebDriver_Functions.Click(By.name("signupnow"));
+			}
+
+			//Step 1: Enter the contact information.
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+
+			//Step 2: Enter the credit card details
+			WebDriver_Functions.WaitPresent(By.id("CCType"));
+			boolean Multicard = true;
+			if(TaxInfo != null && !TaxInfo[3].contains("Valid")) {
+				Multicard = false;
+				CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
+				/////////////////////////////user valid zip code here
+				return new String[] {"Invalid attempt"};
+			}
+			CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
+			
+			//Step 3: Confirmation Page
+			//Domestic and international will be different  
+			WebDriver_Functions.WaitOr_TextToBe(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId, By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr[1]/td[2]"),  UserId);
+			String AccountNumber = WebDriver_Functions.GetText(By.xpath("//*[@id='acctNbr']"));
+			WebDriver_Functions.takeSnapShot("Confirmation.png");
+
+			boolean InetFlag = false, AdminFlag = false;
+
+			//Check the INET page
+			InetFlag = Check_INET_Enrolled(CountryCode);
+
+			//Check the Administration page
+			AdminFlag = Check_WADM_Enrolled(CountryCode);
+			
+			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
+			Helper_Functions.PrintOut("Finished CreditCardRegistrationEnroll  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
+
+			String LastFourOfCC = CreditCardDetils[1].substring(CreditCardDetils[1].length() - 4, CreditCardDetils[1].length());
+			String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, LastFourOfCC, "INET:" + InetFlag, "Admin:" + AdminFlag};
+			
+			Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
+			return ReturnValue;
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}//end CreditCardRegistrationEnroll
     
 	public static String[] WFCL_AccountRegistration_GFBO(String Name[], String UserId, String AccountNumber, String AddressDetails[]) throws Exception{
 		String CountryCode = AddressDetails[6].toUpperCase();
