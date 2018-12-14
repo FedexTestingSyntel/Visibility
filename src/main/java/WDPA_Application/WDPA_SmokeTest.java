@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 public class WDPA_SmokeTest{
 	
 	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -38,7 +38,7 @@ public class WDPA_SmokeTest{
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "Pickup_Ground":
 		    	case "Pickup_Express":
-		    	case "Pickup_ExpressFright"://need to fix this later, not for all countries.
+		    	case "Pickup_ExpressFreight"://need to fix this later, not for all countries.
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < Helper_Functions.DataClass[intLevel].length; k++) {
 		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WDPA")) {
@@ -78,7 +78,7 @@ public class WDPA_SmokeTest{
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
-	}//end WDPA_Pickup_Ground
+	}
 	
 	@Test(dataProvider = "dp")
 	public static void Pickup_Express(String Level, String CountryCode, String UserID, String Password){
@@ -89,10 +89,10 @@ public class WDPA_SmokeTest{
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
-	}//end WDPA_Pickup_Express
+	}
 	
 	@Test(dataProvider = "dp")
-	public static void Pickup_ExpressFright(String Level, String CountryCode, String UserID, String Password){
+	public static void Pickup_ExpressFreight(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule an express freight pickup.", false);
 		try {
 			String PackageDetails[] = {"1", "444", "L", "1400", "1800", "ExpLTL Attempt", "FedEx 1Day Freight", "ConfFiller", "side of barn", "5", "6", "7"};
@@ -114,7 +114,7 @@ public class WDPA_SmokeTest{
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
-	}//end WDPAPickup_ExpressFright
+	}
 	
 	@Test(dataProvider = "dp")
 	public static void Pickup_LTLFreight_Anonymous(String Level, String CountryCode){

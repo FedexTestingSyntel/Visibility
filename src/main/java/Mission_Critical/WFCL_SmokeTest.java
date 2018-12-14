@@ -1,4 +1,4 @@
-package WFCL_Application;
+package Mission_Critical;
 
 import org.testng.annotations.Test;
 
@@ -18,7 +18,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 
 	@BeforeClass

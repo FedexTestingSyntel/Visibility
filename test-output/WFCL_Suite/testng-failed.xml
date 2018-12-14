@@ -7,12 +7,12 @@
   <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
     <parameter name="Level" value="3"/>
     <classes>
-      <class name="WFCL_Application.WFCL_PI_1">
+      <class name="Mission_Critical.MC_PI_1">
         <methods>
-          <include name="TNT_Vat_Validation" invocation-numbers="3 7 2 4 6 9 8 11 10 0"/>
           <include name="beforeClass"/>
+          <include name="TNT_Vat_Validation" invocation-numbers="2"/>
         </methods>
-      </class> <!-- WFCL_Application.WFCL_PI_1 -->
+      </class> <!-- Mission_Critical.MC_PI_1 -->
     </classes>
   </test> <!-- WFCL_Test(failed) -->
 </suite> <!-- Failed suite [WFCL_Suite] -->

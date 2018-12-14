@@ -150,6 +150,10 @@ public class Helper_Functions{
 	//String[] {Streetline1 - 0, Streetline2 - 1, City - 2, State - 3, StateCode - 4, postalCode - 5, countryCode - 6};
 	public static String[] AccountDetails(String AccountNumber){
 		String Streetline1 = "", Streetline2 = "", City ="", State ="", StateCode = "", postalCode = "", countryCode = "";
+		if (Environment.getInstance().getLevel().contentEquals("")) {
+			PrintOut("WARNING Environement level has not been set. Loading L3 for now.\n\n\n", false);
+			Environment.getInstance().setLevel("3");
+		}
 		String TempLevel = "L" + Environment.getInstance().getLevel();
 		if (!"L1L2L3L4".contains(TempLevel)){
 			PrintOut("Invalid Level to find account number detials, checking account vs L3", true);
@@ -229,6 +233,7 @@ public class Helper_Functions{
 			PrintOut("AccountDetails: " + Arrays.toString(AccountDetails), true);
 			return AccountDetails;
  		}catch (Exception e){
+ 			e.printStackTrace();
  			PrintOut("Not able to fully retrieve address: " + Streetline1 + " " + Streetline2+ " " + City+ " " + State+ " " + StateCode+ " " +postalCode+ " " + countryCode, true);
 			return LoadAddress("US");
  		}
@@ -779,7 +784,11 @@ public class Helper_Functions{
 	}
 	
 	public static String ScreenshotBase() {
-		return Helper_Functions.CurrentDateTime() + " L" + Environment.getInstance().getLevel() + " ";
+		Date curDate = new Date();
+    	SimpleDateFormat Dateformatter = new SimpleDateFormat("MMddyy");
+    	SimpleDateFormat Timeformatter = new SimpleDateFormat("HHmmssSSS");
+    	String Time = Dateformatter.format(curDate) + "T" + Timeformatter.format(curDate);
+		return Time + " L" + Environment.getInstance().getLevel() + " ";
 	}
 	
 	public static Account_Data getFreshAccount(String Level, String CountryCode){

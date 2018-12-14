@@ -51,13 +51,18 @@ public class WCRV{
 		    			}
 		    		}
 		    		*/
-		    		//data.add( new Object[] {Level, "US", "L3GtcAdmin", "Test1234", "intra"});
+		    		/*data.add( new Object[] {Level, "US", "L3GtcAdmin", "Test1234", "intra"});
 					data.add( new Object[] {Level, "US", "L3GtcAdmin", "Test1234", "notintra"});
 		    		
 					data.add( new Object[] {Level, "US", "L3UsNonAdminOwner", "Test1234", "intra"});
 					data.add( new Object[] {Level, "US", "L3UsNonAdminOwner", "Test1234", "notintra"});
-		    		
+		    		*/
 					
+					data.add( new Object[] {Level, "US", "L3AdminCA", "Test1234", "intra"});
+					data.add( new Object[] {Level, "US", "L3WCRV609188405", "Test1234", "notintra"});
+					data.add( new Object[] {Level, "US", "L3CNRATENA", "Test1234", "intra"});
+					data.add( new Object[] {Level, "US", "L3COratDIS", "Test1234", "notintra"});
+					data.add( new Object[] {Level, "US", "L3DERATENA1", "Test1234", "intra"});
 		    	break;
 			}
 		}	

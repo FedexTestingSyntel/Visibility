@@ -16,7 +16,7 @@ import TestingFunctions.WRTT_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WRTT{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 	static boolean SmokeTest = true;
 	
@@ -28,7 +28,7 @@ public class WRTT{
 		CountryList = new String[][]{{"US", "United States"}, {"CA", "Canada"}};
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 

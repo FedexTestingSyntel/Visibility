@@ -84,9 +84,11 @@ public class WRTT_Functions {
 
 			//download the rates
 			String mainWindowHandle = DriverFactory.getInstance().getDriver().getWindowHandle();
+			boolean ChildWindowAppeared = false;
 			for (String childWindowHandle : DriverFactory.getInstance().getDriver().getWindowHandles()) {
 				//If window handle is not main window handle then close it 
 				if(!childWindowHandle.equals(mainWindowHandle)){
+					ChildWindowAppeared = true;
 					DriverFactory.getInstance().getDriver().switchTo().window(childWindowHandle);
 					  
 					//wait for the download button to load
@@ -104,9 +106,12 @@ public class WRTT_Functions {
 					DriverFactory.getInstance().getDriver().close(); 
 				}
 			}//end for child window
-				
+			
+			//switch back to main window
+			DriverFactory.getInstance().getDriver().switchTo().window(mainWindowHandle);	
+			
 			try{
-				if (DriverFactory.getInstance().getDriver().findElement(By.tagName("body")).getText().contains("Retail rates are not available for this service. Please select a different service.")){
+				if (WebDriver_Functions.CheckBodyText("Retail rates are not available for this service. Please select a different service.")){
 					//SameDay and InternationalNextFlight are not valid for retail rates
 					if ((Service == 0 || Service == 11 || Service == 17) && !List){
 						WebDriver_Functions.takeSnapShot(Title + "RetailNotAvailable.png");
@@ -115,15 +120,17 @@ public class WRTT_Functions {
 					}else{
 						WebDriver_Functions.takeSnapShot(Title + " SC.png");
 						Helper_Functions.PrintOut("!!!Check for Title why rates not available", true);
+						throw new Exception ("Retail rates are not available for this service.");
 					}
+				}else if (!ChildWindowAppeared) {
+					throw new Exception ("Child Window did not appear.");
+				}else if (WebDriver_Functions.CheckBodyText("Error 500")) {
+					throw new Exception("Error 500");
 				}
-			}catch(Exception e){}
-				
-			//switch back to main window
-			DriverFactory.getInstance().getDriver().switchTo().window(mainWindowHandle);
-			 if (WebDriver_Functions.CheckBodyText("Error 500")) {
-				 throw new Exception("Error 500");
-			 }
+			}catch(Exception e){
+				throw e;
+			}
+
 			Helper_Functions.PrintOut("WRTT " + Title + " Completed successfully", true);
 			return Title;
 		}catch (Exception e) {

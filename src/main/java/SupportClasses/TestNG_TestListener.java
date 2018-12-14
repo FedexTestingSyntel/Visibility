@@ -2,6 +2,9 @@ package SupportClasses;
 
 import java.util.ArrayList;    //The below needed for tracking the status of the tests.
 import java.util.Iterator;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestNGMethod;
@@ -12,6 +15,7 @@ public class TestNG_TestListener implements ITestListener{
 	
 	private static ArrayList<String> ResultsLog = new ArrayList<String>();//the results of all test cases
 	private static ArrayList<String[]> ResultsOverview = new ArrayList<String[]>();
+	private final static Lock lock = new ReentrantLock();//to make sure the httpclient works with the parallel execution
 	
 	@Override
     public void onStart(ITestContext arg0) {
@@ -31,7 +35,9 @@ public class TestNG_TestListener implements ITestListener{
     }
 	
 	@Override
-    public void onTestStart(ITestResult arg0) {
+	public void onTestStart(ITestResult arg0) {
+		//lock has been added to make the screenshot path unique
+		lock.lock();
         Object[] inputArgs = arg0.getParameters();
         if (inputArgs != null && inputArgs.length > 0) {
         	//check if first parameter is an integer, as part of these test the assumption is that if the level is passed will be first variable.
@@ -45,6 +51,8 @@ public class TestNG_TestListener implements ITestListener{
 		DriverFactory.setScreenshotPath(Helper_Functions.ScreenshotBase() + arg0.getName() + " ");
 		Helper_Functions.PrintOut(DriverFactory.getScreenshotPath(), false);
        // Helper_Functions.PrintOut(Environment.getInstance().getLevel(), true);
+		try {Thread.sleep(1);} catch (InterruptedException e) {}
+		lock.unlock();
     }
 
     @Override
@@ -86,7 +94,8 @@ public class TestNG_TestListener implements ITestListener{
     	Helper_Functions.PrintOut("\n\n", false);
 	
 		for (int i = 0 ; i < ResultsLog.size(); i++) {
-			Helper_Functions.PrintOut(i + ") " + ResultsLog.get(i), false);
+			//+1 so that console count starts at 1 instead of 0
+			Helper_Functions.PrintOut(i + 1 + ") " + ResultsLog.get(i), false);
 		}
 		
 		DriverFactory.closeDrivers();

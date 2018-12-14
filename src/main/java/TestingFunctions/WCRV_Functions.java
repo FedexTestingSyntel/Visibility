@@ -17,8 +17,8 @@ import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
 public class WCRV_Functions{
-	public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"},{"IMPORT","I"},{"IMPORT_INBOUND","II"},{"LEGACY_THIRD_PARTY","LT"},{"GLOBAL_THIRD_PARTY","GT"}};
-	//public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"}};
+	//public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"},{"IMPORT","I"},{"IMPORT_INBOUND","II"},{"LEGACY_THIRD_PARTY","LT"},{"GLOBAL_THIRD_PARTY","GT"}};
+	public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"}};
 	
 	//{Service Code,   Brief service name,      full service name}
 	public static String serviceBaseCode[][] = {{"SL","Sp", "SmartPost"},{"FE","Fec", "NEED TO ADD NAME"},{"FP","fp", "NEED TO ADD NAME"},{"92","Gd", "Ground"},{"90","Hd", "Home Delivery"},

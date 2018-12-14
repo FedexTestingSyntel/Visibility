@@ -1,4 +1,4 @@
-package WFCL_Application;
+package Mission_Critical;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
@@ -22,6 +22,10 @@ public class WFCL{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
+		
+		Environment.getInstance().setLevel("3");
+		Helper_Functions.AccountDetails("641179302");
+
 		//CountryList = Environment.getCountryList("BR");
 		//CountryList = Environment.getCountryList("full");
 		//need to fix this and make dynamic;
@@ -44,6 +48,7 @@ public class WFCL{
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i)), Account = null;
 			int intLevel = Integer.parseInt(Level);
 			//int intLevel = Integer.parseInt(Level);
+			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "CreditCardRegistrationEnroll":
 		    		for (int j = 0; j < CountryList.length; j++) {
@@ -199,7 +204,7 @@ public class WFCL{
 	
 	@Test(dataProvider = "dp", priority = 3)//since this method will consume an acocunt number run after others have completed
 	public void AccountRegistration_Admin(String Level, String CountryCode, String Account) {
-		try {
+		try {			
 			String UserName[] = Helper_Functions.LoadDummyName("INET", Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + Account + CountryCode);
 			String AddressDetails[] = Helper_Functions.AccountDetails(Account);

@@ -48,8 +48,6 @@ public class WebDriver_Functions{
     		case "WADM":
     			AppUrl = LevelURL + "/apps/shipadmin/";
 				break;
-    			
-    		
     		case "Pref":  		
     			AppUrl = LevelURL + "/preferences";
     			break;		
@@ -80,6 +78,10 @@ public class WebDriver_Functions{
     		case "WGTM":
     			AppUrl = LevelURL + "/GTM?cntry_code=" + CCL;
 				break;
+    		case "WGTM_FID":
+    			//WGTM page if the find internationl documents link is selected.
+    			AppUrl = LevelURL + "FID?clienttype=dotcom&clickedPrint=false&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&lang_code=en&initialrequest=y&option=fid";
+				break;						
     		case "WIDM":// this is the Find International documents link from GTM page
     			AppUrl = LevelURL + "/FID?clienttype=dotcom&clickedPrint=false&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&lang_code=en&option=fid";
 				break;

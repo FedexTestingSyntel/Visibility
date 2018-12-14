@@ -19,7 +19,7 @@ public class WIDM_Functions{
 
 			//Enter all of the form data
 			WIDM_Registration_Input(AddressDetails, Name, UserId, Email_Address);
-			WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
+			WebDriver_Functions.takeSnapShot("Contact Information.png");
 			WebDriver_Functions.Click(By.id("createUserID"));
 
 			//confirmation page

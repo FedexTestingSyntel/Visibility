@@ -1,4 +1,4 @@
-package AgileApplications;
+package Mission_Critical;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import TestingFunctions.WIDM_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -25,7 +25,7 @@ public class WIDM{
 		
 		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
-	
+		//Helper_Functions.MyEmail = "InvalidPasswordSet@accept.com";
 	}
 	
 	@DataProvider (parallel = true)

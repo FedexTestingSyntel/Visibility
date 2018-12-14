@@ -1,4 +1,4 @@
-package WFCL_Application;
+package Mission_Critical;
 
 import org.testng.annotations.Test;
 import Data_Structures.Account_Data;
@@ -22,12 +22,12 @@ public class WFCL_New{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("smoke");
+		CountryList = Environment.getCountryList("US");
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("FR");
 		//CountryList = Environment.getCountryList("IN");
-		//Helper_Functions.MyEmail = "accept@gmail.com";
+		//Helper_Functions.MyEmail = "accept@fedex.com";
 	}
 	
 	@DataProvider (parallel = true)
@@ -93,9 +93,10 @@ public class WFCL_New{
 					}
 		    		break;
 		    	case "AccountRegistration_INET_Test":
-		    		data.add( new Object[] {Level, "608859888"});
-		    		data.add( new Object[] {Level, "609119721"});
-			    	data.add( new Object[] {Level, "608798447"});
+		    		//data.add( new Object[] {Level, "640695480"});
+		    		//data.add( new Object[] {Level, "640695447"});
+		    		data.add( new Object[] {Level, "641179205"});
+			    	//data.add( new Object[] {Level, "633504580"});
 		    		break;
 			}
 		}	
@@ -105,7 +106,7 @@ public class WFCL_New{
 	@Test(dataProvider = "dp")
 	public void CreditCardRegistrationEnroll(String Level, String EnrollmentID, String CountryCode) {
 		try {
-			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
+			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
@@ -213,7 +214,7 @@ public class WFCL_New{
 	}	
 
 	
-	@Test(dataProvider = "dp", priority = 1, enabled = false)
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_INET_Test(String Level, String Account){
 		try {
 			Account_Data AccountDetails = Account_Lookup.Account_DataAccountDetails(Account, Level);
@@ -223,7 +224,7 @@ public class WFCL_New{
 			AccountDetails.FirstName = ContactName[0];
 			AccountDetails.MiddleName = ContactName[1];
 			AccountDetails.LastName = ContactName[2];
-			AccountDetails.UserId = Helper_Functions.LoadUserID("L" + Level + "Inet" + CountryCode);
+			AccountDetails.UserId = Helper_Functions.LoadUserID("L" + Level + "AccountReg" + Helper_Functions.getRandomString(4));
 			//create user id and link to account number.
 			AccountDetails = WFCL_Functions_UsingData.Account_Linkage(AccountDetails);
 			//register the userid to INET

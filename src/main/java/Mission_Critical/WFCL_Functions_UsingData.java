@@ -1,24 +1,277 @@
-package WFCL_Application;
+package Mission_Critical;
 
 import java.util.Arrays;
 import org.openqa.selenium.By;
+
+import Data_Structures.Account_Data;
 import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
-public class WFCL_Functions{
+public class WFCL_Functions_UsingData{
 	
-	public static String[] CreditCardRegistrationEnroll(String EnrollmentID, String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId, boolean BusinessAccount, String TaxInfo[]) throws Exception{
-		try {
-			String CountryCode = AddressDetails[6];
-			//go to the INET page just to load the cookies
-			WebDriver_Functions.ChangeURL("INET", CountryCode, true);
-			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, CountryCode, false);
+	public static boolean ContactInfo_Page_Array(String Name[], String AddressDetails[], String UserId, boolean Submit) throws Exception {
+		Account_Data Account_Info = new Account_Data();
+		//String Name[] = {FirstName, Middle Name, Last Name}
+		Account_Info.FirstName = Name[0];
+		Account_Info.MiddleName = Name[1];
+		Account_Info.LastName = Name[2];
+		
+		//AddressDetails[] =  {Streetline1 - 0, Streetline2 - 1, City - 2, State - 3, StateCode - 4, postalCode - 5, countryCode - 6};
+		Account_Info.Billing_Address_Line_1 = AddressDetails[0];
+		Account_Info.Billing_Address_Line_2 = AddressDetails[1];
+		Account_Info.Billing_City = AddressDetails[2];
+		Account_Info.Billing_State = AddressDetails[3];
+		Account_Info.Billing_State_Code = AddressDetails[4];
+		Account_Info.Billing_Zip = AddressDetails[5];
+		Account_Info.Billing_Country_Code = AddressDetails[6];
+		
+		Account_Info.UserId = UserId;
+		
+		return ContactInfo_Page(Account_Info, Submit);
+	}
+	
+	public static boolean ContactInfo_Page(Account_Data Account_Info, boolean Submit) throws Exception{
+		//wait for secret questions to load.
+		WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));
+		WebDriver_Functions.CheckBodyText("Country/Territory");
+		
+		WebDriver_Functions.Type(By.id("firstName"), Account_Info.FirstName);
+		WebDriver_Functions.Type(By.name("initials"), Account_Info.MiddleName);
+		WebDriver_Functions.Type(By.id("lastName"), Account_Info.LastName);
+		WebDriver_Functions.Type(By.id("email"), Helper_Functions.MyEmail);
+		WebDriver_Functions.Type(By.id("retypeEmail"), Helper_Functions.MyEmail);
+		WebDriver_Functions.Type(By.id("address1"), Account_Info.Billing_Address_Line_1);
+		WebDriver_Functions.Type(By.name("address2"), Account_Info.Billing_Address_Line_2);
 
-			//add the country code to the screenshot name
-			DriverFactory.setScreenshotPath(DriverFactory.getScreenshotPath() + CountryCode + " ");
+		if (WebDriver_Functions.isPresent(By.name("city"))) {
+			WebDriver_Functions.Type(By.name("city"),Account_Info.Billing_City);
+		}else if (WebDriver_Functions.isPresent(By.name("city1"))){
+			WebDriver_Functions.Type(By.name("city1"), Account_Info.Billing_City);
+		}
+
+		if (Account_Info.Billing_State != ""){
+			try {
+				//for the legacy registration page such as WDPA the code must be entered as text
+				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_State);
+			}catch (Exception e){}
+		}else if (Account_Info.Billing_State_Code != "") {
+			try{
+				WebDriver_Functions.Select(By.id("state"), Account_Info.Billing_State_Code,  "v");
+			}catch (Exception e){}
+		}
+
+		WebDriver_Functions.Type(By.id("zip"), Account_Info.Billing_Zip);
+		WebDriver_Functions.Type(By.id("phone"), Account_Info.Billing_Phone_Number);
+		WebDriver_Functions.Type(By.id("uid"), Account_Info.UserId);
+		WebDriver_Functions.Type(By.id("password"), Helper_Functions.myPassword);
+		WebDriver_Functions.Type(By.id("retypePassword"), Helper_Functions.myPassword);
+		WebDriver_Functions.Select(By.id("reminderQuestion"), "SP2Q1", "v"); //"What is your mother's first name?"
+		WebDriver_Functions.Type(By.id("reminderAnswer"), "mom");
+
+		if (WebDriver_Functions.isPresent(By.id("acceptterms")) && DriverFactory.getInstance().getDriver().findElement(By.id("acceptterms")).isSelected() == false) {
+			WebDriver_Functions.Click(By.id("acceptterms"));
+		}
+
+		Helper_Functions.PrintOut("Name: " + Account_Info.FirstName + " " + Account_Info.MiddleName + " " + Account_Info.LastName + "    UserID:" + Account_Info.UserId, true);
+
+		WebDriver_Functions.takeSnapShot("ContactInformation.png");
+		//if the submit flag is sent as true will submit the page.
+		if (Submit) {
+			if (WebDriver_Functions.isPresent(By.id("iacceptbutton"))) {
+				WebDriver_Functions.Click(By.id("iacceptbutton"));
+			}else if (WebDriver_Functions.isPresent(By.id("createUserID"))) {
+				WebDriver_Functions.Click(By.id("createUserID"));
+			}
+		}
+
+		return true;
+	}//end WFCL_ContactInfo_Page
+	
+	public static boolean Account_Entry_Screen(Account_Data Account_Info) throws Exception{
+		if (WebDriver_Functions.isPresent(By.id("accountNumber"))){
+			WebDriver_Functions.Type(By.id("accountNumber"), Account_Info.Account_Number);
+			WebDriver_Functions.Type(By.id("nickName"), Account_Info.Account_Nickname);
+			WebDriver_Functions.takeSnapShot("AccountInformation.png");
+			WebDriver_Functions.Click(By.id("createUserID"));
+		}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
+			WebDriver_Functions.Type(By.name("newAccountNumber"), Account_Info.Account_Number);
+			WebDriver_Functions.Type(By.name("newNickName"), Account_Info.Account_Nickname);
+			WebDriver_Functions.takeSnapShot("AccountInformation.png");
+			WebDriver_Functions.Click(By.name("submit"));
+		}
+
+		InvoiceOrCCValidaiton(Account_Info);
+
+		if (WebDriver_Functions.isPresent(By.id("accountNumber"))|| WebDriver_Functions.isPresent(By.name("newAccountNumber"))) {
+			WebDriver_Functions.Click(By.name("submit"));
+			Helper_Functions.PrintOut("Warning, still on account entry screen. The address entered may be incorrect.", true);
+		}else if (WebDriver_Functions.CheckBodyText("Request Access from the Account Administrator")) {
+			//remove the account number from local storage as it is now locked to the company that was just created.
+			Helper_Functions.RemoveAccountFromExcel(Account_Info.Account_Number);
+			Helper_Functions.PrintOut("Request Access from the Account Administrator", true);
+			throw new Exception("Request Access from the Account Administrator");
+		}
+		
+		WebDriver_Functions.WaitNotPresent(By.id("createUserID"));
+		return true;
+	}//end WFCL_AccountEntryScreen
+	
+	//need to add here for the different applications.
+	public static boolean Verify_Confirmaiton_Page(String Application, Account_Data Account_Info) throws Exception {
+		String CC = Account_Info.Billing_Country_Code.toUpperCase();
+		try{
+			switch (Application) {
+			case "WFCL_Link"://WFCL linkage page
+				if (CC.contains("US")){
+					WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), Account_Info.UserId);
+					WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), Account_Info.Masked_Account_Number);    //will need to update due to account masking
+				}
+				break;
+			case "INET":
+			case "GFBO":
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.UserId);
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.Masked_Account_Number);
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.Account_Nickname);
+				//WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[4]/table/tbody/tr[2]/td/table/tbody/tr/td[2]/b"), AddressDetails[0] + "\n" + AddressDetails[2] + ", " + AddressDetails[4] + " " + AddressDetails[5] + "\n" + AddressDetails[6].toLowerCase());
+				break;
+			case "WDPA":
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b"), Account_Info.UserId);
+				break;
+			}
+		}catch (Exception e){
+			Helper_Functions.PrintOut(e.getMessage() + "\nNotAble to validate " + Application, true);
+			return false;
+		}
+		
+		WebDriver_Functions.takeSnapShot(Application + " Confirmation Page.png");
+		return true;
+		
+	}
+	
+	//will return the updated Account_Data with the uuid added.
+	public static Account_Data Account_Linkage(Account_Data Account_Info) throws Exception{
+		Helper_Functions.PrintOut("Attempting to register with " + Account_Info.Account_Number, true);
+		String CountryCode = Account_Info.Billing_Country_Code.toUpperCase();
+
+		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
+			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
+			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
+			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
+			ContactInfo_Page(Account_Info, true); //enters all of the details
+		}else{
+			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
+			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
+			ContactInfo_Page(Account_Info, true); //enters all of the details
+		}
+
+		//Step 2 Account information
+		Account_Entry_Screen(Account_Info);
+
+		Verify_Confirmaiton_Page("WFCL_Link", Account_Info);
+		
+		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
+		Account_Info.UUID = UUID;
+		Helper_Functions.WriteUserToExcel(Account_Info.UserId, Helper_Functions.myPassword);
+		return Account_Info;
+	}//end WFCL_AccountLinkage
+	
+	public static void AddressMismatchPage(Account_Data Account_Info) throws Exception {
+		if (WebDriver_Functions.isPresent(By.name("address1"))) {
+			WebDriver_Functions.WaitPresent(By.name("address1"));
+			WebDriver_Functions.Type(By.name("address1"), Account_Info.Billing_Address_Line_1);
+			WebDriver_Functions.Type(By.name("address2"), Account_Info.Billing_Address_Line_2);
+			WebDriver_Functions.Type(By.name("city"), Account_Info.Billing_City);
+			try {
+				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_State_Code);
+				WebDriver_Functions.Type(By.name("zip"), Account_Info.Billing_Zip);
+				WebDriver_Functions.Select(By.name("country"), Account_Info.Billing_Country_Code.toLowerCase(), "v");
+			}catch (Exception e) {}
+		
+			WebDriver_Functions.takeSnapShot("Address Mismatch.png");
+			WebDriver_Functions.Click(By.name("submit"));
+		}
+		
+	}
+	
+	public static boolean INET_Registration(Account_Data Account_Info) throws Exception{
+		String CountryCode =  Account_Info.Billing_Country_Code.toUpperCase();
+
+		WebDriver_Functions.ChangeURL("INET", CountryCode, false);
+		//Register the account number for INET
+		if (CountryCode.contains("US") || CountryCode.contains("CA")){
+			WebDriver_Functions.WaitPresent(By.name("accountNumberOpco"));
+			WebDriver_Functions.Select(By.name("accountNumberOpco"), "1",  "i");	//Will need to update this later to choose the correct account
+			WebDriver_Functions.takeSnapShot("INET Account Selection.png");
+			WebDriver_Functions.Click(By.className("buttonpurple"));
+		}
+		
+		Helper_Functions.Wait(5);/////////Need to make dynamic
+		
+		AddressMismatchPage(Account_Info);
+		
+		Verify_Confirmaiton_Page("INET", Account_Info);
+
+		return true;
+	}
+	
+	public static String Account_Number_Masking(Account_Data Account_Info, Account_Data Account_Info_Mismatch) throws Exception{
+		boolean InetFlag = false;
+		String CountryCode = Account_Info.Billing_Country_Code;
+		
+		Account_Linkage(Account_Info_Mismatch) ;
+
+		//WebDriver_Functions.ChangeURL("https://" + strLevelURL + "/shipping/shipEntryAction.do?origincountry=" + CountryCode.toLowerCase());
+		WebDriver_Functions.ChangeURL("INET", CountryCode, false);
+		//Register the account number for INET
+		if (CountryCode.contains("US") || CountryCode.contains("CA")){
+			WebDriver_Functions.WaitPresent(By.name("accountNumberOpco"));
+			WebDriver_Functions.Select(By.name("accountNumberOpco"), "1",  "i");
+			WebDriver_Functions.takeSnapShot("INET Account Selection.png");
+			WebDriver_Functions.Click(By.className("buttonpurple"));
+			//need to add clicking continue button
+
+			//address mismatch page should appear, enter the correct details.
+			AddressMismatchPage(Account_Info);
 			
+			//Confirmation from INET registration
+			Verify_Confirmaiton_Page("INET", Account_Info);
+			
+			WebDriver_Functions.takeSnapShot("INET Confirmation.png");
+			WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
+			WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
+		}
+
+		WebDriver_Functions.ChangeURL("AdminReg", CountryCode, false);
+		try{
+			if (WebDriver_Functions.isPresent(By.name("accountNumber"))){ 
+				WebDriver_Functions.Select(By.name("accountNumber"), "1", "i");
+				WebDriver_Functions.Click(By.name("submit"));	
+			}
+
+			//address mismatch page should appear, enter the correct details.
+			AddressMismatchPage(Account_Info);
+			InvoiceOrCCValidaiton(Account_Info);
+			
+		}catch (Exception e2){
+			Helper_Functions.PrintOut("Failure with admin registriaton.", true);
+		};
+		
+		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
+		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + Account_Info.UserId + "/" + Helper_Functions.myPassword + "--" + Account_Info.Account_Number + "--" + UUID, true);
+		String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Account_Number, UUID, "INET:" + InetFlag};
+		Helper_Functions.WriteUserToExcel(Account_Info.UserId, Helper_Functions.myPassword);
+		return Arrays.toString(ReturnValue);
+	}//end WFCL_AccountRegistration
+	
+	public static String[] CreditCardRegistrationEnroll(String EnrollmentID, Account_Data Account_Info, String TaxInfo[]) throws Exception{
+		try {
+
+			//go to the INET page just to load the cookies
+			WebDriver_Functions.ChangeURL("INET", Account_Info.Billing_Country_Code, true);
+			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, Account_Info.Billing_Country_Code, false);
+
 			WebDriver_Functions.takeSnapShot("Discount Page.png");
 			
 			if (WebDriver_Functions.isPresent(By.name("Apply Now"))) {
@@ -33,39 +286,36 @@ public class WFCL_Functions{
 			}
 
 			//Step 1: Enter the contact information.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+			ContactInfo_Page(Account_Info, true); //enters all of the details
 
 			//Step 2: Enter the credit card details
 			WebDriver_Functions.WaitPresent(By.id("CCType"));
 			boolean Multicard = true;
 			if(TaxInfo != null && !TaxInfo[3].contains("Valid")) {
 				Multicard = false;
-				CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
-				return new String[] {"Invalid attempt : " +  TaxInfo[3] };
 			}
-			CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
+			Account_Info = WFCL_CC_Page(Account_Info, Multicard, TaxInfo);
 			
 			//Step 3: Confirmation Page
 			//Domestic and international will be different  
-			WebDriver_Functions.WaitOr_TextToBe(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId, By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr[1]/td[2]"),  UserId);
+			WebDriver_Functions.WaitOr_TextToBe(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), Account_Info.UserId, By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr[1]/td[2]"),  Account_Info.UserId);
 			String AccountNumber = WebDriver_Functions.GetText(By.xpath("//*[@id='acctNbr']"));
 			WebDriver_Functions.takeSnapShot("Confirmation.png");
 
 			boolean InetFlag = false, AdminFlag = false;
 
 			//Check the INET page
-			InetFlag = Check_INET_Enrolled(CountryCode);
+			InetFlag = Check_INET_Enrolled(Account_Info.Billing_Country_Code);
 
 			//Check the Administration page
-			AdminFlag = Check_WADM_Enrolled(CountryCode);
+			AdminFlag = Check_WADM_Enrolled(Account_Info.Billing_Country_Code);
 			
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-			Helper_Functions.PrintOut("Finished CreditCardRegistrationEnroll  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
-
-			String LastFourOfCC = CreditCardDetils[1].substring(CreditCardDetils[1].length() - 4, CreditCardDetils[1].length());
-			String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, LastFourOfCC, "INET:" + InetFlag, "Admin:" + AdminFlag};
+			Helper_Functions.PrintOut("Finished CreditCardRegistrationEnroll  " + Account_Info.UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
 			
-			Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
+			String ReturnValue[] = new String[] {Account_Info.UserId, AccountNumber, UUID, Account_Data.Last_Four_of_Credit_Card(Account_Info), "INET:" + InetFlag, "Admin:" + AdminFlag};
+			
+			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Helper_Functions.myPassword);
 			return ReturnValue;
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -113,7 +363,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
 			WebDriver_Functions.Click(By.id("registernow"));
 			
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+			ContactInfo_Page_Array(Name, AddressDetails, UserId, true); //enters all of the details
 
 			//Confirmation page
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/h2"), "Login Information");
@@ -132,77 +382,19 @@ public class WFCL_Functions{
 		}
 	}//end WFCL_UserRegistration
 	
-	public static String WFCL_AccountRegistration_INET(String Name[], String UserId, String AccountNumber, String AddressDetails[]) throws Exception{
-		boolean InetFlag = false;
-		String CountryCode = AddressDetails[6].toUpperCase();
-
-		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
-			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
-			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
-			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
-		}else{
-			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
-			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
-		}
-		
-
-		//Step 2 Account information
-		String AccountNickname = AccountNumber + "_" + CountryCode;
-		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
-
-		if (CountryCode.contains("US")){
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
-			//WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), AccountNumber);    //will need to update due to account masking
-		}
-		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
-		//WebDriver_Functions.ChangeURL("https://" + strLevelURL + "/shipping/shipEntryAction.do?origincountry=" + CountryCode.toLowerCase());
-		WebDriver_Functions.ChangeURL("INET", CountryCode, false);
-		//Register the account number for INET
-		if (CountryCode.contains("US") || CountryCode.contains("CA")){
-			WebDriver_Functions.WaitPresent(By.name("accountNumberOpco"));
-			WebDriver_Functions.Select(By.name("accountNumberOpco"), "1",  "i");
-			WebDriver_Functions.takeSnapShot("INET Account Selection.png");
-			WebDriver_Functions.Click(By.className("buttonpurple"));
-			//need to add clicking continue button
-
-			//Confirmation from INET registration
-			try{//EACI form
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), UserId);
-				//WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b"), AccountNumber);
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[2]/table/tbody/tr[2]/td/b"), AccountNickname);
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[4]/table/tbody/tr[2]/td/table/tbody/tr/td[2]/b"), AddressDetails[0] + "\n" + AddressDetails[2] + ", " + AddressDetails[4] + " " + AddressDetails[5] + "\n" + AddressDetails[6].toLowerCase());
-				InetFlag = true;
-			}catch (Exception e){
-				Helper_Functions.PrintOut("Not able to Verify data on INET registration page.", true);
-			}
-			
-			WebDriver_Functions.takeSnapShot("INET Confirmation.png");
-			WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
-			WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
-		}
-
-		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
-		String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag};
-		Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
-		return Arrays.toString(ReturnValue);
-	}//end WFCL_AccountRegistration
-
-	public static boolean Admin_Registration(String CountryCode, String AccountNumber) throws Exception {
+	public static boolean Admin_Registration(Account_Data Account_Info) throws Exception {
 		try{
-			WebDriver_Functions.ChangeURL("AdminReg", CountryCode, false);
+			WebDriver_Functions.ChangeURL("AdminReg", Account_Info.Billing_Country_Code, false);
 			
 			if (WebDriver_Functions.isPresent(By.name("accountNumber"))){ 
 				WebDriver_Functions.Select(By.name("accountNumber"), "1", "i");
-				WebDriver_Functions.Click(By.name("submit"));	
+				WebDriver_Functions.Click(By.name("submit"));
 			}
 
 			Helper_Functions.Wait(2);
 			
 			if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
-				InvoiceOrCCValidaiton();
+				InvoiceOrCCValidaiton(Account_Info);
 			}
 			
 			WebDriver_Functions.WaitPresent(By.name("companyName"));
@@ -218,8 +410,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.Click(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > p:nth-child(6) > a"));//click shipping admin link
 			WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + CompanyName);
 			//remove the account number from local storage as it is now locked to the company that was just created.
-			//Helper_Functions.RemoveAccountFromExcel(AccountNumber);
-			Helper_Functions.RemoveAccountFromAccount_Numbers(Environment.getInstance().getLevel(), AccountNumber);
+			Helper_Functions.RemoveAccountFromAccount_Numbers(Environment.getInstance().getLevel(), Account_Info.Account_Number);
 		}catch (Exception e){
 			Helper_Functions.PrintOut("Failure with admin registriaton.", true);
 			throw e;
@@ -228,68 +419,26 @@ public class WFCL_Functions{
 		return true;
 	}
 	
-	public static String WFCL_AccountLinkage(String Name[], String UserId, String AccountNumber, String AddressDetails[], String AccountNickname) throws Exception{
-		Helper_Functions.PrintOut("Attempting to register with " + AccountNumber, true);
-		String CountryCode = AddressDetails[6].toUpperCase();
-
-		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
-			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
-			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
-			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
-		}else{
-			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
-			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
-		}
-
-		//Step 2 Account information
-		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
-
-		if (CountryCode.contains("US")){
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
-			//set the AccountNumberCheck value to last three digits of the account number
-			String AccountNumberCheck = AccountNumber.substring(AccountNumber.length() - 3, AccountNumber.length());
-			if (AccountNickname.isEmpty()) {
-				AccountNumberCheck = "My Account - " + AccountNumberCheck;
-			}else {
-				AccountNumberCheck = AccountNickname + " - " + AccountNumberCheck;
-			}
-			//the below was updated due to account masking and story 385883
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), AccountNumberCheck);
-		}
-		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
-		
-		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		Helper_Functions.PrintOut("Finished WFCL_AccountLinkage  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
-		Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
-		String ReturnValue[] = new String[] {UserId, Helper_Functions.myPassword, AccountNumber, UUID};
-		return Arrays.toString(ReturnValue);
-	}//end WFCL_AccountRegistration
-
-	public static String[] WDPA_Registration(String Name[], String UserId, String AccountNumber, String AddressDetails[]) throws Exception{
+	public static String[] WDPA_Registration(Account_Data Account_Info) throws Exception{
  		try {
- 			String CountryCode = AddressDetails[6].toUpperCase();
+ 			String CountryCode = Account_Info.Billing_Country_Code;
  			WebDriver_Functions.ChangeURL("WDPA", CountryCode, true);
  			WebDriver_Functions.Click(By.name("signupnow"));
  	
- 			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+ 			ContactInfo_Page(Account_Info, true); //enters all of the details
  			
 	 		//Step 2 Account information
-	 		String AccountNickname = AccountNumber + "_" + CountryCode;
-	 		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
+ 			Account_Entry_Screen(Account_Info);
 	 		
-	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b"), UserId);
-	 		//*[@id="content"]/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b
+ 			Verify_Confirmaiton_Page("WDPA", Account_Info);
 	 		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 		    
 		    WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
 		    WebDriver_Functions.WaitPresent(By.id("module.account._headerTitle"));
 		    
 		    String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_WDPA  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
-		    String ReturnValue[] = new String[] {UserId, AccountNumber, UUID};
-		    Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
+		    String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Account_Number, UUID};
+		    Helper_Functions.WriteUserToExcel(Account_Info.UserId, Helper_Functions.myPassword);
 		    return ReturnValue;
  		}catch (Exception e) {
  			e.printStackTrace();
@@ -315,76 +464,17 @@ public class WFCL_Functions{
 		}
 	}//end Forgot_User_Email
 
-	//AddressDetails[] =  {Streetline1 - 0, Streetline2 - 1, City - 2, State - 3, StateCode - 4, postalCode - 5, countryCode - 6};
-	//String Name[] = {FirstName, Middle Name, Last Name}
-	public static boolean WFCL_ContactInfo_Page(String Name[], String AddressDetails[], String UserId, boolean Submit) throws Exception{
-		WebDriver_Functions.CheckBodyText("Country/Territory");
-		WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-
-		WebDriver_Functions.Type(By.id("firstName"), Name[0]);
-		WebDriver_Functions.Type(By.name("initials"), Name[1]);
-		WebDriver_Functions.Type(By.id("lastName"), Name[2]);
-		WebDriver_Functions.Type(By.id("email"), Helper_Functions.MyEmail);
-		WebDriver_Functions.Type(By.id("retypeEmail"), Helper_Functions.MyEmail);
-		WebDriver_Functions.Type(By.id("address1"), AddressDetails[0]);
-		WebDriver_Functions.Type(By.name("address2"), AddressDetails[1]);
-
-		if (WebDriver_Functions.isPresent(By.name("city"))) {
-			WebDriver_Functions.Type(By.name("city"), AddressDetails[2]);
-		}else if (WebDriver_Functions.isPresent(By.name("city1"))){
-			WebDriver_Functions.Type(By.name("city1"), AddressDetails[2]);
-		}
-
-		if (AddressDetails[4] != null && AddressDetails[4] != ""){
-			try{
-				WebDriver_Functions.Select(By.id("state"), AddressDetails[4],  "v");
-			}catch (Exception e){
-				try {
-					WebDriver_Functions.Type(By.name("state"), AddressDetails[4]);//for the legacy registration page such as WDPA the code must be entered as text
-				}catch (Exception e2){}
-			};
-		}
-
-		WebDriver_Functions.Type(By.id("zip"), AddressDetails[5]);
-		String strPhone = Helper_Functions.ValidPhoneNumber(AddressDetails[6]);
-		WebDriver_Functions.Type(By.id("phone"), strPhone);
-		WebDriver_Functions.Type(By.id("uid"), UserId);
-		WebDriver_Functions.Type(By.id("password"), Helper_Functions.myPassword);
-		WebDriver_Functions.Type(By.id("retypePassword"), Helper_Functions.myPassword);
-		WebDriver_Functions.Select(By.id("reminderQuestion"), "SP2Q1", "v"); //"What is your mother's first name?"
-		WebDriver_Functions.Type(By.id("reminderAnswer"), "mom");
-
-		if (WebDriver_Functions.isPresent(By.id("acceptterms")) && DriverFactory.getInstance().getDriver().findElement(By.id("acceptterms")).isSelected() == false) {
-			WebDriver_Functions.Click(By.id("acceptterms"));
-		}
-
-		Helper_Functions.PrintOut("Name: " + Arrays.toString(Name) + "    UserID:" + UserId, true);
-
-		WebDriver_Functions.takeSnapShot("ContactInformation.png");
-		//if the submit flag is sent as true will submit the page.
-		if (Submit) {
-			if (WebDriver_Functions.isPresent(By.id("iacceptbutton"))) {
-				WebDriver_Functions.Click(By.id("iacceptbutton"));
-			}else if (WebDriver_Functions.isPresent(By.id("createUserID"))) {
-				WebDriver_Functions.Click(By.id("createUserID"));
-			}
-		}
-
-
-		return true;
-	}//end WFCL_ContactInfo_Page
-
-	public static String[] WFCL_CC_Page(String[] CreditCardDetils, String ShippingAddress[], String BillingAddress[], boolean BusinessRegistration, boolean MultiCard, String TaxInfo[]) throws Exception{
-		String CountryCode = BillingAddress[6];
-		Helper_Functions.PrintOut("WFCL_CC_Page recieved: " + CreditCardDetils[0] + ", " + CountryCode + " From: " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
+	public static Account_Data WFCL_CC_Page(Account_Data Account_Info, boolean MultiCard, String TaxInfo[]) throws Exception{
+		String CountryCode = Account_Info.Billing_Country_Code;
+		Helper_Functions.PrintOut("WFCL_CC_Page recieved: " + Account_Info.Credit_Card_Number + ", " + CountryCode + " From: " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
 		WebDriver_Functions.GetCookieValue("fcl_uuid");
 
-		WebDriver_Functions.WaitForTextPresentIn(By.cssSelector("#CCType"), CreditCardDetils[0].substring(0,1).toUpperCase());//wait for the credit card types to load
+		WebDriver_Functions.WaitForTextPresentIn(By.cssSelector("#CCType"), Account_Info.Credit_Card_Type);//wait for the credit card types to load
 
-		WebDriver_Functions.Type(By.id("creditCardNumber"), CreditCardDetils[1]);
-		WebDriver_Functions.Type(By.id("creditCardIDNumber"), CreditCardDetils[2]);
-		WebDriver_Functions.Select(By.id("monthExpiry"), CreditCardDetils[3], "t");
-		WebDriver_Functions.Select(By.id("yearExpiry"), CreditCardDetils[4], "t");
+		WebDriver_Functions.Type(By.id("creditCardNumber"), Account_Info.Credit_Card_Number);
+		WebDriver_Functions.Type(By.id("creditCardIDNumber"), Account_Info.Credit_Card_CVV);
+		WebDriver_Functions.Select(By.id("monthExpiry"), Account_Info.Credit_Card_Expiration_Month, "t");
+		WebDriver_Functions.Select(By.id("yearExpiry"), Account_Info.Credit_Card_Expiration_Year, "t");
 
 		if (WebDriver_Functions.isPresent(By.name("editshipinfo"))) {
 			WebDriver_Functions.Click(By.name("editshipinfo"));//the shipping address section
@@ -395,13 +485,15 @@ public class WFCL_Functions{
 			WebDriver_Functions.Click(By.name("editccinfo"));//edit the billing address
 			if (WebDriver_Functions.isPresent(By.xpath("//*[@id='billing-address']/label[17]/span[1]"))) {
 				WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[17]/span[1]"), "Country/Territory", 116577);
-			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='billing-address']/label[20]/span[1]"))) {//Non US field    changed from 18 to 20 for emea
+			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='billing-address']/label[18]/span[1]"))) {//Non US field
+				//not sure if this is valid for other regions WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[18]/span[1]"), "Country/Territory", 116577);
+				//when checking BR seeing 
 				WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[20]/span[1]"), "Country/Territory", 116577);
-			} 
+			}
 			
 			//if the zip code does not match what was enterd on previous page then update. This was change as part of the TNT features for the Jan19CL.
-			if (WebDriver_Functions.isPresent(By.id("creditCardZipCode")) && !WebDriver_Functions.GetText(By.id("creditCardZipCode")).contentEquals(BillingAddress[5])) {
-				WebDriver_Functions.Type(By.id("creditCardZipCode"), BillingAddress[5]);
+			if (WebDriver_Functions.isPresent(By.id("creditCardZipCode")) && !WebDriver_Functions.GetText(By.id("creditCardZipCode")).contentEquals(Account_Info.Billing_Zip)) {
+				WebDriver_Functions.Type(By.id("creditCardZipCode"), Account_Info.Billing_Zip);
 			}
 		}
 
@@ -411,7 +503,8 @@ public class WFCL_Functions{
 			WebDriver_Functions.Select(By.name("questionCd11"), "1", "i");
 		}
 
-		if (BusinessRegistration) {
+		//if the account type is set to "b" then do business reg
+		if (Account_Info.Account_Type.toUpperCase().contentEquals("B")) {
 			WebDriver_Functions.Click(By.xpath("//*[@id='accountTypeBus']"));
 			WebDriver_Functions.Type(By.name("company"), "Company Name Here");
 		}
@@ -423,17 +516,9 @@ public class WFCL_Functions{
 			WebDriver_Functions.Type(By.name("indStateTaxID"), TaxInfo[2]);
 		}else if (WebDriver_Functions.isPresent(By.name("vatNo"))) {
 			WebDriver_Functions.Type(By.name("vatNo"), TaxInfo[2]);
-			WebDriver_Functions.Type(By.name("company"), "Vat " + TaxInfo[2]);
 		}
 
-		try {
-			WebDriver_Functions.Select(By.id("CCType"), CreditCardDetils[0], "t");
-		}catch (Exception e) {
-			if (CreditCardDetils[0].contains("MasterCard")) {
-				WebDriver_Functions.Select(By.id("CCType"), "Mastercard", "t");
-			}
-		}
-		
+		WebDriver_Functions.Select(By.id("CCType"), Account_Info.Credit_Card_Type, "t");
 
 		WebDriver_Functions.takeSnapShot("CreditCard Entry.png");
 		WebDriver_Functions.Click(By.id("Complete"));
@@ -444,48 +529,41 @@ public class WFCL_Functions{
 		}catch (Exception e) {}
 
 		//If the user is still on the CC entry page will try and enter a different credit card type.
-		if (TaxInfo != null && !TaxInfo[3].contains("Valid")) {
-			boolean VatCheck = false;
-			if (WebDriver_Functions.isPresent(By.xpath("//*[@id='vatNo']/label[1]/b"))) {
-				VatCheck = WebDriver_Functions.ElementMatches(By.xpath("//*[@id='vatNo']/label[1]/b"), TaxInfo[3], Integer.parseInt(TaxInfo[5]));
-			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='taxInformation']/label/b/text()"))) {   
-				VatCheck = WebDriver_Functions.ElementMatches(By.xpath("//*[@id='taxInformation']/label/b/text()"), TaxInfo[3], Integer.parseInt(TaxInfo[5]));
-			}
-			if (!VatCheck){
-				throw new Exception("Vat error is not present on page"); 
-			}else {
-				WebDriver_Functions.takeSnapShot("Vat Error Page.png");
-			}
-			
-			//*[@id="vatNo"]/label[1]/b
-		}else if (WebDriver_Functions.isPresent(By.id("monthExpiry")) && MultiCard) {
+		if (WebDriver_Functions.isPresent(By.id("monthExpiry")) && MultiCard) {
 			Helper_Functions.PrintOut("Error on Credit Card entry screen. Attempting to register with differnet credit card", true);
-			String NewCreditCard[] = Helper_Functions.LoadCreditCard(CreditCardDetils[1]);
-			return WFCL_CC_Page(NewCreditCard, ShippingAddress, BillingAddress, BusinessRegistration, MultiCard, TaxInfo);
+			String NewCreditCard[] = Helper_Functions.LoadCreditCard(Account_Info.Credit_Card_Number);
+			//{Card Type - 0, Card Number - 1, CVV - 2, Expiration Month - 3, Expiration year - 4}
+			Account_Info.Credit_Card_Type = NewCreditCard[0];
+			Account_Info.Credit_Card_Number = NewCreditCard[1];
+			Account_Info.Credit_Card_CVV = NewCreditCard[2];
+			Account_Info.Credit_Card_Expiration_Month = NewCreditCard[3];
+			Account_Info.Credit_Card_Expiration_Year = NewCreditCard[4];
+			
+			return WFCL_CC_Page(Account_Info, MultiCard, TaxInfo);
 		}
 		//longwait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]")));//check that confirmation page loads
-		return CreditCardDetils; //return the credit card used
+		return Account_Info; 
 	}//end WFCL_CC_Page
 
-	private static void InvoiceOrCCValidaiton() throws Exception{
-		InvoiceOrCCValidaiton("4460", "750000000", "750000001");
-	}
-
-	private static void InvoiceOrCCValidaiton(String CCNumber, String InvoiceA, String InvoiceB) throws Exception{
+	private static void InvoiceOrCCValidaiton(Account_Data Account_Info) throws Exception{
+		//need to add a dynamic wait here for the processing
+		Helper_Functions.Wait(5);
+		
 		if (WebDriver_Functions.isVisable(By.name("invoiceNumberA"))){
-			WebDriver_Functions.Type(By.name("invoiceNumberA"), InvoiceA);
-			WebDriver_Functions.Type(By.name("invoiceNumberB"), InvoiceB);
+			WebDriver_Functions.Type(By.name("invoiceNumberA"), Account_Info.Invoice_Number_A);
+			WebDriver_Functions.Type(By.name("invoiceNumberB"), Account_Info.Invoice_Number_B);
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("invoiceNumberB"));
 		}else if (WebDriver_Functions.isVisable(By.name("creditCardNumber"))) {
-			WebDriver_Functions.Type(By.name("creditCardNumber"), CCNumber);//this is just a guess as the number most commonly used. 
+			String CCNum = Account_Info.Credit_Card_Number;
+			String Last_Four_Digits = CCNum.substring(CCNum.length() - 4, CCNum.length());
+			WebDriver_Functions.Type(By.name("creditCardNumber"), Last_Four_Digits);
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("creditCardNumber"));
 		}
-		//Helper_Functions.PrintOut("breakpoint", false);
 	}
 
-    public static String WFCL_Secret_Answer(String CountryCode, String strUserName, String NewPassword, String SecretAnswer) throws Exception{
+	public static String WFCL_Secret_Answer(String CountryCode, String strUserName, String NewPassword, String SecretAnswer) throws Exception{
  		WebDriver_Functions.ChangeURL("INET", CountryCode, true);
  		
     	try{
@@ -524,8 +602,8 @@ public class WFCL_Functions{
 			return e.getMessage();
 		}
 	}//end ResetPasswordWFCLSecret
-	
-    public static String ResetPasswordWFCL_Email(String CountryCode, String strUserName, String Password) throws Exception{
+
+	public static String ResetPasswordWFCL_Email(String CountryCode, String strUserName, String Password) throws Exception{
     	try{
     		WebDriver_Functions.Login(strUserName, Password);
 
@@ -560,7 +638,7 @@ public class WFCL_Functions{
     	}
 	}//end ResetPasswordWFCL_Email
     
-    public static String[] TaxIDinformation(String CountryCode, boolean BusinessAccount){
+	public static String[] TaxIDinformation(String CountryCode, boolean BusinessAccount){
     	String TaxID = "", StateTaxID = "";
     	switch (CountryCode) {
 			case "GB":		//worked for account 643527529 from 8/30/18
@@ -575,7 +653,7 @@ public class WFCL_Functions{
     	return new String[] {TaxID, StateTaxID};
     }
     
-    public static String[] WFCL_WADM_Invitaiton(String UserID, String Password, String Name[], String Email) throws Exception{	
+	public static String[] WFCL_WADM_Invitaiton(String UserID, String Password, String Name[], String Email) throws Exception{	
 		try {
 			WebDriver_Functions.Login(UserID, Password);
 			WebDriver_Functions.ChangeURL("WADM", "US", false);
@@ -617,204 +695,8 @@ public class WFCL_Functions{
 		}
     }
     
-	public static String WFCL_AdminReg_WithMismatch(String Name[], String UserId, String AccountNumber, String AddressDetails[], String AddressMismatch[], String AccountNickname) throws Exception{
-		boolean InetFlag = false;
-		Helper_Functions.PrintOut("Attempting to register with " + AccountNumber, true);
-		String CountryCode = AddressDetails[6].toUpperCase();
-
-		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
-			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
-			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
-			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, true); //enters all of the details
-		}else{
-			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
-			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, true); //enters all of the details
-		}
-
-		//Step 2 Account information
-		//String AccountNickname = AccountNumber + "_" + CountryCode;
-		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
-		
-		if (CountryCode.contains("US")){
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
-			//WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), AccountNumber);    //will need to update due to account masking
-		}
-		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
-		//WebDriver_Functions.ChangeURL("https://" + strLevelURL + "/shipping/shipEntryAction.do?origincountry=" + CountryCode.toLowerCase());
-		WebDriver_Functions.ChangeURL("INET", CountryCode, false);
-		//Register the account number for INET
-		if (CountryCode.contains("US") || CountryCode.contains("CA")){
-			WebDriver_Functions.WaitPresent(By.name("accountNumberOpco"));
-			WebDriver_Functions.Select(By.name("accountNumberOpco"), "1",  "i");
-			WebDriver_Functions.takeSnapShot("INET Account Selection.png");
-			WebDriver_Functions.Click(By.className("buttonpurple"));
-			//need to add clicking continue button
-
-			//address mismatch page should appear, enter the correct details.
-			AddressMismatchPage(AddressDetails);
-			
-			//Confirmation from INET registration
-			try{//EACI form
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), UserId);
-				//WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b"), AccountNumber);
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[2]/table/tbody/tr[2]/td/b"), AccountNickname);
-				//WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[4]/table/tbody/tr[2]/td/table/tbody/tr/td[2]/b"), AddressDetails[0] + "\n" + AddressDetails[2] + ", " + AddressDetails[4] + " " + AddressDetails[5] + "\n" + AddressDetails[6].toLowerCase());
-				InetFlag = true;
-			}catch (Exception e){
-				Helper_Functions.PrintOut("Not able to Verify data on INET registration page.", true);
-			}
-			
-			WebDriver_Functions.takeSnapShot("INET Confirmation.png");
-			WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
-			WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
-		}
-
-		WebDriver_Functions.ChangeURL("AdminReg", CountryCode, false);
-		try{
-			if (WebDriver_Functions.isPresent(By.name("accountNumber"))){ 
-				WebDriver_Functions.Select(By.name("accountNumber"), "1", "i");
-				WebDriver_Functions.Click(By.name("submit"));	
-			}
-
-			//address mismatch page should appear, enter the correct details.
-			AddressMismatchPage(AddressDetails);
-			
-			if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
-				InvoiceOrCCValidaiton();
-			}	
-		}catch (Exception e2){
-			Helper_Functions.PrintOut("Failure with admin registriaton.", true);
-		};
-		
-		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
-		String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag};
-		Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
-		return Arrays.toString(ReturnValue);
-	}//end WFCL_AccountRegistration
-    
-	public static boolean WFCL_AccountEntryScreen(String AccountNumber, String AccountNickname) throws Exception{
-		if (WebDriver_Functions.isPresent(By.id("accountNumber"))){
-			WebDriver_Functions.Type(By.id("accountNumber"), AccountNumber);
-			WebDriver_Functions.Type(By.id("nickName"), AccountNickname);
-			WebDriver_Functions.takeSnapShot("AccountInformation.png");
-			WebDriver_Functions.Click(By.id("createUserID"));
-			WebDriver_Functions.WaitNotPresent(By.id("nickName"));
-		}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
-			WebDriver_Functions.Type(By.name("newAccountNumber"), AccountNumber);
-			WebDriver_Functions.Type(By.name("newNickName"), AccountNickname);
-			WebDriver_Functions.takeSnapShot("AccountInformation.png");
-			WebDriver_Functions.Click(By.name("submit"));
-			WebDriver_Functions.WaitNotPresent(By.name("newNickName"));
-		}
-
-		//need to add a dynamic wait here for the processing
-		Helper_Functions.Wait(5);
-				
-		if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
-			InvoiceOrCCValidaiton();
-		}
-
-		if (WebDriver_Functions.isPresent(By.id("accountNumber"))|| WebDriver_Functions.isPresent(By.name("newAccountNumber"))) {
-			WebDriver_Functions.Click(By.name("submit"));
-			Helper_Functions.PrintOut("Warning, still on account entry screen. The address entered may be incorrect.", true);
-			//return WFCL_AccountEntryScreen(AccountNumber, AccountNickname, Path);//this is an issue, need to fix later as link is an issue for AU 
-		}else if (WebDriver_Functions.CheckBodyText("Request Access from the Account Administrator")) {
-			//remove the account number from local storage as it is now locked to the company that was just created.
-			Helper_Functions.RemoveAccountFromExcel(AccountNumber);
-			Helper_Functions.PrintOut("Request Access from the Account Administrator", true);
-			throw new Exception("Request Access from the Account Administrator");
-		}
-		
-
-		WebDriver_Functions.WaitNotPresent(By.id("createUserID"));
-		return true;
-	}//end WFCL_AccountEntryScreen
-	
-	public static void AddressMismatchPage(String AddressDetails[]) throws Exception {
-		WebDriver_Functions.WaitPresent(By.name("address1"));
-		WebDriver_Functions.Type(By.name("address1"), AddressDetails[0]);
-		WebDriver_Functions.Type(By.name("address2"), AddressDetails[1]);
-		WebDriver_Functions.Type(By.name("city"), AddressDetails[2]);
-		try {
-			WebDriver_Functions.Type(By.name("state"), AddressDetails[4]);
-			WebDriver_Functions.Type(By.name("zip"), AddressDetails[5]);
-			WebDriver_Functions.Select(By.name("country"), AddressDetails[6].toLowerCase(), "v");
-		}catch (Exception e) {}
-		
-		WebDriver_Functions.takeSnapShot("Address Mismatch.png");
-		WebDriver_Functions.Click(By.name("submit"));
-	}
-	
-	public static String[] Zip_TNT_Validation(String EnrollmentID, String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId, boolean BusinessAccount, String TaxInfo[]) throws Exception{
-		try {
-			String CountryCode = AddressDetails[6];
-			//go to the INET page just to load the cookies
-			WebDriver_Functions.ChangeURL("INET", CountryCode, true);
-			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, CountryCode, false);
-
-			//add the country code to the screenshot name
-			DriverFactory.setScreenshotPath(DriverFactory.getScreenshotPath() + CountryCode + " ");
-			
-			WebDriver_Functions.takeSnapShot("Discount Page.png");
-			
-			if (WebDriver_Functions.isPresent(By.name("Apply Now"))) {
-				//apply link from marketing page
-				WebDriver_Functions.Click(By.name("Apply Now"));
-			}
-			
-			if (WebDriver_Functions.isPresent(By.linkText("Finish registering for a FedEx account"))) {
-				WebDriver_Functions.Click(By.linkText("Finish registering for a FedEx account"));
-			}else if (WebDriver_Functions.isPresent(By.name("signupnow"))) {
-				WebDriver_Functions.Click(By.name("signupnow"));
-			}
-
-			//Step 1: Enter the contact information.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
-
-			//Step 2: Enter the credit card details
-			WebDriver_Functions.WaitPresent(By.id("CCType"));
-			boolean Multicard = true;
-			if(TaxInfo != null && !TaxInfo[3].contains("Valid")) {
-				Multicard = false;
-				CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
-				/////////////////////////////user valid zip code here
-				return new String[] {"Invalid attempt"};
-			}
-			CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
-			
-			//Step 3: Confirmation Page
-			//Domestic and international will be different  
-			WebDriver_Functions.WaitOr_TextToBe(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId, By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr[1]/td[2]"),  UserId);
-			String AccountNumber = WebDriver_Functions.GetText(By.xpath("//*[@id='acctNbr']"));
-			WebDriver_Functions.takeSnapShot("Confirmation.png");
-
-			boolean InetFlag = false, AdminFlag = false;
-
-			//Check the INET page
-			InetFlag = Check_INET_Enrolled(CountryCode);
-
-			//Check the Administration page
-			AdminFlag = Check_WADM_Enrolled(CountryCode);
-			
-			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-			Helper_Functions.PrintOut("Finished CreditCardRegistrationEnroll  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
-
-			String LastFourOfCC = CreditCardDetils[1].substring(CreditCardDetils[1].length() - 4, CreditCardDetils[1].length());
-			String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, LastFourOfCC, "INET:" + InetFlag, "Admin:" + AdminFlag};
-			
-			Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
-			return ReturnValue;
-		}catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}//end CreditCardRegistrationEnroll
-    
-	public static String[] WFCL_AccountRegistration_GFBO(String Name[], String UserId, String AccountNumber, String AddressDetails[]) throws Exception{
-		String CountryCode = AddressDetails[6].toUpperCase();
+	public static String[] WFCL_AccountRegistration_GFBO(Account_Data Account_Info) throws Exception{
+		String CountryCode = Account_Info.Billing_Country_Code;
 		
 		//The below applicable countries list was updated on 1/30/18
 		String GFBOCountry_List[] = {"SV", "LU", "MO", "GU", "AE", "AN", "AR", "AT", "AU", "AW", "BB", "BE", "BH", "BM", "BR", "BS", "CH", "CL", "CN", "CR", "CZ", "DE", "DK", "DO", "EE", "ES", "FI", "FR", "GB", "GD", "GP", "GR", "GT", "HK", "HU", "IE", "IN", "IT", "JM", "JP", "KN", "KR", "KV", "KW", "KY", "LC", "LT", "LV", "MQ", "MX", "MY", "NL", "NO", "NZ", "PA", "PL", "PT", "RU", "SE", "SG", "TC", "TH", "TR", "TT", "TW", "US", "UY", "VC", "VE", "VG", "VI", "CA", "CW", "BQ", "SX", "MF", "BW", "LS", "MW", "MZ", "NA", "SI", "ZA", "SZ", "ZM", "VN", "BG", "HR", "RO", "SK", "QA", "PH", "AD", "AF", "AL", "AM", "AO", "AZ", "BA", "BD", "BF", "BI", "BJ", "BT", "BY", "CD", "CF", "CG", "CI", "CM", "CV", "CY", "DJ", "DZ", "EG", "ER", "ET", "GA", "GE", "GH", "GI", "GL", "GM", "GN", "GQ", "GW", "IL", "IQ", "IR", "IS", "JO", "KE", "KG", "KZ", "LB", "LI", "LK", "LR", "LY", "MA", "MC", "MD", "ME", "MG", "MK", "ML", "MR", "MT", "MU", "MV", "NE", "NG", "NP", "OM", "PK", "PS", "RE", "RS", "RW", "SA", "SC", "SD", "SL", "SN", "SO", "SY", "TD", "TG", "TM", "TN", "TZ", "UA", "UG", "UZ"};
@@ -829,11 +711,10 @@ public class WFCL_Functions{
  			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));
 
  			//enters all of the details
-	 		WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true);
+ 			ContactInfo_Page(Account_Info, true);
 		    
 	 		//Step 2 Account information
-	 		String AccountNickname = AccountNumber + "_" + AddressDetails[6];
-	 		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
+ 			Account_Entry_Screen(Account_Info);
 	 		
 		    //Confirmation page for FBO
 	 		//wait.until(ExpectedConditions.presenceOfElementLocated(By.id("selectbillingmedium1:j_idt24")));//the header for FBO
@@ -844,9 +725,7 @@ public class WFCL_Functions{
 	 		WebDriver_Functions.Click(By.id("selectbillingmedium1:continueId"));  
 	 		
 	 		//Registration Confirmation Page
-	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), UserId);
-	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b"), AccountNumber);
-	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[2]/table/tbody/tr[2]/td/b"), AccountNickname);
+	 		Verify_Confirmaiton_Page("GFBO", Account_Info);
 	 		WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
 
 			//Make sure the link on the confirmation page navigates to the correct page.
@@ -865,9 +744,8 @@ public class WFCL_Functions{
 			WebDriver_Functions.takeSnapShot("Page.png");
 			
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_GFBO  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, false);
-		    String ReturnValue[] = new String[] {UserId, AccountNumber, UUID};
-		    Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
+		    String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Account_Number, UUID};
+		    Helper_Functions.WriteUserToExcel(Account_Info.UserId, Helper_Functions.myPassword);
 		    return ReturnValue;
  		}catch (Exception e) {
  			throw e;
