@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>WFCL_Test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>8/0/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>6/2/0</td>
 </tr><tr>
-<td>Started on:</td><td>Thu Dec 13 13:29:38 CST 2018</td>
+<td>Started on:</td><td>Mon Dec 17 13:18:58 CST 2018</td>
 </tr>
-<tr><td>Total time:</td><td>439 seconds (439796 ms)</td>
+<tr><td>Total time:</td><td>355 seconds (355742 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -67,6 +67,78 @@ function toggleAllBoxes() {
 </tr>
 </table><p/>
 <small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-failed'>
+<tr><td colspan='4' align='center'><b>FAILED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='Mission_Critical.WFCL_SmokeTest.AccountRegistration_Admin()'><b>AccountRegistration_Admin</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.Account_Data@5a7041a8</td>
+<td><div><pre>java.lang.AssertionError: Request Access from the Account Administrator
+	at Mission_Critical.WFCL_SmokeTest.AccountRegistration_Admin(WFCL_SmokeTest.java:133)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace953268439", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace953268439'><pre>java.lang.AssertionError: Request Access from the Account Administrator
+	at org.testng.Assert.fail(Assert.java:96)
+	at Mission_Critical.WFCL_SmokeTest.AccountRegistration_Admin(WFCL_SmokeTest.java:133)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>96</td>
+<td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
+<tr>
+<td title='Mission_Critical.WFCL_SmokeTest.AccountRegistration_INET()'><b>AccountRegistration_INET</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.Account_Data@390fd152</td>
+<td><div><pre>java.lang.AssertionError: Request Access from the Account Administrator
+	at Mission_Critical.WFCL_SmokeTest.AccountRegistration_INET(WFCL_SmokeTest.java:148)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1449624972", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1449624972'><pre>java.lang.AssertionError: Request Access from the Account Administrator
+	at org.testng.Assert.fail(Assert.java:96)
+	at Mission_Critical.WFCL_SmokeTest.AccountRegistration_INET(WFCL_SmokeTest.java:148)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>115</td>
+<td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
+</table><p>
 <table width='100%' border='1' class='invocation-passed'>
 <tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
 <tr><td><b>Test method</b></td>
@@ -75,44 +147,34 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='Mission_Critical.WFCL_SmokeTest.AccountRegistration_Admin()'><b>AccountRegistration_Admin</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 2, Data_Structures.Account_Data@683450ee</td>
+<td title='Mission_Critical.WFCL_SmokeTest.AccountRegistration_WDPA()'><b>AccountRegistration_WDPA</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.Account_Data@40dce8bd</td>
 <td></td>
-<td>73</td>
+<td>118</td>
 <td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
 <tr>
-<td title='Mission_Critical.WFCL_SmokeTest.AccountRegistration_INET()'><b>AccountRegistration_INET</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 2, Data_Structures.Account_Data@686273b</td>
+<td title='Mission_Critical.WFCL_SmokeTest.CreditCardRegistrationEnroll()'><b>CreditCardRegistrationEnroll</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 3, ss90705920, US</td>
 <td></td>
-<td>63</td>
+<td>255</td>
 <td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
 <tr>
-<td title='Mission_Critical.WFCL_SmokeTest.AccountRegistration_WDPA()'><b>AccountRegistration_WDPA</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 2, Data_Structures.Account_Data@232fc718</td>
+<td title='Mission_Critical.WFCL_SmokeTest.Forgot_User_Email()'><b>Forgot_User_Email</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 3, US, sean.kauffman.osv@fedex.com</td>
 <td></td>
-<td>164</td>
+<td>60</td>
 <td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
 <tr>
-<td title='Mission_Critical.WFCL_SmokeTest.CreditCardRegistrationEnroll()'><b>CreditCardRegistrationEnroll</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 2, ss90705920, US</td>
+<td title='Mission_Critical.WFCL_SmokeTest.Password_Reset_Secret()'><b>Password_Reset_Secret</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 3, US, L3080618T100257, Test1234A, mom</td>
 <td></td>
-<td>300</td>
+<td>169</td>
 <td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
 <tr>
-<td title='Mission_Critical.WFCL_SmokeTest.Forgot_User_Email()'><b>Forgot_User_Email</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 2, US, sean.kauffman.osv@fedex.com</td>
+<td title='Mission_Critical.WFCL_SmokeTest.Reset_Password_Email()'><b>Reset_Password_Email</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 3, US, L3080618T100257, Test1234</td>
 <td></td>
-<td>160</td>
+<td>230</td>
 <td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
 <tr>
-<td title='Mission_Critical.WFCL_SmokeTest.Password_Reset_Secret()'><b>Password_Reset_Secret</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 2, US, L2USCC191713564, Test1234A, mom</td>
+<td title='Mission_Critical.WFCL_SmokeTest.UserRegistration()'><b>UserRegistration</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 3, US</td>
 <td></td>
-<td>106</td>
-<td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
-<tr>
-<td title='Mission_Critical.WFCL_SmokeTest.Reset_Password_Email()'><b>Reset_Password_Email</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 2, US, L2USCC191713564, Test1234</td>
-<td></td>
-<td>282</td>
-<td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
-<tr>
-<td title='Mission_Critical.WFCL_SmokeTest.UserRegistration()'><b>UserRegistration</b><br>Test class: Mission_Critical.WFCL_SmokeTest<br>Parameters: 2, US</td>
-<td></td>
-<td>258</td>
+<td>156</td>
 <td>Mission_Critical.WFCL_SmokeTest@74294adb</td></tr>
 </table><p>
 <table width='100%' border='1' class='invocation-skipped'>
@@ -123,14 +185,14 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='SupportClasses.Environment.SetEvironmentLevel()'><b>SetEvironmentLevel</b><br>Test class: SupportClasses.Environment<br>Parameters: 2</td>
+<td title='SupportClasses.Environment.SetEvironmentLevel()'><b>SetEvironmentLevel</b><br>Test class: SupportClasses.Environment<br>Parameters: 3</td>
 <td><div><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
 	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:63)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace2103640329", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace2103640329'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1483738225", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1483738225'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
 	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:63)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)

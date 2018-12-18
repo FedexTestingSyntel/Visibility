@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 public class WDPA_SmokeTest{
 	
 	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -40,22 +40,27 @@ public class WDPA_SmokeTest{
 		    	case "Pickup_Express":
 		    	case "Pickup_ExpressFreight"://need to fix this later, not for all countries.
 		    		for (int j = 0; j < CountryList.length; j++) {
+		    			/*
 		    			for (int k = 1; k < Helper_Functions.DataClass[intLevel].length; k++) {
 		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WDPA")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
-		    			}
+		    			}*/
+		    			data.add( new Object[] {Level, "US", "L3WDPAUAT", "Test1234"});
+		    			 
 					}
 		    	break;
 		    	case "Pickup_LTLFreight":    //update this later to restrict based on country
 		    		for (int j = 0; j < CountryList.length; j++) {
+		    			/*
 		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
 		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Freight") || Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("LTL")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
-		    			}
+		    			}*/
+		    			data.add( new Object[] {Level, "US", "L3WDPAUAT", "Test1234"});
 					}
 		    	break;
 		    	case "Pickup_LTLFreight_Anonymous":    //update this later to restrict based on country

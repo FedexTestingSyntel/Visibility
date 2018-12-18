@@ -558,19 +558,25 @@ public class Helper_Functions{
 			
 			for (int i= 0 ; i < totalNoOfRows; i++) { //change to start at 1 if want to ignore the first row.
 				String buffer[] = new String[totalNoOfCols];
+				boolean EmptyRow = true;
 				for (int j=0; j < totalNoOfCols; j++) {
 					String CellContents = sh.getCell(j, i).getContents();
 					if (CellContents == null) {
 						CellContents = "";
+					}else {
+						EmptyRow = false;
 					}
 					buffer[j] = CellContents;
 				}
-				data.add(buffer);
+				if (!EmptyRow) {
+					data.add(buffer);
+				}
 			}
 			wb.close();
 			fs.close();
 			
 		}catch (Exception e) {
+			System.err.println("filePath: " + filePath + "   sheetName: " + sheetName);
 			e.printStackTrace();
 		}
 		return data;
@@ -794,7 +800,7 @@ public class Helper_Functions{
 	public static Account_Data getFreshAccount(String Level, String CountryCode){
 		Account_Data D[] = Environment.getAccountDetails(Level);
 		for (Account_Data Current: D) {
-			if (Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
+			if (Current != null && Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
 				return Current;
 			}
 		}

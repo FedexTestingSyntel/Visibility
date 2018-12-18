@@ -9,7 +9,7 @@ import SupportClasses.WebDriver_Functions;
 
 public class WFCL_Functions{
 	
-	public static String[] CreditCardRegistrationEnroll(String EnrollmentID, String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId, boolean BusinessAccount, String TaxInfo[]) throws Exception{
+	public static String[] CreditCardRegistrationEnroll(String EnrollmentID, String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId, String Email, boolean BusinessAccount, String TaxInfo[]) throws Exception{
 		try {
 			String CountryCode = AddressDetails[6];
 			//go to the INET page just to load the cookies
@@ -33,7 +33,7 @@ public class WFCL_Functions{
 			}
 
 			//Step 1: Enter the contact information.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email, true); //enters all of the details
 
 			//Step 2: Enter the credit card details
 			WebDriver_Functions.WaitPresent(By.id("CCType"));
@@ -93,7 +93,7 @@ public class WFCL_Functions{
 	public static boolean Check_WADM_Enrolled(String CountryCode) {
 		try{
 			//navigates to the US home page as other regions may not be present.
-			WebDriver_Functions.ChangeURL("Home", "US", false);
+			WebDriver_Functions.ChangeURL("HOME", "US", false);
 			WebDriver_Functions.ChangeURL("WADM", "US", false);
 			//wait for the WADM pages to load
 			WebDriver_Functions.WaitPresent(By.id("main"));
@@ -109,13 +109,13 @@ public class WFCL_Functions{
 	}
 
 	//will return a string array with 0 as the user id and 1 as the password, 2 is the uuid
-	public static String[] WFCL_UserRegistration(String UserId, String[] Name, String AddressDetails[]) throws Exception{
+	public static String[] WFCL_UserRegistration(String UserId, String[] Name, String Email, String AddressDetails[]) throws Exception{
 		try {
 			String CountryCode = AddressDetails[6];
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
 			WebDriver_Functions.Click(By.id("registernow"));
 			
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email, true); //enters all of the details
 
 			//Confirmation page
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/h2"), "Login Information");
@@ -134,7 +134,7 @@ public class WFCL_Functions{
 		}
 	}//end WFCL_UserRegistration
 	
-	public static String WFCL_AccountRegistration_INET(String Name[], String UserId, String AccountNumber, String AddressDetails[]) throws Exception{
+	public static String WFCL_AccountRegistration_INET(String Name[], String UserId, String Email, String AccountNumber, String AddressDetails[]) throws Exception{
 		boolean InetFlag = false;
 		String CountryCode = AddressDetails[6].toUpperCase();
 
@@ -142,11 +142,11 @@ public class WFCL_Functions{
 			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
 			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email, true); //enters all of the details
 		}else{
 			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email, true); //enters all of the details
 		}
 		
 
@@ -194,7 +194,7 @@ public class WFCL_Functions{
 
 	public static boolean Admin_Registration(String CountryCode, String AccountNumber) throws Exception {
 		try{
-			WebDriver_Functions.ChangeURL("AdminReg", CountryCode, false);
+			WebDriver_Functions.ChangeURL("ADMINREG", CountryCode, false);
 			
 			if (WebDriver_Functions.isPresent(By.name("accountNumber"))){ 
 				WebDriver_Functions.Select(By.name("accountNumber"), "1", "i");
@@ -230,7 +230,7 @@ public class WFCL_Functions{
 		return true;
 	}
 	
-	public static String WFCL_AccountLinkage(String Name[], String UserId, String AccountNumber, String AddressDetails[], String AccountNickname) throws Exception{
+	public static String WFCL_AccountLinkage(String Name[], String UserId, String Email, String AccountNumber, String AddressDetails[], String AccountNickname) throws Exception{
 		Helper_Functions.PrintOut("Attempting to register with " + AccountNumber, true);
 		String CountryCode = AddressDetails[6].toUpperCase();
 
@@ -238,11 +238,11 @@ public class WFCL_Functions{
 			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
 			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email,true); //enters all of the details
 		}else{
 			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email,true); //enters all of the details
 		}
 
 		//Step 2 Account information
@@ -269,13 +269,13 @@ public class WFCL_Functions{
 		return Arrays.toString(ReturnValue);
 	}//end WFCL_AccountRegistration
 
-	public static String[] WDPA_Registration(String Name[], String UserId, String AccountNumber, String AddressDetails[]) throws Exception{
+	public static String[] WDPA_Registration(String Name[], String UserId, String Email, String AccountNumber, String AddressDetails[]) throws Exception{
  		try {
  			String CountryCode = AddressDetails[6].toUpperCase();
  			WebDriver_Functions.ChangeURL("WDPA", CountryCode, true);
  			WebDriver_Functions.Click(By.name("signupnow"));
  	
- 			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+ 			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email, true); //enters all of the details
  			
 	 		//Step 2 Account information
 	 		String AccountNickname = AccountNumber + "_" + CountryCode;
@@ -319,15 +319,15 @@ public class WFCL_Functions{
 
 	//AddressDetails[] =  {Streetline1 - 0, Streetline2 - 1, City - 2, State - 3, StateCode - 4, postalCode - 5, countryCode - 6};
 	//String Name[] = {FirstName, Middle Name, Last Name}
-	public static boolean WFCL_ContactInfo_Page(String Name[], String AddressDetails[], String UserId, boolean Submit) throws Exception{
+	public static boolean WFCL_ContactInfo_Page(String Name[], String AddressDetails[], String UserId, String Email, boolean Submit) throws Exception{
 		WebDriver_Functions.CheckBodyText("Country/Territory");
 		WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
 
 		WebDriver_Functions.Type(By.id("firstName"), Name[0]);
 		WebDriver_Functions.Type(By.name("initials"), Name[1]);
 		WebDriver_Functions.Type(By.id("lastName"), Name[2]);
-		WebDriver_Functions.Type(By.id("email"), Helper_Functions.MyEmail);
-		WebDriver_Functions.Type(By.id("retypeEmail"), Helper_Functions.MyEmail);
+		WebDriver_Functions.Type(By.id("email"), Email);
+		WebDriver_Functions.Type(By.id("retypeEmail"), Email);
 		WebDriver_Functions.Type(By.id("address1"), AddressDetails[0]);
 		WebDriver_Functions.Type(By.name("address2"), AddressDetails[1]);
 
@@ -620,7 +620,7 @@ public class WFCL_Functions{
 		}
     }
     
-	public static String WFCL_AdminReg_WithMismatch(String Name[], String UserId, String AccountNumber, String AddressDetails[], String AddressMismatch[], String AccountNickname) throws Exception{
+	public static String WFCL_AdminReg_WithMismatch(String Name[], String UserId, String Email,String AccountNumber, String AddressDetails[], String AddressMismatch[], String AccountNickname) throws Exception{
 		boolean InetFlag = false;
 		Helper_Functions.PrintOut("Attempting to register with " + AccountNumber, true);
 		String CountryCode = AddressDetails[6].toUpperCase();
@@ -629,11 +629,11 @@ public class WFCL_Functions{
 			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
 			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, Email, true); //enters all of the details
 		}else{
 			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
 			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressMismatch, UserId, Email, true); //enters all of the details
 		}
 
 		//Step 2 Account information
@@ -674,7 +674,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
 		}
 
-		WebDriver_Functions.ChangeURL("AdminReg", CountryCode, false);
+		WebDriver_Functions.ChangeURL("ADMINREG", CountryCode, false);
 		try{
 			if (WebDriver_Functions.isPresent(By.name("accountNumber"))){ 
 				WebDriver_Functions.Select(By.name("accountNumber"), "1", "i");
@@ -751,7 +751,7 @@ public class WFCL_Functions{
 		WebDriver_Functions.Click(By.name("submit"));
 	}
 	
-	public static String[] Zip_TNT_Validation(String EnrollmentID, String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId, boolean BusinessAccount, String TaxInfo[]) throws Exception{
+	public static String[] Zip_TNT_Validation(String EnrollmentID, String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId,  String Email, boolean BusinessAccount, String TaxInfo[]) throws Exception{
 		try {
 			String CountryCode = AddressDetails[6];
 			//go to the INET page just to load the cookies
@@ -775,7 +775,7 @@ public class WFCL_Functions{
 			}
 
 			//Step 1: Enter the contact information.
-			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true); //enters all of the details
+			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email, true); //enters all of the details
 
 			//Step 2: Enter the credit card details
 			WebDriver_Functions.WaitPresent(By.id("CCType"));
@@ -816,7 +816,7 @@ public class WFCL_Functions{
 		}
 	}//end CreditCardRegistrationEnroll
     
-	public static String[] WFCL_AccountRegistration_GFBO(String Name[], String UserId, String AccountNumber, String AddressDetails[]) throws Exception{
+	public static String[] WFCL_AccountRegistration_GFBO(String Name[], String UserId, String Email, String AccountNumber, String AddressDetails[]) throws Exception{
 		String CountryCode = AddressDetails[6].toUpperCase();
 		
 		//The below applicable countries list was updated on 1/30/18
@@ -832,7 +832,7 @@ public class WFCL_Functions{
  			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));
 
  			//enters all of the details
-	 		WFCL_ContactInfo_Page(Name, AddressDetails, UserId, true);
+	 		WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email,true);
 		    
 	 		//Step 2 Account information
 	 		String AccountNickname = AccountNumber + "_" + AddressDetails[6];

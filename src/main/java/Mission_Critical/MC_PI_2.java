@@ -34,37 +34,23 @@ public class MC_PI_2{
 
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
+			String Invalid_Email[] = new String[] {"@Grp2_DOTCOMsyntelinc.com","Grp2@DOTCOM@syntelinc.com", "Grp2_DOTCOM@syntelinc", "a@.c", ".GRP2_DOTCOM@syntelinc.com", "tencharacttencharacttencharacttencharacttencharacttencharact12345@accept.com","tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact12345678.com"};
+			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttenchar.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com", "GRP2_DOTCOM@syntelinc.com", "GRP2-DOTCOM@syntelinc.com"};		
+
+			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WIDM_Registration_Invalid_Email":
-					for (int j=0; j < CountryList.length; j++) {
-						String Invalid_Email[] = new String[] {"@Grp2_DOTCOMsyntelinc.com",
-								"Grp2@DOTCOM@syntelinc.com", 
-								"Grp2_DOTCOM@syntelinc", 
-								"a@.c", 
-								".GRP2_DOTCOM@syntelinc.com", 
-								"tencharacttencharacttencharacttencharacttencharacttencharact12345@accept.com",
-								"tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttenchar1.com",
-								"tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact12345678.com"};
-						
+					for (int j=0; j < CountryList.length; j++) {				
 						for (String Email: Invalid_Email) {
 							data.add( new Object[] {Level, CountryList[j][0], Email});
 						}
-						
 					}
 					break;
 				case "WIDM_Registration_Valid_Email":
-					for (int j=0; j < CountryList.length; j++) {
-						String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttenchar.com",
-								"a@b.c", 
-								"tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", 
-								"tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com", 
-								"GRP2_DOTCOM@syntelinc.com", 
-								"GRP2-DOTCOM@syntelinc.com"};		
-						 
+					for (int j=0; j < CountryList.length; j++) {					 
 						for (String Email: Valid_Emails) {
 							data.add( new Object[] {Level, CountryList[j][0], Email});
 						}
-						
 					}
 					break;
 				case "WIDM_Email_BounceBack":

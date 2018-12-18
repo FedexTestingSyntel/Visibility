@@ -1,51 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [SMOKE_Test_Suit]" parallel="methods">
+<suite thread-count="1" guice-stage="DEVELOPMENT" name="Failed suite [SMOKE_Test_Suit]">
   <listeners>
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
-  <test thread-count="8" name="SMOKE_Test(failed)" parallel="methods">
+  <test thread-count="1" name="SMOKE_Test(failed)" parallel="methods">
+    <parameter name="Level" value="3"/>
     <classes>
-      <class name="WaterfallApplications.OADR">
+      <class name="Mission_Critical.WFCL_SmokeTest">
         <methods>
-          <include name="beforeClass"/>
-          <include name="OADR_Apply_Discount_To_Account" invocation-numbers="0"/>
-        </methods>
-      </class> <!-- WaterfallApplications.OADR -->
-      <class name="TestNG.WFCL">
-        <methods>
-          <include name="WFCL_AccountRegistration_INET" invocation-numbers="0"/>
-          <include name="WFCL_Reset_Password_Email" invocation-numbers="0"/>
-          <include name="beforeClass"/>
-          <include name="WFCL_AccountRegistration_Admin" invocation-numbers="0"/>
-        </methods>
-      </class> <!-- TestNG.WFCL -->
-      <class name="TestNG.WIDM">
-        <methods>
-          <include name="ResetPasswordWIDM_Email" invocation-numbers="0"/>
-          <include name="afterClass"/>
-          <include name="WIDM_RegistrationEFWS" invocation-numbers="0"/>
-          <include name="WIDM_ResetPasswordSecret" invocation-numbers="0"/>
+          <include name="CreditCardRegistrationEnroll" invocation-numbers="0"/>
+          <include name="AccountRegistration_WDPA" invocation-numbers="0"/>
+          <include name="AccountRegistration_Admin" invocation-numbers="0"/>
+          <include name="AccountRegistration_INET" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
-      </class> <!-- TestNG.WIDM -->
-      <class name="WaterfallApplications.WCRV">
-        <methods>
-          <include name="beforeClass"/>
-          <include name="beforeMethod"/>
-          <include name="WCRV_Generate_RateSheet" invocation-numbers="1 0"/>
-        </methods>
-      </class> <!-- WaterfallApplications.WCRV -->
-      <class name="WaterfallApplications.WDPA">
-        <methods>
-          <include name="WDPAPickup_LTLFreight" invocation-numbers="0"/>
-          <include name="WDPAPickup_LTLFreight_Anonymous" invocation-numbers="0"/>
-          <include name="WDPAPickup_ExpressFright" invocation-numbers="0"/>
-          <include name="WDPA_Pickup_Ground" invocation-numbers="0"/>
-          <include name="WDPA_Pickup_Express" invocation-numbers="0"/>
-          <include name="beforeClass"/>
-        </methods>
-      </class> <!-- WaterfallApplications.WDPA -->
+      </class> <!-- Mission_Critical.WFCL_SmokeTest -->
     </classes>
   </test> <!-- SMOKE_Test(failed) -->
 </suite> <!-- Failed suite [SMOKE_Test_Suit] -->

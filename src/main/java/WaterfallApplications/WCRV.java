@@ -51,18 +51,50 @@ public class WCRV{
 		    			}
 		    		}
 		    		*/
-		    		/*data.add( new Object[] {Level, "US", "L3GtcAdmin", "Test1234", "intra"});
-					data.add( new Object[] {Level, "US", "L3GtcAdmin", "Test1234", "notintra"});
+
+					if (intLevel ==7 ) {
+						data.add( new Object[] {Level, "US", "VEProdWADM", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "WADMProVENoPerm", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "BMProdIPAS", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "CONonAdmOwn", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "CONonAdmNonOwnInvited", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "WADMProDE", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "WADMProDENoPerm", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "WADMProDEStandard", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "FRProdWADM", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "FRProdIPAS", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "ESNonAdmOwn", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "ESNonAdmNonOwnInvited", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "WADMProEEStandard", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "ProdUsandBrWADM", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "ProdUsandDeWADM", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "BRProdAdm", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "BRProdAdmNoPer", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "BRProdWADM", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "BRProdStd", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "BRProdInvtY", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "BRProdInNo", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "DOPRODPRICE1", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "DOPRODPRICEInv", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "DOProdIPAS", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "Prod809304124", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "AEProdAdm", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "AEProdOwner", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "ProductionMeisaTesting", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "ProductionMeisaTesting", "Test1234", "notintra"}); 
+						data.add( new Object[] {Level, "US", "ProductionMeisaTesting", "Test1234", "notintra"}); 
+					}else if (intLevel == 3 ) {
+			    		data.add( new Object[] {Level, "US", "L3GtcAdmin", "Test1234", "intra"});
+						data.add( new Object[] {Level, "US", "L3GtcAdmin", "Test1234", "notintra"});
+						data.add( new Object[] {Level, "US", "L3UsNonAdminOwner", "Test1234", "intra"});
+						data.add( new Object[] {Level, "US", "L3UsNonAdminOwner", "Test1234", "notintra"});
+						data.add( new Object[] {Level, "US", "L3AdminCA", "Test1234", "intra"});
+						data.add( new Object[] {Level, "US", "L3WCRV609188405", "Test1234", "notintra"});
+						data.add( new Object[] {Level, "US", "L3CNRATENA", "Test1234", "intra"});
+						data.add( new Object[] {Level, "US", "L3COratDIS", "Test1234", "notintra"});
+						data.add( new Object[] {Level, "US", "L3DERATENA1", "Test1234", "intra"});
+					}
 		    		
-					data.add( new Object[] {Level, "US", "L3UsNonAdminOwner", "Test1234", "intra"});
-					data.add( new Object[] {Level, "US", "L3UsNonAdminOwner", "Test1234", "notintra"});
-		    		*/
-					
-					data.add( new Object[] {Level, "US", "L3AdminCA", "Test1234", "intra"});
-					data.add( new Object[] {Level, "US", "L3WCRV609188405", "Test1234", "notintra"});
-					data.add( new Object[] {Level, "US", "L3CNRATENA", "Test1234", "intra"});
-					data.add( new Object[] {Level, "US", "L3COratDIS", "Test1234", "notintra"});
-					data.add( new Object[] {Level, "US", "L3DERATENA1", "Test1234", "intra"});
 		    	break;
 			}
 		}	

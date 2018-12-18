@@ -42,7 +42,7 @@ public class OADR{
 		    	case "OADR_Apply_Discount_To_Account":
 		    		String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs("US");
 		    		for (int j = 0; j < Helper_Functions.DataClass[intLevel].length; j++) {
-	    				if (Helper_Functions.DataClass[intLevel][j].COUNTRY_CD.contentEquals("US")) {
+	    				if (Helper_Functions.DataClass[intLevel][j].COUNTRY_CD.contentEquals("US") && Helper_Functions.DataClass[intLevel][j].SSO_LOGIN_DESC.contains("CC")) {
 	    					data.add( new Object[] {Level, EnrollmentID[0], EnrollmentID[1], Helper_Functions.DataClass[intLevel][j].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][j].USER_PASSWORD_DESC});
 	    					break;
 	    				}

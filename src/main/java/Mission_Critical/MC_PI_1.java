@@ -130,7 +130,7 @@ public class MC_PI_1{
 			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
 
-			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, BuisnessAccount, VatNumber);
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, BuisnessAccount, VatNumber);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -173,7 +173,7 @@ public class MC_PI_1{
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
 			//print out VAT for reference
 			Helper_Functions.PrintOut("Vat: " + Arrays.toString(VatNumber), false);
-			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, BuisnessAccount, VatNumber);
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, BuisnessAccount, VatNumber);
 			
  			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
@@ -191,7 +191,7 @@ public class MC_PI_1{
 			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
 			Helper_Functions.PrintOut("ZipCode Attempt: " + ZipCode, false);
-			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, BuisnessAccount, VatNumber);
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, BuisnessAccount, VatNumber);
 			
  			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {

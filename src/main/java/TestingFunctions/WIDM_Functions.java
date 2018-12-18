@@ -203,11 +203,18 @@ public class WIDM_Functions{
 		try{
 			WebDriver_Functions.Login(strUserName, Password);
 
+			
+			String Email = "<<not found>>";
+			try {
+				WebDriver_Functions.ChangeURL("WPRL", "US", false);
+				WebDriver_Functions.WaitPresent(By.id("ci_fullname_val"));
+				String UserDetails = DriverFactory.getInstance().getDriver().findElement(By.id("ci_fullname_val")).getText();
+				Email = UserDetails.substring(UserDetails.lastIndexOf('\n') + 1, UserDetails.length());
+			}catch(Exception e2) {
+				Helper_Functions.PrintOut("Not able to validate the email address for this user.", false);
+			}
+			
 			//trigger the password reset email
-			WebDriver_Functions.ChangeURL("WPRL", "US", false);
-			WebDriver_Functions.WaitPresent(By.id("ci_fullname_val"));
-			String UserDetails = DriverFactory.getInstance().getDriver().findElement(By.id("ci_fullname_val")).getText();
-			String Email = UserDetails.substring(UserDetails.lastIndexOf('\n') + 1, UserDetails.length());
 			WebDriver_Functions.ChangeURL("WIDM", "US", true);
 			WebDriver_Functions.Click(By.name("forgotUidPwd"));
 			WebDriver_Functions.Type(By.name("userID"),strUserName);

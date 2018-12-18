@@ -59,7 +59,7 @@ public class Create_Accounts{
 				}	
 				
 				//if doing a single country
-				if (CountryList[6].contentEquals("CA")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
+				if (CountryList[6].contentEquals("US")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
 			}
 		}
 		return data.iterator();
@@ -333,9 +333,16 @@ public class Create_Accounts{
 	}
 	
 	public static boolean writeAccountsToExcel(Account_Data Account_Info[]) throws Exception{
+		String fileName = Helper_Functions.DataDirectory + "\\AddressDetails.xls", sheetName = "Account_Numbers"; 
+		
+		writeAccountsToExcel(Account_Info, fileName, sheetName);
+		//write the same accounts to the backup sheet, just for reference later
+		writeAccountsToExcel(Account_Info, fileName, sheetName + "_Backup");
+		return true;
+	}
+	
+	public static boolean writeAccountsToExcel(Account_Data Account_Info[], String fileName, String sheetName) throws Exception{
 		try {
-			String fileName = Helper_Functions.DataDirectory + "\\AddressDetails.xls", sheetName = "Account_Numbers"; 
-			
 			//Read the spreadsheet that needs to be updated
 			FileInputStream fsIP= new FileInputStream(new File(fileName));  
 			//Access the workbook                  
@@ -350,12 +357,12 @@ public class Create_Accounts{
 				worksheet = wb.getSheetAt(i);
 			} 
 			
-			int RowtoWrite = 0;
-			while (worksheet.getRow(RowtoWrite) != null) {
-				RowtoWrite++;
-			}
 			
+			int RowtoWrite = 0;
 			for(int i = 0; i < Account_Info.length; i++) {
+				while (worksheet.getRow(RowtoWrite) != null) {
+					RowtoWrite++;
+				}
 				worksheet.createRow(RowtoWrite);
 				String AccountInformation[] = new String[] {
 					Account_Info[i].Level, 

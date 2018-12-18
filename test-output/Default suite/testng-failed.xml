@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Mission_Critical.MC_PI_1">
+      <class name="Mission_Critical.WFCL_New">
         <methods>
+          <include name="AccountRegistration_INET_Test" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="TNT_Vat_Validation" invocation-numbers="0 2 1 3"/>
         </methods>
-      </class> <!-- Mission_Critical.MC_PI_1 -->
+      </class> <!-- Mission_Critical.WFCL_New -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

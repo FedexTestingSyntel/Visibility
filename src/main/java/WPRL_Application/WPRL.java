@@ -23,7 +23,7 @@ public class WPRL {
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-	
+		Helper_Functions.MyEmail = Helper_Functions.MyFakeEmail;
 		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
 	}
@@ -53,12 +53,21 @@ public class WPRL {
 		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
 		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("FDM")) {
 		    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
-		    					//break;
+		    					break;
 		    				}
 		    			}
 					}
 		    	break;
 		    	case "WPRL_AccountManagement_NonPasskey":
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
+		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("INET")) {
+		    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    					break;
+		    				}
+		    			}
+					}
+		    		break;
 		    	case "WPRL_Contact_NonAdmin":
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
@@ -74,8 +83,9 @@ public class WPRL {
 		    	break;
 		    	
 		    	case "WPRL_FDM_Enroll":
-	    			for (int j = 0; j < 29; j++) {
+	    			for (int j = 22; j < 29; j++) {
 	    				data.add( new Object[] {Level, j});
+	    				break;
 	    			}
 		    		break;
 		    	

@@ -7,12 +7,13 @@
   <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
     <parameter name="Level" value="3"/>
     <classes>
-      <class name="Mission_Critical.MC_PI_1">
+      <class name="Mission_Critical.WFCL_SmokeTest">
         <methods>
+          <include name="AccountRegistration_Admin" invocation-numbers="0"/>
+          <include name="AccountRegistration_INET" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="TNT_Vat_Validation" invocation-numbers="2"/>
         </methods>
-      </class> <!-- Mission_Critical.MC_PI_1 -->
+      </class> <!-- Mission_Critical.WFCL_SmokeTest -->
     </classes>
   </test> <!-- WFCL_Test(failed) -->
 </suite> <!-- Failed suite [WFCL_Suite] -->

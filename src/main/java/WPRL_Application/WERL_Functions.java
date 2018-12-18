@@ -28,7 +28,7 @@ public class WERL_Functions {
 			String Pin = MFAC_PinGeneration.IssuePinAPI(UUID + "-" + ShareID, "postal");
 			//check the confirmation page that the postcard has been sent
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='angularWerl']/app-root/app-postal-confirmation/div/h1"), "Your activation code is on the way");
-			WebDriver_Functions.ChangeURL("WPRL_FDM", "US", true);//navigate to WPRL FDM page
+			WebDriver_Functions.ChangeURL("WPRL_FDM", "US", false);//navigate to WPRL FDM page
 			WebDriver_Functions.Click(By.id("activationLink"));
 			
 			WebDriver_Functions.WaitPresent(By.id("pinInputField"));
@@ -88,38 +88,37 @@ public class WERL_Functions {
 		
 		if (ContactList.isEmpty()){
 			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "32 MEADOW CREST DR", "", "SHERWOOD", "AR", "72120", "US", "6xmc5tpjhrtaymw7yfwshqfao"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "58 CABOT ST", "", "HARTFORD", "CT", "06112", "US", ""});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "9133 SUPERIOR DR", "", "OLIVEBRANCH", "MS", "38654", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "75-681 LALII PL", "", "KAILUA KONA", "HI", "96740", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "95 HUTCHINS DR", "", "PORTLAND", "ME", "04102", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "329 MADISON ST APT 202", "", "DENVER", "MD", "80206", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "210 W FOSTER AVE", "APT 208", "HENDERSON", "NV", "89011", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "4242 IRVING BLVD", "APT 208", "DALLAS", "TX", "75247", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "11201 AMPERE CT", "APT 208", "LOUISVILLE", "KY", "40299", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "250 BOBBY JONES EXPY", "APT 208", "AUGUSTA", "GA", "30907", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "182 LEWIS RD", "APT 208", "ROYAL OAKS", "CA", "95076", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "2635 S WESTERN AVE", "", "CHICAGO", "IL", "60608", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "150 DOCKS CORNER RD", "APT 208", "DAYTON", "NJ", "08810", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "210 Main St", "", "Levan", "UT", "84639", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "3614 DELVERNE RD", "", "BALTIMORE", "MD", "21218", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "2784 Prospect-Upper Sandusky Rd S", "APT 202", "Marion", "OH", "43302", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "6701-6799 N 19th St", "", "Tampa", "FL", "33610", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "10625 Parsons Rd", "", "Duluth", "GA", "30097", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "359 Spur Rd", "", "Orofino", "ID", "83544", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "765-731 Mayfair Ln", "", "Carmel", "IN", "46032", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "2299-2277 380th St", "", "Harcourt", "IA", "50544", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "15501-16195 340th Rd", "", "Amherst", "NE", "68812", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "11987 Island Daisy Ln", "", "Park Rapids", "MN", "56470", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "N W 1101 B C", "", "Windsor", "MO", "65360", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "220 Central Ave", "", "Great Falls", "MT", "59401", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "259 Sunset Rd SW", "", "Albuquerque", "NM", "87105", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "6-120 Fitzsimonds Rd", "", "Jericho", "VT", "05465", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "27822-27184 S Meridian Rd", "", "Aurora", "OR", "97002", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "100-198 E Florida Ave", "", "Chickasha", "OK", "73018", "US"});
-			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "8599-8501 11th St SE", "", "Kensal", "ND", "58455", "US"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "58 CABOT ST", "", "HARTFORD", "CT", "6112", "US", "247p0y08t50f3zed2exvaue09"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "9133 SUPERIOR DR", "", "OLIVEBRANCH", "MS", "38654", "US", "2ojrqs935gpa1ypnicxcspwm5"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "75-681 LALII PL", "", "KAILUA KONA", "HI", "96740", "US", "464fn6icyb6e4iw9vetuyz5ir"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "95 HUTCHINS DR", "", "PORTLAND", "ME", "4102", "US", "3cvnkwdfotey3zldrko808dhf"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "329 MADISON ST APT 202", "", "DENVER", "MD", "80206", "US", "7hqf1rpftonlfthiifapqp45k"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "1622 Colloquium Dr", "APT 208", "HENDERSON", "NV", "89014", "US", "6v97hdvv359dhctbtiwxpg1ta"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "515 Kenwood Ave", "APT 208", "DAYTON", "OH", "45406", "US", "72n99a8430p2mx2b4ko4d28qk"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "8599-8501 11th St SE", "", "Kensal", "ND", "58455", "US", "240rzltzd9btm85wxwvd78rww"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "27822-27184 S Meridian Rd", "", "Aurora", "OR", "97002", "US", "3wwkvkzrpsxgax31vxbv5qxb5"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "359 Spur Rd", "", "Orofino", "ID", "83544", "US", "1ug631gi15scz0rxur0hrx8qh"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "3614 DELVERNE RD", "", "BALTIMORE", "MD", "21218", "US", "7i4ksltmhnqlxhzbs9j6356ix"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "705 W 22nd St", "", "Higginsville", "MO", "64037", "US", "68pkv8fdgamily7onk626n7xt"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "1047 Osage Ave", "", "Richland", "IA", "52585", "US", "6iub8xcoggkqhcaiwolwqc1pu"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "2916 Co Rd 130", "", "Fort Ripley", "MN", "56449", "US", "20rpuzw2vy8mho3jbtxolcjyl"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "1308 Almond Ave", "", "Madison", "FL", "32340", "US", "1rg816yy05wsscduu2r9ft3zt"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "1223 S 15th St", "", "Chickasha", "OK", "73018", "US", "6ywz8db0rb1q71dbtykbkubel"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "4802 S Loomis Blvd", "", "CHICAGO", "IL", "60609", "US", "1mdm2q039dobzsq76tn3q18eb"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "4005 California Ave", "APT 208", "Modesto", "CA", "95358", "US", "72tnisxa7rocqbgsahjwhzwn8"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "8931 Preston Rd", "APT 208", "DALLAS", "TX", "75247", "US", "7hgby17d1j4wgo3oolifmijdl"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "220 E Southland Blvd", "APT 208", "LOUISVILLE", "KY", "40214", "US", "2zpzble6zzsqoos0c7z4wlf4d"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "1650 Ironwood Ct", "APT 208", "AUGUSTA", "GA", "30905", "US", "20462kzvl8lajb7v6k3u4ve6m"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "21380 Goose Rd ", "", "Ellendale", "DE", "19941", "US", "1qp291cxx2s8xnxtqvuue9ki1"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "515 Kenwood Ave", "APT 208", "DAYTON", "NJ", "45406", "US", "72n99a8430p2mx2b4ko4d28qk"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "3151 Alberta Pl", "", "West Jordan", "UT", "84084", "US", "29dqbpmahuuic8bps0sszs1vj"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "4861 LA-121861 LA-181 S 5  5 Rd", "", "Boyce", "LA", "71409", "US", "6f6zcjs39l2vm11fzjxbobhyc"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "181 S 5 Rd", "", "Morrill", "NE", "69358", "US", "6ptezn20228z2mf7v11s5rj57"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "180 Trout St", "", "Hartsel", "CO", "80449", "US", "3rrx02yst8bxdze5uybo08d57"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "2115 Sand Hill Rd", "", "Marriottsville", "MD", "21104", "US", "5acsnolr5izxaqaplh664rf6y"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "2800 E 550 S", "", "Star City", "IN", "46985", "US", "32zmbi1gdn4v627885l146e09"});
+			ContactList.add(new String[] {"John", "A", "Doe", Phone, Email, "1437 Augusta Hwy", "", "Round O", "SC", "29474", "US", "75ovwgbx781nz4g12214sbwp6"});
 
-			
-			
 			//These address are working from the WERL page as well
 			/*
 			ContactList.add(new String[] {"TESTER", "", "ZCHUCKZ", Phone, Email, "32 MEADOW CREST DR", "", "SHERWOOD", "AR", "72120", "US", "6xmc5tpjhrtaymw7yfwshqfao"});//L3FDM061418T172631

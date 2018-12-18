@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" name="SMOKE_Test_Suit">
+<suite thread-count="1" name="SMOKE_Test_Suit">
 	<listeners>
 		<listener class-name="SupportClasses.TestNG_ReportListener"/>
 	</listeners>
   
-	<test thread-count="8" name="SMOKE_Test" parallel="methods" group-by-instances="true">
-		<parameter name="Level" value="2" />
+	<test thread-count="3" name="SMOKE_Test" parallel="methods" group-by-instances="true">
+		<parameter name="Level" value="3" />
     	<classes>
 			<class name="SupportClasses.Environment"/>
-    		<class name="TestNG.MFAC"/>
-      		<class name="TestNG.WFCL"/>
-      		<class name="TestNG.WIDM"/>
+			<class name="Mission_Critical.WFCL_SmokeTest"/>
+      		
+      		<!--
+      		
       		<class name="WaterfallApplications.OADR"/>
      		<class name="WaterfallApplications.WRTT"/>
       		<class name="WaterfallApplications.WDPA"/>
       		<class name="WaterfallApplications.WPRL"/>
       		<class name="WaterfallApplications.WCRV"/>
+      		
+      		<class name="Mission_Critical.WIDM_SmokeTest"/>
+			-->
     	</classes>
   	</test> <!-- WDPA_Test -->
 </suite> <!-- WDPA_Suite -->

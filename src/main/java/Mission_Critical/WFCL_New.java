@@ -16,7 +16,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -95,7 +95,7 @@ public class WFCL_New{
 		    	case "AccountRegistration_INET_Test":
 		    		//data.add( new Object[] {Level, "640695480"});
 		    		//data.add( new Object[] {Level, "640695447"});
-		    		data.add( new Object[] {Level, "641179205"});
+		    		data.add( new Object[] {Level, "106408335"});
 			    	//data.add( new Object[] {Level, "633504580"});
 		    		break;
 			}
@@ -111,7 +111,7 @@ public class WFCL_New{
 			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
 			String TaxInfo[] = Helper_Functions.getTaxInfo(CountryCode).get(0);
-			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, false, TaxInfo);
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, false, TaxInfo);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -124,7 +124,7 @@ public class WFCL_New{
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String UserID = Helper_Functions.LoadUserID("L" + Level  + Address[6] + "Create");
 			String ContactName[] = Helper_Functions.LoadDummyName("Create", Level);
-			String Result = Arrays.toString(WFCL_Functions.WFCL_UserRegistration(UserID, ContactName, Address));
+			String Result = Arrays.toString(WFCL_Functions.WFCL_UserRegistration(UserID, ContactName, Helper_Functions.MyEmail, Address));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -139,7 +139,7 @@ public class WFCL_New{
 			String Account = AccountDetails.Account_Number;
 			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
 			String UserID = Helper_Functions.LoadUserID("L" + Level + Account + CountryCode);
-			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Account, AddressDetails);
+			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
 			WFCL_Functions.Admin_Registration(CountryCode, Account);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
@@ -186,7 +186,7 @@ public class WFCL_New{
 
 			String ContactName[] = Helper_Functions.LoadDummyName("WDPA", Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + CountryCode + Thread.currentThread().getId() + "WDPA");
-			String Result[] = WFCL_Functions.WDPA_Registration(ContactName, UserID, Account, AddressDetails);
+			String Result[] = WFCL_Functions.WDPA_Registration(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

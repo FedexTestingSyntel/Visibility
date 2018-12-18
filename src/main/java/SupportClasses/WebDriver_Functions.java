@@ -21,40 +21,44 @@ public class WebDriver_Functions{
 	
 	public static void ChangeURL(String AppDesignation, String CountryCode, boolean ClearCookies) throws Exception {
 		String LevelURL = null, AppUrl = null, CCL = CountryCode.toLowerCase(),CCU = CountryCode.toUpperCase();
-		
 		LevelURL = LevelUrlReturn();
 		//String caller = Thread.currentThread().getStackTrace()[2].getMethodName();
 		switch (AppDesignation) {
-			case "AdminReg":  	
+			case "AdminReg":
+			case "ADMINREG":
     			AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?appName=fclpasskey&registration=true&countryCode=" + CCL + "&languageCode=en&fclHost=" + LevelURL + "&step3URL=" + LevelURL + "%2Fapps%2Fshipadmin&afterwardsURL=" + LevelURL + "%2Fapps%2Fshipadmin&locale=en_" + CCU + "&programIndicator=1";
 				break;
 			case "FCLCreate":  	
+			case "FCLCREATE":  
     			//AppUrl = LevelURL + "/fcl/web/jsp/signup.jsp";
     			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=oadr&locale=" + CCL + "_en&step3URL=https%3A%2F%2F.fedex.com%3A443%2Ffcl%2Fweb%2Fjsp%2FfclValidateAndCreate.jsp&afterwardsURL=" + LevelURL + "%3A443%2Ffcl%2Fweb%2Fjsp%2Foadr.jsp&programIndicator=p314t9n1ey&accountOption=link";
 				break;
-    		case "FCLLink":  	
+    		case "FCLLink": 
+    		case "FCLLINK":
     			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=oadr&locale=" + CCL + "_en&step3URL=https%3A%2F%2F.fedex.com%3A443%2Ffcl%2Fweb%2Fjsp%2FfclValidateAndCreate.jsp&afterwardsURL=" + LevelURL + "%3A443%2Ffcl%2Fweb%2Fjsp%2Foadr.jsp&programIndicator=p314t9n1ey&accountOption=link";
 				break;
     		case "FCLLinkInter":  	
+    		case "FCLLINKINTER": 
     			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo.jsp?appName=fclfsm&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Fship%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fship%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&programIndicator=0";
     			if(Helper_Functions.Check_Country_Region(CountryCode).contains("APAC")){//APAC Country
 					AppUrl = AppUrl.replaceAll("%2Fship%2", "%2Fshipping_apac%2");
  	 			}
     			break;	
-				
     		case "INET":		
     			AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";;
     			break;
     		case "WADM":
     			AppUrl = LevelURL + "/apps/shipadmin/";
 				break;
-    		case "Pref":  		
+    		case "Pref":  
+    		case "PREF":  
     			AppUrl = LevelURL + "/preferences";
     			break;		
     		case "JSP":  		
     			AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp";//independent of level
 				break;
     		case "JSP_Express":
+    		case "JSP_EXPRESS":
     			AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/express.jsp";
     			break;
     		case "ECAM":			
@@ -92,6 +96,7 @@ public class WebDriver_Functions{
     			AppUrl = LevelURL + "/PickupApp/login?locale=en_" + CCL;
 				break;
     		case "WDPA_Pickups":
+    		case "WDPA_PICKUPS":
     			AppUrl = LevelURL + "/PickupApp/pickuphistory.do?method=doInit";
 				break;
     		case "WDPA_LTL":  	
@@ -131,6 +136,8 @@ public class WebDriver_Functions{
     			if (AppDesignation.contains("Enrollment_")){//https://wwwdrt.idev.fedex.com/fcl/ALL?enrollmentid=ml18024117&language=en&country=us 
     				AppDesignation = AppDesignation.replace("Enrollment_", "");
     				AppUrl = LevelURL + "/fcl/ALL?enrollmentid=" + AppDesignation + "&language=en&country=" + CCL;
+    			}else if (AppUrl == null) {
+    				Helper_Functions.PrintOut("FAILURE, unable to recognise  " + AppDesignation, false);
     			}
 		}//end switch AppDesignation
 		
@@ -518,20 +525,22 @@ public class WebDriver_Functions{
     			throw new Exception();
     		}
     		
-    		if (isPresent(By.name("username"))){
-    			Type(By.name("username"), UserName);
-    			Type(By.name("password"), Password);
-    			Click(By.name("login"));
-    			if (GetCookieValue("fcl_uuid") == null) {
-    				throw new Exception("Did not login through INET");
-    			}
+    		Type(By.name("username"), UserName);
+    		Type(By.name("password"), Password);
+    		Click(By.name("login"));
+    		if (GetCookieValue("fcl_uuid") == null) {
+    			throw new Exception("Did not login through INET");
     		}
     		Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
         	return true;
 		}catch(Exception e2){
 			Helper_Functions.PrintOut("Not able to login through INET", true);
-			throw new Exception("User not working.");
 		}//end try catch for logging into INET page
+    	
+    	Helper_Functions.PrintOut("Not able to login through any flow, check user id.", true);
+    	//Need to add a scenario to login through WIDM
+		return false;
+    	
       }//end Login    
   	
   	public static String LevelUrlReturn() {

@@ -9,7 +9,7 @@
 		<parameter name="Level" value="3" />
     	<classes>
     		<class name="SupportClasses.Environment"/>
-      		<class name="WaterfallApplications.WPRL"/>
+      		<class name="WPRL_Application.WPRL"/>
     	</classes>
   	</test> <!-- WPRL_Test -->
 </suite> <!-- WPRL_Suite -->
