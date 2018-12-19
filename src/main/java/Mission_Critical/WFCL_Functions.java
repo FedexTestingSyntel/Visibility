@@ -19,9 +19,8 @@ public class WFCL_Functions{
 			//add the country code to the screenshot name
 			DriverFactory.setScreenshotPath(DriverFactory.getScreenshotPath() + CountryCode + " ");
 			
-			WebDriver_Functions.takeSnapShot("Discount Page.png");
-			
 			if (WebDriver_Functions.isPresent(By.name("Apply Now"))) {
+				WebDriver_Functions.takeSnapShot("Discount Page.png");
 				//apply link from marketing page
 				WebDriver_Functions.Click(By.name("Apply Now"));
 			}
@@ -294,7 +293,6 @@ public class WFCL_Functions{
 		    Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
 		    return ReturnValue;
  		}catch (Exception e) {
- 			e.printStackTrace();
  			throw e;
  		}
  	}//end WFCL_AccountRegistration_WDPA
@@ -308,11 +306,11 @@ public class WFCL_Functions{
 
 			WebDriver_Functions.takeSnapShot("Forgot User Id.png");
 			WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[3]/form/table/tbody/tr[6]/td/input[2]"));
+			WebDriver_Functions.WaitPresent(By.id("linkaction"));
 			WebDriver_Functions.takeSnapShot("Forgot User Confirmation.png");
 			Helper_Functions.PrintOut("Completed Forgot User Confirmation using " + Email + ". An email has been triggered and that test must be completed manually by to see the user list.", true);
 			return Email;
 		}catch(Exception e){
-			Helper_Functions.PrintOut("General failure in Forgot_User_Email" + "  " + e.getMessage(), true);
 			throw e;
 		}
 	}//end Forgot_User_Email

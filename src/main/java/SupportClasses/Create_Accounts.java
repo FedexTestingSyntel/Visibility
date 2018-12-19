@@ -59,7 +59,7 @@ public class Create_Accounts{
 				}	
 				
 				//if doing a single country
-				if (CountryList[6].contentEquals("US")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
+				//if (CountryList[6].contentEquals("US")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
 			}
 		}
 		return data.iterator();

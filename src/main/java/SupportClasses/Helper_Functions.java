@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 import org.openqa.selenium.By;
+import org.testng.Assert;
 
 import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
@@ -806,5 +807,16 @@ public class Helper_Functions{
 		}
 		return null;
 	}
+	
+	public static Account_Data getAddressDetails(String Level, String CountryCode){
+		Account_Data D[] = Environment.getAddressDetails();
+		for (Account_Data Current: D) {
+			if (Current != null && Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
+				return Current;
+			}
+		}
+		return null;
+	}
+	
 
 }//End Class

@@ -1,5 +1,7 @@
 package Data_Structures;
 
+import SupportClasses.Helper_Functions;
+
 public class Account_Data {
 	//Note: When adding a value make sure to check that same reflects in the Environment class
 	
@@ -53,6 +55,7 @@ public class Account_Data {
 	public String MiddleName = "";
 	public String LastName = "";
 	public String UUID = "";
+	public String Email = "";
 	public String UserId = "";
 	
 
@@ -95,6 +98,7 @@ public class Account_Data {
 		this.MiddleName = account_Info.MiddleName;
 		this.LastName = account_Info.LastName;
 		this.UserId = account_Info.UserId;
+		this.Email = account_Info.Email;
 		this.UUID = account_Info.UUID;
 	}
 
@@ -112,6 +116,14 @@ public class Account_Data {
 		}else {
 			Account_Info.Masked_Account_Number = Nickname + " - " + Last_Three_Digits;
 		}
+		return Account_Info;
+	}
+	
+	public static Account_Data Set_Dummy_Contact_Name(Account_Data Account_Info) {
+		String ContactName[] = Helper_Functions.LoadDummyName(Account_Info.Billing_Country_Code, Account_Info.Level);
+		Account_Info.FirstName = ContactName[0];
+		Account_Info.MiddleName = ContactName[1];
+		Account_Info.LastName = ContactName[2];
 		return Account_Info;
 	}
 	

@@ -364,21 +364,22 @@ public class WebDriver_Functions{
 		}
 	}
 	
-	public static void WaitForTextPresentIn(By Ele, String Text) throws Exception{
+	public static boolean WaitForTextPresentIn(By Ele, String Text) throws Exception{
 		for(int i = 0; i < DriverFactory.WaitTimeOut + 1; i++) {
 			if (isPresent(Ele)) {
 				String DriverValue = DriverFactory.getInstance().getDriver().findElement(Ele).getAttribute("value");
 				String DriverText = DriverFactory.getInstance().getDriver().findElement(Ele).getText();
 				if (DriverValue != null && DriverValue.contains(Text)) {
-					break;
+					return true;
 				}else if (DriverText!= null && DriverText.contains(Text)) {
-					break;
+					return true;
 				}else if (i == DriverFactory.WaitTimeOut) {
 					throw new Exception ("Text does not match.  " + Ele.toString());
 				}
 			}
-			Thread.sleep(1000);
+			Thread.sleep(1000);//will give time incase the element needs to load on the page.
 		}
+		throw new Exception ("Element not present on page." + Ele.toString());
 	}
 	
 	public static void WaitForTextNotPresentIn(By Ele, String Text) throws Exception{

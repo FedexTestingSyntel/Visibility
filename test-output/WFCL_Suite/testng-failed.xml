@@ -9,8 +9,8 @@
     <classes>
       <class name="Mission_Critical.WFCL_SmokeTest">
         <methods>
-          <include name="AccountRegistration_Admin" invocation-numbers="0"/>
-          <include name="AccountRegistration_INET" invocation-numbers="0"/>
+          <include name="CreditCardRegistrationEnroll" invocation-numbers="0"/>
+          <include name="Forgot_User_Email" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
       </class> <!-- Mission_Critical.WFCL_SmokeTest -->

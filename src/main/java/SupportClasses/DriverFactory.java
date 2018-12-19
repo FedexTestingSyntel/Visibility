@@ -165,4 +165,10 @@ public class DriverFactory{
      public static void setScreenshotPath(String SC){
     	 ScreenshotPath.set(SC);
      }
+     
+     public static void setBrowserLimit(int BL){
+    	 BrowserLimit = BL;
+    	 DriverStorage = new WebDriver[BrowserLimit];
+    	 DriverInUse = new boolean[BrowserLimit];
+     }
 }

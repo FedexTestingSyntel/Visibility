@@ -56,7 +56,8 @@ public class WFCL_Functions_UsingData{
 				//for the legacy registration page such as WDPA the code must be entered as text
 				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_State);
 			}catch (Exception e){}
-		}else if (Account_Info.Billing_State_Code != "") {
+		}
+		if (Account_Info.Billing_State_Code != "") {
 			try{
 				WebDriver_Functions.Select(By.id("state"), Account_Info.Billing_State_Code,  "v");
 			}catch (Exception e){}
@@ -129,6 +130,9 @@ public class WFCL_Functions_UsingData{
 					WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), Account_Info.Masked_Account_Number);    //will need to update due to account masking
 				}
 				break;
+			case "WFCL_CREATE":
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/h2"), "Login Information");
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr"), "Your user ID " + Account_Info.UserId);
 			case "INET":
 			case "GFBO":
 				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.UserId);
@@ -357,26 +361,24 @@ public class WFCL_Functions_UsingData{
 	}
 
 	//will return a string array with 0 as the user id and 1 as the password, 2 is the uuid
-	public static String[] WFCL_UserRegistration(String UserId, String[] Name, String AddressDetails[]) throws Exception{
+	public static String[] WFCL_UserRegistration(Account_Data Address_Info) throws Exception{
+		String CountryCode = Address_Info.Billing_Country_Code;
 		try {
-			String CountryCode = AddressDetails[6];
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
 			WebDriver_Functions.Click(By.id("registernow"));
 			
-			ContactInfo_Page_Array(Name, AddressDetails, UserId, true); //enters all of the details
+			ContactInfo_Page(Address_Info, true); //enters all of the details
 
 			//Confirmation page
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/h2"), "Login Information");
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr/td[2]"), UserId);
-			WebDriver_Functions.takeSnapShot("RegistrationConfirmation.png");
+			Verify_Confirmaiton_Page("WFCL_CREATE", Address_Info);
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-			Helper_Functions.PrintOut("Finished WFCL_UserRegistration  " + UserId + "/" + Helper_Functions.myPassword + " -- " + UUID, true);
-			String ReturnValue[] = new String[]{UserId, UUID};
-			Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);//Write User to file for later reference
+			Helper_Functions.PrintOut("Finished WFCL_UserRegistration  " + Address_Info.UserId + "/" + Helper_Functions.myPassword + " -- " + UUID, true);
+			String ReturnValue[] = new String[]{Address_Info.UserId, UUID};
+			Helper_Functions.WriteUserToExcel(Address_Info.UserId, Helper_Functions.myPassword);//Write User to file for later reference
 			return ReturnValue;
 		}catch (Exception e) {
 			if (e.getMessage().contains("[(@name='accountType') and (@value = 'noAccount')]")){
-				Helper_Functions.PrintOut("Radio button not present for " + AddressDetails[6] + " to do User id creation.", true);
+				Helper_Functions.PrintOut("Radio button not present for " + CountryCode + " to do User id creation.", true);
 			}
 			throw e;
 		}

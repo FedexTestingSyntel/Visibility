@@ -1,6 +1,8 @@
 package WaterfallApplications;
 
 import org.testng.annotations.Test;
+
+import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import org.testng.annotations.BeforeClass;
@@ -28,6 +30,7 @@ public class WCRV{
 	
 		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
+		DriverFactory.WaitTimeOut = 60;
 	}
 	
 	@DataProvider (parallel = true)

@@ -119,17 +119,11 @@ public class WCRV_Functions{
 				}
 			}//end for i
 				
-			try{//check that the default language loads
-				WebDriver_Functions.WaitForText(By.id("wcrv-language"), "Select or enter");
-			}catch (Exception e){
-				Helper_Functions.PrintOut("Default language did not load.", true);
-				Select selLanguage = new Select(DriverFactory.getInstance().getDriver().findElement(By.id("wcrv-language")));
-				selLanguage.selectByValue("EN");//change language to English
-			}
+			Select selLanguage = new Select(DriverFactory.getInstance().getDriver().findElement(By.id("wcrv-language")));
+			selLanguage.selectByValue("EN");//change language to English
 			
 				
 			try{//check that the default currency loads
-				
 				WebDriver_Functions.WaitForTextNot(By.id("wcrv-currency"), "Select or enter");
 				Select selCurrency = new Select(DriverFactory.getInstance().getDriver().findElement(By.id("wcrv-currency")));
 				selCurrency.selectByValue("USD");
@@ -520,7 +514,7 @@ public class WCRV_Functions{
 				}
 			}
  		}catch(Exception e){
- 			Helper_Functions.PrintOut(svgGroup + " " + servBaseCode  + " is not present to be selected.", true);
+ 			//Helper_Functions.PrintOut(svgGroup + " " + servBaseCode  + " is not present to be selected.", true);
  			return false;
  		}
  		DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.SECONDS);

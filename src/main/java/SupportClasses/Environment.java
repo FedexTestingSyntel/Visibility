@@ -15,6 +15,7 @@ public class Environment {
 	public static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 	public static ArrayList<String[]> TaxData = new ArrayList<String[]>();
 	public static Account_Data Account_Details[][] = new Account_Data[8][];
+	public static Account_Data Address_Data[];
 	
 	private Environment(){
 		//Do-nothing..Do not allow to initialize this class from outside
@@ -151,7 +152,9 @@ public class Environment {
 		for (int i = 1; i < AccountsAlreadyCreated.size(); i++) {
 			String Row[] = AccountsAlreadyCreated.get(i);
 			//Helper_Functions.PrintOut(Arrays.toString(Row), false);
-			Account_Details[i -1] = new Account_Data();
+			Account_Details[i - 1] = new Account_Data();
+			//will load the dummy email address by default.
+			Account_Details[i - 1].Email = Helper_Functions.MyEmail;
 			for (int j = 0; j <Headers.length; j++) {
 				int pos = i - 1;
 				switch (Headers[j]) {
@@ -246,16 +249,78 @@ public class Environment {
 		  			Account_Details[pos].Account_Type = Row[j];
 		  			break;
 		  		case "Tax_ID_One":
-		  			Account_Details[pos].Account_Type = Row[j];
+		  			Account_Details[pos].Tax_ID_One = Row[j];
 		  			break;
 		  		case "Tax_ID_Two":
-		  			Account_Details[pos].Account_Type = Row[j];
+		  			Account_Details[pos].Tax_ID_Two = Row[j];
 		  			break;
 				}//end switch
-				
 			}
 		}
   		//invalid input
   		return Account_Details;
+	}
+
+	public static Account_Data[] getAddressDetails() {
+		//if the data is already loaded then return the values
+		if (Address_Data!= null) {
+			return Address_Data;
+		}else if (AddressDetails == null || AddressDetails.size() == 0){
+			getAddressList();
+		}
+		
+		Address_Data = new Account_Data[AddressDetails.size()];
+		String Headers[] = AddressDetails.get(0);
+		for (int i = 1; i < AddressDetails.size(); i++) {
+			String Row[] = AddressDetails.get(i);
+
+			Address_Data[i -1] = new Account_Data();
+			for (int j = 0; j <Headers.length; j++) {
+				int pos = i - 1;
+				switch (Headers[j]) {
+		  		case "Address_Line_1":
+		  			Address_Data[pos].Shipping_Address_Line_1 = Row[j];
+		  			Address_Data[pos].Billing_Address_Line_1 = Row[j];
+		  			break;
+		  		case "Address_Line_2":
+		  			Address_Data[pos].Shipping_Address_Line_2 = Row[j];
+		  			Address_Data[pos].Billing_Address_Line_2 = Row[j];
+		  			break;
+		  		case "City":
+		  			Address_Data[pos].Shipping_City = Row[j];
+		  			Address_Data[pos].Billing_City = Row[j];
+		  			break;
+		  		case "State":
+		  			Address_Data[pos].Shipping_State = Row[j];
+		  			Address_Data[pos].Billing_State = Row[j];
+		  			break;
+		  		case "State_Code":
+		  			Address_Data[pos].Shipping_State_Code = Row[j];
+		  			Address_Data[pos].Billing_State_Code = Row[j];
+		  			break;
+		  		case "Zip":
+		  			Address_Data[pos].Shipping_Zip = Row[j];
+		  			Address_Data[pos].Billing_Zip = Row[j];
+		  			break;
+		  		case "Country_Code":
+		  			Address_Data[pos].Shipping_Country_Code = Row[j];
+		  			Address_Data[pos].Billing_Country_Code = Row[j];
+		  			break;
+		  		case "Region":
+		  			Address_Data[pos].Shipping_Region = Row[j];
+		  			Address_Data[pos].Billing_Region = Row[j];
+		  			break;
+		  		case "Country":
+		  			Address_Data[pos].Shipping_Country = Row[j];
+		  			Address_Data[pos].Billing_Country = Row[j];
+		  			break;
+				}//end switch
+			}
+			//will load the dummy email address and phone number by default.
+			Address_Data[i -1].Billing_Phone_Number = Helper_Functions.myPhone;
+			Address_Data[i -1].Shipping_Phone_Number = Helper_Functions.myPhone;
+			Address_Data[i -1].Email = Helper_Functions.MyEmail;
+		}
+  		return Address_Data;
 	}
 }

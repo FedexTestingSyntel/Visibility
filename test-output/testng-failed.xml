@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Mission_Critical.WFCL_New">
+      <class name="WaterfallApplications.WCRV">
         <methods>
-          <include name="AccountRegistration_INET_Test" invocation-numbers="0"/>
           <include name="beforeClass"/>
+          <include name="WCRV_Generate_RateSheet" invocation-numbers="7 6 4 5"/>
         </methods>
-      </class> <!-- Mission_Critical.WFCL_New -->
+      </class> <!-- WaterfallApplications.WCRV -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
