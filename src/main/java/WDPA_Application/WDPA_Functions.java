@@ -377,7 +377,7 @@ public class WDPA_Functions{
 			    WebDriver_Functions.Type(By.id("history.filterField"), strConfirmationNumber);
 			    WebDriver_Functions.Select(By.id("history.filterColumn"), "Confirmation no.", "t");
 			    WebDriver_Functions.Click(By.id("history.search"));
-			    
+			    WebDriver_Functions.takeSnapShot("LTL MyPickups.png");
 			    WebDriver_Functions.WaitPresent(By.id("row.check1"));
 			    assertEquals("Scheduled", WebDriver_Functions.GetText(By.id("statusLink0")));
 			    assertEquals(strConfirmationNumber, WebDriver_Functions.GetText(By.id("confNumLink0")));

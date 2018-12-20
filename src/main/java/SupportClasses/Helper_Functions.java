@@ -16,6 +16,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import org.openqa.selenium.By;
 import org.testng.Assert;
@@ -36,7 +38,7 @@ public class Helper_Functions{
 	public static String BaseDirectory = System.getProperty("user.dir").substring(0, System.getProperty("user.dir").lastIndexOf("\\") + 1);
 	public static String FileSaveDirectory = BaseDirectory + "EclipseScreenshots";
 	public static String DataDirectory = BaseDirectory + "Data";
-	
+	public final static Lock Excellock = new ReentrantLock();//prevent excel ready clashes
 	public static String Passed = "Passed", Failed = "Fail", Skipped = "Skipped";
 	
 	//a list of the Userids
@@ -486,7 +488,9 @@ public class Helper_Functions{
     }
 	
 	public static String LoadUserID(String Base){
-		return Base + CurrentDateTime() + getRandomString(2);
+		String User = Base + CurrentDateTime() + getRandomString(4);
+		System.out.println("UserID: " + User);
+		return User;
 	}
 	
 	//returns the transaction id from a string
@@ -606,6 +610,7 @@ public class Helper_Functions{
 	
 	public static boolean RemoveAccountFromAccount_Numbers(String Level, String Account_to_Delete) {
 		try {
+			Excellock.lock();
 			String fileName = DataDirectory + "\\AddressDetails.xls";
 			String sheetName = "Account_Numbers";
 			//Read the spreadsheet that needs to be updated
@@ -650,12 +655,16 @@ public class Helper_Functions{
 		}catch (Exception e) {
 			PrintOut("WARNING, Unble to remove account from excel.", true);
 			return false;
+		}finally {
+			Excellock.unlock();
 		}
 		return true;
 	}
 	
 	public static boolean writeExcelData(String fileName, String sheetName, String CellData, int RowtoWrite, int ColumntoWrite){
+		
 		try {
+			Excellock.lock();
 			//Read the spreadsheet that needs to be updated
 			FileInputStream fsIP= new FileInputStream(new File(fileName));  
 			//Access the workbook                  
@@ -695,6 +704,8 @@ public class Helper_Functions{
 		}catch (Exception e) {
 			PrintOut("WARNING, Unable to write to Excel.", true);
 			return false;
+		}finally {
+			Excellock.unlock();
 		}
 		return true;
 	}
@@ -812,7 +823,7 @@ public class Helper_Functions{
 		Account_Data D[] = Environment.getAddressDetails();
 		for (Account_Data Current: D) {
 			if (Current != null && Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
-				return Current;
+				return new Account_Data(Current);
 			}
 		}
 		return null;

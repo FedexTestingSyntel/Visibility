@@ -25,7 +25,7 @@ public class WFCL_New{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("US");
+		CountryList = Environment.getCountryList("GB");
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("FR");
@@ -51,13 +51,14 @@ public class WFCL_New{
 		    			}
 					}
 		    		break;
-		    	case "UserRegistration":
-		    		data.add( new Object[] {Level, "US"});
-		    		break;
 		    	case "UserRegistration_Account_Data":
+		    		Helper_Functions.MyEmail = "accept@fedex.com";
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			AccountDetails = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
-		    			data.add( new Object[] {Level, AccountDetails});
+		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
+		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
+		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
+		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
+		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
 					}
 		    		break;
 		    	case "AccountRegistration_Admin":
@@ -146,20 +147,6 @@ public class WFCL_New{
 		*/
 	}
 
-	
-	@Test(dataProvider = "dp")
-	public void UserRegistration(String Level, String CountryCode) {
-		try {
-			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String UserID = Helper_Functions.LoadUserID("L" + Level  + Address[6] + "Create");
-			String ContactName[] = Helper_Functions.LoadDummyName("Create", Level);
-			String Result = Arrays.toString(WFCL_Functions.WFCL_UserRegistration(UserID, ContactName, Helper_Functions.MyEmail, Address));
-			Helper_Functions.PrintOut(Result, false);
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
-	
 	@Test(dataProvider = "dp")
 	public void UserRegistration_Account_Data(String Level, Account_Data AccountDetails) {
 		try {
@@ -283,3 +270,22 @@ public class WFCL_New{
 
 
 }
+
+
+/*
+ * 
+ 
+	
+	@Test(dataProvider = "dp")
+	public void UserRegistration(String Level, String CountryCode) {
+		try {
+			String Address[] = Helper_Functions.LoadAddress(CountryCode);
+			String UserID = Helper_Functions.LoadUserID("L" + Level  + Address[6] + "Create");
+			String ContactName[] = Helper_Functions.LoadDummyName("Create", Level);
+			String Result = Arrays.toString(WFCL_Functions.WFCL_UserRegistration(UserID, ContactName, Helper_Functions.MyEmail, Address));
+			Helper_Functions.PrintOut(Result, false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	*/

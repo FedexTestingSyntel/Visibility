@@ -131,8 +131,7 @@ public class WFCL_Functions_UsingData{
 				}
 				break;
 			case "WFCL_CREATE":
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/h2"), "Login Information");
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr"), "Your user ID " + Account_Info.UserId);
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr/td[2]"), "Your user ID " + Account_Info.UserId);
 			case "INET":
 			case "GFBO":
 				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.UserId);
@@ -146,7 +145,7 @@ public class WFCL_Functions_UsingData{
 			}
 		}catch (Exception e){
 			Helper_Functions.PrintOut(e.getMessage() + "\nNotAble to validate " + Application, true);
-			return false;
+			throw e;
 		}
 		
 		WebDriver_Functions.takeSnapShot(Application + " Confirmation Page.png");

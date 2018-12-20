@@ -18,7 +18,7 @@ import TestingFunctions.WRTT_Functions;
 public class WRTT{
 	static String LevelsToTest = "3";
 	static String CountryList[][];
-	static boolean SmokeTest = true;
+	static boolean SmokeTest = false;
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -28,7 +28,7 @@ public class WRTT{
 		CountryList = new String[][]{{"US", "United States"}, {"CA", "Canada"}};
 	}
 	
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 

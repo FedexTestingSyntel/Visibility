@@ -18,7 +18,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 
 	@BeforeClass

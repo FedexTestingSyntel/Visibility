@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.openqa.selenium.By;
@@ -343,6 +346,7 @@ public class Create_Accounts{
 	
 	public static boolean writeAccountsToExcel(Account_Data Account_Info[], String fileName, String sheetName) throws Exception{
 		try {
+			Helper_Functions.Excellock.lock();
 			//Read the spreadsheet that needs to be updated
 			FileInputStream fsIP= new FileInputStream(new File(fileName));  
 			//Access the workbook                  
@@ -421,6 +425,8 @@ public class Create_Accounts{
 			wb.close();
 		}catch (Exception e) {
 			throw e;
+		}finally {
+			Helper_Functions.Excellock.unlock();
 		}
 		return true;
 	}

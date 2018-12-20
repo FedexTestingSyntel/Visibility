@@ -65,21 +65,22 @@ public class MC_PI_1{
 		    		break;
 		    	case "TNT_Vat_Validation":
 		    		String Vat_Validation[] = {"GB", "FR", "BE", "NL", "LU"};
+		    		Vat_Validation = new String[] {"GB"};
 		    		for (int j = 0; j < Vat_Validation.length; j++) {
 		    			EnrollmentID = Helper_Functions.LoadEnrollmentIDs(Vat_Validation[j]);
 		    			ArrayList<String[]> TaxInfoLoc = Helper_Functions.getTaxInfo(Vat_Validation[j]);
 		    			//for each vat example of the country add a test
 		    			for (String Tax[]: TaxInfoLoc) {
-		    				/*
+		    				
 		    				if (Tax[4].contentEquals("B")) {//business account
 		    					data.add(new Object[] {Level, EnrollmentID[0], Vat_Validation[j], Tax, Tax[2], true});
 		    				}else {
 		    					data.add(new Object[] {Level, EnrollmentID[0], Vat_Validation[j], Tax, Tax[2], false});
 		    				}
-		    				*/
+		    				/*
 		    				if (Tax[4].contentEquals("B1")) {//when trying to test specific examples, need to update the excel sheet.
 		    					data.add(new Object[] {Level, EnrollmentID[0], Vat_Validation[j], Tax, Tax[2], true});
-		    				}
+		    				}*/
 		    				
 		    			}
 					}
