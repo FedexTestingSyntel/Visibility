@@ -1,4 +1,4 @@
-package TestingFunctions;
+package Mission_Critical;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -233,9 +233,9 @@ public class WIDM_Functions{
 		}
 	}//end ResetPasswordWIDM
 
-	public static String Forgot_User_WIDM(String Email) throws Exception{
+	public static String Forgot_User_WIDM(String CountryCode, String Email) throws Exception{
 		try{	
-			WebDriver_Functions.ChangeURL("WIDM", "US", true);
+			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
 			WebDriver_Functions.Click(By.name("forgotUidPwd"));
 			//wait for text box for user id to appear
 			WebDriver_Functions.Type(By.name("email"),Email);

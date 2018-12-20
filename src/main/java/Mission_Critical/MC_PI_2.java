@@ -15,10 +15,11 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import java.util.Iterator;
 import java.util.List;
+
+import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
-import TestingFunctions.WIDM_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
@@ -33,7 +34,7 @@ public class MC_PI_2{
 		//CountryList = new String[][]{{"US", "United States"}};
 	}
 	
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -44,17 +45,16 @@ public class MC_PI_2{
 			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com", "GRP2_DOTCOMaaaa@syntelinc.com", "GRP2-DOTCOM@syntelinc.com"};		
 			//"#NAME?/^&{}()~_+@fedex.com",           	special characters
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
-				case "WIDM_Registration_Invalid_Email":
+				case "WIDM_Registration_Email_Validation":
+				case "WFCL_Registration_Email_Validation":	
+				case "WFCL_Forgot_UserID_Email_Validation":
+				case "WIDM_Forgot_UserID_Email_Validation":
 					for (int j=0; j < CountryList.length; j++) {				
 						for (String Email: Invalid_Email) {
-							data.add( new Object[] {Level, CountryList[j][0], Email});
+							data.add( new Object[] {Level, CountryList[j][0], Email, true});
 						}
-					}
-					break;
-				case "WIDM_Registration_Valid_Email":
-					for (int j=0; j < CountryList.length; j++) {					 
 						for (String Email: Valid_Emails) {
-							data.add( new Object[] {Level, CountryList[j][0], Email});
+							data.add( new Object[] {Level, CountryList[j][0], Email, false});
 						}
 					}
 					break;
@@ -65,71 +65,64 @@ public class MC_PI_2{
 						data.add( new Object[] {Level, "L3USCreate120518T194625px", "Test1234", Helper_Functions.getRandomString(22) + "@gmail.com"});
 					}
 					break;
-				case "WFCL_Registration_Valid_Email":
-					for (String Email: Valid_Emails) {
-						data.add( new Object[] {Level, Helper_Functions.LoadUserID("L" + Level + "ValidEmail"), Email});
-					}
-					break;
-				case "WFCL_Registration_Invalid_Email":
-					for (String Email: Invalid_Email) {
-						data.add( new Object[] {Level, Helper_Functions.LoadUserID("L" + Level + "InvalidEmail"), Email});
-					}
-					break;	
-				case "WFCL_Registration_Valid_Email_Legacy":
-					for (String Email: Valid_Emails) {
-						Account_Data AccountDetails = Helper_Functions.getFreshAccount(Level,  "US");
-						String UserID = Helper_Functions.LoadUserID("L" + Level + "WFCLLegacy");
-			    		data.add( new Object[] {Level, AccountDetails, UserID, Email});
-					}
-					break;	
-				case "WFCL_Registration_Invalid_Email_Legacy":
-					for (String Email: Invalid_Email) {
-						Account_Data AccountDetails = Helper_Functions.getFreshAccount(Level,  "US");
-						String UserID = Helper_Functions.LoadUserID("L" + Level + "InvalidWFCLLegacy");
-			    		data.add( new Object[] {Level, AccountDetails, UserID, Email});
-					}
-					break;	
-				case "WFCL_Forgot_UserID_Email_Validation":
-					for (int j=0; j < CountryList.length; j++) {	
+				case "WFCL_Registration_Email_Validation_Legacy":
+					for (int j=0; j < CountryList.length; j++) {				
 						for (String Email: Invalid_Email) {
-							data.add( new Object[] {Level, CountryList[j][0], Email});
+							Account_Data AccountDetails = Helper_Functions.getFreshAccount(Level,  "US");
+							String UserID = Helper_Functions.LoadUserID("L" + Level + "InvalidWFCLLegacy");
+				    		data.add( new Object[] {Level, AccountDetails, UserID, Email, true});
+						}
+						for (String Email: Valid_Emails) {
+							Account_Data AccountDetails = Helper_Functions.getFreshAccount(Level,  "US");
+							String UserID = Helper_Functions.LoadUserID("L" + Level + "WFCLLegacy");
+				    		data.add( new Object[] {Level, AccountDetails, UserID, Email, false});
 						}
 					}
 					break;
-					
-					
 			}
 		}	
 		return data.iterator();
 	}
-
+	
 	@Test(dataProvider = "dp", description = "411835", enabled = true)
-	public void WIDM_Registration_Valid_Email(String Level, String CountryCode, String Email){
+	public void WIDM_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected){
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
 			String UserId = Helper_Functions.LoadUserID("L" + Level + "WIDM" + CountryCode);
-			WIDM_Functions.WIDM_Registration(Address, UserName, UserId, Email);
-			Helper_Functions.PrintOut("Email Address: " + Email + " validated.", false);
+			
+			if (ErrorExpected) {
+				WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
+				WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
+				//Enter all of the form data
+				WIDM_Functions.WIDM_Registration_Input(Address, UserName, UserId, Email);
+				WebDriver_Functions.Click(By.id("createUserID"));
+				WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
+				WebDriver_Functions.takeSnapShot("Invalid Email.png");
+				Helper_Functions.PrintOut("Email Address: " + Email + " validated. Error message recieved.", false);
+			}else {
+				WIDM_Functions.WIDM_Registration(Address, UserName, UserId, Email);
+				Helper_Functions.PrintOut("Email Address: " + Email + " validated.", false);
+			}
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "411835", enabled = true)
-	public void WIDM_Registration_Invalid_Email(String Level, String CountryCode, String Email){
+	@Test(dataProvider = "dp")
+	public void WIDM_Forgot_UserID_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
-			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
-			String UserId = Helper_Functions.LoadUserID("L" + Level + "WIDM" + CountryCode);
-			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
-			WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
-			//Enter all of the form data
-			WIDM_Functions.WIDM_Registration_Input(Address, UserName, UserId, Email);
-			WebDriver_Functions.Click(By.id("createUserID"));
-			WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
-			WebDriver_Functions.takeSnapShot("Invalid Email.png");
-			Helper_Functions.PrintOut("Email Address: " + Email + " validated. Error message recieved.", false);
+			try {
+				WIDM_Functions.Forgot_User_WIDM(CountryCode, Email);
+			}catch (Exception e1) {
+				if (ErrorExpected) {
+					WebDriver_Functions.WaitPresent(By.id("emailerror"));
+					WebDriver_Functions.WaitForText(By.id("emailerror"), "Email address is not valid.");
+					WebDriver_Functions.takeSnapShot("Invalid Email.png");
+				}else {
+					throw e1;
+				}
+			}
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -156,72 +149,67 @@ public class MC_PI_2{
 		}
 	}
 
-	@Test(dataProvider = "dp", description = "411836", enabled = false)
-	public void WFCL_Registration_Valid_Email(String Level, String UserID, String Email) {
+	@Test(dataProvider = "dp", description = "411836", enabled = true)
+	public void WFCL_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
-			String Address[] = Helper_Functions.LoadAddress("US");
+			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String ContactName[] = Helper_Functions.LoadDummyName("Create", Level);
-			String Result = Arrays.toString(WFCL_Functions.WFCL_UserRegistration(UserID, ContactName, Email, Address));
-			Helper_Functions.PrintOut(Result, false);
+			String UserId = Helper_Functions.LoadUserID("L" + Level + "WFCL" + CountryCode);
+			if (ErrorExpected) {
+				try {
+					WFCL_Functions.WFCL_UserRegistration(UserId, ContactName, Email, Address);
+				}catch (Exception ExpectedError) {}
+				WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
+				WebDriver_Functions.takeSnapShot("Invalid Email.png");
+			}else {
+				WFCL_Functions.WFCL_UserRegistration(UserId, ContactName, Email, Address);
+				Helper_Functions.PrintOut("Email Address: " + Email + " validated.", false);
+			}
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "411836", enabled = false)
-	public void WFCL_Registration_Invalid_Email(String Level, String UserID, String Email) {
-		try {
-			String Address[] = Helper_Functions.LoadAddress("US");
-			String ContactName[] = Helper_Functions.LoadDummyName("Create", Level);
-			try {
-				WFCL_Functions.WFCL_UserRegistration(UserID, ContactName, Email, Address);
-			}catch (Exception ExpectedError) {}
-			WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
-			WebDriver_Functions.takeSnapShot("Invalid Email.png");
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
-	
-	@Test(dataProvider = "dp", description = "411836", enabled = false)
-	public void WFCL_Registration_Valid_Email_Legacy(String Level, Account_Data AccountDetails, String UserID, String Email){
+	@Test(dataProvider = "dp", description = "411836", enabled = true)
+	public void WFCL_Registration_Email_Validation_Legacy(String Level, Account_Data AccountDetails, String UserID, String Email, boolean ErrorExpected){
 		try {
 			String Account = AccountDetails.Account_Number;
 			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
-			String ContactName[] = Helper_Functions.LoadDummyName("Leg", Level);
-			String Result[] = WFCL_Functions.WDPA_Registration(ContactName, UserID, Email, Account, AddressDetails);
-			Helper_Functions.PrintOut(Arrays.toString(Result), false);
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
-	
-	@Test(dataProvider = "dp", description = "411836", enabled = false)
-	public void WFCL_Registration_Invalid_Email_Legacy(String Level, Account_Data AccountDetails, String UserID, String Email){
-		try {
-			String Account = AccountDetails.Account_Number;
-			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
-			String ContactName[] = Helper_Functions.LoadDummyName("Leg", Level);
-			try {
-				WFCL_Functions.WDPA_Registration(ContactName, UserID, Email, Account, AddressDetails);
-			}catch (Exception ExpectedError) {}
-			WebDriver_Functions.WaitPresent(By.id("emailinvalid"));
-			WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
-			WebDriver_Functions.takeSnapShot("Invalid Email.png");
+			String ContactName[] = Helper_Functions.LoadDummyName("FCL", Level);
+			if (ErrorExpected) {
+				try {
+					DriverFactory.getInstance().getDriverWait().wait(3);
+					WFCL_Functions.WDPA_Registration(ContactName, UserID, Email, Account, AddressDetails);
+				}catch (Exception ExpectedError) {
+				}finally {
+					DriverFactory.getInstance().getDriverWait().wait(DriverFactory.WaitTimeOut);
+				}
+				WebDriver_Functions.WaitPresent(By.id("emailinvalid"));
+				WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
+				WebDriver_Functions.takeSnapShot("Invalid Email.png");
+			}else {
+				String Result[] = WFCL_Functions.WDPA_Registration(ContactName, UserID, Email, Account, AddressDetails);
+				Helper_Functions.PrintOut(Arrays.toString(Result), false);
+			}
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
 	@Test(dataProvider = "dp")
-	public void WFCL_Forgot_UserID_Email_Validation(String Level, String CountryCode, String Email) {
+	public void WFCL_Forgot_UserID_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			try {
 				WFCL_Functions.Forgot_User_Email(CountryCode, Email);
-			}catch (Exception ExpectedError) {}
-			WebDriver_Functions.WaitPresent(By.id("emailerror"));
-			WebDriver_Functions.WaitForText(By.id("emailerror"), "Email address is not valid.");
-			WebDriver_Functions.takeSnapShot("Invalid Email.png");
+			}catch (Exception e1) {
+				if (ErrorExpected) {
+					WebDriver_Functions.WaitPresent(By.id("emailerror"));
+					WebDriver_Functions.WaitForText(By.id("emailerror"), "Email address is not valid.");
+					WebDriver_Functions.takeSnapShot("Invalid Email.png");
+				}else {
+					throw e1;
+				}
+			}
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

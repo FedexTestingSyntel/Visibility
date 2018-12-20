@@ -112,7 +112,6 @@ public class WFCL_SmokeTest{
 			String UserID = Helper_Functions.LoadUserID("L" + Level  + Address[6] + "Create");
 			String ContactName[] = Helper_Functions.LoadDummyName("Create", Level);
 			String Email = Helper_Functions.MyEmail;
-			Email = "a@b.c";
 			String Result = Arrays.toString(WFCL_Functions.WFCL_UserRegistration(UserID, ContactName, Email, Address));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {

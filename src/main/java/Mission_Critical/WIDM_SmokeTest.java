@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
-import TestingFunctions.WIDM_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
@@ -109,7 +108,7 @@ public class WIDM_SmokeTest{
 	@Test(dataProvider = "dp")
 	public void WIDM_ForgotUserID(String Level, String Email){
 		try {
-			WIDM_Functions.Forgot_User_WIDM(Email);
+			WIDM_Functions.Forgot_User_WIDM("US", Email);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

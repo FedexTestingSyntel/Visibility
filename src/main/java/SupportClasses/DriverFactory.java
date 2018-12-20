@@ -2,9 +2,13 @@ package SupportClasses;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -16,6 +20,7 @@ public class DriverFactory{
 	public static int WaitTimeOut = 30;
 	private static WebDriver DriverStorage[] = new WebDriver[BrowserLimit];
 	private static boolean DriverInUse[] = new boolean[BrowserLimit];
+	private static int DriverType = 0;
 	
 	//private DriverFactory(){//Do-nothing..Do not allow to initialize this class from outside}
 	
@@ -53,43 +58,56 @@ public class DriverFactory{
 	   }
    };
    
-   public WebDriver CreateDriver() {
+   private final static Lock Driverlock = new ReentrantLock();//prevent excel ready clashes
+   private WebDriver CreateDriver() {
+	   Driverlock.lock();
+	   WebDriver Locdriver = null;
 	   for (int i = 1; i < 4; i++) {//try three times to create the driver.
 		   //still need to research why the below error message is appearing
 		   //Nov 19, 2018 11:56:30 AM org.openqa.selenium.os.UnixProcess checkForError
 		   //SEVERE: org.apache.commons.exec.ExecuteException: Process exited with an error: 1 (Exit value: 1)
 		   try {
-			   WebDriver Locdriver = null;
-			   //make sure driver in the project folder
-			   String Location = System.getProperty("user.dir") + "\\chromedriver.exe";
-			   System.setProperty("webdriver.chrome.driver", Location);
+			   if (DriverType == 0) {//Chrome
+				  //make sure driver in the project folder
+				   String Location = System.getProperty("user.dir") + "\\chromedriver.exe";
+				   System.setProperty("webdriver.chrome.driver", Location);
 		   
-			   ChromeOptions options = new ChromeOptions();
-			   //this is used to remove the "Chrome is being controlled by automated test software" banner
-			   options.addArguments("disable-infobars"); 
-			   //options.addArguments("--start-fullscreen");
-			   options.addArguments("start-maximized");   
+				   ChromeOptions options = new ChromeOptions();
+				   //this is used to remove the "Chrome is being controlled by automated test software" banner
+				   options.addArguments("disable-infobars"); 
+				   //options.addArguments("--start-fullscreen");
+				   options.addArguments("start-maximized");   
 			
-			   HashMap<String, Object> chromeOptionsMap = new HashMap<String, Object>();
-			   chromeOptionsMap.put("plugins.plugins_disabled", new String[] {"Chrome PDF Viewer"});
-			   chromeOptionsMap.put("plugins.always_open_pdf_externally", true);
-			   options.setExperimentalOption("prefs", chromeOptionsMap);
-			   String downloadFilepath = Helper_Functions.FileSaveDirectory  + "\\Download";
-			   chromeOptionsMap.put("download.default_directory", downloadFilepath);
-			   DesiredCapabilities cap = DesiredCapabilities.chrome();
-			   cap.setCapability(ChromeOptions.CAPABILITY, chromeOptionsMap);
-			   cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-			   cap.setCapability(ChromeOptions.CAPABILITY, options);
+				   HashMap<String, Object> chromeOptionsMap = new HashMap<String, Object>();
+				   chromeOptionsMap.put("plugins.plugins_disabled", new String[] {"Chrome PDF Viewer"});
+				   chromeOptionsMap.put("plugins.always_open_pdf_externally", true);
+				   options.setExperimentalOption("prefs", chromeOptionsMap);
+				   String downloadFilepath = Helper_Functions.FileSaveDirectory  + "\\Download";
+				   chromeOptionsMap.put("download.default_directory", downloadFilepath);
+				   DesiredCapabilities cap = DesiredCapabilities.chrome();
+				   cap.setCapability(ChromeOptions.CAPABILITY, chromeOptionsMap);
+				   cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+				   cap.setCapability(ChromeOptions.CAPABILITY, options);
 			   
-			   Locdriver = new ChromeDriver(options);
-			   Locdriver.manage().timeouts().implicitlyWait(WaitTimeOut, TimeUnit.SECONDS);  		
+				   Locdriver = new ChromeDriver(options);
+				   Locdriver.manage().timeouts().implicitlyWait(WaitTimeOut, TimeUnit.SECONDS);   
+			   }else if (DriverType == 1) {//IE
+				   String Location = System.getProperty("user.dir") + "\\IEDriverServer.exe";
+				   System.setProperty("webdriver.ie.driver", Location);
+				   Locdriver = new InternetExplorerDriver();
+			   }
+			   		
 			   BrowserCurrent++;
-			   return Locdriver;
 		   }catch (Exception e) {
 			   Helper_Functions.PrintOut("ERROR CREATING DRIVER, Attempt " + i, true);
 		   }
+		   
+		   if (Locdriver != null) {
+			   break;//break from for loop
+		   }
 	   }
-	   return null;
+	   Driverlock.unlock();
+	   return Locdriver;
    }
    	   
    // call this method to get the driver object and launch the browser

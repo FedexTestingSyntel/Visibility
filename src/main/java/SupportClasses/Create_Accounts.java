@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.openqa.selenium.By;
@@ -62,7 +59,7 @@ public class Create_Accounts{
 				}	
 				
 				//if doing a single country
-				//if (CountryList[6].contentEquals("US")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
+				if (CountryList[6].contentEquals("US")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
 			}
 		}
 		return data.iterator();

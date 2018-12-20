@@ -171,7 +171,7 @@ public class WebDriver_Functions{
 			WebElement Element = DriverFactory.getInstance().getDriver().findElement(Ele);
 			//clear out any existing text.
 			Element.clear();
-			if (i < 5) {
+			if (i < 3) {
 				Element.sendKeys(text);//try entering character by character
 			}else {
 				JavascriptExecutor myExecutor = ((JavascriptExecutor) DriverFactory.getInstance().getDriver());

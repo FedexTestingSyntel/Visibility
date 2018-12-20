@@ -20,8 +20,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import org.openqa.selenium.By;
-import org.testng.Assert;
-
 import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
 import jxl.Sheet;
