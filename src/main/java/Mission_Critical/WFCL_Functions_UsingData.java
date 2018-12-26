@@ -105,12 +105,14 @@ public class WFCL_Functions_UsingData{
 
 		InvoiceOrCCValidaiton(Account_Info);
 
+		Helper_Functions.Wait(2);//////////////Need to delete this later, facing issue with the loading time.
+		
 		if (WebDriver_Functions.isPresent(By.id("accountNumber"))|| WebDriver_Functions.isPresent(By.name("newAccountNumber"))) {
 			WebDriver_Functions.Click(By.name("submit"));
 			Helper_Functions.PrintOut("Warning, still on account entry screen. The address entered may be incorrect.", true);
 		}else if (WebDriver_Functions.CheckBodyText("Request Access from the Account Administrator")) {
 			//remove the account number from local storage as it is now locked to the company that was just created.
-			Helper_Functions.RemoveAccountFromExcel(Account_Info.Account_Number);
+			Helper_Functions.RemoveAccountFromAccount_Numbers(Environment.getInstance().getLevel(), Account_Info.Account_Number);
 			Helper_Functions.PrintOut("Request Access from the Account Administrator", true);
 			throw new Exception("Request Access from the Account Administrator");
 		}
@@ -215,7 +217,6 @@ public class WFCL_Functions_UsingData{
 		AddressMismatchPage(Account_Info);
 		
 		Verify_Confirmaiton_Page("INET", Account_Info);
-
 		return true;
 	}
 	

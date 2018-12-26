@@ -7,14 +7,14 @@
   <test thread-count="8" name="WPRL_Test(failed)" parallel="methods">
     <parameter name="Level" value="3"/>
     <classes>
-      <class name="WaterfallApplications.WPRL">
+      <class name="WPRL_Application.WPRL">
         <methods>
-          <include name="WPRL_AccountManagement_Passkey" invocation-numbers="0"/>
-          <include name="WPRL_Contact_Admin" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="WPRL_FDM" invocation-numbers="0"/>
+          <include name="WPRL_Contact_NonAdmin" invocation-numbers="0"/>
+          <include name="WPRL_Contact_Admin" invocation-numbers="0"/>
+          <include name="WPRL_FDM_Enroll" invocation-numbers="0"/>
         </methods>
-      </class> <!-- WaterfallApplications.WPRL -->
+      </class> <!-- WPRL_Application.WPRL -->
     </classes>
   </test> <!-- WPRL_Test(failed) -->
 </suite> <!-- Failed suite [WPRL_Suite] -->

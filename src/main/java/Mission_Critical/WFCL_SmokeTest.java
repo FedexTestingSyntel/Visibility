@@ -18,13 +18,14 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
+		//CountryList = Environment.getCountryList("AU");
 	}
 	
 	@DataProvider (parallel = true)
@@ -135,7 +136,7 @@ public class WFCL_SmokeTest{
 		}
 	}
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = true)
 	public void AccountRegistration_INET(String Level, Account_Data AccountDetails){
 		try {
 			String CountryCode = AccountDetails.Billing_Country_Code;

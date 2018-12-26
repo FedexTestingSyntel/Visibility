@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="1" ignored="7" total="8" passed="0">
+<testng-results skipped="0" failed="0" ignored="0" total="6" passed="6">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="41929" started-at="2018-12-20T22:57:25Z" finished-at="2018-12-20T22:58:07Z">
+  <suite name="WIDM_Suite" duration-ms="156925" started-at="2018-12-26T17:02:29Z" finished-at="2018-12-26T17:05:06Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="41929" started-at="2018-12-20T22:57:25Z" finished-at="2018-12-20T22:58:07Z">
-      <class name="Mission_Critical.WFCL_SmokeTest">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:Mission_Critical.WFCL_SmokeTest@3571b748]" name="beforeClass" is-config="true" duration-ms="171" started-at="2018-12-20T22:57:25Z" finished-at="2018-12-20T22:57:25Z">
+    <test name="WIDM_Test" duration-ms="156925" started-at="2018-12-26T17:02:29Z" finished-at="2018-12-26T17:05:06Z">
+      <class name="Mission_Critical.WIDM_SmokeTest">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:Mission_Critical.WIDM_SmokeTest@58a90037]" name="beforeClass" is-config="true" duration-ms="0" started-at="2018-12-26T17:02:30Z" finished-at="2018-12-26T17:02:30Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="FAIL" signature="UserRegistration(java.lang.String, java.lang.String)[pri:0, instance:Mission_Critical.WFCL_SmokeTest@3571b748]" name="UserRegistration" duration-ms="37667" started-at="2018-12-20T22:57:25Z" data-provider="dp" finished-at="2018-12-20T22:58:03Z">
+        <test-method status="PASS" signature="WIDM_Registration_ErrorMessages(java.lang.String, java.lang.String)[pri:0, instance:Mission_Critical.WIDM_SmokeTest@58a90037]" name="WIDM_Registration_ErrorMessages" duration-ms="102506" started-at="2018-12-26T17:02:30Z" data-provider="dp" finished-at="2018-12-26T17:04:12Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[2]]>
+                <![CDATA[3]]>
               </value>
             </param>
             <param index="1">
@@ -24,42 +24,110 @@
               </value>
             </param>
           </params>
-          <exception class="java.lang.AssertionError">
-            <message>
-              <![CDATA[Returned value cannot be converted to WebElement: {stacktrace=, error=invalid session id, message=session null does not exist}
-Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
-System info: host: 'WTC-5159473-l2', ip: '199.81.61.48', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
-Driver info: driver.version: RemoteWebDriver]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[java.lang.AssertionError: Returned value cannot be converted to WebElement: {stacktrace=, error=invalid session id, message=session null does not exist}
-Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
-System info: host: 'WTC-5159473-l2', ip: '199.81.61.48', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
-Driver info: driver.version: RemoteWebDriver
-at org.testng.Assert.fail(Assert.java:96)
-at Mission_Critical.WFCL_SmokeTest.UserRegistration(WFCL_SmokeTest.java:118)
-at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-at java.lang.reflect.Method.invoke(Unknown Source)
-at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
-at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
-at java.util.concurrent.FutureTask.run(Unknown Source)
-at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-at java.util.concurrent.FutureTask.run(Unknown Source)
-at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-at java.lang.Thread.run(Unknown Source)
-]]>
-            </full-stacktrace>
-          </exception> <!-- java.lang.AssertionError -->
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- UserRegistration -->
-      </class> <!-- Mission_Critical.WFCL_SmokeTest -->
-    </test> <!-- Default test -->
-  </suite> <!-- Default suite -->
+        </test-method> <!-- WIDM_Registration_ErrorMessages -->
+        <test-method status="PASS" signature="WIDM_Registration(java.lang.String, java.lang.String)[pri:0, instance:Mission_Critical.WIDM_SmokeTest@58a90037]" name="WIDM_Registration" duration-ms="139199" started-at="2018-12-26T17:02:30Z" data-provider="dp" finished-at="2018-12-26T17:04:49Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[US]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- WIDM_Registration -->
+        <test-method status="PASS" signature="WIDM_ForgotUserID(java.lang.String, java.lang.String)[pri:0, instance:Mission_Critical.WIDM_SmokeTest@58a90037]" name="WIDM_ForgotUserID" duration-ms="56326" started-at="2018-12-26T17:02:30Z" data-provider="dp" finished-at="2018-12-26T17:03:26Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[sean.kauffman.osv@fedex.com]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- WIDM_ForgotUserID -->
+        <test-method status="PASS" signature="WIDM_RegistrationEFWS(java.lang.String, java.lang.String)[pri:0, instance:Mission_Critical.WIDM_SmokeTest@58a90037]" name="WIDM_RegistrationEFWS" duration-ms="72767" started-at="2018-12-26T17:02:30Z" data-provider="dp" finished-at="2018-12-26T17:03:43Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[US]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- WIDM_RegistrationEFWS -->
+        <test-method status="PASS" signature="ResetPasswordWIDM_Email(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:Mission_Critical.WIDM_SmokeTest@58a90037]" name="ResetPasswordWIDM_Email" duration-ms="120249" started-at="2018-12-26T17:02:30Z" data-provider="dp" finished-at="2018-12-26T17:04:30Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3080618T100257]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ResetPasswordWIDM_Email -->
+        <test-method status="PASS" signature="WIDM_ResetPasswordSecret(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:Mission_Critical.WIDM_SmokeTest@58a90037]" name="WIDM_ResetPasswordSecret" duration-ms="156240" started-at="2018-12-26T17:02:30Z" data-provider="dp" finished-at="2018-12-26T17:05:06Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[US]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[L3WIDMWgtm072418T130916]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[Test12345]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[mom]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- WIDM_ResetPasswordSecret -->
+      </class> <!-- Mission_Critical.WIDM_SmokeTest -->
+    </test> <!-- WIDM_Test -->
+  </suite> <!-- WIDM_Suite -->
 </testng-results>

@@ -41,7 +41,7 @@ public class Create_Accounts{
 		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
 		for (int i=0; i < LevelsToTest.length(); i++) {
 			String Level = String.valueOf(LevelsToTest.charAt(i));
-			
+					
 			for (int j = 1; j < AddressDetails.size(); j++) {
 				String CountryList[] = AddressDetails.get(j);
 				ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
@@ -59,7 +59,7 @@ public class Create_Accounts{
 				}	
 				
 				//if doing a single country
-				if (CountryList[6].contentEquals("US")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
+				//if (CountryList[6].contentEquals("US")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
 			}
 		}
 		return data.iterator();

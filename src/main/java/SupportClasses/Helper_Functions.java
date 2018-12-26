@@ -585,27 +585,6 @@ public class Helper_Functions{
 		return data;
 	}
 	
-	public static boolean RemoveAccountFromExcel(String AccountOverwrite) {
-		ArrayList<String[]> data = getExcelData(DataDirectory + "\\AddressDetails.xls", "Accounts");
-		//Here are the assumed headers of the excel file.
-		//[Address_Line_1, Address_Line_2, City, State, State_Code, Zip, Country_Code, Region, Country, L1_Account, L2_Account, L3_Account, L4_Account, L5_Account, L6_Account, L7_Account]
-		int intLevel = Integer.parseInt(Environment.getInstance().getLevel());
-		for (int i = 0; i < data.size(); i++){
-			String CountryArray[] = data.get(i);
-			//if the correct line for the country and there are account numbers loaded.
-			if (CountryArray[8 + intLevel].contains(AccountOverwrite)) {//position 9 in the L1 accounts
-				String RemainingAccounts = CountryArray[8 + intLevel].replace(AccountOverwrite + ", ",  "");
-				RemainingAccounts = CountryArray[8 + intLevel].replace(AccountOverwrite + ", ",  "");
-				RemainingAccounts = CountryArray[8 + intLevel].replace(AccountOverwrite,  "");
-				boolean removed = writeExcelData(DataDirectory + "\\AddressDetails.xls", "Accounts", RemainingAccounts, i, 8 + intLevel);
-				System.out.println("Account " + AccountOverwrite + " has been removed, remaining accounts " + RemainingAccounts);
-				return removed;
-			}
-		}
-		
-		return false;
-	}
-	
 	public static boolean RemoveAccountFromAccount_Numbers(String Level, String Account_to_Delete) {
 		try {
 			Excellock.lock();

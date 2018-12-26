@@ -9,7 +9,7 @@
   		<parameter name="Level" value="3" />
     	<classes>
     		<class name="SupportClasses.Environment"/>
-      		<class name="AgileApplications.WIDM"/>
+      		<class name="Mission_Critical.WIDM_SmokeTest"/>
     	</classes>
   	</test> <!-- WIDM_Test -->
 </suite> <!-- WIDM_Suite -->

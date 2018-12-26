@@ -65,7 +65,6 @@ public class MC_PI_1{
 		    		break;
 		    	case "TNT_Vat_Validation":
 		    		String Vat_Validation[] = {"GB", "FR", "BE", "NL", "LU"};
-		    		Vat_Validation = new String[] {"GB"};
 		    		for (int j = 0; j < Vat_Validation.length; j++) {
 		    			EnrollmentID = Helper_Functions.LoadEnrollmentIDs(Vat_Validation[j]);
 		    			ArrayList<String[]> TaxInfoLoc = Helper_Functions.getTaxInfo(Vat_Validation[j]);

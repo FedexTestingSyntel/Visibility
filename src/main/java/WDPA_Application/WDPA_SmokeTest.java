@@ -16,9 +16,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WDPA_SmokeTest{
-	
-	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -40,27 +38,29 @@ public class WDPA_SmokeTest{
 		    	case "Pickup_Express":
 		    	case "Pickup_ExpressFreight"://need to fix this later, not for all countries.
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			/*
-		    			for (int k = 1; k < Helper_Functions.DataClass[intLevel].length; k++) {
+		    			if (intLevel == 3) {
+		    				data.add( new Object[] {Level, "US", "L3WDPAUAT", "Test1234"});
+		    			}else {
+		    				for (int k = 1; k < Helper_Functions.DataClass[intLevel].length; k++) {
 		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WDPA")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
-		    			}*/
-		    			data.add( new Object[] {Level, "US", "L3WDPAUAT", "Test1234"});
-		    			 
+		    			}
+		    			}
+		    					    			 
 					}
 		    	break;
 		    	case "Pickup_LTLFreight":    //update this later to restrict based on country
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			/*
+		    			
 		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
 		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Freight") || Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("LTL")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
-		    			}*/
-		    			data.add( new Object[] {Level, "US", "L3WDPAUAT", "Test1234"});
+		    			}
+		    			//data.add( new Object[] {Level, "US", "L3WDPAUAT", "Test1234"});
 					}
 		    	break;
 		    	case "Pickup_LTLFreight_Anonymous":    //update this later to restrict based on country
@@ -90,7 +90,8 @@ public class WDPA_SmokeTest{
 		Helper_Functions.PrintOut("Schedule an express pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			WDPA_Functions.WDPAPickupDetailed(CountryCode, UserID, Password, "express", "CompanyNameHere", "John Doe", "9011111111", Address, null, "INET");
+			String Result = Arrays.toString(WDPA_Functions.WDPAPickupDetailed(CountryCode, UserID, Password, "express", "CompanyNameHere", "John Doe", "9011111111", Address, null, "INET"));
+			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

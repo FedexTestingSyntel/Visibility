@@ -25,13 +25,13 @@ public class WFCL_New{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("US");
+		//CountryList = Environment.getCountryList("US");
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("FR");
-		//CountryList = Environment.getCountryList("GB");
+		CountryList = Environment.getCountryList("CA");
 		//Helper_Functions.MyEmail = "accept@fedex.com";
-		//CountryList = new String[][]{{"GB", "Singapore"}, {"US", "Australia"}};
+		//CountryList = new String[][]{{"jj", "Singapore"}, {"CA", "Australia"}};
 	}
 	
 	@DataProvider (parallel = true)

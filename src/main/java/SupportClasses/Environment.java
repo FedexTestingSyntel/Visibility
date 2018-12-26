@@ -223,6 +223,12 @@ public class Environment {
 		  			break;
 		  		case "Account_Number":
 		  			Account_Details[pos].Account_Number = Row[j];
+		  			if (Account_Details[pos].Billing_Country_Code != null) {
+		  				Account_Details[pos].Account_Nickname = Row[j] + "_" + Account_Details[pos].Billing_Country_Code;
+		  			}else {
+		  				Account_Details[pos].Account_Nickname = Row[j] + "_Acc";
+		  			}
+		  			
 		  			break;
 		  		case "Credit_Card_Type":
 		  			Account_Details[pos].Credit_Card_Type = Row[j];

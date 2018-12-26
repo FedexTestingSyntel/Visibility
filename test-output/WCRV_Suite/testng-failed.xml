@@ -10,7 +10,7 @@
       <class name="WaterfallApplications.WCRV">
         <methods>
           <include name="beforeClass"/>
-          <include name="WCRV_Generate_RateSheet" invocation-numbers="0 1"/>
+          <include name="WCRV_Generate_RateSheet" invocation-numbers="0 8 7 4 6"/>
         </methods>
       </class> <!-- WaterfallApplications.WCRV -->
     </classes>

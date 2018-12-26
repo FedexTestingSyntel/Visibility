@@ -40,10 +40,14 @@ public class MC_PI_2{
 
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-			String Invalid_Email[] = new String[] {"tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact12345678.com", "@Grp2_DOTCOMsyntelinc.com","Grp2@DOTCOM@syntelinc.com", "Grp2_DOTCOM@syntelinc", "Grp2_DOTCOMsyntelinc.com", "a@.c", ".GRP2_DOTCOM@syntelinc.com", "tencharacttencharacttencharacttencharacttencharacttencharact12345@accept.com"};
+			String Invalid_Email[] = new String[] {"tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact12345678.com", "@Grp2DOTCOMsyntelinc.com","Grp2@DOTCOM@syntelinc.com", "Grp2DOTCOM@syntelinc", "Grp2DOTCOMsyntelinc.com", "a@.c", "@b.c", "a@b.", ".GRP2DOTCOM@syntelinc.com", "tencharacttencharacttencharacttencharacttencharacttencharact12345@accept.com"};
 			// " @,<#>$%;:”[]*\\|`!",          			special characters
-			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com", "GRP2_DOTCOMaaaa@syntelinc.com", "GRP2-DOTCOM@syntelinc.com"};		
+			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com"};		
 			//"#NAME?/^&{}()~_+@fedex.com",           	special characters
+			
+			//Invalid_Email = new String[] {"a"};
+			//Valid_Emails = new String[] {"aa@b.c", "a@bb.c", "a@b.cc", "aaa@b.c", "a@bbb.c", "a@b.ccc"};
+			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WIDM_Registration_Email_Validation":
 				case "WFCL_Registration_Email_Validation":	
@@ -79,12 +83,26 @@ public class MC_PI_2{
 						}
 					}
 					break;
+				case "WFCL_Reset_Password_Email_Validation":
+					for (int j=0; j < CountryList.length; j++) {				
+						for (String Email: Invalid_Email) {
+							boolean ErrorExpected = false;
+							if (Email.length() < 5) {
+								ErrorExpected = true;//only for the min and max length should we get error.
+							}
+							data.add( new Object[] {Level, CountryList[j][0], Email, ErrorExpected});
+						}
+						for (String Email: Valid_Emails) {
+							data.add( new Object[] {Level, CountryList[j][0], Email, false});
+						}
+					}
+					break;
 			}
 		}	
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", description = "411835", enabled = true)
+	@Test(dataProvider = "dp", description = "411835")
 	public void WIDM_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected){
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -94,7 +112,6 @@ public class MC_PI_2{
 			if (ErrorExpected) {
 				WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
 				WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
-				//Enter all of the form data
 				WIDM_Functions.WIDM_Registration_Input(Address, UserName, UserId, Email);
 				WebDriver_Functions.Click(By.id("createUserID"));
 				WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
@@ -109,7 +126,7 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", description = "411832")
 	public void WIDM_Forgot_UserID_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			try {
@@ -128,7 +145,7 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "420303", enabled = false)
+	@Test(dataProvider = "dp", description = "420303")
 	public void WIDM_Email_BounceBack(String Level, String UserID, String Password, String Email){
 		try {
 			WebDriver_Functions.ChangeURL("WGTM_FID", "US", true);
@@ -149,16 +166,16 @@ public class MC_PI_2{
 		}
 	}
 
-	@Test(dataProvider = "dp", description = "411836", enabled = true)
+	@Test(dataProvider = "dp", description = "411836")
 	public void WFCL_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String ContactName[] = Helper_Functions.LoadDummyName("Create", Level);
 			String UserId = Helper_Functions.LoadUserID("L" + Level + "WFCL" + CountryCode);
 			if (ErrorExpected) {
-				try {
-					WFCL_Functions.WFCL_UserRegistration(UserId, ContactName, Email, Address);
-				}catch (Exception ExpectedError) {}
+				WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
+				WebDriver_Functions.Click(By.id("registernow"));
+				WFCL_Functions.WFCL_ContactInfo_Page(ContactName, Address, UserId, Email, true); //enters all of the details
 				WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
 				WebDriver_Functions.takeSnapShot("Invalid Email.png");
 			}else {
@@ -170,7 +187,7 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "411836", enabled = true)
+	@Test(dataProvider = "dp", description = "411836")
 	public void WFCL_Registration_Email_Validation_Legacy(String Level, Account_Data AccountDetails, String UserID, String Email, boolean ErrorExpected){
 		try {
 			String Account = AccountDetails.Account_Number;
@@ -196,7 +213,7 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", description = "411833")
 	public void WFCL_Forgot_UserID_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			try {
@@ -210,6 +227,28 @@ public class MC_PI_2{
 					throw e1;
 				}
 			}
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test(dataProvider = "dp", description = "411826")
+	public void WFCL_Reset_Password_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
+		try {
+			WebDriver_Functions.ChangeURL("INET", CountryCode, true);
+    		WebDriver_Functions.Click(By.name("forgotUidPwd"));
+    		WebDriver_Functions.Type(By.name("userID"), Email);
+    		
+    		WebDriver_Functions.takeSnapShot("Password Reset.png");
+    		WebDriver_Functions.Click(By.id("ada_forgotpwdcontinue"));
+    		if (ErrorExpected) {
+    			WebDriver_Functions.WaitForText(By.id("useriderror"), "The User ID you entered is invalid.");
+    			WebDriver_Functions.takeSnapShot("Password Reset Error Message.png");
+    		}else {
+    			if (!WebDriver_Functions.CheckBodyText("Reset your password by answering the secret question associated with your fedex.com User ID.")) {
+    				throw new Exception("User did not process to next step of reset password flow.");
+    			}
+    		}
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

@@ -15,15 +15,13 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM_SmokeTest{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
-		//CountryList = new String[][]{{"US", "United States"}};
-		//Helper_Functions.MyEmail = "InvalidPasswordSet@accept.com";
 	}
 	
 	@DataProvider (parallel = true)

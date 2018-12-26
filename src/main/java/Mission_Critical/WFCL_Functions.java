@@ -446,7 +446,6 @@ public class WFCL_Functions{
 		//If the user is still on the CC entry page will try and enter a different credit card type.
 		if (TaxInfo != null && !TaxInfo[3].contains("Valid")) {
 			boolean VatCheck = false;
-			boolean ErrorElementPresent = WebDriver_Functions.isPresent(By.xpath("//*[@id='taxInformation']/label/b"));
 			if (WebDriver_Functions.isPresent(By.xpath("//*[@id='vatNo']/label[1]/b"))) {
 				VatCheck = WebDriver_Functions.ElementMatches(By.xpath("//*[@id='vatNo']/label[1]/b"), TaxInfo[3], Integer.parseInt(TaxInfo[5]));
 			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='taxInformation']/label/b"))) {   
@@ -521,7 +520,7 @@ public class WFCL_Functions{
 				throw new Exception("Error.");
 			}
 		}catch (Exception e){
-			Helper_Functions.PrintOut("Secret quesiton " + SecretAnswer + " was not accepted.", true);
+			Helper_Functions.PrintOut("Secret question " + SecretAnswer + " was not accepted.", true);
 			return e.getMessage();
 		}
 	}//end ResetPasswordWFCLSecret
@@ -724,7 +723,7 @@ public class WFCL_Functions{
 			//return WFCL_AccountEntryScreen(AccountNumber, AccountNickname, Path);//this is an issue, need to fix later as link is an issue for AU 
 		}else if (WebDriver_Functions.CheckBodyText("Request Access from the Account Administrator")) {
 			//remove the account number from local storage as it is now locked to the company that was just created.
-			Helper_Functions.RemoveAccountFromExcel(AccountNumber);
+			Helper_Functions.RemoveAccountFromAccount_Numbers(Environment.getInstance().getLevel(), AccountNumber);
 			Helper_Functions.PrintOut("Request Access from the Account Administrator", true);
 			throw new Exception("Request Access from the Account Administrator");
 		}

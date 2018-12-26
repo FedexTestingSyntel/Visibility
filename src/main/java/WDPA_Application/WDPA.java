@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 public class WDPA extends WDPA_Functions{
 	
 	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass

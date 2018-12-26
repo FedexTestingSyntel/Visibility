@@ -156,6 +156,16 @@ public class DriverFactory{
  	   return wait.get();
     }
     
+    public boolean setQuickWait(boolean SetQuickWait) {
+    	if (SetQuickWait) {
+    		this.wait = this.quickwait;
+    	}else {
+    		wait.remove();//remove the current status, next time called will be recreated
+    	}
+		return SetQuickWait;
+    	
+    }
+    
     ThreadLocal<WebDriverWait> quickwait = new ThreadLocal<WebDriverWait>(){
   	   @Override
   	   synchronized protected WebDriverWait initialValue(){
