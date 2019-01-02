@@ -26,12 +26,13 @@ import SupportClasses.WebDriver_Functions;
 public class MC_PI_2{
 	static String LevelsToTest = "2";
 	static String CountryList[][];
+	final boolean EnableCompleted = false;
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
-		//CountryList = new String[][]{{"US", "United States"}};
+		CountryList = Environment.getCountryList("high");
 	}
 	
 	@DataProvider (parallel = true)
@@ -40,13 +41,12 @@ public class MC_PI_2{
 
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
+			int intLevel = Integer.parseInt(Level);
+			
 			String Invalid_Email[] = new String[] {"tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact12345678.com", "@Grp2DOTCOMsyntelinc.com","Grp2@DOTCOM@syntelinc.com", "Grp2DOTCOM@syntelinc", "Grp2DOTCOMsyntelinc.com", "a@.c", "@b.c", "a@b.", ".GRP2DOTCOM@syntelinc.com", "tencharacttencharacttencharacttencharacttencharacttencharact12345@accept.com"};
 			// " @,<#>$%;:”[]*\\|`!",          			special characters
 			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com"};		
 			//"#NAME?/^&{}()~_+@fedex.com",           	special characters
-			
-			//Invalid_Email = new String[] {"a"};
-			//Valid_Emails = new String[] {"aa@b.c", "a@bb.c", "a@b.cc", "aaa@b.c", "a@bbb.c", "a@b.ccc"};
 			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WIDM_Registration_Email_Validation":
@@ -62,6 +62,18 @@ public class MC_PI_2{
 						}
 					}
 					break;
+				case "WIDM_Reset_Password_Secret_SamePassword_Error":
+				case "WFCL_Reset_Password_Secret_SamePassword_Error":	
+					for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if ((m.getName().contains("WIDM") && Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WIDM")) || (m.getName().contains("WFCL") && Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Create"))) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    					Environment.DataClass[intLevel][k].SSO_LOGIN_DESC = "";
+		    					break;
+		    				}
+		    			}
+					}
+		    		break;
 				case "WIDM_Email_BounceBack":
 					if (Level.contentEquals("2")) {
 						data.add( new Object[] {Level, "L2BadEmail110718T134301xv", "Test1234", Helper_Functions.getRandomString(22) + "@gmail.com"});
@@ -69,6 +81,14 @@ public class MC_PI_2{
 						data.add( new Object[] {Level, "L3USCreate120518T194625px", "Test1234", Helper_Functions.getRandomString(22) + "@gmail.com"});
 					}
 					break;
+				case "WIDM_Force_Change_Password":
+					if (Level.contentEquals("2")) {
+						data.add( new Object[] {Level, "", "Test1234"});
+					}else if (Level.contentEquals("3")) {
+						data.add( new Object[] {Level, "L3WIDMUS101618T162632", "Test1234"});
+					}
+					break;
+					
 				case "WFCL_Registration_Email_Validation_Legacy":
 					for (int j=0; j < CountryList.length; j++) {				
 						for (String Email: Invalid_Email) {
@@ -102,7 +122,7 @@ public class MC_PI_2{
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", description = "411835")
+	@Test(dataProvider = "dp", description = "411835", enabled = EnableCompleted)
 	public void WIDM_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected){
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -126,7 +146,7 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "411832")
+	@Test(dataProvider = "dp", description = "411832", enabled = EnableCompleted)
 	public void WIDM_Forgot_UserID_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			try {
@@ -145,7 +165,7 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "420303")
+	@Test(dataProvider = "dp", description = "420303", enabled = EnableCompleted)
 	public void WIDM_Email_BounceBack(String Level, String UserID, String Password, String Email){
 		try {
 			WebDriver_Functions.ChangeURL("WGTM_FID", "US", true);
@@ -166,7 +186,7 @@ public class MC_PI_2{
 		}
 	}
 
-	@Test(dataProvider = "dp", description = "411836")
+	@Test(dataProvider = "dp", description = "411836", enabled = EnableCompleted)
 	public void WFCL_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -187,7 +207,7 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "411836")
+	@Test(dataProvider = "dp", description = "411836", enabled = EnableCompleted)
 	public void WFCL_Registration_Email_Validation_Legacy(String Level, Account_Data AccountDetails, String UserID, String Email, boolean ErrorExpected){
 		try {
 			String Account = AccountDetails.Account_Number;
@@ -213,7 +233,7 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "411833")
+	@Test(dataProvider = "dp", description = "411833", enabled = EnableCompleted)
 	public void WFCL_Forgot_UserID_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			try {
@@ -232,7 +252,7 @@ public class MC_PI_2{
 		}
 	}
 
-	@Test(dataProvider = "dp", description = "411826")
+	@Test(dataProvider = "dp", description = "411826", enabled = EnableCompleted)
 	public void WFCL_Reset_Password_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			WebDriver_Functions.ChangeURL("INET", CountryCode, true);
@@ -254,4 +274,23 @@ public class MC_PI_2{
 		}
 	}
 
+	@Test(dataProvider = "dp", description = "397664", enabled = true)
+	public void WIDM_Reset_Password_Secret_SamePassword_Error(String Level, String CountryCode, String UserId, String Password, String SecretAnswer){
+		try {
+			WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password, SecretAnswer, true);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", description = "397668",  enabled = EnableCompleted)
+	public void WFCL_Reset_Password_Secret_SamePassword_Error(String Level, String Country, String UserId, String Password, String SecretAnswer){
+		try {
+			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, Password, SecretAnswer, true);
+			Helper_Functions.PrintOut(Result, false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
 }

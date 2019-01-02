@@ -113,9 +113,9 @@ public class WFCL{
 		    		break;
 		    	case "Password_Reset_Secret":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC + "A", Helper_Functions.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC + "A", Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -123,18 +123,18 @@ public class WFCL{
 		    		break;
 		    	case "Reset_Password_Email":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "WADM_Invitaiton":
-		    		for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-	    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("CC")) {
-	    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC, Helper_Functions.MyEmail});
+		    		for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+	    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("CC")) {
+	    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, Helper_Functions.MyEmail});
 	    					break;
 	    				}
 	    			}
@@ -260,7 +260,7 @@ public class WFCL{
 	@Test(dataProvider = "dp")
 	public void Password_Reset_Secret(String Level, String Country, String UserId, String newPassword, String SecretAnswer){
 		try {
-			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, newPassword, SecretAnswer);
+			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, newPassword, SecretAnswer, false);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

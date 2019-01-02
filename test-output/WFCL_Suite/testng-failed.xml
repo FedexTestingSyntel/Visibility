@@ -7,12 +7,12 @@
   <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
     <parameter name="Level" value="2"/>
     <classes>
-      <class name="Mission_Critical.WFCL_SmokeTest">
+      <class name="Mission_Critical.MC_PI_2">
         <methods>
-          <include name="AccountRegistration_Admin" invocation-numbers="0"/>
           <include name="beforeClass"/>
+          <include name="WFCL_Reset_Password_Secret_SamePassword_Error" invocation-numbers="1 2"/>
         </methods>
-      </class> <!-- Mission_Critical.WFCL_SmokeTest -->
+      </class> <!-- Mission_Critical.MC_PI_2 -->
     </classes>
   </test> <!-- WFCL_Test(failed) -->
 </suite> <!-- Failed suite [WFCL_Suite] -->

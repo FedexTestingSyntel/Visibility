@@ -40,9 +40,9 @@ public class WPRL {
 		    	case "WPRL_Contact_Admin":
 		    	case "WPRL_AccountManagement_Passkey":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WADM")) {
-		    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WADM")) {
+		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
@@ -50,9 +50,9 @@ public class WPRL {
 		    	break;
 		    	case "WPRL_FDM":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("FDM")) {
-		    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("FDM")) {
+		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
@@ -60,9 +60,9 @@ public class WPRL {
 		    	break;
 		    	case "WPRL_AccountManagement_NonPasskey":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("INET")) {
-		    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("INET")) {
+		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
@@ -70,9 +70,9 @@ public class WPRL {
 		    		break;
 		    	case "WPRL_Contact_NonAdmin":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Create")) {
-		    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Create")) {
+		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}

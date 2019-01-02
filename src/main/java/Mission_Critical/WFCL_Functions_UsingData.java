@@ -9,7 +9,7 @@ import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
-public class WFCL_Functions_UsingData{
+public class WFCL_Functions_UsingData{ 
 	
 	public static boolean ContactInfo_Page_Array(String Name[], String AddressDetails[], String UserId, boolean Submit) throws Exception {
 		Account_Data Account_Info = new Account_Data();

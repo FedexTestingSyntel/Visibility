@@ -43,9 +43,9 @@ public class WDPA extends WDPA_Functions{
 		    	case "Pickup_Express":
 		    	case "Pickup_ExpressFright"://need to fix this later, not for all countries.
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 1; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WDPA")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 1; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WDPA")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}
@@ -53,9 +53,9 @@ public class WDPA extends WDPA_Functions{
 		    	break;
 		    	case "Pickup_LTLFreight":    //update this later to restrict based on country
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Freight") || Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("LTL")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Freight") || Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("LTL")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}

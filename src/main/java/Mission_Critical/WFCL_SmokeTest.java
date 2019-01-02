@@ -30,7 +30,7 @@ public class WFCL_SmokeTest{
 	
 	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
-		List<Object[]> data = new ArrayList<Object[]>();
+		List<Object[]> data = new ArrayList<Object[]>(); 
 
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
@@ -68,9 +68,9 @@ public class WFCL_SmokeTest{
 		    		break;
 		    	case "Password_Reset_Secret":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC + "A", Helper_Functions.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC + "A", Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -78,9 +78,9 @@ public class WFCL_SmokeTest{
 		    		break;
 		    	case "Reset_Password_Email":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}
@@ -179,7 +179,7 @@ public class WFCL_SmokeTest{
 	@Test(dataProvider = "dp")
 	public void Password_Reset_Secret(String Level, String Country, String UserId, String newPassword, String SecretAnswer){
 		try {
-			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, newPassword, SecretAnswer);
+			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, newPassword, SecretAnswer, false);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

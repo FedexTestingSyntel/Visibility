@@ -2,12 +2,15 @@ package SupportClasses;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import org.testng.SkipException;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import Data_Structures.Account_Data;
+import Data_Structures.User_Data;
 
 public class Environment {
 	public static String LevelsToTest;
@@ -16,7 +19,9 @@ public class Environment {
 	public static ArrayList<String[]> TaxData = new ArrayList<String[]>();
 	public static Account_Data Account_Details[][] = new Account_Data[8][];
 	public static Account_Data Address_Data[];
-	
+	//a list of the Userids
+	public static User_Data DataClass[][]= new User_Data[8][];
+		
 	private Environment(){
 		//Do-nothing..Do not allow to initialize this class from outside
 	}
@@ -31,7 +36,7 @@ public class Environment {
 			System.err.println("Levels set to " + Levels);
 			for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
 				String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-				Helper_Functions.LoadUserIds(Integer.parseInt(Level));
+				getUserIds(Integer.parseInt(Level));
 			}
 		}else {
 			System.err.println("Levels has already been set from XML. Will execute with " + LevelsToTest);
@@ -67,6 +72,7 @@ public class Environment {
 	public static String[][] getCountryList(String Identifier){
 		Identifier = Identifier.toUpperCase();
 		String FullCountryList[][] = new String[][]{{"US", "United States"}, {"AF", "Afghanistan"}, {"AL", "Albania"}, {"DZ", "Algeria"}, {"AS", "American Samoa"}, {"AD", "Andorra"}, {"AO", "Angola"}, {"AI", "Anguilla"}, {"AG", "Antigua and Barbuda"}, {"AR", "Argentina"}, {"AM", "Armenia"}, {"AW", "Aruba"}, {"AU", "Australia"}, {"AT", "Austria"}, {"AZ", "Azerbaijan"}, {"BS", "Bahamas"}, {"BH", "Bahrain"}, {"BD", "Bangladesh"}, {"BB", "Barbados"}, {"BY", "Belarus"}, {"BE", "Belgium"}, {"BZ", "Belize"}, {"BJ", "Benin"}, {"BM", "Bermuda"}, {"BT", "Bhutan"}, {"BO", "Bolivia"}, {"BQ", "Bonaire/Saba/Sint Eustatius"}, {"BA", "Bosnia-Herzegovina"}, {"BW", "Botswana"}, {"BR", "Brazil"}, {"VG", "Britain Virgin Islands"}, {"BN", "Brunei"}, {"BG", "Bulgaria"}, {"BF", "Burkina Faso"}, {"BI", "Burundi"}, {"KH", "Cambodia"}, {"CM", "Cameroon"}, {"CA", "Canada"}, {"CV", "Cape Verde Islands"}, {"KY", "Cayman Islands"}, {"CF", "Central African Republic"}, {"TD", "Chad"}, {"CL", "Chile"}, {"CN", "China"}, {"CO", "Colombia"}, {"KM", "Comoros"}, {"CG", "Congo"}, {"CK", "Cook Islands"}, {"CR", "Costa Rica"}, {"HR", "Croatia"}, {"CU", "Cuba"}, {"CW", "Curacao"}, {"CY", "Cyprus"}, {"CZ", "Czech Republic"}, {"CD", "Democratic Republic of Congo"}, {"DK", "Denmark"}, {"DJ", "Djibouti"}, {"DM", "Dominica"}, {"DO", "Dominican Republic"}, {"TL", "East Timor"}, {"EC", "Ecuador"}, {"EG", "Egypt"}, {"SV", "El Salvador"}, {"GQ", "Equatorial Guinea"}, {"ER", "Eritrea"}, {"EE", "Estonia"}, {"ET", "Ethiopia"}, {"FO", "Faroe Islands"}, {"FJ", "Fiji"}, {"FI", "Finland"}, {"FR", "France"}, {"GF", "French Guiana"}, {"PF", "French Polynesia"}, {"GA", "Gabon"}, {"GM", "Gambia"}, {"GE", "Georgia, Republic of"}, {"DE", "Germany"}, {"GH", "Ghana"}, {"GI", "Gibraltar"}, {"GR", "Greece"}, {"GL", "Greenland"}, {"GD", "Grenada"}, {"GP", "Guadeloupe"}, {"GU", "Guam"}, {"GT", "Guatemala"}, {"GN", "Guinea"}, {"GW", "Guinea-Bissau"}, {"GY", "Guyana"}, {"HT", "Haiti"}, {"HN", "Honduras"}, {"HK", "Hong Kong"}, {"HU", "Hungary"}, {"IS", "Iceland"}, {"IN", "India"}, {"ID", "Indonesia"}, {"IR", "Iran"}, {"IQ", "Iraq Republic"}, {"IE", "Ireland"}, {"IL", "Israel"}, {"IT", "Italy"}, {"CI", "Ivory Coast"}, {"JM", "Jamaica"}, {"JP", "Japan"}, {"JO", "Jordan"}, {"KZ", "Kazakhstan"}, {"KE", "Kenya"}, {"KI", "Kiribati"}, {"KW", "Kuwait"}, {"KG", "Kyrgyzstan"}, {"LA", "Laos"}, {"LV", "Latvia"}, {"LB", "Lebanon"}, {"LS", "Lesotho"}, {"LR", "Liberia"}, {"LY", "Libya"}, {"LI", "Liechtenstein"}, {"LT", "Lithuania"}, {"LU", "Luxembourg"}, {"MO", "Macau"}, {"MK", "Macedonia"}, {"MG", "Madagascar"}, {"MW", "Malawi"}, {"MY", "Malaysia"}, {"MV", "Maldives"}, {"ML", "Mali"}, {"MT", "Malta"}, {"MH", "Marshall Islands"}, {"MQ", "Martinique"}, {"MR", "Mauritania"}, {"MU", "Mauritius"}, {"MX", "Mexico"}, {"FM", "Micronesia"}, {"MD", "Moldova"}, {"MC", "Monaco"}, {"MN", "Mongolia"}, {"ME", "Montenegro"}, {"MS", "Montserrat"}, {"MA", "Morocco"}, {"MZ", "Mozambique"}, {"MM", "Myanmar/Burma"}, {"NA", "Namibia"}, {"NR", "Nauru"}, {"NP", "Nepal"}, {"NL", "Netherlands"}, {"AN", "Netherlands Antilles"}, {"NC", "New Caledonia"}, {"NZ", "New Zealand"}, {"NI", "Nicaragua"}, {"NE", "Niger"}, {"NG", "Nigeria"}, {"NU", "Niue"}, {"NO", "Norway"}, {"OM", "Oman"}, {"PK", "Pakistan"}, {"PW", "Palau"}, {"PS", "Palestine"}, {"PA", "Panama"}, {"PG", "Papua New Guinea"}, {"PY", "Paraguay"}, {"PE", "Peru"}, {"PH", "Philippines"}, {"PL", "Poland"}, {"PT", "Portugal"}, {"PR", "Puerto Rico"}, {"QA", "Qatar"}, {"RE", "Reunion Island"}, {"RO", "Romania"}, {"RU", "Russia"}, {"RW", "Rwanda"}, {"MF", "Saint Martin"}, {"MP", "Saipan"}, {"WS", "Samoa"}, {"SM", "San Marino"}, {"ST", "Sao Tome & Principe"}, {"SA", "Saudi Arabia"}, {"SN", "Senegal"}, {"RS", "Serbia"}, {"SC", "Seychelles"}, {"SL", "Sierra Leone"}, {"SG", "Singapore"}, {"SK", "Slovak Republic"}, {"SI", "Slovenia"}, {"SB", "Solomon Islands"}, {"SO", "Somalia"}, {"ZA", "South Africa"}, {"KR", "South Korea"}, {"ES", "Spain"}, {"LK", "Sri Lanka"}, {"KN", "St Kitts and Nevis"}, {"LC", "St Lucia"}, {"SX", "St Maarten"}, {"VC", "St Vincent"}, {"GP", "St. Barthelemy"}, {"SD", "Sudan"}, {"SR", "Suriname"}, {"SZ", "Swaziland"}, {"SE", "Sweden"}, {"CH", "Switzerland"}, {"SY", "Syria"}, {"TW", "Taiwan"}, {"TJ", "Tajikistan"}, {"TZ", "Tanzania"}, {"TH", "Thailand"}, {"TG", "Togo"}, {"TK", "Tokelau Is."}, {"TO", "Tonga"}, {"TT", "Trinidad And Tobago"}, {"TN", "Tunisia"}, {"TR", "Turkey"}, {"TM", "Turkmenistan"}, {"TC", "Turks And Caicos"}, {"TV", "Tuvalu"}, {"UG", "Uganda"}, {"UA", "Ukraine"}, {"AE", "United Arab Emirates"}, {"GB", "United Kingdom"}, {"UY", "Uruguay"}, {"VI", "US Virgin Islands/St John/St Thomas"}, {"UZ", "Uzbekistan"}, {"VU", "Vanuatu"}, {"VA", "Vatican City State"}, {"VE", "Venezuela"}, {"VN", "Vietnam"}, {"WF", "Wallis and Futuna"}, {"YE", "Yemen"}, {"ZM", "Zambia"}, {"ZW", "Zimbabwe"}};
+		String HighCountryList[][] = new String[][]{{"US", "United States"},{"AU", "Australia"},{"CA", "Canada"},{"GB", "United Kingdom"},{"BR", "Brazil"},{"AE", "United Arab Emirates"}};
 		String SmokeCountryList[][] = new String[][]{{"US", "United States"}};
 		
 		//return smoke list by default
@@ -75,6 +81,8 @@ public class Environment {
 			ReturnList = SmokeCountryList;
 		}else if (Identifier.contentEquals("FULL")){
 			ReturnList = FullCountryList;
+		}else if (Identifier.contentEquals("HIGH")){
+			ReturnList = HighCountryList;
 		}else {
 			// if the country code is sent
 			if (Identifier.length() == 2) {
@@ -328,5 +336,50 @@ public class Environment {
 			Address_Data[i -1].Email = Helper_Functions.MyEmail;
 		}
   		return Address_Data;
+	}
+
+	public static void getUserIds(int intLevel) {
+		List<String[]> FullDataFromExcel = new ArrayList<String[]>();
+		FullDataFromExcel = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TestingData.xls", "L" + intLevel);
+		DataClass[intLevel] = new User_Data[FullDataFromExcel.size()];
+		int filled = 0;
+		for (int j = 0; j < FullDataFromExcel.size(); j++) {
+			try {
+				DataClass[intLevel][filled] = new User_Data(); 
+				DataClass[intLevel][filled].UUID_NBR = FullDataFromExcel.get(j)[0];
+				DataClass[intLevel][filled].SSO_LOGIN_DESC = FullDataFromExcel.get(j)[1];
+				DataClass[intLevel][filled].USER_PASSWORD_DESC = FullDataFromExcel.get(j)[2];
+				DataClass[intLevel][filled].SECRET_QUESTION_DESC = FullDataFromExcel.get(j)[3];
+				DataClass[intLevel][filled].SECRET_ANSWER_DESC = FullDataFromExcel.get(j)[4];
+				DataClass[intLevel][filled].FIRST_NM = FullDataFromExcel.get(j)[5];
+				DataClass[intLevel][filled].LAST_NM = FullDataFromExcel.get(j)[6];
+				DataClass[intLevel][filled].STREET_DESC = FullDataFromExcel.get(j)[7];
+				DataClass[intLevel][filled].CITY_NM = FullDataFromExcel.get(j)[8];
+				DataClass[intLevel][filled].STATE_CD = FullDataFromExcel.get(j)[9];
+				DataClass[intLevel][filled].POSTAL_CD = FullDataFromExcel.get(j)[10];
+				DataClass[intLevel][filled].COUNTRY_CD = FullDataFromExcel.get(j)[11];
+				DataClass[intLevel][filled].EMAIL_ADDR_DESC = FullDataFromExcel.get(j)[12];
+				DataClass[intLevel][filled].PHONE_NBR = FullDataFromExcel.get(j)[13];
+				DataClass[intLevel][filled].STREET2_DESC = FullDataFromExcel.get(j)[14];
+				DataClass[intLevel][filled].INITIALS_NM = FullDataFromExcel.get(j)[15];
+				DataClass[intLevel][filled].FAX_NBR = FullDataFromExcel.get(j)[16];
+				DataClass[intLevel][filled].ACCOUNT_NBR = FullDataFromExcel.get(j)[17];
+				DataClass[intLevel][filled].ACCOUNT_RELATION_DESC = FullDataFromExcel.get(j)[18];
+				DataClass[intLevel][filled].MODIFY_DT = FullDataFromExcel.get(j)[19];
+				DataClass[intLevel][filled].COMPANY_NM = FullDataFromExcel.get(j)[20];
+				DataClass[intLevel][filled].EMAIL_ALLOWED_FLG = FullDataFromExcel.get(j)[21];
+				DataClass[intLevel][filled].LAST_LOGIN_DT = FullDataFromExcel.get(j)[22];
+				DataClass[intLevel][filled].LANGUAGE_CD = FullDataFromExcel.get(j)[23];
+				DataClass[intLevel][filled].DEACTIVATE_CD = FullDataFromExcel.get(j)[24];
+				DataClass[intLevel][filled].MARKETING_ANSWER_DESC = FullDataFromExcel.get(j)[25];
+				DataClass[intLevel][filled].REGISTRATION_DT = FullDataFromExcel.get(j)[26];
+				DataClass[intLevel][filled].T_C_DATE = FullDataFromExcel.get(j)[27];
+				DataClass[intLevel][filled].DELETE_DT = FullDataFromExcel.get(j)[28];
+				DataClass[intLevel][filled].INVALID_LOGIN_DT = FullDataFromExcel.get(j)[29];
+				filled++;
+			}catch (Exception e) {
+				Helper_Functions.PrintOut("Warning, unable to load user data for line " + j + " ", false);
+			}
+		}
 	}
 }

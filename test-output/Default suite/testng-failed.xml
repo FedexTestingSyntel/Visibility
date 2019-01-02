@@ -3,12 +3,13 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="WaterfallApplications.OADR">
+      <class name="Mission_Critical.WFCL_New">
         <methods>
+          <include name="afterClass"/>
+          <include name="AccountRegistration_Admin" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="OADR_Apply_Discount_To_Account" invocation-numbers="0"/>
         </methods>
-      </class> <!-- WaterfallApplications.OADR -->
+      </class> <!-- Mission_Critical.WFCL_New -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

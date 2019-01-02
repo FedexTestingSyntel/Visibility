@@ -34,7 +34,7 @@ public class Create_Accounts{
 				ECAMuserid = s[1];
 				ECAMpassword = s[2];
 			}
-		}
+		} 
 			
 		List<Object[]> data = new ArrayList<Object[]>();
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
@@ -44,7 +44,9 @@ public class Create_Accounts{
 					
 			for (int j = 1; j < AddressDetails.size(); j++) {
 				String CountryList[] = AddressDetails.get(j);
+				/*
 				ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
+				
 				int ExistingAccounts = 0;
 				for(String Account[]: AccountsAlreadyCreated) {
 					//Compare address line 1 vs billing address L1	//compare country code vs billing country code
@@ -53,13 +55,16 @@ public class Create_Accounts{
 					}
 				}
 				
-				if (ExistingAccounts < 3 || (CountryList[6].contentEquals("US") && ExistingAccounts < 8)) {
-					data.add( new Object[] {Level, CountryList});
-					//break;
-				}	
+				//attempt to create all account numbers
+				//if (ExistingAccounts < 3 || (CountryList[6].contentEquals("US") && ExistingAccounts < 8)) {
+				//	data.add( new Object[] {Level, CountryList});//break;
+				//}	
+				 * */
 				
 				//if doing a single country
-				//if (CountryList[6].contentEquals("US")) {for (int k = 0; k< data.size(); k++) {data.remove(0);k--;}data.add( new Object[] {Level, CountryList});break;}
+				if (CountryList[6].contentEquals("RO") || CountryList[6].contentEquals("EC")) {
+					data.add( new Object[] {Level, CountryList});
+				}
 			}
 		}
 		return data.iterator();

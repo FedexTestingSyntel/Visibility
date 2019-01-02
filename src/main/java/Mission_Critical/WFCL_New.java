@@ -18,14 +18,14 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";  
 	static String CountryList[][]; 
 	static List<String> Users = new ArrayList<String>();
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		//CountryList = Environment.getCountryList("US");
+		CountryList = Environment.getCountryList("US");
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("FR");
@@ -85,9 +85,9 @@ public class WFCL_New{
 		    		break;
 		    	case "Password_Reset_Secret":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC + "A", Helper_Functions.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC + "A", Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -95,21 +95,22 @@ public class WFCL_New{
 		    		break;
 		    	case "Reset_Password_Email":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "AccountRegistration_INET_Test":
-		    		String Accounts[] = {"642454684", "642167308", "642455400", "797691380", "642454749", "642167405", "642455184", "797691500", "642454765", "642167529", "642455206", "797691640", "642454781", "642167626", "642455222", "797691860", "642454803", "642167723", "642455249", "797692280", "642454820", "642167820", "642455281", "797692700", "642454846", "642167928", "642455303", "797391700", "642454862", "642168142", "642455320"};
+		    		/*String Accounts[] = {"642454684", "642167308", "642455400", "797691380", "642454749", "642167405", "642455184", "797691500", "642454765", "642167529", "642455206", "797691640", "642454781", "642167626", "642455222", "797691860", "642454803", "642167723", "642455249", "797692280", "642454820", "642167820", "642455281", "797692700", "642454846", "642167928", "642455303", "797391700", "642454862", "642168142", "642455320"};
 		    		for (String A: Accounts) {
 		    			data.add( new Object[] {Level, A});
 		    		}
+		    		*/
 		    		
-		    		//data.add( new Object[] {Level, "640695480"});
+		    		data.add( new Object[] {Level, "609119721"});
 		    		//data.add( new Object[] {Level, "640695447"});
 		    		//data.add( new Object[] {Level, "106408335"});
 			    	//data.add( new Object[] {Level, "633504580"});
@@ -223,7 +224,7 @@ public class WFCL_New{
 	@Test(dataProvider = "dp")
 	public void Password_Reset_Secret(String Level, String Country, String UserId, String newPassword, String SecretAnswer){
 		try {
-			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, newPassword, SecretAnswer);
+			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, newPassword, SecretAnswer, false);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

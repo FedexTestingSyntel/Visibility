@@ -37,9 +37,9 @@ public class WIDM{
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WIDM_ResetPasswordSecret":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WIDM")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC + "5", Helper_Functions.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WIDM")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC + "5", Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -63,9 +63,9 @@ public class WIDM{
 					break;
 				case "ResetPasswordWIDM_Email":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Helper_Functions.DataClass[intLevel].length; k++) {
-		    				if (Helper_Functions.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, Helper_Functions.DataClass[intLevel][k].SSO_LOGIN_DESC, Helper_Functions.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
+		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}
@@ -104,7 +104,7 @@ public class WIDM{
 	@Test(dataProvider = "dp")
 	public void WIDM_ResetPasswordSecret(String Level, String CountryCode, String UserId, String Password, String SecretAnswer){
 		try {
-			WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password + "5", SecretAnswer);
+			WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password + "5", SecretAnswer, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

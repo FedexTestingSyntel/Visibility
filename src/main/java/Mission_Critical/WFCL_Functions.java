@@ -485,9 +485,9 @@ public class WFCL_Functions{
 		//Helper_Functions.PrintOut("breakpoint", false);
 	}
 
-    public static String WFCL_Secret_Answer(String CountryCode, String strUserName, String NewPassword, String SecretAnswer) throws Exception{
+    public static String WFCL_Secret_Answer(String CountryCode, String strUserName, String NewPassword, String SecretAnswer, boolean ErrorExpected) throws Exception{
  		WebDriver_Functions.ChangeURL("INET", CountryCode, true);
- 		
+ 		 
     	try{
     		//click the forgot password link
     		WebDriver_Functions.Click(By.name("forgotUidPwd"));
@@ -495,12 +495,11 @@ public class WFCL_Functions{
     		
     		WebDriver_Functions.takeSnapShot("Password Reset.png");
             //click the option 1 button and try to answer with secret question
-    		//WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[6]/td/input[2]"));//updated the below as not working on 10-29-18
-    		WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[6]/td/span[2]/input"));
+    		WebDriver_Functions.Click(By.id("ada_forgotpwdcontinue"));
                                 
     		//click the continue button
     		WebDriver_Functions.Click(By.xpath("//*[@id='module.resetpasswordoptions._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[5]/td/input"));
-
+    		
             WebDriver_Functions.Type(By.name("answer"), SecretAnswer);
             WebDriver_Functions.takeSnapShot("Reset Password Secret.png");
             WebDriver_Functions.Click(By.name("action1"));
@@ -509,19 +508,29 @@ public class WFCL_Functions{
 			WebDriver_Functions.Type(By.name("retypePassword"),NewPassword);
 			WebDriver_Functions.takeSnapShot("New Password.png");
 			WebDriver_Functions.Click(By.name("confirm"));
+			
+			if (ErrorExpected) {
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/form/table/tbody/tr[6]/td/table/tbody/tr[1]/td/b"), "New password cannot be the same as the last password.");
+				WebDriver_Functions.takeSnapShot("Same Password " + NewPassword + ".png");
+				NewPassword = NewPassword + "5";
+				WebDriver_Functions.Type(By.name("password"),NewPassword);
+				WebDriver_Functions.Type(By.name("retypePassword"),NewPassword);
+				WebDriver_Functions.takeSnapShot("New Password " + NewPassword + ".png");
+				WebDriver_Functions.Click(By.name("confirm"));
+			}
+			
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td/h1"), "Thank you.");
 			boolean loginAttempt = WebDriver_Functions.Login(strUserName, NewPassword);
 			Helper_Functions.PrintOut(strUserName + " has had the password changed to " + NewPassword, true);
 			if (NewPassword.contentEquals(Helper_Functions.myPassword) && loginAttempt && Thread.currentThread().getStackTrace()[2].getMethodName().contentEquals("WFCL_Secret_Answer")){
 		    	return strUserName + " " + NewPassword;
 			}else if (loginAttempt){
-				return WFCL_Secret_Answer(CountryCode, strUserName, Helper_Functions.myPassword, SecretAnswer);//change the password back
+				return WFCL_Secret_Answer(CountryCode, strUserName, Helper_Functions.myPassword, SecretAnswer, false);//change the password back
 			}else{
 				throw new Exception("Error.");
 			}
 		}catch (Exception e){
-			Helper_Functions.PrintOut("Secret question " + SecretAnswer + " was not accepted.", true);
-			return e.getMessage();
+			throw e;
 		}
 	}//end ResetPasswordWFCLSecret
 	

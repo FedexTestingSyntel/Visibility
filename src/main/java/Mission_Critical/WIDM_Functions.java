@@ -161,11 +161,11 @@ public class WIDM_Functions{
 		}
 	}//end WIDM_Registration_Input
 
-	public static String ResetPasswordWIDM_Secret(String CountryCode, String strUserName, String NewPassword, String SecretAnswer) throws Exception{
+	public static String ResetPasswordWIDM_Secret(String CountryCode, String strUserName, String NewPassword, String SecretAnswer, boolean ErrorExpected) throws Exception{
 		if(strUserName == null){
 			Helper_Functions.PrintOut("Cannot login with user id as null. Recieved from " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
 			throw new Exception("Userid required.");
-		}
+		} 
 		
 		WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
 
@@ -184,13 +184,24 @@ public class WIDM_Functions{
 		WebDriver_Functions.Type(By.name("retypePassword"),NewPassword);
 		WebDriver_Functions.takeSnapShot("New Password " + NewPassword + ".png");
 		WebDriver_Functions.Click(By.name("confirm"));
+		
+		if (ErrorExpected) {
+			WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/form/table/tbody/tr[6]/td/table/tbody/tr[2]/td/b"), "New password cannot be the same as the last password.");
+			WebDriver_Functions.takeSnapShot("Same Password " + NewPassword + ".png");
+			NewPassword = NewPassword + "5";
+			WebDriver_Functions.Type(By.name("password"),NewPassword);
+			WebDriver_Functions.Type(By.name("retypePassword"),NewPassword);
+			WebDriver_Functions.takeSnapShot("New Password " + NewPassword + ".png");
+			WebDriver_Functions.Click(By.name("confirm"));
+		}
+		
 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td"), "Thank you. Your password has been reset");
 		boolean loginAttempt = WebDriver_Functions.Login(strUserName, NewPassword);
 		Helper_Functions.PrintOut(strUserName + " has had the password changed to " + NewPassword, true);
 		if (NewPassword.contentEquals(strPassword)){
 			return NewPassword;
 		}else if (loginAttempt){
-			String Result = strUserName + " " + NewPassword + " " +  ResetPasswordWIDM_Secret(CountryCode, strUserName, strPassword, SecretAnswer);//change the password back
+			String Result = strUserName + " " + NewPassword + " " +  ResetPasswordWIDM_Secret(CountryCode, strUserName, strPassword, SecretAnswer, false);//change the password back
 			Helper_Functions.PrintOut(Result, false);
 			return Result;
 		}else{
