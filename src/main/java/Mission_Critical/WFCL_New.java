@@ -18,7 +18,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "2";  
+	static String LevelsToTest = "7";  
 	static String CountryList[][]; 
 	static List<String> Users = new ArrayList<String>();
 
@@ -29,7 +29,7 @@ public class WFCL_New{
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("FR");
-		CountryList = Environment.getCountryList("CA");
+		CountryList = Environment.getCountryList("DE");
 		//Helper_Functions.MyEmail = "accept@fedex.com";
 		//CountryList = new String[][]{{"jj", "Singapore"}, {"CA", "Australia"}};
 	}
@@ -53,12 +53,7 @@ public class WFCL_New{
 					}
 		    		break;
 		    	case "UserRegistration_Account_Data":
-		    		Helper_Functions.MyEmail = "accept@fedex.com";
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
-		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
-		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
-		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
 		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
 					}
 		    		break;
@@ -110,9 +105,9 @@ public class WFCL_New{
 		    		}
 		    		*/
 		    		
-		    		data.add( new Object[] {Level, "609119721"});
-		    		//data.add( new Object[] {Level, "640695447"});
-		    		//data.add( new Object[] {Level, "106408335"});
+		    		data.add( new Object[] {Level, "643041561"});
+		    		//data.add( new Object[] {Level, "642711326"});
+		    		//data.add( new Object[] {Level, "642260243"});
 			    	//data.add( new Object[] {Level, "633504580"});
 		    		break;
 			}
@@ -123,7 +118,7 @@ public class WFCL_New{
 	@Test(dataProvider = "dp")
 	public void CreditCardRegistrationEnroll(String Level, String EnrollmentID, String CountryCode) {
 		try {
-			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
+			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
@@ -240,7 +235,6 @@ public class WFCL_New{
 			Assert.fail(e.getMessage());
 		}
 	}	
-
 	
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_INET_Test(String Level, String Account){

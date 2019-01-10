@@ -478,7 +478,12 @@ public class WebDriver_Functions{
 		return DriverFactory.getInstance().getDriver().findElement(Ele).getText();
 	}
 
-    public static boolean Login(String UserName, String Password) throws Exception {
+	
+	public static boolean Login(String UserName, String Password) throws Exception {
+		return Login(UserName, Password, "All");
+	}
+	
+    public static boolean Login(String UserName, String Password, String Application) throws Exception {
     	if(UserName == null || UserName == ""){
     		Helper_Functions.PrintOut("Cannot login with user id as null. Recieved from " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
     		throw new Exception("User not working.");

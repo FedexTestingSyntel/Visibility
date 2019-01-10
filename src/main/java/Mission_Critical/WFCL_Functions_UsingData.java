@@ -110,6 +110,7 @@ public class WFCL_Functions_UsingData{
 		if (WebDriver_Functions.isPresent(By.id("accountNumber"))|| WebDriver_Functions.isPresent(By.name("newAccountNumber"))) {
 			WebDriver_Functions.Click(By.name("submit"));
 			Helper_Functions.PrintOut("Warning, still on account entry screen. The address entered may be incorrect.", true);
+			throw new Exception("Still on Accounts Screen");
 		}else if (WebDriver_Functions.CheckBodyText("Request Access from the Account Administrator")) {
 			//remove the account number from local storage as it is now locked to the company that was just created.
 			Helper_Functions.RemoveAccountFromAccount_Numbers(Environment.getInstance().getLevel(), Account_Info.Account_Number);
@@ -205,18 +206,22 @@ public class WFCL_Functions_UsingData{
 
 		WebDriver_Functions.ChangeURL("INET", CountryCode, false);
 		//Register the account number for INET
-		if (CountryCode.contains("US") || CountryCode.contains("CA")){
-			WebDriver_Functions.WaitPresent(By.name("accountNumberOpco"));
-			WebDriver_Functions.Select(By.name("accountNumberOpco"), "1",  "i");	//Will need to update this later to choose the correct account
-			WebDriver_Functions.takeSnapShot("INET Account Selection.png");
-			WebDriver_Functions.Click(By.className("buttonpurple"));
-		}
-		
-		Helper_Functions.Wait(5);/////////Need to make dynamic
-		
-		AddressMismatchPage(Account_Info);
-		
+		WebDriver_Functions.WaitPresent(By.name("accountNumberOpco"));
+		WebDriver_Functions.Select(By.name("accountNumberOpco"), "1",  "i");
+		WebDriver_Functions.takeSnapShot("INET Account Selection.png");
+		WebDriver_Functions.Click(By.className("buttonpurple"));
+
+		//need to add clicking continue button
 		Verify_Confirmaiton_Page("INET", Account_Info);
+
+		WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
+		WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
+
+		//String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
+		//Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
+		//String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag};
+		//Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
+		//return Arrays.toString(ReturnValue);
 		return true;
 	}
 	

@@ -71,10 +71,10 @@ public class WRTT_Functions {
 			if (Service < 11){
 				if (List){
 					WebDriver_Functions.Click(By.name("ratesByServiceType"));
-					Title = Title + "L";
+					Title = Title + "List";
 				}else{
 					WebDriver_Functions.Click(By.xpath("(//input[@name='ratesByServiceType'])[2]"));
-					Title = Title + "R";
+					Title = Title + "Retail";
 				}
 			}else if (!List && Service > 10){
 				return "international do not have retail rates";
@@ -118,7 +118,7 @@ public class WRTT_Functions {
 						Helper_Functions.PrintOut("WRTT " + Title + " Completed successfully since retail not available", true);
 						return Title;
 					}else{
-						WebDriver_Functions.takeSnapShot(Title + " SC.png");
+						//WebDriver_Functions.takeSnapShot(Title + " SC.png");
 						Helper_Functions.PrintOut("!!!Check for Title why rates not available", true);
 						throw new Exception ("Retail rates are not available for this service.");
 					}

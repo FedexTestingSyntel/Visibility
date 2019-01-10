@@ -153,7 +153,7 @@ public class WIDM_Functions{
 				}
 			}
 			
-			Helper_Functions.PrintOut(Failures, false);
+			Helper_Functions.PrintOut("Failures: " + Failures, true);
 			return Failures;
 		}catch (Exception e) {
 			e.printStackTrace();

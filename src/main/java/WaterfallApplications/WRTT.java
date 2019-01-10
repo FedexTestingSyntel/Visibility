@@ -16,7 +16,7 @@ import TestingFunctions.WRTT_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WRTT{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 	static boolean SmokeTest = false;
 	
@@ -56,7 +56,10 @@ public class WRTT{
 		    			        for (int l = 0; l < chars.length; l++) {
 		    			            boolArray[l] = chars[l] == '0' ? true : false;
 		    			        }
-			    				data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
+		    			        if (boolArray[1] == true) {
+		    			        	data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
+		    			        }
+			    				//data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
 		    			    }
 		    			}
 		    		}

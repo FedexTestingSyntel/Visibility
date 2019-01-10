@@ -88,7 +88,13 @@ public class MC_PI_2{
 						data.add( new Object[] {Level, "L3WIDMUS101618T162632", "Test1234"});
 					}
 					break;
-					
+				case "WFCL_Force_Change_Password":
+					if (Level.contentEquals("2")) {
+						data.add( new Object[] {Level, "L2UpdatePassword122718T135503lf", "Test1234"});
+					}else if (Level.contentEquals("3")) {
+						data.add( new Object[] {Level, "", "Test1234"});
+					}
+					break;
 				case "WFCL_Registration_Email_Validation_Legacy":
 					for (int j=0; j < CountryList.length; j++) {				
 						for (String Email: Invalid_Email) {
@@ -274,7 +280,7 @@ public class MC_PI_2{
 		}
 	}
 
-	@Test(dataProvider = "dp", description = "397664", enabled = true)
+	@Test(dataProvider = "dp", description = "397664", enabled = EnableCompleted)
 	public void WIDM_Reset_Password_Secret_SamePassword_Error(String Level, String CountryCode, String UserId, String Password, String SecretAnswer){
 		try {
 			WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password, SecretAnswer, true);
@@ -285,6 +291,26 @@ public class MC_PI_2{
 	
 	@Test(dataProvider = "dp", description = "397668",  enabled = EnableCompleted)
 	public void WFCL_Reset_Password_Secret_SamePassword_Error(String Level, String Country, String UserId, String Password, String SecretAnswer){
+		try {
+			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, Password, SecretAnswer, true);
+			Helper_Functions.PrintOut(Result, false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", description = "397668",  enabled = EnableCompleted)
+	public void WFCL_InfoSec_Force_Password_Change_Email_Field(String Level, String Country, String UserId, String Password, String SecretAnswer){
+		try {
+			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, Password, SecretAnswer, true);
+			Helper_Functions.PrintOut(Result, false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", description = "397668",  enabled = EnableCompleted)
+	public void WIDM_Force_Change_Password(String Level, String Country, String UserId, String Password, String SecretAnswer){
 		try {
 			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, Password, SecretAnswer, true);
 			Helper_Functions.PrintOut(Result, false);

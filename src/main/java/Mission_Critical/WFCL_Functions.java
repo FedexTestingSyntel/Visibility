@@ -67,7 +67,6 @@ public class WFCL_Functions{
 			Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
 			return ReturnValue;
 		}catch (Exception e) {
-			e.printStackTrace();
 			throw e;
 		}
 	}//end CreditCardRegistrationEnroll
@@ -272,7 +271,12 @@ public class WFCL_Functions{
  		try {
  			String CountryCode = AddressDetails[6].toUpperCase();
  			WebDriver_Functions.ChangeURL("WDPA", CountryCode, true);
- 			WebDriver_Functions.Click(By.name("signupnow"));
+ 			if (WebDriver_Functions.isPresent(By.name("signupnow"))) {
+ 				WebDriver_Functions.Click(By.name("signupnow"));
+ 			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='module.logon.newusers._expanded']/a[1]"))) {
+ 				WebDriver_Functions.Click(By.xpath("//*[@id='module.logon.newusers._expanded']/a[1]"));
+ 			}
+ 			
  	
  			WFCL_ContactInfo_Page(Name, AddressDetails, UserId, Email, true); //enters all of the details
  			
@@ -418,22 +422,26 @@ public class WFCL_Functions{
 
 		if (WebDriver_Functions.isPresent(By.name("indTaxID"))) {
 			WebDriver_Functions.Type(By.name("indTaxID"), TaxInfo[1]); 
+		}else if (WebDriver_Functions.isPresent(By.name("taxID"))) {    //using name since duplicate id on page
+			WebDriver_Functions.Type(By.name("taxID"), TaxInfo[1]); 
 		}
+		
 		if (WebDriver_Functions.isPresent(By.name("indStateTaxID"))) {
 			WebDriver_Functions.Type(By.name("indStateTaxID"), TaxInfo[2]);
 		}else if (WebDriver_Functions.isPresent(By.name("vatNo"))) {
 			WebDriver_Functions.Type(By.name("vatNo"), TaxInfo[2]);
 			WebDriver_Functions.Type(By.name("company"), "Vat " + TaxInfo[2]);
-		}
-
-		try {
-			WebDriver_Functions.Select(By.id("CCType"), CreditCardDetils[0], "t");
-		}catch (Exception e) {
-			if (CreditCardDetils[0].contains("MasterCard")) {
-				WebDriver_Functions.Select(By.id("CCType"), "Mastercard", "t");
-			}
+		}else if (WebDriver_Functions.isPresent(By.name("statetaxId"))) {
+			WebDriver_Functions.Type(By.name("statetaxId"), TaxInfo[2]);
+			WebDriver_Functions.Type(By.name("company"), "Vat " + TaxInfo[2]);
 		}
 		
+		if (CreditCardDetils[0].contains("MasterCard") && !WebDriver_Functions.GetText(By.cssSelector("#CCType")).contains(CreditCardDetils[0])) {
+			//For some of the countries the C will be lower case
+			WebDriver_Functions.Select(By.id("CCType"), "Mastercard", "t");
+		}else {
+			WebDriver_Functions.Select(By.id("CCType"), CreditCardDetils[0], "t");
+		}
 
 		WebDriver_Functions.takeSnapShot("CreditCard Entry.png");
 		WebDriver_Functions.Click(By.id("Complete"));
@@ -883,6 +891,14 @@ public class WFCL_Functions{
  		}
  	}//end WFCL_AccountRegistration_GFBO
     
+	public static boolean WFCL_InfoSec_ChangePassword(String UserId, String Password, String NewPassword, String Email, String ErrorExpected) {
+		///WebDriver_Functions.Login(UserID, Password);
+		
+		
+		
+		return true;
+	}
+	
 }//End Class
 
 /*	

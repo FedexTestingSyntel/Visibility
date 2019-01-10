@@ -99,7 +99,7 @@ public class DriverFactory{
 			   		
 			   BrowserCurrent++;
 		   }catch (Exception e) {
-			   Helper_Functions.PrintOut("ERROR CREATING DRIVER, Attempt " + i, true);
+			   System.err.println("ERROR CREATING DRIVER, Attempt " + i);
 		   }
 		   
 		   if (Locdriver != null) {

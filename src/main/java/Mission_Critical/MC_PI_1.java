@@ -39,7 +39,7 @@ public class MC_PI_1{
 		    				if (Tax[4].contentEquals("B")) {
 		    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, true});
 		    				}else {
-		    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, false});
+		    					//data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, false});
 		    				}
 		    				
 		    			}
@@ -122,7 +122,7 @@ public class MC_PI_1{
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp", description = "349582", enabled = false)
+	@Test(dataProvider = "dp", description = "349582", enabled = true)
 	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");

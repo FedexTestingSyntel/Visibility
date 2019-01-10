@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -62,7 +63,7 @@ public class Create_Accounts{
 				 * */
 				
 				//if doing a single country
-				if (CountryList[6].contentEquals("RO") || CountryList[6].contentEquals("EC")) {
+				if (CountryList[6].contentEquals("CN")) {
 					data.add( new Object[] {Level, CountryList});
 				}
 			}
@@ -105,6 +106,7 @@ public class Create_Accounts{
 			Account_Details.Billing_Phone_Number = Helper_Functions.myPhone;
 
 			Account_Data[] Accounts = null;
+			Helper_Functions.PrintOut("Attempting to create account number for " + Arrays.toString(CountryDetails), false);
 			Accounts = CreateAccountNumbers(Account_Details, OperatingCompanies, 10);
 			writeAccountsToExcel(Accounts);
 
@@ -114,7 +116,6 @@ public class Create_Accounts{
 	}
 	
 	public static Account_Data[] CreateAccountNumbers(Account_Data Account_Info, String OperatingCompanies, int NumAccounts) throws Exception{
-		Helper_Functions.PrintOut("Attempting to create account number for "+ Account_Info.Billing_Country + " ---- " + Account_Info.Billing_Address_Line_1, false);
 		try {
 			// AccountDetails Example = 
 			//ShippingCountryCode, BillingCountryCode, OperatingCompanies (E = Express, G = Ground, F = Freight so "EDF" is all three), NumberOfAccounts
@@ -347,6 +348,93 @@ public class Create_Accounts{
 	}
 	
 	public static boolean writeAccountsToExcel(Account_Data Account_Info[], String fileName, String sheetName) throws Exception{
+		try {
+			Helper_Functions.Excellock.lock();
+			//Read the spreadsheet that needs to be updated
+			FileInputStream fsIP= new FileInputStream(new File(fileName));  
+			//Access the workbook                  
+			HSSFWorkbook wb = new HSSFWorkbook(fsIP);
+			//Access the worksheet, so that we can update / modify it. 
+			HSSFSheet worksheet = wb.getSheetAt(0);
+			for(int i = 1; i< wb.getNumberOfSheets() + 1;i++) {
+				//PrintOut("CurrentSheet: " + worksheet.getSheetName(), false);  //for debugging if getting errors with sheet not found
+				if (worksheet.getSheetName().contentEquals(sheetName)) {
+					break;
+				}
+				worksheet = wb.getSheetAt(i);
+			} 
+			
+			
+			int RowtoWrite = 0;
+			for(int i = 0; i < Account_Info.length; i++) {
+				while (worksheet.getRow(RowtoWrite) != null) {
+					RowtoWrite++;
+				}
+				worksheet.createRow(RowtoWrite);
+				String AccountInformation[] = new String[] {
+					Account_Info[i].Level, 
+					Account_Info[i].Shipping_Address_Line_1, 
+					Account_Info[i].Shipping_Address_Line_2,
+					Account_Info[i].Shipping_City,
+					Account_Info[i].Shipping_State,
+					Account_Info[i].Shipping_State_Code,
+					Account_Info[i].Shipping_Phone_Number,
+					Account_Info[i].Shipping_Zip,
+					Account_Info[i].Shipping_Country_Code,
+					Account_Info[i].Shipping_Region,
+					Account_Info[i].Shipping_Country,
+					Account_Info[i].Billing_Address_Line_1,
+					Account_Info[i].Billing_Address_Line_2,
+					Account_Info[i].Billing_City,
+					Account_Info[i].Billing_State,
+					Account_Info[i].Billing_State_Code,
+					Account_Info[i].Billing_Phone_Number,
+					Account_Info[i].Billing_Zip,
+					Account_Info[i].Billing_Country_Code,
+					Account_Info[i].Billing_Region,
+					Account_Info[i].Billing_Country,
+					Account_Info[i].Account_Number,
+					Account_Info[i].Credit_Card_Type,
+					Account_Info[i].Credit_Card_Number,
+					Account_Info[i].Credit_Card_CVV,
+					Account_Info[i].Credit_Card_Expiration_Month,
+					Account_Info[i].Credit_Card_Expiration_Year,
+					Account_Info[i].Invoice_Number_A,
+					Account_Info[i].Invoice_Number_B,
+					Account_Info[i].Account_Type,
+					Account_Info[i].Tax_ID_One,
+					Account_Info[i].Tax_ID_Two
+				};
+				try {
+					for (int j = 0; j < AccountInformation.length + 1; j++) {
+						if (worksheet.getRow(RowtoWrite).getCell(j) == null) {//if cell not present create it
+							worksheet.getRow(RowtoWrite).createCell(j);
+						}
+						worksheet.getRow(RowtoWrite).getCell(j).setCellValue(AccountInformation[j]);
+					}
+				}catch(Exception e) {}
+
+				RowtoWrite++;
+			}
+
+			//Close the InputStream  
+			fsIP.close(); 
+			//Open FileOutputStream to write updates
+			FileOutputStream output_file =new FileOutputStream(new File(fileName));  
+			//write changes
+			wb.write(output_file);
+			//close the stream
+			output_file.close();
+			wb.close();
+		}catch (Exception e) {
+			throw e;
+		}finally {
+			Helper_Functions.Excellock.unlock();
+		}
+		return true;
+	}
+	
+	public static boolean writeUsersToExcel(Account_Data Account_Info[], String fileName, String sheetName) throws Exception{
 		try {
 			Helper_Functions.Excellock.lock();
 			//Read the spreadsheet that needs to be updated

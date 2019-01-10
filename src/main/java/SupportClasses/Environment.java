@@ -165,6 +165,9 @@ public class Environment {
 			Account_Details[i - 1].Email = Helper_Functions.MyEmail;
 			for (int j = 0; j <Headers.length; j++) {
 				int pos = i - 1;
+				if (Row[j] == null) {
+					Row[j] = "";
+				}
 				switch (Headers[j]) {
 		  		case "Level":
 		  			Account_Details[pos].Level = Row[j];
@@ -231,12 +234,11 @@ public class Environment {
 		  			break;
 		  		case "Account_Number":
 		  			Account_Details[pos].Account_Number = Row[j];
-		  			if (Account_Details[pos].Billing_Country_Code != null) {
+		  			if (Account_Details[pos].Billing_Country_Code != null && !Account_Details[pos].Billing_Country_Code.contentEquals("")) {
 		  				Account_Details[pos].Account_Nickname = Row[j] + "_" + Account_Details[pos].Billing_Country_Code;
 		  			}else {
 		  				Account_Details[pos].Account_Nickname = Row[j] + "_Acc";
 		  			}
-		  			
 		  			break;
 		  		case "Credit_Card_Type":
 		  			Account_Details[pos].Credit_Card_Type = Row[j];
@@ -338,47 +340,59 @@ public class Environment {
   		return Address_Data;
 	}
 
+	//will load the userids into the data class even if the rows have been changed.
 	public static void getUserIds(int intLevel) {
 		List<String[]> FullDataFromExcel = new ArrayList<String[]>();
 		FullDataFromExcel = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TestingData.xls", "L" + intLevel);
-		DataClass[intLevel] = new User_Data[FullDataFromExcel.size()];
-		int filled = 0;
-		for (int j = 0; j < FullDataFromExcel.size(); j++) {
-			try {
-				DataClass[intLevel][filled] = new User_Data(); 
-				DataClass[intLevel][filled].UUID_NBR = FullDataFromExcel.get(j)[0];
-				DataClass[intLevel][filled].SSO_LOGIN_DESC = FullDataFromExcel.get(j)[1];
-				DataClass[intLevel][filled].USER_PASSWORD_DESC = FullDataFromExcel.get(j)[2];
-				DataClass[intLevel][filled].SECRET_QUESTION_DESC = FullDataFromExcel.get(j)[3];
-				DataClass[intLevel][filled].SECRET_ANSWER_DESC = FullDataFromExcel.get(j)[4];
-				DataClass[intLevel][filled].FIRST_NM = FullDataFromExcel.get(j)[5];
-				DataClass[intLevel][filled].LAST_NM = FullDataFromExcel.get(j)[6];
-				DataClass[intLevel][filled].STREET_DESC = FullDataFromExcel.get(j)[7];
-				DataClass[intLevel][filled].CITY_NM = FullDataFromExcel.get(j)[8];
-				DataClass[intLevel][filled].STATE_CD = FullDataFromExcel.get(j)[9];
-				DataClass[intLevel][filled].POSTAL_CD = FullDataFromExcel.get(j)[10];
-				DataClass[intLevel][filled].COUNTRY_CD = FullDataFromExcel.get(j)[11];
-				DataClass[intLevel][filled].EMAIL_ADDR_DESC = FullDataFromExcel.get(j)[12];
-				DataClass[intLevel][filled].PHONE_NBR = FullDataFromExcel.get(j)[13];
-				DataClass[intLevel][filled].STREET2_DESC = FullDataFromExcel.get(j)[14];
-				DataClass[intLevel][filled].INITIALS_NM = FullDataFromExcel.get(j)[15];
-				DataClass[intLevel][filled].FAX_NBR = FullDataFromExcel.get(j)[16];
-				DataClass[intLevel][filled].ACCOUNT_NBR = FullDataFromExcel.get(j)[17];
-				DataClass[intLevel][filled].ACCOUNT_RELATION_DESC = FullDataFromExcel.get(j)[18];
-				DataClass[intLevel][filled].MODIFY_DT = FullDataFromExcel.get(j)[19];
-				DataClass[intLevel][filled].COMPANY_NM = FullDataFromExcel.get(j)[20];
-				DataClass[intLevel][filled].EMAIL_ALLOWED_FLG = FullDataFromExcel.get(j)[21];
-				DataClass[intLevel][filled].LAST_LOGIN_DT = FullDataFromExcel.get(j)[22];
-				DataClass[intLevel][filled].LANGUAGE_CD = FullDataFromExcel.get(j)[23];
-				DataClass[intLevel][filled].DEACTIVATE_CD = FullDataFromExcel.get(j)[24];
-				DataClass[intLevel][filled].MARKETING_ANSWER_DESC = FullDataFromExcel.get(j)[25];
-				DataClass[intLevel][filled].REGISTRATION_DT = FullDataFromExcel.get(j)[26];
-				DataClass[intLevel][filled].T_C_DATE = FullDataFromExcel.get(j)[27];
-				DataClass[intLevel][filled].DELETE_DT = FullDataFromExcel.get(j)[28];
-				DataClass[intLevel][filled].INVALID_LOGIN_DT = FullDataFromExcel.get(j)[29];
-				filled++;
-			}catch (Exception e) {
-				Helper_Functions.PrintOut("Warning, unable to load user data for line " + j + " ", false);
+		DataClass[intLevel] = new User_Data[FullDataFromExcel.size() - 1];
+		
+		String Headers[] = FullDataFromExcel.get(0);
+		for (int i = 1; i < FullDataFromExcel.size(); i++) {
+			String Row[] = FullDataFromExcel.get(i);
+			DataClass[intLevel][i - 1] = new User_Data(); 
+			for (int j = 0; j <Headers.length; j++) {
+				int pos = i - 1;
+				switch (Headers[j]) {
+		  		case "UUID_NBR":
+					DataClass[intLevel][pos].UUID_NBR = Row[j];
+					break;
+		  		case "SSO_LOGIN_DESC":
+		  			DataClass[intLevel][pos].SSO_LOGIN_DESC = Row[j];
+					break;
+		  		case "USER_PASSWORD_DESC":
+		  			DataClass[intLevel][pos].USER_PASSWORD_DESC = Row[j];
+					break;
+		  		case "SECRET_QUESTION_DESC":
+		  			DataClass[intLevel][pos].SECRET_QUESTION_DESC = Row[j];
+					break;
+		  		case "SECRET_ANSWER_DESC":
+		  			DataClass[intLevel][pos].SECRET_ANSWER_DESC = Row[j];
+					break;
+		  		case "FIRST_NM":
+		  			DataClass[intLevel][pos].FIRST_NM = Row[j];
+					break;
+		  		case "LAST_NM":
+		  			DataClass[intLevel][pos].LAST_NM = Row[j];
+					break;
+		  		case "STREET_DESC":
+		  			DataClass[intLevel][pos].STREET_DESC = Row[j];
+					break;
+		  		case "CITY_NM":
+		  			DataClass[intLevel][pos].CITY_NM = Row[j];
+					break;
+		  		case "STATE_CD":
+		  			DataClass[intLevel][pos].STATE_CD = Row[j];
+					break;
+		  		case "POSTAL_CD":
+		  			DataClass[intLevel][pos].POSTAL_CD = Row[j];
+					break;
+		  		case "COUNTRY_CD":
+		  			DataClass[intLevel][pos].COUNTRY_CD = Row[j];
+					break;
+		  		case "APPLICATION_LIST":
+		  			DataClass[intLevel][pos].APPLICATION_LIST = Row[j];
+					break;
+				}//end switch
 			}
 		}
 	}
