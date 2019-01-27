@@ -28,8 +28,7 @@ public class WIDM_Functions{
 			WebDriver_Functions.takeSnapShot("Registration WIDM Confirmation.png");
 			String ReturnValue[] = new String[] {UserId, strPassword, UUID};
 			Helper_Functions.WriteUserToExcel(UserId, strPassword);
-			
-			Helper_Functions.PrintOut("WIDM_Registration Completed: " + UserId + "/" + strPassword + "--" + UUID, false);
+			Helper_Functions.PrintOut("WIDM_Registration Completed: " +  Arrays.toString(ReturnValue), false);
 			return Arrays.toString(ReturnValue);
 		}catch (Exception e) {
 			e.printStackTrace();

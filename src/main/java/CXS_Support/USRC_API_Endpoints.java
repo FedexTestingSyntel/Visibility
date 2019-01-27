@@ -1,6 +1,7 @@
 package CXS_Support;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -17,6 +18,86 @@ import org.json.JSONObject;
 import SupportClasses.Helper_Functions;
 
 public class USRC_API_Endpoints {
+	
+	public static String LoginFullResponse(String URL, String UserID, String Password){
+  		try{
+  			HttpPost httppost = new HttpPost(URL);
+
+  			JSONObject processingParameters = new JSONObject()
+  				.put("anonymousTransaction", true)
+  				.put("clientId", "WGRT")
+  				.put("clientVersion", "3")
+  				.put("returnDetailedErrors", false)
+  				.put("returnLocalizedDateTime", false);
+  				
+  			JSONObject LogInRequest = new JSONObject()
+  				.put("processingParameters", processingParameters)
+  				.put("userName", UserID)
+  				.put("password", Password);
+  				
+  			JSONObject main = new JSONObject()
+  				.put("LogInRequest", LogInRequest);
+
+  			String json = main.toString();
+  				
+  			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+  			urlParameters.add(new BasicNameValuePair("action", "LogIn"));
+  			urlParameters.add(new BasicNameValuePair("format", "json"));
+  			urlParameters.add(new BasicNameValuePair("version", "1"));
+  			urlParameters.add(new BasicNameValuePair("locale", "en_US"));
+  			urlParameters.add(new BasicNameValuePair("data", json));
+
+  			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
+  			Helper_Functions.PrintOut("Get cookie from USRC for " + UserID + "/" + Password, true);
+  			
+  			String Response = General_API_Calls.HTTPCall(httppost, json);	
+			
+  			return Response;
+  		}catch (Exception e){
+  			e.printStackTrace();
+  			return null;
+  		}
+  	}
+	
+	public static String Logout(String URL){
+  		try{
+  			HttpPost httppost = new HttpPost(URL);
+
+  			JSONObject processingParameters = new JSONObject()
+  				.put("anonymousTransaction", false)
+  				.put("clientId", "WGRT")
+  				.put("clientVersion", "3")
+  				.put("returnDetailedErrors", true)
+  				.put("returnLocalizedDateTime", false);
+  				
+  			JSONObject LogInRequest = new JSONObject()
+  				.put("processingParameters", processingParameters);
+  				
+  			JSONObject main = new JSONObject()
+  				.put("LogOutRequest", LogInRequest);
+
+  			String json = main.toString();
+  				
+  			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+  			urlParameters.add(new BasicNameValuePair("action", "logout"));
+  			urlParameters.add(new BasicNameValuePair("format", "json"));
+  			urlParameters.add(new BasicNameValuePair("version", "1"));
+  			urlParameters.add(new BasicNameValuePair("locale", "en_US"));
+  			urlParameters.add(new BasicNameValuePair("data", json));
+
+  			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
+  			String Response = General_API_Calls.HTTPCall(httppost, json);
+  			return Response;
+  		}catch (Exception e){
+  			e.printStackTrace();
+  			return null;
+  		}
+  	}
+	
 	 //Takes in the userid, password, and the level and returns the cookies generated.
   	//{fdx_=[cookie], uuid};  0 is the cookie, 1 is the uuid     ex [fdx_login=ssodrt-cos2.97fb.364ddc40, gw0g0h657p]
   	public static String[] Login(String URL, String UserID, String Password){
@@ -56,10 +137,10 @@ public class USRC_API_Endpoints {
   			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
   			Helper_Functions.PrintOut("Get cookie from USRC for " + UserID + "/" + Password, true);
   			HttpResponse response = httpclient.execute(httppost);
-  			Helper_Functions.PrintOut("response: " + response, true);
+  			Helper_Functions.PrintOut("response: " + EntityUtils.toString(response.getEntity()), true);
   			Header[] headers = response.getAllHeaders();
   			//takes apart the headers of the response and returns the fdx_login cookie if present
-  			String fdx_login = null, fcl_uuid = null;
+  			String fdx_login = null, fcl_uuid = null, full_cookies = "";
   			for (Header header : headers) {
   				//String Test = header.getName() + "    " + header.getValue();PrintOut(Test, false);// used in debugging or if want to see other cookie values
   				if (header.getName().contentEquals("Set-Cookie") && header.getValue().contains("fdx_login")) {
@@ -67,12 +148,16 @@ public class USRC_API_Endpoints {
   				}else if (header.getName().contentEquals("Set-Cookie") && header.getValue().contains("fcl_uuid")) {
   					fcl_uuid = header.toString().replace("Set-Cookie: fcl_uuid=", "").replace("; domain=.fedex.com; path=/", "");
   				}
+  				if (header.getName().contentEquals("Set-Cookie")) {
+  					full_cookies += header.toString(); 
+  				}
   			}
   			if (fdx_login == null) {
-  				Helper_Functions.PrintOut("Not able to retrieve cookie, \n\n" + response, false);
   				return null;
   			}
-  			return new String[] {fdx_login, fcl_uuid};
+  			String HeaderArray[] = new String[] {fdx_login, fcl_uuid, full_cookies};
+  			Helper_Functions.PrintOut("Headers" + Arrays.toString(HeaderArray), true);
+  			return HeaderArray;
   		}catch (Exception e){
   			e.printStackTrace();
   			return null;
@@ -82,9 +167,7 @@ public class USRC_API_Endpoints {
 	//c[] = 0 - First name, 1 - middle name, 2 - last name, 3 - phone number, 4 - email address, 5 - address line 1, 6 - address line 2, 7 - city, 8 - state code, 9 - zip code, 10 - country
 	//User = the UserID that is being created
 	public static String NewFCLUser(String CreateUserURL, String C[], String User, String Password){			
-
 		HttpPost httppost = new HttpPost(CreateUserURL);
-				
 		JSONObject main = new JSONObject()
 			.put("firstName", C[0])
 			.put("middleName", C[1])
@@ -123,7 +206,6 @@ public class USRC_API_Endpoints {
 			e.printStackTrace();
 			Response = e.getLocalizedMessage();
 		}
-			
 		return Response;
 	}
 	
@@ -296,18 +378,14 @@ public class USRC_API_Endpoints {
 			Response = General_API_Calls.HTTPCall(httpGet, "");
 			
 			return Response;
-			//Example: {"output":{"userProfile":{"profileLocked":false,"loginInformation":{"userId":"L3USCreate122618T104229twvh","secretQuestion":{"code":"SP2Q1","text":"What is your mother's first name?         "}},"userProfileAddress":{"contact":{"personName":{"firstName":"FthreeCreatewjjvyzm","middleName":"M","lastName":"Lqjdymaa"},"companyName":"","phoneNumber":"9011111111","faxNumber":"","emailAddress":"sean.kauffman.osv@fedex.com"},"contactAncillaryDetail":{"phoneNumberDetails":[{"type":"HOME","number":{"countryCode":"","localNumber":"9011111111"},"permissions":{}},{"type":"MOBILE","number":{"countryCode":"","localNumber":""},"permissions":{}},{"type":"FAX","number":{"countryCode":"","localNumber":""},"permissions":{}}]},"address":{"streetLines":["10 FED EX PKWY",""],"city":"Collierville","stateOrProvinceCode":"TN","postalCode":"38017","countryCode":"US","residential":false}}}},"successful":true}
+			//Example: {"output":{"userProfile":{"profileLocked":false,"loginInformation":{"userId":"UserIDHere","secretQuestion":{"code":"SP2Q1","text":"What is your mother's first name?         "}},"userProfileAddress":{"contact":{"personName":{"firstName":"FthreeCreatewjjvyzm","middleName":"M","lastName":"Lqjdymaa"},"companyName":"","phoneNumber":"9011111111","faxNumber":"","emailAddress":"accept.osv@fedex.com"},"contactAncillaryDetail":{"phoneNumberDetails":[{"type":"HOME","number":{"countryCode":"","localNumber":"9011111111"},"permissions":{}},{"type":"MOBILE","number":{"countryCode":"","localNumber":""},"permissions":{}},{"type":"FAX","number":{"countryCode":"","localNumber":""},"permissions":{}}]},"address":{"streetLines":["10 FED EX PKWY",""],"city":"Collierville","stateOrProvinceCode":"TN","postalCode":"38017","countryCode":"US","residential":false}}}},"successful":true}
 		} catch (Exception e) {
 			return e.getMessage();
 		}	
 	}
 	
-	public static String[] Parse_ViewUserProfileWIDM(String Response) {
-		String Parse[][] = {{"UUID_NBR", "", ""},
-							{"SSO_LOGIN_DESC", "", ""},
-							{"USER_PASSWORD_DESC", "", ""},
-							{"SECRET_QUESTION_DESC", "secretQuestion\":{\"code\":\"", "\",\""}, 
-							{"SECRET_ANSWER_DESC", "", ""},
+	public static String[][] Parse_ViewUserProfileWIDM(String Response, String ParseCheck[][]) {
+		String Parse[][] = {{"SECRET_QUESTION_DESC", "secretQuestion\":{\"code\":\"", "\",\""},
 							{"FIRST_NM", "\"firstName\":\"", "\",\""}, 
 							{"LAST_NM", "\"lastName\":\"", "\"},\""}, 
 							{"STREET_DESC", "\"streetLines\":[\"", "\",\""}, 
@@ -316,15 +394,22 @@ public class USRC_API_Endpoints {
 							{"POSTAL_CD", "\"postalCode\":\"", "\",\""}, 
 							{"COUNTRY_CD", "\",\"countryCode\":\"", "\",\""}};
 		
-		String ParsedValues[] = new String[Parse.length];
-		for(int i = 0; i < Parse.length; i++){
-			ParsedValues[i] = ParseRequest(Response, Parse[i][1], Parse[i][2]);
-			if (Parse[i][0].contentEquals("SECRET_QUESTION_DESC") && ParsedValues[i].contentEquals("SP2Q1")) {
-				//this is a guess based on other automated tests. By defualt the other scripts put mom as the secret answer.
-				ParsedValues[i] = "mom";
+		for(int i = 0; i < ParseCheck.length; i++){
+			for (int j = 0; j < Parse.length; j++) {
+				if (Parse[j][0].contentEquals(ParseCheck[i][0])) {
+					ParseCheck[i][1] = ParseRequest(Response, Parse[j][1], Parse[j][2]);
+					if (ParseCheck[i][0].contentEquals("SECRET_QUESTION_DESC") && ParseCheck[i][1].contentEquals("SP2Q1") && Parse[j][0].contentEquals("SECRET_QUESTION_DESC")) {
+						//this is a guess based on other automated tests. By default the other scripts put mom as the secret answer.
+						for (int k = 0; k < ParseCheck.length; k++) {
+							if (ParseCheck[k][0].contentEquals("SECRET_ANSWER_DESC") && ParseCheck[k][1].contentEquals("")) {
+								ParseCheck[k][1] = "mom";
+							}
+						}
+					}
+				}
 			}
 		}
-		return ParsedValues;
+		return ParseCheck;
 	}
 	
 	public static String ParseRequest(String s, String Start, String End) {
@@ -378,4 +463,69 @@ public class USRC_API_Endpoints {
 		}
 	}
 
+	public static String AccountRetrievalRequest(String URL, String Cookie){
+		//This takes the generic USRC url    EX: https://wwwdrt.idev.fedex.com/userCal/user
+  		try{
+  			HttpPost httppost = new HttpPost(URL);
+
+  			JSONObject processingParameters = new JSONObject()
+  	  				.put("anonymousTransaction", false)
+  	  				.put("clientId", "WFCL")
+  	  				.put("clientVersion", "1")
+  	  				.put("returnDetailedErrors", true)
+  	  				.put("returnLocalizedDateTime", false);
+  	  				
+  	  		JSONObject AccountRetrievalRequest = new JSONObject()
+  	  				.put("processingParameters", processingParameters);
+  	  				
+  	  		JSONObject main = new JSONObject()
+  	  				.put("AccountRetrievalRequest", AccountRetrievalRequest);
+
+  			String json = main.toString();
+  			
+  			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  			httppost.addHeader("Accept", "text/plain");
+  			httppost.addHeader("Cookie", Cookie);
+  			
+  			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+  			urlParameters.add(new BasicNameValuePair("action", "getAllAccounts"));
+  			urlParameters.add(new BasicNameValuePair("format", "json"));
+  			urlParameters.add(new BasicNameValuePair("version", "1"));
+  			urlParameters.add(new BasicNameValuePair("locale", "en_us"));
+  			urlParameters.add(new BasicNameValuePair("data", json));
+
+  			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+  			String Response = General_API_Calls.HTTPCall(httppost, json);	
+			
+  			return Response;
+  		}catch (Exception e){
+  			e.printStackTrace();
+  			return null;
+  		}
+  	}
+	
+	public static String Parse_AccountRetrievalRequest_AccountNumber(String Response) {
+		String Start = "\"value\":\"";
+		String End = "\"},\"displayName\"";
+		
+		String AccountNumbers = "";
+		while (Response.contains("accountNumber")) {
+			String Account = ParseRequest(Response, Start, End);
+			//remove the section that was just checked.
+			Response = Response.substring(Response.indexOf(End) + End.length(), Response.length());
+			if (!Account.contentEquals("")) {
+				if (AccountNumbers.contentEquals("")) {
+					AccountNumbers = Account;
+				}else {
+					AccountNumbers += "," + Account;
+				}
+			}
+		}
+		
+		if (!AccountNumbers.contentEquals("")) {  //if no valid values were found then return null.
+			return AccountNumbers;
+		}
+		return null;
+	}
 }

@@ -10,6 +10,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
@@ -17,7 +19,7 @@ import SupportClasses.Helper_Functions;
 
 public class WPRL {
 
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -28,7 +30,7 @@ public class WPRL {
 		//CountryList = new String[][]{{"US", "United States"}};
 	}
 	
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -39,40 +41,44 @@ public class WPRL {
 			switch (m.getName()) { 
 		    	case "WPRL_Contact_Admin":
 		    	case "WPRL_AccountManagement_Passkey":
+		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WADM")) {
-		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].SSO_LOGIN_DESC.contains("WADM")) {
+		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    	break;
 		    	case "WPRL_FDM":
+		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("FDM")) {
-		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].SSO_LOGIN_DESC.contains("FDM")) {
+		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    	break;
 		    	case "WPRL_AccountManagement_NonPasskey":
+		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("INET")) {
-		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].SSO_LOGIN_DESC.contains("INET")) {
+		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "WPRL_Contact_NonAdmin":
+		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Create")) {
-		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].SSO_LOGIN_DESC.contains("Create")) {
+		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}

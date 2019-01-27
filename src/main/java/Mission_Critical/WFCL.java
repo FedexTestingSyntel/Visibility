@@ -1,6 +1,9 @@
 package Mission_Critical;
 
 import org.testng.annotations.Test;
+
+import Data_Structures.User_Data;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -112,29 +115,32 @@ public class WFCL{
 					}
 		    		break;
 		    	case "Password_Reset_Secret":
+		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC + "A", Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC + "A", UD[k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "Reset_Password_Email":
+		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "WADM_Invitaiton":
-		    		for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-	    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("CC")) {
-	    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, Helper_Functions.MyEmail});
+		    		UD = Environment.Get_UserIds(intLevel);
+		    		for (int k = 0; k < UD.length; k++) {
+	    				if (UD[k].SSO_LOGIN_DESC.contains("CC")) {
+	    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, Helper_Functions.MyEmail});
 	    					break;
 	    				}
 	    			}

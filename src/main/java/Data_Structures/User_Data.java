@@ -13,5 +13,12 @@ public class User_Data {
 	public String STATE_CD;
 	public String POSTAL_CD;
 	public String COUNTRY_CD;
-	public String APPLICATION_LIST;
+	public String ACCOUNT_NUMBER;
+	public String WCRV_ENABLED;
+	public String GFBO_ENABLED;
+	public String WGRT_ENABLED;
+	public String WDPA_ENABLED;
+	public String PASSKEY;
+	public String ERROR;
 }
+

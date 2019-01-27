@@ -373,6 +373,13 @@ public class WFCL_Functions{
 				WebDriver_Functions.Click(By.id("createUserID"));
 			}
 		}
+		
+		//The Captcha image
+		if (WebDriver_Functions.isPresent(By.id("nucaptcha-answer"))) {
+			Helper_Functions.PrintOut("Captcha image appearing on page. Need to manually enter the value", true);
+			Helper_Functions.Wait(10);
+			WebDriver_Functions.WaitNotPresent(By.id("nucaptcha-answer"));
+		}
 
 
 		return true;
@@ -424,6 +431,13 @@ public class WFCL_Functions{
 			WebDriver_Functions.Type(By.name("indTaxID"), TaxInfo[1]); 
 		}else if (WebDriver_Functions.isPresent(By.name("taxID"))) {    //using name since duplicate id on page
 			WebDriver_Functions.Type(By.name("taxID"), TaxInfo[1]); 
+		}else if (WebDriver_Functions.isPresent(By.id("companyRegNoId"))){
+			if (TaxInfo != null) {
+				WebDriver_Functions.Type(By.id("companyRegNoId"), TaxInfo[1]); //added on 01/24/18 for apac countries
+			}else {
+				WebDriver_Functions.Type(By.id("companyRegNoId"), "123456"); //added on 01/24/18 for apac countries
+				System.err.println("Need to add a companyRegNoId for this country");
+			}
 		}
 		
 		if (WebDriver_Functions.isPresent(By.name("indStateTaxID"))) {
@@ -891,8 +905,20 @@ public class WFCL_Functions{
  		}
  	}//end WFCL_AccountRegistration_GFBO
     
-	public static boolean WFCL_InfoSec_ChangePassword(String UserId, String Password, String NewPassword, String Email, String ErrorExpected) {
-		///WebDriver_Functions.Login(UserID, Password);
+	public static boolean WFCL_InfoSec_ChangePassword(String UserId, String Password, String NewPassword, String Email, boolean ErrorExpected) throws Exception {
+		try {
+			WebDriver_Functions.Login(UserId, Password, "WFCL");
+			
+			WebDriver_Functions.Type(By.name("password"), NewPassword);
+			WebDriver_Functions.Type(By.name("retypePassword"), NewPassword);
+			
+			WebDriver_Functions.Type(By.name("email"), Email);
+			WebDriver_Functions.Type(By.name("retypeEmail"), Email);
+			
+			
+		} catch (Exception e) {
+			throw e;
+		}
 		
 		
 		

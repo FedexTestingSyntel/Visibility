@@ -10,12 +10,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import Data_Structures.User_Data;
 import SupportClasses.*;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class OADR{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	final static boolean SmokeTest = true; // will limit the test cases to high level
 	static String CountryList[][];
 	
@@ -40,10 +42,11 @@ public class OADR{
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "OADR_Apply_Discount_To_Account":
+		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs("US");
-		    		for (int j = 0; j < Environment.DataClass[intLevel].length; j++) {
-	    				if (Environment.DataClass[intLevel][j].COUNTRY_CD.contentEquals("US") && Environment.DataClass[intLevel][j].SSO_LOGIN_DESC.contains("CC")) {
-	    					data.add( new Object[] {Level, EnrollmentID[0], EnrollmentID[1], Environment.DataClass[intLevel][j].SSO_LOGIN_DESC, Environment.DataClass[intLevel][j].USER_PASSWORD_DESC});
+		    		for (int j = 0; j < UD.length; j++) {
+	    				if (UD[j].COUNTRY_CD.contentEquals("US") && UD[j].SSO_LOGIN_DESC.contains("CC")) {
+	    					data.add( new Object[] {Level, EnrollmentID[0], EnrollmentID[1], UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
 	    					break;
 	    				}
 	    			}

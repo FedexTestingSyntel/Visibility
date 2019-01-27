@@ -22,7 +22,7 @@ import Data_Structures.*;
 
 public class USRC_FDM {
 
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -45,7 +45,7 @@ public class USRC_FDM {
 				for (int j = 0; j < 1; j++) {
 					String UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
 					String Password = "Test1234";
-					data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, j});
+					data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, j});
 				}
 				break;
 			case "EndtoEndEnrollment_UserID":
@@ -60,8 +60,8 @@ public class USRC_FDM {
 	}
 	
 	@Test (dataProvider = "dp", priority = 1, description = "380527")
-	public void EndtoEndEnrollment(USRC_Data USRC_Details, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password, int Contact) {
-		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"",""};
+	public void EndtoEndEnrollment(String Level, USRC_Data USRC_Details, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password, int Contact) {
+		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		try {
 			String Response = "";
 			String ContactDetails[] = USRC_Data.ContactDetailsList.get(Contact);
@@ -114,7 +114,7 @@ public class USRC_FDM {
 	
 	@Test (dataProvider = "dp", priority = 1, description = "380527")
 	public void EndtoEndEnrollment_UserID(USRC_Data USRC_Details, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password) {
-		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"",""};
+		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		try {
 			String Response = "";
 			String ContactDetails[] = USRC_Data.ContactDetailsList.get(0);

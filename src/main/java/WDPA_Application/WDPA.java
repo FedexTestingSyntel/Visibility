@@ -10,6 +10,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
@@ -18,7 +20,7 @@ import SupportClasses.Helper_Functions;
 public class WDPA extends WDPA_Functions{
 	
 	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -42,20 +44,22 @@ public class WDPA extends WDPA_Functions{
 		    	case "Pickup_Ground":
 		    	case "Pickup_Express":
 		    	case "Pickup_ExpressFright"://need to fix this later, not for all countries.
+		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 1; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WDPA")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 1; k < UD.length; k++) {
+		    				if (UD[k].SSO_LOGIN_DESC.contains("WDPA")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}
 					}
 		    	break;
 		    	case "Pickup_LTLFreight":    //update this later to restrict based on country
+		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Freight") || Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("LTL")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].SSO_LOGIN_DESC.contains("Freight") || UD[k].SSO_LOGIN_DESC.contains("LTL")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}

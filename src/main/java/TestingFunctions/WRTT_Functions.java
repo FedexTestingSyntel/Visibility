@@ -138,17 +138,9 @@ public class WRTT_Functions {
 		}
 }//end WRTT
  	
- 	public static String WRTT_eCRV(String CountryCode) throws Exception {	 
+ 	public static String WRTT_eCRV_WRTTLink(String CountryCode) throws Exception {	 
 		try {
-			try{
-				WebDriver_Functions.ChangeURL("WGRT", CountryCode, true);
-				WebDriver_Functions.Click(By.id("wgrt.rateTools.menu_div"));
-				WebDriver_Functions.Click(By.id("wgrt.rateTools.rate._div"));
-				WebDriver_Functions.WaitPresent(By.xpath("//*[@id='content']/form/div[4]/div[1]/div/button/label"));
-			}catch (Exception e){
-				Helper_Functions.PrintOut("For Country _" + CountryCode + "_ not able to navigate to splash page", true);
-				WebDriver_Functions.ChangeURL("WRTT", CountryCode, true);
-			}
+			WebDriver_Functions.ChangeURL("ECRV", CountryCode, true);
 			WebDriver_Functions.WaitForText(By.cssSelector("label"), "FedEx Rate Sheets");
 			WebDriver_Functions.WaitForText(By.xpath("//div[@id='content']/form/div[3]/div/div/h1/label"), "Standard rates");
 			WebDriver_Functions.WaitForText(By.cssSelector("h4 > label"), "View standard rates for a specific FedEx® service across all zones.");
@@ -158,11 +150,6 @@ public class WRTT_Functions {
 			WebDriver_Functions.WaitForText(By.xpath("//button[@onclick='getWCRV();']"), "Get account-based rates");
 			WebDriver_Functions.WaitForText(By.cssSelector("b > label"), "Please note:");
 			WebDriver_Functions.WaitForText(By.cssSelector("li > label"), "Additional shipping fees and optional-service fees may apply. Please see Service Info or see FedEx Service Guide for details.");
-			WebDriver_Functions.WaitForText(By.linkText("Service Info"), "Service Info");
-			String Service_Info = DriverFactory.getInstance().getDriver().findElement(By.linkText("Service Info")).getAttribute("href"); 
-			//check the link
-			WebDriver_Functions.WaitForText(By.xpath("//div[@id='container']/div[3]/div/div/ul/li/label/a[2]"), "FedEx Service Guide");
-			String FedEx_Service_Guide = DriverFactory.getInstance().getDriver().findElement(By.xpath("//div[@id='container']/div[3]/div/div/ul/li/label/a[2]")).getAttribute("href"); 
 			WebDriver_Functions.WaitForText(By.xpath("//div[@id='container']/div[3]/div/div/ul/li[2]/label"), "FedEx reserves the right to modify its services and zone structure without notice.");
 			WebDriver_Functions.takeSnapShot("eCRV.png");
 			//quick check to see if land on page
@@ -178,7 +165,27 @@ public class WRTT_Functions {
 				}
 			}catch (Exception e) {
 				Helper_Functions.PrintOut(CountryCode + " WRTT Button not working", false);
+				throw new Exception("WRTT_Link: false");
 			}
+			
+			return"WRTT_eCRV for " + CountryCode + " completed.";
+		}catch (Exception e) {
+			throw e;
+		}
+	}//end WRTT_eCRV
+ 	
+ 	public static String WRTT_eCRV_Service_Links(String CountryCode) throws Exception {	 
+		try {
+			WebDriver_Functions.ChangeURL("ECRV", CountryCode, true);
+			WebDriver_Functions.WaitForText(By.cssSelector("li > label"), "Additional shipping fees and optional-service fees may apply. Please see Service Info or see FedEx Service Guide for details.");
+			WebDriver_Functions.WaitForText(By.linkText("Service Info"), "Service Info");
+			String Service_Info = DriverFactory.getInstance().getDriver().findElement(By.linkText("Service Info")).getAttribute("href"); 
+			//check the link
+			WebDriver_Functions.WaitForText(By.xpath("//div[@id='container']/div[3]/div/div/ul/li/label/a[2]"), "FedEx Service Guide");
+			String FedEx_Service_Guide = DriverFactory.getInstance().getDriver().findElement(By.xpath("//div[@id='container']/div[3]/div/div/ul/li/label/a[2]")).getAttribute("href"); 
+			WebDriver_Functions.WaitForText(By.xpath("//div[@id='container']/div[3]/div/div/ul/li[2]/label"), "FedEx reserves the right to modify its services and zone structure without notice.");
+			WebDriver_Functions.takeSnapShot("eCRV.png");
+			//quick check to see if land on page
 			
 			boolean blnService_Info = true, blnFedEx_Service_Guide = true;
 			//check the Service_Info link that was present on eCRV page
@@ -209,11 +216,16 @@ public class WRTT_Functions {
 				Helper_Functions.PrintOut("FedEx_Service_Guide not navigating correctly.", true);
 			}
 			
-			return"WRTT_eCRV for " + CountryCode + " completed.";
+			if (blnService_Info == false || blnFedEx_Service_Guide == false) {
+				Helper_Functions.PrintOut("FedEx_Service_Guide: " + blnFedEx_Service_Guide + ", Service_Info: " + blnService_Info, true);
+				throw new Exception("FedEx_Service_Guide: " + blnFedEx_Service_Guide + ", Service_Info: " + blnService_Info);
+			}
+			
+			return"WRTT_eCRV_Service_Links for " + CountryCode + " completed.";
 		}catch (Exception e) {
 			throw e;
 		}
-	}//end WRTT_eCRV
+	}//end WRTT_eCRV_Service_Links
 
  	public static String eCRVNavigation(String CountryCode) {
 		// launch the browser and direct it to the Base URL
@@ -223,9 +235,9 @@ public class WRTT_Functions {
 			WebDriver_Functions.Click(By.id("wgrt.rateTools.menu_div"));
 			WebDriver_Functions.Click(By.id("wgrt.rateTools.rate._div"));
 			WebDriver_Functions.isPresent(By.xpath("//*[@id='content']/form/div[4]/div[1]/div/button/label"));
-			return CountryCode + " is enabled";
+			return CountryCode + " Rate sheet link in WGRT is enabled";
 		}catch (Exception e){
-			return CountryCode + " is enabled";
+			return CountryCode + " Link is not present";
 		}
 	}
 }

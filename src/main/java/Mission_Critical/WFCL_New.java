@@ -2,6 +2,7 @@ package Mission_Critical;
 
 import org.testng.annotations.Test;
 import Data_Structures.Account_Data;
+import Data_Structures.User_Data;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -18,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "7";  
+	static String LevelsToTest = "2";  
 	static String CountryList[][]; 
 	static List<String> Users = new ArrayList<String>();
 
@@ -28,10 +29,10 @@ public class WFCL_New{
 		CountryList = Environment.getCountryList("US");
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
-		//CountryList = Environment.getCountryList("FR");
-		CountryList = Environment.getCountryList("DE");
+		//CountryList = Environment.getCountryList("BR");
+		CountryList = Environment.getCountryList("TH");
 		//Helper_Functions.MyEmail = "accept@fedex.com";
-		//CountryList = new String[][]{{"jj", "Singapore"}, {"CA", "Australia"}};
+		//CountryList = new String[][]{{"SK", "Japan"}, {"RO", "Singapore"}, {"EC", "Singapore"}};
 	}
 	
 	@DataProvider (parallel = true)
@@ -79,20 +80,22 @@ public class WFCL_New{
 					}
 		    		break;
 		    	case "Password_Reset_Secret":
+		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC + "A", Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC + "A", UD[k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "Reset_Password_Email":
+		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}
@@ -105,7 +108,7 @@ public class WFCL_New{
 		    		}
 		    		*/
 		    		
-		    		data.add( new Object[] {Level, "643041561"});
+		    		data.add( new Object[] {Level, "752342520"});
 		    		//data.add( new Object[] {Level, "642711326"});
 		    		//data.add( new Object[] {Level, "642260243"});
 			    	//data.add( new Object[] {Level, "633504580"});
@@ -128,20 +131,6 @@ public class WFCL_New{
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
-		
-		/*
-		try {
-			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
-			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
-			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
-			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
-			String TaxInfo[] = Helper_Functions.getTaxInfo(CountryCode).get(0);
-			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, false, TaxInfo);
-			Helper_Functions.PrintOut(Arrays.toString(Result), false);
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-		*/
 	}
 
 	@Test(dataProvider = "dp")
@@ -239,7 +228,7 @@ public class WFCL_New{
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_INET_Test(String Level, String Account){
 		try {
-			Account_Data AccountDetails = Account_Lookup.Account_DataAccountDetails(Account, Level);
+			Account_Data AccountDetails = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
 			AccountDetails = Account_Data.Set_Dummy_Contact_Name(AccountDetails);
 			AccountDetails.UserId = Helper_Functions.LoadUserID("L" + Level + "Acc" + Account);
 			//create user id and link to account number.
@@ -266,22 +255,3 @@ public class WFCL_New{
 
 
 }
-
-
-/*
- * 
- 
-	
-	@Test(dataProvider = "dp")
-	public void UserRegistration(String Level, String CountryCode) {
-		try {
-			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String UserID = Helper_Functions.LoadUserID("L" + Level  + Address[6] + "Create");
-			String ContactName[] = Helper_Functions.LoadDummyName("Create", Level);
-			String Result = Arrays.toString(WFCL_Functions.WFCL_UserRegistration(UserID, ContactName, Helper_Functions.MyEmail, Address));
-			Helper_Functions.PrintOut(Result, false);
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
-	*/

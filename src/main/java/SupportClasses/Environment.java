@@ -18,9 +18,7 @@ public class Environment {
 	public static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 	public static ArrayList<String[]> TaxData = new ArrayList<String[]>();
 	public static Account_Data Account_Details[][] = new Account_Data[8][];
-	public static Account_Data Address_Data[];
-	//a list of the Userids
-	public static User_Data DataClass[][]= new User_Data[8][];
+	public static Account_Data Address_Data[];	
 		
 	private Environment(){
 		//Do-nothing..Do not allow to initialize this class from outside
@@ -34,10 +32,6 @@ public class Environment {
 		if (LevelsToTest == null) {
 			LevelsToTest = Levels;
 			System.err.println("Levels set to " + Levels);
-			for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
-				String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-				getUserIds(Integer.parseInt(Level));
-			}
 		}else {
 			System.err.println("Levels has already been set from XML. Will execute with " + LevelsToTest);
 		}
@@ -341,59 +335,79 @@ public class Environment {
 	}
 
 	//will load the userids into the data class even if the rows have been changed.
-	public static void getUserIds(int intLevel) {
+	public static User_Data[] Get_UserIds(int intLevel) {
 		List<String[]> FullDataFromExcel = new ArrayList<String[]>();
 		FullDataFromExcel = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TestingData.xls", "L" + intLevel);
-		DataClass[intLevel] = new User_Data[FullDataFromExcel.size() - 1];
+		//a list of the Userids
+		User_Data DataClass[] = new User_Data[FullDataFromExcel.size() - 1];
 		
 		String Headers[] = FullDataFromExcel.get(0);
 		for (int i = 1; i < FullDataFromExcel.size(); i++) {
 			String Row[] = FullDataFromExcel.get(i);
-			DataClass[intLevel][i - 1] = new User_Data(); 
+			DataClass[i - 1] = new User_Data(); 
 			for (int j = 0; j <Headers.length; j++) {
 				int pos = i - 1;
 				switch (Headers[j]) {
 		  		case "UUID_NBR":
-					DataClass[intLevel][pos].UUID_NBR = Row[j];
+					DataClass[pos].UUID_NBR = Row[j];
 					break;
 		  		case "SSO_LOGIN_DESC":
-		  			DataClass[intLevel][pos].SSO_LOGIN_DESC = Row[j];
+		  			DataClass[pos].SSO_LOGIN_DESC = Row[j];
 					break;
 		  		case "USER_PASSWORD_DESC":
-		  			DataClass[intLevel][pos].USER_PASSWORD_DESC = Row[j];
+		  			DataClass[pos].USER_PASSWORD_DESC = Row[j];
 					break;
 		  		case "SECRET_QUESTION_DESC":
-		  			DataClass[intLevel][pos].SECRET_QUESTION_DESC = Row[j];
+		  			DataClass[pos].SECRET_QUESTION_DESC = Row[j];
 					break;
 		  		case "SECRET_ANSWER_DESC":
-		  			DataClass[intLevel][pos].SECRET_ANSWER_DESC = Row[j];
+		  			DataClass[pos].SECRET_ANSWER_DESC = Row[j];
 					break;
 		  		case "FIRST_NM":
-		  			DataClass[intLevel][pos].FIRST_NM = Row[j];
+		  			DataClass[pos].FIRST_NM = Row[j];
 					break;
 		  		case "LAST_NM":
-		  			DataClass[intLevel][pos].LAST_NM = Row[j];
+		  			DataClass[pos].LAST_NM = Row[j];
 					break;
 		  		case "STREET_DESC":
-		  			DataClass[intLevel][pos].STREET_DESC = Row[j];
+		  			DataClass[pos].STREET_DESC = Row[j];
 					break;
 		  		case "CITY_NM":
-		  			DataClass[intLevel][pos].CITY_NM = Row[j];
+		  			DataClass[pos].CITY_NM = Row[j];
 					break;
 		  		case "STATE_CD":
-		  			DataClass[intLevel][pos].STATE_CD = Row[j];
+		  			DataClass[pos].STATE_CD = Row[j];
 					break;
 		  		case "POSTAL_CD":
-		  			DataClass[intLevel][pos].POSTAL_CD = Row[j];
+		  			DataClass[pos].POSTAL_CD = Row[j];
 					break;
 		  		case "COUNTRY_CD":
-		  			DataClass[intLevel][pos].COUNTRY_CD = Row[j];
+		  			DataClass[pos].COUNTRY_CD = Row[j];
 					break;
-		  		case "APPLICATION_LIST":
-		  			DataClass[intLevel][pos].APPLICATION_LIST = Row[j];
+		  		case "ACCOUNT_NUMBER":
+		  			DataClass[pos].ACCOUNT_NUMBER = Row[j];
 					break;
+		  		case "WCRV_ENABLED":
+		  			DataClass[pos].WCRV_ENABLED = Row[j];
+					break;	
+		  		case "GFBO_ENABLED":
+		  			DataClass[pos].GFBO_ENABLED = Row[j];
+					break;	
+		  		case "WGRT_ENABLED":
+		  			DataClass[pos].WGRT_ENABLED = Row[j];
+					break;	
+		  		case "WDPA_ENABLED":
+		  			DataClass[pos].WDPA_ENABLED = Row[j];
+					break;	
+		  		case "PASSKEY":
+		  			DataClass[pos].PASSKEY = Row[j];
+					break;	
+		  		case "ERROR":
+		  			DataClass[pos].ERROR = Row[j];
+					break;	
 				}//end switch
 			}
 		}
+		return DataClass;
 	}
 }

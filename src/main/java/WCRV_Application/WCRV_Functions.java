@@ -1,4 +1,4 @@
-package TestingFunctions;
+package WCRV_Application;
 
 import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
@@ -18,22 +18,47 @@ import SupportClasses.WebDriver_Functions;
 
 public class WCRV_Functions{
 	//public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"},{"IMPORT","I"},{"IMPORT_INBOUND","II"},{"LEGACY_THIRD_PARTY","LT"},{"GLOBAL_THIRD_PARTY","GT"}};
-	public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"}};
+	public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"},{"IMPORT","I"},{"GLOBAL_THIRD_PARTY","GT"}};
 	
 	//{Service Code,   Brief service name,      full service name}
-	public static String serviceBaseCode[][] = {{"SL","Sp", "SmartPost"},{"FE","Fec", "NEED TO ADD NAME"},{"FP","fp", "NEED TO ADD NAME"},{"92","Gd", "Ground"},{"90","Hd", "Home Delivery"},
-												{"88","SD", "Intra-MX SD-Letter"},{"87","SDci", "Intra-MX SD City LTR"},{"86","IEF", "Economy Freight"},{"84","IPddf", "Priority DirectDistribution Freight"},{"83","3Df", "3Day Freight"},
-												{"80","2Df", "2Day Freight"},{"70","1Df", "1Day Freight"},{"49","2DAm", "2Day AM"},{"39","Ff", "First Overnight® Freight"},{"26", "Econ", "FedEx Economy"},
-												{"24","Ndnoon", "FedEx Next Day by 12 Noon, GB to GB"},{"20","Es", "Express Saver"},{"18","IPdd", "Priority DirectDistribution"},{"17","IEdd", "Economy DirectDistribution"},{"06","Fo", "First Overnight/International"},
-												{"05","So", "Standard Overnight"},{"04","Iec", "International Economy"},{"03","2Da", "2Day"},{"01","Po", "Priority Overnight/International"}};
+	public static String serviceBaseCode[][] = {
+			{"SL","Sp", "SmartPost"},
+			{"SP", "SpDom", "SmartPostDom"}, //Added on 01/18/19
+			{"SB", "SpBPM", "SmartPost Bound Printed Matter"}, //Added on 01/18/19
+			{"SM", "SpMed", "SmartPost Media"},//Added on 01/18/19
+			{"FE","Fec", "NEED TO ADD NAME"},
+			{"FP","fp", "NEED TO ADD NAME"},
+			{"92","Gd", "Ground"},
+			{"90","Hd", "Home Delivery"},
+			{"88","SD", "Intra-MX SD-Letter"},
+			{"87","SDci", "Intra-MX SD City LTR"},
+			{"86","IEF", "Economy Freight"},
+			//{"84","IPddf", "Priority DirectDistribution Freight"},   //distribution services removed from list after defect 470145 
+			{"83","3Df", "3Day Freight"},
+			{"80","2Df", "2Day Freight"},
+			{"70","1Df", "1Day Freight"},
+			{"49","2DAm", "2Day AM"},
+			{"39","Ff", "First Overnight® Freight"},
+			{"26", "Econ", "FedEx Economy"},
+			{"24","Ndnoon", "FedEx Next Day by 12 Noon, GB to GB"},
+			{"20","Es", "Express Saver"},
+			//{"18","IPdd", "Priority DirectDistribution"},   //distribution services removed from list after defect 470145 
+			//{"17","IEdd", "Economy DirectDistribution"},   //distribution services removed from list after defect 470145 
+			{"06","Fo", "First Overnight/International"},
+			{"05","So", "Standard Overnight"},
+			{"04","Iec", "International Economy"},
+			{"03","2Da", "2Day"},
+			{"01","Po", "Priority Overnight/International"}};     
 	
 	public static String[] WCRV_Generate(String CountryCode, String User, String Password) throws Exception{
-		return WCRV_Generate(CountryCode, User, Password, "any");
+		Random rand = new Random();
+		int numServicetoSelect = rand.nextInt(3) + 1;
+		return WCRV_Generate(CountryCode, User, Password, "any", numServicetoSelect);
 	}
 	
 	//Service can be intra, notintra, export, import, third, or any.     //not case sensitive
 	//intra = domestic, notintra = international
- 	public static String[] WCRV_Generate(String CountryCode, String User, String Password, String Service) throws Exception{
+ 	public static String[] WCRV_Generate(String CountryCode, String User, String Password, String Service, int numServicetoSelect) throws Exception{
  		Service = Service.toUpperCase();
 
 		String Time = Helper_Functions.CurrentDateTime();
@@ -43,8 +68,15 @@ public class WCRV_Functions{
 			//to load the cookies for the given country
 			WebDriver_Functions.ChangeURL("WDPA", CountryCode, false);
 			WebDriver_Functions.ChangeURL("WCRV", CountryCode, false);
+			
+			//Early exist if use does not have access
+			if (WebDriver_Functions.CheckBodyText("This user does not have access to the FedEx Rate Sheet Tool.")) {
+				throw new Exception("UserId does not have access.");
+			}
+			
 			//wait for WCRV page to load
 			WebDriver_Functions.WaitPresent(By.id("wcrv-profile"));
+
 			try{
 				WebDriver_Functions.WaitPresent(By.id("account"));
 			}catch (Exception e){
@@ -71,7 +103,6 @@ public class WCRV_Functions{
 			
 			//wait for the service element to be loaded  //random.nextInt(max - min + 1) + min
 			Random rand = new Random();
-			int numServicetoSelect = rand.nextInt(3) + 1;
 			String RateSheetName = "";//the code of the services
 			int gi = 0, sbc = 0, i = 0;
 			for(int attempt = 0; i < numServicetoSelect; attempt++){
@@ -96,7 +127,7 @@ public class WCRV_Functions{
 					boolean try_to_select = false;
 					if (Service.contentEquals("ANY")) {
 						try_to_select = true;
-					}else if (Service.contentEquals("NOTINTRA") && (svcGroupIndicator[gi][0].contains("EXPORT") || svcGroupIndicator[gi][0].contains("IMPORT") || svcGroupIndicator[gi][0].contains("THIRD"))) {
+					}else if (svcGroupIndicator[gi][0].contains(Service)) {
 						try_to_select = true;
 					}else {
 						if (svcGroupIndicator[gi][0].contains(Service)) {
@@ -156,7 +187,6 @@ public class WCRV_Functions{
 			WebDriver_Functions.WaitPresent(By.cssSelector("th.sorting"));
 			if (AccountCountry.contentEquals("US") && State.contentEquals("PR")){
 				//ITG 166046 - ID 1509566
-				
 				WebDriver_Functions.WaitForText(By.xpath("//*[@id='manageTable']/tbody/tr[1]/td[3]"), "PR");
 			}else{
 				WebDriver_Functions.WaitForText(By.xpath("//*[@id='manageTable']/tbody/tr[1]/td[3]"), AccountCountry);
@@ -172,7 +202,7 @@ public class WCRV_Functions{
 			Helper_Functions.PrintOut("Not able to complete WCRV_Generate", true);
 			throw e;
 		}
- }//end WCRV_Generate
+ 	}//end WCRV_Generate
  
  	public static void WCRV_Profile(String CountryCode, String User, String Password){
  		CountryCode = CountryCode.toUpperCase();
@@ -520,4 +550,25 @@ public class WCRV_Functions{
  		DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.SECONDS);
  		return true;
  	}//end WCRV_SelectService
+
+ 	public static boolean WCRV_CheckPermission(String CountryCode, String User, String Password) throws Exception{;
+		try {
+			WebDriver_Functions.Login(User, Password);
+				
+			//to load the cookies for the given country
+			WebDriver_Functions.ChangeURL("WDPA", CountryCode, false);
+			WebDriver_Functions.ChangeURL("WCRV", CountryCode, false);
+			
+			//Early exist if use does not have access
+			if (WebDriver_Functions.CheckBodyText("This user does not have access to the FedEx Rate Sheet Tool.")) {
+				throw new Exception("UserId does not have access.");
+			}
+			
+			//wait for WCRV page to load
+			WebDriver_Functions.WaitPresent(By.id("wcrv-profile"));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+ 	}//end WCRV_Generate
 }

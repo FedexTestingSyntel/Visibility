@@ -45,7 +45,7 @@ public class WebDriver_Functions{
  	 			}
     			break;	
     		case "INET":		
-    			AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";;
+    			AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";
     			break;
     		case "WADM":
     			AppUrl = LevelURL + "/apps/shipadmin/";
@@ -60,6 +60,10 @@ public class WebDriver_Functions{
     		case "JSP_Express":
     		case "JSP_EXPRESS":
     			AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/express.jsp";
+    			break;
+    		case "ECRV":
+    			AppUrl = LevelURL + "/ratetools/RateToolsEntry.do?link=2&CountryCode=" + CCU + "&locale=" + CCU + "_en";
+    			AppUrl = AppUrl.replace("https", "http");
     			break;
     		case "ECAM":			
     			if (Environment.getInstance().getLevel().contentEquals("2")) {
@@ -480,7 +484,7 @@ public class WebDriver_Functions{
 
 	
 	public static boolean Login(String UserName, String Password) throws Exception {
-		return Login(UserName, Password, "All");
+		return Login(UserName, Password, "WFCLWIDMAEM");
 	}
 	
     public static boolean Login(String UserName, String Password, String Application) throws Exception {
@@ -490,58 +494,83 @@ public class WebDriver_Functions{
     	}
     	ChangeURL("HOME", "US", true);
     	
-    	try{
-			//try to login from the WDPA page
-    		ChangeURL("WDPA", "US", false);
-			Type(By.name("username"), UserName);
-			Type(By.name("password"), Password);
-			Click(By.name("login"));
-			if (GetCookieValue("fcl_uuid") == null) {
-    			throw new Exception("Did not login through WDPA");
-    		}
-			Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
-	    	return true;
-		}catch(Exception e3){
-			Helper_Functions.PrintOut("Not able to login through WDPA", true);
-		}
-    	
-    	try{
-    		//this will navigate to the home page
-    		ChangeURL("HOME", "US", false);
-    		Click(By.cssSelector("span.fxg-user-options__sign-in-text"));
-            //wait for text box for user id to appear
-    		Type(By.id("NavLoginUserId"), UserName);
-    		Type(By.id("NavLoginPassword"), Password);
-    		Thread.sleep(1000);
-    		Click(By.cssSelector("#HeaderLogin > button.fxg-button.fxg-button--orange"));
-    		Thread.sleep(5000);
-            if (GetCookieValue("fcl_uuid") == null) {
-             	throw new Exception("Did not login through global header");
-            }
-            Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
-        	return true;
-    	}catch(Exception e){
-    		Helper_Functions.PrintOut("Not able to login through US home page", true);
-    	}//end try catch for logging into home page
-    	
-    	try{
-			//try to login from the INET page.
-    		ChangeURL("INET", "US", false);
-    		if (DriverFactory.getInstance().getDriver().getPageSource().contains("Error 404") || DriverFactory.getInstance().getDriver().getPageSource().contains("unable to process your request at this time.")){
-    			throw new Exception();
+    	if (Application.contains("WFCL")) {
+    		try{
+    			//try to login from the WDPA page
+        		ChangeURL("WDPA", "US", false);
+    			Type(By.name("username"), UserName);
+    			Type(By.name("password"), Password);
+    			Click(By.name("login"));
+    			if (GetCookieValue("fcl_uuid") == null) {
+        			throw new Exception("Did not login through WDPA");
+        		}
+    			Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
+    	    	return true;
+    		}catch(Exception e3){
+    			Helper_Functions.PrintOut("Not able to login through WDPA", true);
     		}
     		
-    		Type(By.name("username"), UserName);
-    		Type(By.name("password"), Password);
-    		Click(By.name("login"));
-    		if (GetCookieValue("fcl_uuid") == null) {
-    			throw new Exception("Did not login through INET");
+        	try{
+    			//try to login from the INET page.
+        		ChangeURL("INET", "US", false);
+        		if (DriverFactory.getInstance().getDriver().getPageSource().contains("Error 404") || DriverFactory.getInstance().getDriver().getPageSource().contains("unable to process your request at this time.")){
+        			throw new Exception();
+        		}
+        		
+        		Type(By.name("username"), UserName);
+        		Type(By.name("password"), Password);
+        		Click(By.name("login"));
+        		if (GetCookieValue("fcl_uuid") == null) {
+        			throw new Exception("Did not login through INET");
+        		}
+        		Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
+            	return true;
+    		}catch(Exception e2){
+    			Helper_Functions.PrintOut("Not able to login through INET", true);
     		}
-    		Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
-        	return true;
-		}catch(Exception e2){
-			Helper_Functions.PrintOut("Not able to login through INET", true);
-		}//end try catch for logging into INET page
+    		
+    	}
+    	
+    	if (Application.contains("WIDM")) {
+    		try{
+    			//try to login from the WGTM page
+        		ChangeURL("WIDM", "US", false);
+    			Type(By.id("username"), UserName);
+    			Type(By.id("password"), Password);
+    			Click(By.name("login"));
+    			if (GetCookieValue("fcl_uuid") == null) {
+        			throw new Exception("Did not login through WGTM");
+        		}
+    			Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
+    	    	return true;
+    		}catch(Exception e3){
+    			Helper_Functions.PrintOut("Not able to login through WGTM", true);
+    		}
+    	}
+    	
+    	if (Application.contains("AEM")) {
+        	try{
+        		//this will navigate to the home page
+        		ChangeURL("HOME", "US", false);
+        		Click(By.cssSelector("span.fxg-user-options__sign-in-text"));
+                //wait for text box for user id to appear
+        		Type(By.id("NavLoginUserId"), UserName);
+        		Type(By.id("NavLoginPassword"), Password);
+        		Thread.sleep(1000);
+        		Click(By.cssSelector("#HeaderLogin > button.fxg-button.fxg-button--orange"));
+        		Thread.sleep(5000);
+                if (GetCookieValue("fcl_uuid") == null) {
+                 	throw new Exception("Did not login through global header");
+                }
+                Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
+            	return true;
+        	}catch(Exception e){
+        		Helper_Functions.PrintOut("Not able to login through US home page", true);
+        	}//end try catch for logging into home page
+    	}
+
+    	
+
     	
     	Helper_Functions.PrintOut("Not able to login through any flow, check user id.", true);
     	//Need to add a scenario to login through WIDM

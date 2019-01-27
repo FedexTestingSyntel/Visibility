@@ -105,7 +105,6 @@ public class TestNG_TestListener implements ITestListener{
 			Helper_Functions.PrintOut("ChromeDriver.exe Cleanup Executed", true);
 			Helper_Functions.MoveOldLogs();
 		} catch (Exception e) {}
-
     }
 
     @Override
@@ -113,32 +112,43 @@ public class TestNG_TestListener implements ITestListener{
     }
     
     private void TestResults(ITestResult arg0) {
-    	String AttemptLogs = ThreadLogger.getInstance().ReturnLogString();
-    	//save the results of given test locally
-    	ResultsLog.add(AttemptLogs);
-    	
-    	//save the summary of the issue.
-    	String status = Helper_Functions.Failed;
-    	if (arg0.getStatus() == ITestResult.SUCCESS) {
-    		status = Helper_Functions.Passed;
+    	int SpaceSaver = 200;//added due to this taking up an infinite number of infinite memory.
+    	try {
+    		String AttemptLogs = ThreadLogger.getInstance().ReturnLogString();
+        	//save the results of given test locally
+    		if (ResultsLog.size() < SpaceSaver) {
+    			ResultsLog.add(AttemptLogs);
+    		}
+        	
+        	
+        	//save the summary of the issue.
+        	String status = Helper_Functions.Failed;
+        	if (arg0.getStatus() == ITestResult.SUCCESS) {
+        		status = Helper_Functions.Passed;
+        	}
+        	if (ResultsOverview.size() < SpaceSaver) {
+        		ResultsOverview.add(new String[]{arg0.getMethod().getMethodName(), status, ""});
+        		arg0.setAttribute("ExecutionLog", AttemptLogs);// this will save the trace to the test
+        	}
+        	
+        	//arg0.setAttribute("ExecutionLog", ThreadLogger.getInstance().ReturnLogString());
+        	
+        	ArrayList<String> CurrentLogs = ThreadLogger.getInstance().ReturnLogs();
+        	//reset the logs of the given thread back to blank
+        	String TestCompleteData = "";		
+        	for (int i = 0; i < CurrentLogs.size(); i++){
+        		if (TestCompleteData.contentEquals("")) {
+        			TestCompleteData = CurrentLogs.get(i);
+        		}else {
+        			TestCompleteData += System.lineSeparator() + CurrentLogs.get(i);
+        		}
+    		}
+        	ThreadLogger.ThreadLog.add(TestCompleteData + System.lineSeparator());
+    		
+    	}catch (Exception e){
+    		Helper_Functions.PrintOut("Warning, unable to save test results. " + e.getLocalizedMessage(), true);
     	}
     	
-    	ResultsOverview.add(new String[]{arg0.getMethod().getMethodName(), status, ""});
-    	
-    	arg0.setAttribute("ExecutionLog", AttemptLogs);// this will save the trace to the test
-    	//arg0.setAttribute("ExecutionLog", ThreadLogger.getInstance().ReturnLogString());
-    	
-    	ArrayList<String> CurrentLogs = ThreadLogger.getInstance().ReturnLogs();
-    	//reset the logs of the given thread back to blank
-    	String TestCompleteData = "";		
-    	for (int i = 0; i < CurrentLogs.size(); i++){
-    		if (TestCompleteData.contentEquals("")) {
-    			TestCompleteData = CurrentLogs.get(i);
-    		}else {
-    			TestCompleteData += System.lineSeparator() + CurrentLogs.get(i);
-    		}
-		}
-    	ThreadLogger.ThreadLog.add(TestCompleteData + System.lineSeparator());
     	if (DriverFactory.BrowserCurrent > 0) {//need to add a better way to check if should close browser
     		DriverFactory.getInstance().releaseDriver();
     	}

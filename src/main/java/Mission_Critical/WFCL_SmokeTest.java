@@ -3,6 +3,7 @@ package Mission_Critical;
 import org.testng.annotations.Test;
 
 import Data_Structures.Account_Data;
+import Data_Structures.User_Data;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.Assert;
@@ -18,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -67,20 +68,22 @@ public class WFCL_SmokeTest{
 					}
 		    		break;
 		    	case "Password_Reset_Secret":
+		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC + "A", Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC + "A", UD[k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "Reset_Password_Email":
+		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}

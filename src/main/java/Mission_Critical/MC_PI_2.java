@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.testng.annotations.Test;
 
 import Data_Structures.Account_Data;
+import Data_Structures.User_Data;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
@@ -32,7 +33,7 @@ public class MC_PI_2{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
-		CountryList = Environment.getCountryList("high");
+		//CountryList = Environment.getCountryList("high");
 	}
 	
 	@DataProvider (parallel = true)
@@ -43,10 +44,15 @@ public class MC_PI_2{
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
 			
+			//Special characters as from Stories 428282 and 428283
 			String Invalid_Email[] = new String[] {"tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact12345678.com", "@Grp2DOTCOMsyntelinc.com","Grp2@DOTCOM@syntelinc.com", "Grp2DOTCOM@syntelinc", "Grp2DOTCOMsyntelinc.com", "a@.c", "@b.c", "a@b.", ".GRP2DOTCOM@syntelinc.com", "tencharacttencharacttencharacttencharacttencharacttencharact12345@accept.com"};
-			// " @,<#>$%;:”[]*\\|`!",          			special characters
-			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com"};		
-			//"#NAME?/^&{}()~_+@fedex.com",           	special characters
+			String Invalid_Email_Special[] = new String[] {"acc ept@gmail.com", "abc@@cdf.dfg", "acc,@fed.com", "ac<c@fed.com", "acc@f#ed.com", "ac>c@fed.com", "acc@$fed.com", "a%cc@fed.com", "ac;c@fed.com", "a:cc@fed.com", "ac\"c@fed.com", "ac[c@fed.com", "acc@fed.co]m", "ac*c@fed.com", "ac\\c@fed.com", "ac|c@fed.com", "acc`@fed.com", "a!cc@fed.com"};
+
+			//String Invalid_Email_Special[] = new String[] {"acc`@fed.com", "ac*c@fed.com", "ac[c@fed.com", "ac\\c@fed.com", "ac\"c@fed.com"};
+			
+			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com"};	
+			String Valid_Emails_Special[] = new String[] {"ac=c@fed.com", "a.cc@fed.com", "a/cc@fed.com", "a?cc@fed.com", "a^cc@fed.com", "ac'c@fed.com", "ac&c@fed.com", "ac{c@fed.com", "ac}c@fed.com", "ac(c@fed.com", "ac)c@fed.com", "a~cc@fed.com", "ac_c@fed.com", "a-cc@fed.com", "a+cc@fed.com"};			
+
 			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WIDM_Registration_Email_Validation":
@@ -60,15 +66,23 @@ public class MC_PI_2{
 						for (String Email: Valid_Emails) {
 							data.add( new Object[] {Level, CountryList[j][0], Email, false});
 						}
+						
+						for (String Email: Invalid_Email_Special) {
+							data.add( new Object[] {Level, CountryList[j][0], Email, true});
+						}
+						for (String Email: Valid_Emails_Special) {
+							data.add( new Object[] {Level, CountryList[j][0], Email, false});
+						}
 					}
 					break;
 				case "WIDM_Reset_Password_Secret_SamePassword_Error":
-				case "WFCL_Reset_Password_Secret_SamePassword_Error":	
+				case "WFCL_Reset_Password_Secret_SamePassword_Error":
+					User_Data UD[] =  Environment.Get_UserIds(intLevel);
 					for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if ((m.getName().contains("WIDM") && Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WIDM")) || (m.getName().contains("WFCL") && Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("Create"))) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC, Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
-		    					Environment.DataClass[intLevel][k].SSO_LOGIN_DESC = "";
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if ((m.getName().contains("WIDM") && UD[k].SSO_LOGIN_DESC.contains("WIDM")) || (m.getName().contains("WFCL") && UD[k].SSO_LOGIN_DESC.contains("Create"))) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, UD[k].SECRET_ANSWER_DESC});
+		    					UD[k].SSO_LOGIN_DESC = "";
 		    					break;
 		    				}
 		    			}
@@ -83,7 +97,7 @@ public class MC_PI_2{
 					break;
 				case "WIDM_Force_Change_Password":
 					if (Level.contentEquals("2")) {
-						data.add( new Object[] {Level, "", "Test1234"});
+						data.add( new Object[] {Level, "L2UpdatePassword122818T141800oo", "Test1234"});
 					}else if (Level.contentEquals("3")) {
 						data.add( new Object[] {Level, "L3WIDMUS101618T162632", "Test1234"});
 					}
@@ -91,8 +105,6 @@ public class MC_PI_2{
 				case "WFCL_Force_Change_Password":
 					if (Level.contentEquals("2")) {
 						data.add( new Object[] {Level, "L2UpdatePassword122718T135503lf", "Test1234"});
-					}else if (Level.contentEquals("3")) {
-						data.add( new Object[] {Level, "", "Test1234"});
 					}
 					break;
 				case "WFCL_Registration_Email_Validation_Legacy":
@@ -123,12 +135,29 @@ public class MC_PI_2{
 						}
 					}
 					break;
+		    	case "BR_TaxID":
+	    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs("BR");
+	    			ArrayList<String[]> TaxInfo = Helper_Functions.getTaxInfo("BR");
+	    			for (String Tax[]: TaxInfo) {
+	    				if (Tax[4].contentEquals("B")) {
+	    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, true});		//REMOVE Comment after demo
+	    				}else {
+	    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, false});
+	    				}
+	    				
+	    			}
+	    		break;
+		    	case "TH_Welcome_Email_Disabled":
+	    			EnrollmentID = Helper_Functions.LoadEnrollmentIDs("TH");
+	    			data.add(new Object[] {Level, EnrollmentID[0], "TH", null, false});
+	    			data.add(new Object[] {Level, EnrollmentID[0], "TH", null, true});
+	    		break; 
 			}
 		}	
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", description = "411835", enabled = EnableCompleted)
+	@Test(dataProvider = "dp", description = "411835", enabled = true)
 	public void WIDM_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected){
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -148,6 +177,7 @@ public class MC_PI_2{
 				Helper_Functions.PrintOut("Email Address: " + Email + " validated.", false);
 			}
 		}catch (Exception e) {
+			Check_If_EFWS_Failure();
 			Assert.fail(e.getMessage());
 		}
 	}
@@ -167,6 +197,7 @@ public class MC_PI_2{
 				}
 			}
 		}catch (Exception e) {
+			Check_If_EFWS_Failure();
 			Assert.fail(e.getMessage());
 		}
 	}
@@ -192,7 +223,7 @@ public class MC_PI_2{
 		}
 	}
 
-	@Test(dataProvider = "dp", description = "411836", enabled = EnableCompleted)
+	@Test(dataProvider = "dp", description = "411836", enabled = true)
 	public void WFCL_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -209,6 +240,7 @@ public class MC_PI_2{
 				Helper_Functions.PrintOut("Email Address: " + Email + " validated.", false);
 			}
 		}catch (Exception e) {
+			Check_If_EFWS_Failure();
 			Assert.fail(e.getMessage());
 		}
 	}
@@ -235,6 +267,7 @@ public class MC_PI_2{
 				Helper_Functions.PrintOut(Arrays.toString(Result), false);
 			}
 		}catch (Exception e) {
+			Check_If_EFWS_Failure();
 			Assert.fail(e.getMessage());
 		}
 	}
@@ -254,6 +287,7 @@ public class MC_PI_2{
 				}
 			}
 		}catch (Exception e) {
+			Check_If_EFWS_Failure();
 			Assert.fail(e.getMessage());
 		}
 	}
@@ -299,24 +333,64 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "397668",  enabled = EnableCompleted)
-	public void WFCL_InfoSec_Force_Password_Change_Email_Field(String Level, String Country, String UserId, String Password, String SecretAnswer){
+	@Test(dataProvider = "dp", description = "419457", enabled = true)   
+	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
-			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, Password, SecretAnswer, true);
-			Helper_Functions.PrintOut(Result, false);
+			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
+			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
+			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
+			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
+
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, BuisnessAccount, VatNumber);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "397668",  enabled = EnableCompleted)
-	public void WIDM_Force_Change_Password(String Level, String Country, String UserId, String Password, String SecretAnswer){
+	@Test(dataProvider = "dp", description = "414270", enabled = true)   
+	public void TH_Welcome_Email_Disabled(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
-			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, Password, SecretAnswer, true);
-			Helper_Functions.PrintOut(Result, false);
+			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
+			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
+			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
+			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
+
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, BuisnessAccount, VatNumber);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+			Assert.fail("Need to validate that no email was recieved.");
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
+	public static void Check_If_EFWS_Failure() {
+		String EFWS_Message = "Your registration request is not approved based on the information submitted.";
+		if (WebDriver_Functions.CheckBodyText(EFWS_Message)) {
+			Helper_Functions.PrintOut("The \"" + EFWS_Message + "\" message is present on the page. Check the reason for the denied status.", false);
+		}
+	}
+	
+	/*
+	The below user stories are related to the InfoSec screen and could not be automated.
+	397668
+	397668
+	425257
+	
+	Password Flag	
+	L1Akshay110/Test1234
+	L1Akshay111/Test1234	
+	L2UpdatePassword122718T135503lz/Test1234
+	L2UpdatePassword122718T135503lf/Test1234
+	
+	UserID Flag	
+	L1Akshay112/Test1234
+	L1Akshay113/Test1234	
+	L2UpdatePassword122718T135503xw/Test1234
+	L2UpdatePassword122718T135503ta/Test1234
+	
+	SecretQuestion Flag	
+	L1Akshay114/Test1234	
+	L2UpdatePassword122718T135503rh/Test1234
+	*/
 }

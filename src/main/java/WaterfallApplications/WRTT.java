@@ -18,14 +18,14 @@ import TestingFunctions.WRTT_Functions;
 public class WRTT{
 	static String LevelsToTest = "7";
 	static String CountryList[][];
-	static boolean SmokeTest = false;
+	static boolean SmokeTest = true;
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		
-		//if (SmokeTest) 
-		CountryList = new String[][]{{"US", "United States"}, {"CA", "Canada"}};
+		CountryList = Environment.getCountryList("US");
+		CountryList = Environment.getCountryList("FULL");
+
 	}
 	
 	@DataProvider (parallel = true)
@@ -65,8 +65,11 @@ public class WRTT{
 		    		}
 		    	break;
 		    	case "WRTT_eCRV_Page":
-		    	case "WRTT_SpalshPage_eCRV":
-		    		data.add( new Object[] {Level, "US"});
+		    	case "WRTT_eCRV_WRTTLink":
+		    		//data.add( new Object[] {Level, "US"});
+		    		for (int j=0; j < CountryList.length; j++) {				
+						data.add( new Object[] {Level, CountryList[j][0]});
+					}
 		    	break;
 			}
 		}	
@@ -85,10 +88,10 @@ public class WRTT{
 	}//end WRTT_Rate_Sheet
 	
 	@Test(dataProvider = "dp")
-	public static void WRTT_eCRV_Page(String Level, String CountryCode){
+	public static void WRTT_eCRV_WRTTLink(String Level, String CountryCode){
 		Helper_Functions.PrintOut("Validate the eCRV page for " + CountryCode, false);
 		try {
-			String Result = WRTT_Functions.WRTT_eCRV(CountryCode);
+			String Result = WRTT_Functions.WRTT_eCRV_WRTTLink(CountryCode);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -97,7 +100,7 @@ public class WRTT{
 	
 	@Test(dataProvider = "dp")
 	public static void WRTT_SpalshPage_eCRV(String Level, String CountryCode){
-		Helper_Functions.PrintOut("Validate the navigation from home page to eCRV page for " + CountryCode, false);
+		Helper_Functions.PrintOut("Validate the RateSheets link is present in WGRT page for " + CountryCode, false);
 		try {
 			String Result = WRTT_Functions.eCRVNavigation(CountryCode);
 			Helper_Functions.PrintOut(Result, false);

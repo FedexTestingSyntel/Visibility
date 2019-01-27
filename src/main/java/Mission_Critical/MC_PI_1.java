@@ -39,7 +39,7 @@ public class MC_PI_1{
 		    				if (Tax[4].contentEquals("B")) {
 		    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, true});
 		    				}else {
-		    					//data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, false});
+		    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, false});
 		    				}
 		    				
 		    			}
@@ -86,7 +86,7 @@ public class MC_PI_1{
 		    		break;
 		    	case "TNT_Zip_Validation":
 		    		String Zip_Validation[] = {"GB", "NL", "CL"};
-		    		Zip_Validation = new String[] {"GB"};
+		    		//Zip_Validation = new String[] {"GB"};
 		    		for (int j = 0; j < Zip_Validation.length; j++) {
 		    			EnrollmentID = Helper_Functions.LoadEnrollmentIDs(Zip_Validation[j]);
 		    			ArrayList<String[]> TaxInfoLoc = Helper_Functions.getTaxInfo(Zip_Validation[j]);
@@ -122,7 +122,8 @@ public class MC_PI_1{
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp", description = "349582", enabled = true)
+	//This story was overwritten in the next PI. Story 419457 reverted these changes and made the option change irrelevent.
+	@Test(dataProvider = "dp", description = "349582", enabled = false)   
 	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");

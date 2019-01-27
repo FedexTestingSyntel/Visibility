@@ -30,9 +30,9 @@ public class USRC_Data {
 	public static USRC_Data LoadVariables(String Level){
 		int intLevel = Integer.parseInt(Level);
 		//if the level details were already loaded then return detail.
-		//if (DataClass[intLevel] != null) {
-		//	return DataClass[intLevel];
-		//}
+		if (DataClass[intLevel] != null) {
+			return DataClass[intLevel];
+		}
 		
 		//since the level details have not been loaded load them.
 		USRC_Data DC = new USRC_Data();
@@ -97,18 +97,16 @@ public class USRC_Data {
 			DC.OAuth_Token_Client_Secret ="";
 			break;
 		case "6"://need to update these values manually, do not share
-			DC.OAuth_Token_Client_ID = "";
-			DC.OAuth_Token_Client_Secret ="";
+			DC.OAuth_Token_Client_ID = "l7xxde71559b0ad74896a6bf569b1c026c40";
+			DC.OAuth_Token_Client_Secret = "8823413826a3482889f51fc6f5e30441";
 			break;
 		case "7"://need to update these values manually, do not share
-			DC.OAuth_Token_Client_ID = "";
-			DC.OAuth_Token_Client_Secret ="";
+			DC.OAuth_Token_Client_ID = "l7xxdd1a6d120ab84667b653bd99cd25a033";
+			DC.OAuth_Token_Client_Secret ="b24b83e86c5640cf9f25baab30e99208";
 			break;
 		}
-		//generate the OAuthToken, please note that this is not valid on L1 as API calls cannot be used on that level
-		if (!Level.contentEquals("1")) {
-			DC.OAuth_Token = General_API_Calls.getAuthToken(DC.OAuth_Token_URL, DC.OAuth_Token_Client_ID , DC.OAuth_Token_Client_Secret);
-		}
+
+		DC.OAuth_Token = LoadBearerToken(DC);
 		
 		ArrayList<String[]> ContactList = new ArrayList<String[]>();
 		String Phone = "9011111111", Email = "YouNeedToUpdateThisLater@fedex.com";
@@ -148,6 +146,15 @@ public class USRC_Data {
 		DataClass[intLevel] = DC;
 		
 		return DC;
+	}
+	
+	public static String LoadBearerToken(USRC_Data DC){
+		//generate the OAuthToken, please note that this is not valid on L1 as API calls cannot be used on that level
+		if (!DC.Level.contentEquals("1")) {
+			DC.OAuth_Token = General_API_Calls.getAuthToken(DC.OAuth_Token_URL, DC.OAuth_Token_Client_ID , DC.OAuth_Token_Client_Secret);
+			System.out.println("OAuth_Token : " + DC.OAuth_Token);
+		}
+		return DC.OAuth_Token;
 	}
 	
 	public static String LevelUrlReturn(String level2) {

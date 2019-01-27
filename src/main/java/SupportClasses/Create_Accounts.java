@@ -24,7 +24,7 @@ public class Create_Accounts{
 	private static String ECAMuserid;
 	private static String ECAMpassword;
 	
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	
 	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -24,7 +24,6 @@ import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
 import jxl.Sheet;
 import jxl.Workbook;
-
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -268,20 +267,21 @@ public class Helper_Functions{
 		}else {
 			System.out.println(Text);
 		}
-		
+		if (Text == null) {
+			Text = "";
+		}
 		Text = Text.replaceAll("\n", System.lineSeparator());
 		ThreadLogger.getInstance().UpdateLogs(Text);//Store the all values that are printed for a given thread.
 	}
 	
 	public static void WriteUserToExcel(String UserID, String Password) {
 		int intLevel = Integer.valueOf(Environment.getInstance().getLevel());
-		if (Environment.DataClass[intLevel] == null) {
-			Environment.getUserIds(intLevel);
-		}
-		int Row = Environment.DataClass[intLevel].length;            //////////Fix this later to write the whole line
+		User_Data UD[] =  Environment.Get_UserIds(intLevel);
+		int Row = UD.length;            //////////Fix this later to write the whole line
 		writeExcelData(DataDirectory + "\\TestingData.xls", "L" + intLevel, UserID, Row, 1);
 		writeExcelData(DataDirectory + "\\TestingData.xls", "L" + intLevel, Password, Row, 2);
 	}
+	
 	
 	//{Card Type - 0, Card Number - 1, CVV - 2, Expiration Month - 3, Expiration year - 4}
 	public static String[] LoadCreditCard(String CardDetails){
@@ -640,6 +640,80 @@ public class Helper_Functions{
 		return true;
 	}
 
+	public static boolean WriteToExcel(String FileName, String SheetName, String Data[][], int KeyPosition) {
+		HSSFWorkbook wb = null;
+		boolean FileUpdated = false;
+		try {
+			Excellock.lock();
+			//Read the spreadsheet that needs to be updated
+			FileInputStream fsIP= new FileInputStream(new File(FileName));  
+			//Access the workbook                  
+			wb = new HSSFWorkbook(fsIP);
+			//Access the work sheet, so that we can update / modify it. 
+			HSSFSheet worksheet = wb.getSheetAt(0);
+			for(int i = 1; i< wb.getNumberOfSheets() + 1;i++) {
+				//PrintOut("CurrentSheet: " + worksheet.getSheetName(), false);  //for debugging if getting errors with sheet not found
+				if (worksheet.getSheetName().contentEquals(SheetName)) {
+					break;
+				}
+				worksheet = wb.getSheetAt(i);
+			}
+			
+			//Check the column headers for the key position
+			int KeyColumn = -1;
+			HSSFRow IdentifierRow = worksheet.getRow(0);
+			for (int i = 0; i < worksheet.getLastRowNum() + 1; i++) {
+				if (IdentifierRow.getCell(i) != null && IdentifierRow.getCell(i).getStringCellValue().contentEquals(Data[KeyPosition][0])) {
+					KeyColumn = i;
+					break;
+				}
+			}
+			//will add a colum header if not found.
+			if (KeyColumn == -1) {
+				throw new Exception("Key Not Found");
+			}
+			
+			for (int j = 1; j < worksheet.getLastRowNum() + 1; j++) {
+				if (worksheet.getRow(j).getCell(KeyColumn) != null && worksheet.getRow(j).getCell(KeyColumn).getStringCellValue().contentEquals(Data[KeyPosition][1])) {
+					for (int k = 0; k < Data.length; k++) {
+						if (worksheet.getRow(j).getCell(k) == null) {//if cell not present create it
+							worksheet.getRow(j).createCell(k);
+						}
+						for(int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
+							if (IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
+								Cell cell = null; 
+								if (worksheet.getRow(j).getCell(l) == null) {//if cell not present create it
+									worksheet.getRow(j).createCell(l);
+								}
+								cell = worksheet.getRow(j).getCell(l);
+								cell.setCellValue(Data[k][1]);
+								break;
+							}
+						}
+					}	
+				}
+			}
+			//Close the InputStream  
+			fsIP.close(); 
+			//Open FileOutputStream to write updates
+			FileOutputStream output_file =new FileOutputStream(new File(FileName));  
+			//write changes
+			wb.write(output_file);
+			//close the stream
+			output_file.close();
+			
+			FileUpdated = true;
+		}catch (Exception e) {
+			try {
+				wb.close();
+			} catch (IOException e1) {}
+			e.printStackTrace();
+		}finally {
+			Excellock.unlock();
+		}
+		return FileUpdated;
+	}
+	
 	public static void PrintOutTable(ArrayList<String[]> List) {
 		try {
 			if (List != null) {

@@ -3,6 +3,9 @@ package Mission_Critical;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import org.testng.annotations.Test;
+
+import Data_Structures.User_Data;
+
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.Assert;
@@ -15,7 +18,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM_SmokeTest{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -33,10 +36,11 @@ public class WIDM_SmokeTest{
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WIDM_ResetPasswordSecret":
+		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].SSO_LOGIN_DESC.contains("WIDM")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC + "5", Environment.DataClass[intLevel][k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].SSO_LOGIN_DESC.contains("WIDM")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC + "5", UD[k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -55,10 +59,11 @@ public class WIDM_SmokeTest{
 					data.add( new Object[] {Level, CountryList[0][0]});
 					break;
 				case "ResetPasswordWIDM_Email":
+					UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < Environment.DataClass[intLevel].length; k++) {
-		    				if (Environment.DataClass[intLevel][k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, Environment.DataClass[intLevel][k].SSO_LOGIN_DESC, Environment.DataClass[intLevel][k].USER_PASSWORD_DESC});
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
 		    			}
