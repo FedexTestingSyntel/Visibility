@@ -64,7 +64,8 @@ public class TestNG_TestListener implements ITestListener{
     public void onTestFailure(ITestResult arg0) {
     	try {
     		long ThreadID = Thread.currentThread().getId();
-			WebDriver_Functions.takeSnapShot("Failure " + arg0.getName() + " T" + ThreadID + " " + Helper_Functions.CurrentDateTime() + ".png");
+    		//ThreadID is added to ensure that the screenshot name will be unique.
+			WebDriver_Functions.takeSnapShot("Failure T" + ThreadID + " " + Helper_Functions.CurrentDateTime() + ".png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

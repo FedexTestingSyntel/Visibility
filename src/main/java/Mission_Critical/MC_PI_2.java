@@ -3,20 +3,17 @@ package Mission_Critical;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.testng.annotations.Test;
-
 import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import java.util.Iterator;
 import java.util.List;
-
 import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
@@ -33,7 +30,7 @@ public class MC_PI_2{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
-		//CountryList = Environment.getCountryList("high");
+		CountryList = Environment.getCountryList("fr");
 	}
 	
 	@DataProvider (parallel = true)
@@ -46,17 +43,18 @@ public class MC_PI_2{
 			
 			//Special characters as from Stories 428282 and 428283
 			String Invalid_Email[] = new String[] {"tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact12345678.com", "@Grp2DOTCOMsyntelinc.com","Grp2@DOTCOM@syntelinc.com", "Grp2DOTCOM@syntelinc", "Grp2DOTCOMsyntelinc.com", "a@.c", "@b.c", "a@b.", ".GRP2DOTCOM@syntelinc.com", "tencharacttencharacttencharacttencharacttencharacttencharact12345@accept.com"};
-			String Invalid_Email_Special[] = new String[] {"acc ept@gmail.com", "abc@@cdf.dfg", "acc,@fed.com", "ac<c@fed.com", "acc@f#ed.com", "ac>c@fed.com", "acc@$fed.com", "a%cc@fed.com", "ac;c@fed.com", "a:cc@fed.com", "ac\"c@fed.com", "ac[c@fed.com", "acc@fed.co]m", "ac*c@fed.com", "ac\\c@fed.com", "ac|c@fed.com", "acc`@fed.com", "a!cc@fed.com"};
+			String Invalid_Email_Special[] = new String[] {"acc ept@gmail.com", "abc@@cdf.dfg", "ac,c@fed.com", "ac<c@fed.com", "ac#c@fed.com", "ac>c@fed.com", "a$cc@fed.com", "a%cc@fed.com", "ac;c@fed.com", "a:cc@fed.com", "ac\"c@fed.com", "ac[c@fed.com", "a]cc@fed.com", "ac*c@fed.com", "ac\\c@fed.com", "ac|c@fed.com", "acc`@fed.com", "a!cc@fed.com"};
 
 			//String Invalid_Email_Special[] = new String[] {"acc`@fed.com", "ac*c@fed.com", "ac[c@fed.com", "ac\\c@fed.com", "ac\"c@fed.com"};
 			
 			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com"};	
 			String Valid_Emails_Special[] = new String[] {"ac=c@fed.com", "a.cc@fed.com", "a/cc@fed.com", "a?cc@fed.com", "a^cc@fed.com", "ac'c@fed.com", "ac&c@fed.com", "ac{c@fed.com", "ac}c@fed.com", "ac(c@fed.com", "ac)c@fed.com", "a~cc@fed.com", "ac_c@fed.com", "a-cc@fed.com", "a+cc@fed.com"};			
 
+			//The below special char
 			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WIDM_Registration_Email_Validation":
-				case "WFCL_Registration_Email_Validation":	
+				case "WFCL_Registration_Email_Validation":
 				case "WFCL_Forgot_UserID_Email_Validation":
 				case "WIDM_Forgot_UserID_Email_Validation":
 					for (int j=0; j < CountryList.length; j++) {				
@@ -75,6 +73,15 @@ public class MC_PI_2{
 						}
 					}
 					break;
+				case "WIDM_Registration_Email_Error":
+					for (int j=0; j < CountryList.length; j++) {				
+						data.add( new Object[] {Level, CountryList[j][0], Invalid_Email, true});
+						data.add( new Object[] {Level, CountryList[j][0], Invalid_Email_Special, true});
+						data.add( new Object[] {Level, CountryList[j][0], Valid_Emails, false});
+						data.add( new Object[] {Level, CountryList[j][0], Valid_Emails_Special, false});
+					}
+					break;
+					
 				case "WIDM_Reset_Password_Secret_SamePassword_Error":
 				case "WFCL_Reset_Password_Secret_SamePassword_Error":
 					User_Data UD[] =  Environment.Get_UserIds(intLevel);
@@ -146,39 +153,85 @@ public class MC_PI_2{
 	    				}
 	    				
 	    			}
-	    		break;
+	    			break;
 		    	case "TH_Welcome_Email_Disabled":
 	    			EnrollmentID = Helper_Functions.LoadEnrollmentIDs("TH");
 	    			data.add(new Object[] {Level, EnrollmentID[0], "TH", null, false});
 	    			data.add(new Object[] {Level, EnrollmentID[0], "TH", null, true});
-	    		break; 
+	    			break; 
+				case "WFCL_Email_BounceBack_Email_Error":
+					for (int j=0; j < CountryList.length; j++) {
+						String UserID = "", Password = "Test1234";
+						if (intLevel == 2) {
+							UserID = "L2UpdatePassword012919T123552nj";
+						}
+						
+						//data.add( new Object[] {Level, CountryList[j][0], UserID, Password, Invalid_Email, true});
+						//data.add( new Object[] {Level, CountryList[j][0], UserID, Password, Invalid_Email_Special, true});
+						data.add( new Object[] {Level, CountryList[j][0], UserID, Password, Valid_Emails, false});
+						data.add( new Object[] {Level, CountryList[j][0], UserID, Password, Valid_Emails_Special, false});
+					}
+					break;
+	    		
 			}
-		}	
+		}
+		System.out.println("Starting " + m.getName() + " : There are " + data.size() + " scenarios.");
 		return data.iterator();
 	}
 	
 	@Test(dataProvider = "dp", description = "411835", enabled = true)
 	public void WIDM_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected){
 		try {
-			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
 			String UserId = Helper_Functions.LoadUserID("L" + Level + "WIDM" + CountryCode);
+			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
+			WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
+			WIDM_Functions.WIDM_Registration_Input(null, null, UserId, Email);
+			WebDriver_Functions.Click(By.id("createUserID"));
 			
-			if (ErrorExpected) {
-				WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
-				WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
-				WIDM_Functions.WIDM_Registration_Input(Address, UserName, UserId, Email);
-				WebDriver_Functions.Click(By.id("createUserID"));
+			if (WebDriver_Functions.CheckBodyText("Email address is not valid.") && ErrorExpected) {
 				WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
 				WebDriver_Functions.takeSnapShot("Invalid Email.png");
 				Helper_Functions.PrintOut("Email Address: " + Email + " validated. Error message recieved.", false);
+			}else if (WebDriver_Functions.CheckBodyText("Email address is not valid.")){
+				throw new Exception("Error present on page.");
 			}else {
-				WIDM_Functions.WIDM_Registration(Address, UserName, UserId, Email);
+				WebDriver_Functions.takeSnapShot("Valid Email.png");
 				Helper_Functions.PrintOut("Email Address: " + Email + " validated.", false);
 			}
 		}catch (Exception e) {
-			Check_If_EFWS_Failure();
-			Assert.fail(e.getMessage());
+			Assert.fail(e.getLocalizedMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", description = "411835", enabled = true)
+	public void WIDM_Registration_Email_Error(String Level, String CountryCode, String[] Emails, boolean ErrorExpected){
+		try {
+			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
+			WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
+			WIDM_Functions.WIDM_Registration_Input(null, null, "", "accept@fedex.com");
+			
+			String IncorrectResponse = "";
+			
+			for (int i = 0 ; i < Emails.length; i++) {
+				WebDriver_Functions.Type(By.id("email"), Emails[i]);
+				WebDriver_Functions.Type(By.id("retypeEmail"), Emails[i]);
+				WebDriver_Functions.Click(By.id("createUserID"));
+				
+				if (ErrorExpected && WebDriver_Functions.CheckBodyText("Email address is not valid.")) {
+					WebDriver_Functions.WaitForText(By.id("emailinvalid"), "Email address is not valid.");
+					WebDriver_Functions.takeSnapShot("Invalid Email.png");
+					Helper_Functions.PrintOut("Email Address: " + Emails[i] + " validated. Error message recieved.", false);
+				}else if (ErrorExpected || WebDriver_Functions.CheckBodyText("Email address is not valid.")){
+					IncorrectResponse += Emails[i];
+				}
+			}
+			
+			if (!IncorrectResponse.contentEquals("")) {
+				Assert.fail(IncorrectResponse);
+			}
+			
+		}catch (Exception e) {
+			Assert.fail(e.getLocalizedMessage());
 		}
 	}
 	
@@ -223,7 +276,7 @@ public class MC_PI_2{
 		}
 	}
 
-	@Test(dataProvider = "dp", description = "411836", enabled = true)
+	@Test(dataProvider = "dp", description = "411836", enabled = EnableCompleted)
 	public void WFCL_Registration_Email_Validation(String Level, String CountryCode, String Email, boolean ErrorExpected) {
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -333,7 +386,7 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "419457", enabled = true)   
+	@Test(dataProvider = "dp", description = "419457", enabled = EnableCompleted)   
 	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
@@ -368,6 +421,42 @@ public class MC_PI_2{
 		String EFWS_Message = "Your registration request is not approved based on the information submitted.";
 		if (WebDriver_Functions.CheckBodyText(EFWS_Message)) {
 			Helper_Functions.PrintOut("The \"" + EFWS_Message + "\" message is present on the page. Check the reason for the denied status.", false);
+			throw new SkipException("Forcing skip, will be deleted from report later");
+		}
+	}
+	
+	@Test(dataProvider = "dp", description = "414215", enabled = true)
+	public void WFCL_Email_BounceBack_Email_Error(String Level, String CountryCode, String UserID, String Password, String[] Emails, boolean ErrorExpected){
+		try {
+			WebDriver_Functions.Login(UserID, Password, "WFCL");
+			
+			String IncorrectResponse = "";
+			
+			for (int i = 0 ; i < Emails.length; i++) {
+				WebDriver_Functions.Type(By.name("email"), Emails[i]);
+				WebDriver_Functions.Type(By.name("retypeEmail"), Emails[i]);
+				WebDriver_Functions.Click(By.name("submit"));
+				
+				if (ErrorExpected && WebDriver_Functions.CheckBodyText("Email address is not valid.")) {
+					//added a space " " from 02/04/19 execution
+					WebDriver_Functions.WaitForText(By.xpath("//*[@id='module.adminmessage._expanded']/table/tbody/tr[2]/td/table/tbody/tr[3]/td/b"), "Email address is not valid.  ");
+					WebDriver_Functions.takeSnapShot("Invalid Email.png");
+					Helper_Functions.PrintOut("Email Address: " + Emails[i] + " validated. Error message recieved.", false);
+				}else if (ErrorExpected || WebDriver_Functions.CheckBodyText("Email address is not valid.") || WebDriver_Functions.isPresent(By.name("email"))){
+					IncorrectResponse += Emails[i] + "   ";
+				}
+				
+				if(!WebDriver_Functions.isPresent(By.name("email"))) {
+					WebDriver_Functions.Login(UserID, Password, "WFCL");
+				}
+			}
+			
+			if (!IncorrectResponse.contentEquals("")) {
+				Assert.fail(IncorrectResponse);
+			}
+			
+		}catch (Exception e) {
+			Assert.fail(e.getLocalizedMessage());
 		}
 	}
 	

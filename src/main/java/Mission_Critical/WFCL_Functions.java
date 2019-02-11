@@ -132,7 +132,7 @@ public class WFCL_Functions{
 		}
 	}//end WFCL_UserRegistration
 	
-	public static String WFCL_AccountRegistration_INET(String Name[], String UserId, String Email, String AccountNumber, String AddressDetails[]) throws Exception{
+	public static String[] WFCL_AccountRegistration_INET(String Name[], String UserId, String Email, String AccountNumber, String AddressDetails[]) throws Exception{
 		boolean InetFlag = false;
 		String CountryCode = AddressDetails[6].toUpperCase();
 
@@ -149,6 +149,7 @@ public class WFCL_Functions{
 		
 
 		//Step 2 Account information
+		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");//print out the UUID for reference
 		String AccountNickname = AccountNumber + "_" + CountryCode;
 		WFCL_AccountEntryScreen(AccountNumber, AccountNickname);
 
@@ -183,11 +184,10 @@ public class WFCL_Functions{
 			WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
 		}
 
-		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
 		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, true);
 		String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag};
 		Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
-		return Arrays.toString(ReturnValue);
+		return ReturnValue;
 	}//end WFCL_AccountRegistration
 
 	public static boolean Admin_Registration(String CountryCode, String AccountNumber) throws Exception {
@@ -275,6 +275,8 @@ public class WFCL_Functions{
  				WebDriver_Functions.Click(By.name("signupnow"));
  			}else if (WebDriver_Functions.isPresent(By.xpath("//*[@id='module.logon.newusers._expanded']/a[1]"))) {
  				WebDriver_Functions.Click(By.xpath("//*[@id='module.logon.newusers._expanded']/a[1]"));
+ 			}else if (WebDriver_Functions.isPresent(By.id("loginLink"))) {//Added for APAC
+ 				WebDriver_Functions.Click(By.id("loginLink"));
  			}
  			
  	
@@ -410,7 +412,7 @@ public class WFCL_Functions{
 				WebDriver_Functions.ElementMatches(By.xpath("//*[@id='billing-address']/label[20]/span[1]"), "Country/Territory", 116577);
 			} 
 			
-			//if the zip code does not match what was enterd on previous page then update. This was change as part of the TNT features for the Jan19CL.
+			//if the zip code does not match what was entered on previous page then update. This was change as part of the TNT features for the Jan19CL.
 			if (WebDriver_Functions.isPresent(By.id("creditCardZipCode")) && !WebDriver_Functions.GetText(By.id("creditCardZipCode")).contentEquals(BillingAddress[5])) {
 				WebDriver_Functions.Type(By.id("creditCardZipCode"), BillingAddress[5]);
 			}
@@ -844,7 +846,7 @@ public class WFCL_Functions{
 		}
 	}//end CreditCardRegistrationEnroll
     
-	public static String[] WFCL_AccountRegistration_GFBO(String Name[], String UserId, String Email, String AccountNumber, String AddressDetails[]) throws Exception{
+	public static boolean WFCL_AccountRegistration_GFBO(String Name[], String UserId, String Email, String AccountNumber, String AddressDetails[]) throws Exception{
 		String CountryCode = AddressDetails[6].toUpperCase();
 		
 		//The below applicable countries list was updated on 1/30/18
@@ -897,9 +899,8 @@ public class WFCL_Functions{
 			
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
 		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_GFBO  " + UserId + "/" + Helper_Functions.myPassword + "--" + AccountNumber + "--" + UUID, false);
-		    String ReturnValue[] = new String[] {UserId, AccountNumber, UUID};
 		    Helper_Functions.WriteUserToExcel(UserId, Helper_Functions.myPassword);
-		    return ReturnValue;
+		    return true;
  		}catch (Exception e) {
  			throw e;
  		}

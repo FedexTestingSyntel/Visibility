@@ -134,7 +134,7 @@ public class WFCL_Functions_UsingData{
 				}
 				break;
 			case "WFCL_CREATE":
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr/td[2]"), "Your user ID " + Account_Info.UserId);
+				WebDriver_Functions.WaitForTextPresentIn(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr/td[2]"), Account_Info.UserId);
 			case "INET":
 			case "GFBO":
 				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.UserId);
@@ -370,15 +370,23 @@ public class WFCL_Functions_UsingData{
 		String CountryCode = Address_Info.Billing_Country_Code;
 		try {
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
-			WebDriver_Functions.Click(By.id("registernow"));
+			//WebDriver_Functions.Click(By.id("registernow"));
 			
 			ContactInfo_Page(Address_Info, true); //enters all of the details
 
-			//Confirmation page
-			Verify_Confirmaiton_Page("WFCL_CREATE", Address_Info);
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
+			
+			if ("US".contains(Address_Info.Billing_Country_Code)) {
+				//Confirmation page
+				Verify_Confirmaiton_Page("WFCL_CREATE", Address_Info);
+			}
+			
+			if (UUID == null) {
+				throw new Exception("Error, user not created.");
+			}
+			
 			Helper_Functions.PrintOut("Finished WFCL_UserRegistration  " + Address_Info.UserId + "/" + Helper_Functions.myPassword + " -- " + UUID, true);
-			String ReturnValue[] = new String[]{Address_Info.UserId, UUID};
+			String ReturnValue[] = new String[]{Address_Info.UserId, Helper_Functions.myPassword,  UUID};
 			Helper_Functions.WriteUserToExcel(Address_Info.UserId, Helper_Functions.myPassword);//Write User to file for later reference
 			return ReturnValue;
 		}catch (Exception e) {

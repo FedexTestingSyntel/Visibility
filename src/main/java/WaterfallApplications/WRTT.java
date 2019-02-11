@@ -25,6 +25,7 @@ public class WRTT{
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("US");
 		CountryList = Environment.getCountryList("FULL");
+		SmokeTest = false;
 
 	}
 	
@@ -56,7 +57,7 @@ public class WRTT{
 		    			        for (int l = 0; l < chars.length; l++) {
 		    			            boolArray[l] = chars[l] == '0' ? true : false;
 		    			        }
-		    			        if (boolArray[1] == true) {
+		    			        if (boolArray[0] == true && boolArray[1] == false) {//all listed as zone chart true
 		    			        	data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
 		    			        }
 			    				//data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
@@ -76,7 +77,7 @@ public class WRTT{
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = true)
 	public static void WRTT_Rate_Sheet(String Level, int Service, boolean ZoneChart, boolean PDF, boolean List){
 		Helper_Functions.PrintOut("Validate the rate sheet download through WRTT", false);
 		try {
@@ -87,7 +88,7 @@ public class WRTT{
 		}
 	}//end WRTT_Rate_Sheet
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = false)
 	public static void WRTT_eCRV_WRTTLink(String Level, String CountryCode){
 		Helper_Functions.PrintOut("Validate the eCRV page for " + CountryCode, false);
 		try {
@@ -98,7 +99,7 @@ public class WRTT{
 		}
 	}//end WRTT_eCRV
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = false)
 	public static void WRTT_SpalshPage_eCRV(String Level, String CountryCode){
 		Helper_Functions.PrintOut("Validate the RateSheets link is present in WGRT page for " + CountryCode, false);
 		try {

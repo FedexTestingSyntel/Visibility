@@ -63,7 +63,7 @@ public class Create_Accounts{
 				 * */
 				
 				//if doing a single country
-				if (CountryList[6].contentEquals("CN")) {
+				if (CountryList[6].contentEquals("US")) {
 					data.add( new Object[] {Level, CountryList});
 				}
 			}
@@ -291,27 +291,6 @@ public class Create_Accounts{
 				Account_Details[i] = new Account_Data(Account_Info);
 				String token = tok.nextToken();
 				Account_Details[i].Account_Number = token;
-/*
- 				Account_Details[i].Level = Account_Info.Level;
-				Account_Details[i].Shipping_Address_Line_1 = Account_Info.Shipping_Address_Line_1;
-				Account_Details[i].Shipping_Address_Line_2 = Account_Info.Shipping_Address_Line_2;
-				Account_Details[i].Shipping_City = Account_Info.Shipping_City;
-				Account_Details[i].Shipping_State = Account_Info.Shipping_State;
-				Account_Details[i].Shipping_State_Code = Account_Info.Shipping_State_Code;
-				Account_Details[i].Shipping_Zip = Account_Info.Shipping_Zip;
-				Account_Details[i].Shipping_Country_Code = Account_Info.Shipping_Country_Code;
-				Account_Details[i].Shipping_Region = Account_Info.Shipping_Region;
-				Account_Details[i].Shipping_Country = Account_Info.Shipping_Country;
-				Account_Details[i].Billing_Address_Line_1 = Account_Info.Billing_Address_Line_1;
-				Account_Details[i].Billing_Address_Line_2 = Account_Info.Billing_Address_Line_2;
-				Account_Details[i].Billing_City = Account_Info.Billing_City;
-				Account_Details[i].Billing_State = Account_Info.Billing_State;
-				Account_Details[i].Billing_State_Code = Account_Info.Billing_State_Code;
-				Account_Details[i].Billing_Zip = Account_Info.Billing_Zip;
-				Account_Details[i].Billing_Country_Code = Account_Info.Billing_Country_Code;
-				Account_Details[i].Billing_Region = Account_Info.Billing_Region;
-				Account_Details[i].Billing_Country = Account_Info.Billing_Country;
- */
 			    Account_Details[i].Account_Type = Account_Type;
 			    Account_Details[i].Tax_ID_One = StateTax;
 			    Account_Details[i].Tax_ID_Two = CountryTax;

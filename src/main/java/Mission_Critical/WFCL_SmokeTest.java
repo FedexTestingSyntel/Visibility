@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -131,9 +131,10 @@ public class WFCL_SmokeTest{
 			String Account = AccountDetails.Account_Number;
 			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
 			String UserID = Helper_Functions.LoadUserID("L" + Level + Account + CountryCode);
-			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
-			WFCL_Functions.Admin_Registration(CountryCode, Account);
-			Helper_Functions.PrintOut(Result, false);
+			String Result[] = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
+			Result = Arrays.copyOf(Result, Result.length + 1);
+			Result[Result.length - 1] = "Admin:" + WFCL_Functions.Admin_Registration(CountryCode, Account);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -147,8 +148,8 @@ public class WFCL_SmokeTest{
 			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + "Inet" + CountryCode);
-			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
-			Helper_Functions.PrintOut(Result, false);
+			String Result[] = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

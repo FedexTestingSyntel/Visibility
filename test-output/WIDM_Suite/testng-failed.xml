@@ -5,12 +5,11 @@
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   <test thread-count="8" name="WIDM_Test(failed)" parallel="methods">
-    <parameter name="Level" value="2"/>
+    <parameter name="Level" value="3"/>
     <classes>
       <class name="Mission_Critical.WIDM_SmokeTest">
         <methods>
           <include name="WIDM_RegistrationEFWS" invocation-numbers="0"/>
-          <include name="ResetPasswordWIDM_Email" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
       </class> <!-- Mission_Critical.WIDM_SmokeTest -->

@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WDPA_SmokeTest{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -42,9 +42,9 @@ public class WDPA_SmokeTest{
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < UD.length; k++) {
-		    				if (UD[k].SSO_LOGIN_DESC.contains("WDPA")) {
+		    				if (UD[k].WDPA_ENABLED.contains("WDPA")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					break;
+		    					//break;
 		    				}
 		    			}
 		    		}
@@ -53,9 +53,14 @@ public class WDPA_SmokeTest{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].SSO_LOGIN_DESC.contains("Freight") || UD[k].SSO_LOGIN_DESC.contains("LTL")) {
+		    				//if (UD[k].SSO_LOGIN_DESC.contains("Freight") || UD[k].SSO_LOGIN_DESC.contains("LTL")) {
+		    				//	data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    				//	//break;
+		    				//}
+		    				
+		    				if (UD[k].WDPA_ENABLED.contains("T") && UD[k].FREIGHT_ENABLED.contains("")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					break;
+		    					//break;
 		    				}
 		    			}
 		    			//data.add( new Object[] {Level, "US", "L3WDPAUAT", "Test1234"});
@@ -67,7 +72,10 @@ public class WDPA_SmokeTest{
 					}
 		    	break;
 			}
-		}	
+		}
+		while(data.size() > 30) {
+			data.remove(data.size() - 1);
+		}
 		return data.iterator();
 	}
 	

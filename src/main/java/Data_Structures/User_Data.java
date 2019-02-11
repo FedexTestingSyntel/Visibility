@@ -19,6 +19,8 @@ public class User_Data {
 	public String WGRT_ENABLED;
 	public String WDPA_ENABLED;
 	public String PASSKEY;
+	public String FDM_STATUS;
+	public String FREIGHT_ENABLED;
 	public String ERROR;
 }
 

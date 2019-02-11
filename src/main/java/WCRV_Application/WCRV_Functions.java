@@ -17,8 +17,8 @@ import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
 public class WCRV_Functions{
-	//public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"},{"IMPORT","I"},{"IMPORT_INBOUND","II"},{"LEGACY_THIRD_PARTY","LT"},{"GLOBAL_THIRD_PARTY","GT"}};
-	public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"},{"IMPORT","I"},{"GLOBAL_THIRD_PARTY","GT"}};
+	public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"},{"IMPORT","I"},{"IMPORT_INBOUND","II"},{"LEGACY_THIRD_PARTY","LT"},{"GLOBAL_THIRD_PARTY","GT"}};
+	//public static String svcGroupIndicator[][] = {{"INTRA_COUNTRY","D"},{"EXPORT","E"},{"IMPORT","I"},{"GLOBAL_THIRD_PARTY","GT"}};
 	
 	//{Service Code,   Brief service name,      full service name}
 	public static String serviceBaseCode[][] = {
@@ -129,10 +129,6 @@ public class WCRV_Functions{
 						try_to_select = true;
 					}else if (svcGroupIndicator[gi][0].contains(Service)) {
 						try_to_select = true;
-					}else {
-						if (svcGroupIndicator[gi][0].contains(Service)) {
-							try_to_select = true;
-						}
 					}
 					
 					if(try_to_select && WCRV_SelectService(svcGroupIndicator[gi][0], serviceBaseCode[sbc][0])){

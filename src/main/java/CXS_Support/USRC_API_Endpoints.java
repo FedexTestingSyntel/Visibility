@@ -136,22 +136,30 @@ public class USRC_API_Endpoints {
 
   			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
   			Helper_Functions.PrintOut("Get cookie from USRC for " + UserID + "/" + Password, true);
-  			HttpResponse response = httpclient.execute(httppost);
-  			Helper_Functions.PrintOut("response: " + EntityUtils.toString(response.getEntity()), true);
-  			Header[] headers = response.getAllHeaders();
+  			HttpResponse Response = httpclient.execute(httppost);
+  			Helper_Functions.PrintOut("response: " + EntityUtils.toString(Response.getEntity()), true);
+  			Header[] Headers = Response.getAllHeaders();
   			//takes apart the headers of the response and returns the fdx_login cookie if present
-  			String fdx_login = null, fcl_uuid = null, full_cookies = "";
-  			for (Header header : headers) {
+  			String fdx_login = null, fcl_uuid = null, full_cookies = "", RequestHeaders = "";
+  			for (Header Header : Headers) {
   				//String Test = header.getName() + "    " + header.getValue();PrintOut(Test, false);// used in debugging or if want to see other cookie values
-  				if (header.getName().contentEquals("Set-Cookie") && header.getValue().contains("fdx_login")) {
-  					fdx_login = header.toString().replace("Set-Cookie: ", "").replace("; domain=.fedex.com; path=/; secure", "");
-  				}else if (header.getName().contentEquals("Set-Cookie") && header.getValue().contains("fcl_uuid")) {
-  					fcl_uuid = header.toString().replace("Set-Cookie: fcl_uuid=", "").replace("; domain=.fedex.com; path=/", "");
+  				if (Header.getName().contentEquals("Set-Cookie") && Header.getValue().contains("fdx_login")) {
+  					fdx_login = Header.toString().replace("Set-Cookie: ", "").replace("; domain=.fedex.com; path=/; secure", "");
+  				}else if (Header.getName().contentEquals("Set-Cookie") && Header.getValue().contains("fcl_uuid")) {
+  					fcl_uuid = Header.toString().replace("Set-Cookie: fcl_uuid=", "").replace("; domain=.fedex.com; path=/", "");
   				}
-  				if (header.getName().contentEquals("Set-Cookie")) {
-  					full_cookies += header.toString(); 
+  				if (Header.getName().contentEquals("Set-Cookie")) {
+  					full_cookies += Header.toString(); 
   				}
+  				RequestHeaders += Header + "___";
   			}
+  			
+  			String MethodName = "USRCLogin";
+  			Helper_Functions.PrintOut(MethodName + " URL: " + httppost.toString() + "\n    " + 
+					  MethodName + " Headers: " + RequestHeaders + "\n    " +
+					  MethodName + " Request: " + json + "\n    " + 
+					  MethodName + " Response: " + Response, true); 
+					  
   			if (fdx_login == null) {
   				return null;
   			}
@@ -506,21 +514,23 @@ public class USRC_API_Endpoints {
   	}
 	
 	public static String Parse_AccountRetrievalRequest_AccountNumber(String Response) {
-		String Start = "\"value\":\"";
-		String End = "\"},\"displayName\"";
+		String Account_Start = "\"value\":\"", Account_End = "\"},\"displayName\"";
 		
 		String AccountNumbers = "";
 		while (Response.contains("accountNumber")) {
-			String Account = ParseRequest(Response, Start, End);
-			//remove the section that was just checked.
-			Response = Response.substring(Response.indexOf(End) + End.length(), Response.length());
-			if (!Account.contentEquals("")) {
-				if (AccountNumbers.contentEquals("")) {
-					AccountNumbers = Account;
-				}else {
-					AccountNumbers += "," + Account;
-				}
+			String Account = ParseRequest(Response, Account_Start, Account_End);
+			
+			if (Account.contentEquals("")) {
+				String NickName_Start = "{\"accountNickname\":\"", NickName_End = "\",\"accountNumber\":{";
+				Account = ParseRequest(Response, NickName_Start, NickName_End);
 			}
+			if (AccountNumbers.contentEquals("")) {
+				AccountNumbers = Account;
+			}else {
+				AccountNumbers += "," + Account;
+			}
+			//remove the section that was just checked.
+			Response = Response.substring(Response.indexOf(Account_End) + Account_End.length(), Response.length());
 		}
 		
 		if (!AccountNumbers.contentEquals("")) {  //if no valid values were found then return null.

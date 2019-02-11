@@ -2,11 +2,14 @@ package WDPA_Application;
 
 import static org.testng.Assert.assertEquals;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import SupportClasses.DriverFactory;
+import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
@@ -279,58 +282,36 @@ public class WDPA_Functions{
 		WebDriver_Functions.takeSnapShot("Cancellation.png");
 	}
 	
-	public static String WDPALTLPickup(String AddressDetails[], String User, String Password, String HandelingUnits, String Weight) throws Exception{
+	public static String WDPALTLPickup(String AddressDetails[], String UserID, String Password, String HandelingUnits, String Weight) throws Exception{
 		String CountryCode = AddressDetails[6];
 		//https://wwwdev.idev.fedex.com/PickupApp/login?locale=en_US
 		
-		String strAccountSelected = "";
-		
+		//String strAccountSelected = "";
 		try {
 			//check if logged in flow or not, blank user means non logged in flow.
-			if (User != ""){
-				WebDriver_Functions.Login(User, Password);			
+			if (UserID != ""){
+				WebDriver_Functions.Login(UserID, Password);			
 				// launch the browser and direct it to the Base URL  https://wwwdrt.idev.fedex.com/PickupApp/scheduleFreightPickup.do?method=doInit&locale=en_us
 				WebDriver_Functions.ChangeURL("WDPA_LTL", CountryCode, false);
 				//wait for the WDPA page to load
 				WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
 				//WebDriver_Functions.Select(By.id("account.freight.accountBox._Dropdown"), "0", "i");
-				strAccountSelected = WebDriver_Functions.GetText(By.xpath("//option"));
-				WebDriver_Functions.Click(By.xpath("//option"));
-				
-				//select payment type
-				if (WebDriver_Functions.isPresent(By.id("account.freight.accountBox._InputSelect"))) {
+				//strAccountSelected = WebDriver_Functions.GetText(By.xpath("//option"));
+			
+				//Select account from dropdown
+				try {
+					DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);   
+					WebDriver_Functions.Click(By.xpath("//option"));
 					WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), "0", "i");
+				}catch (Exception e){   //account selection, Fix later
+				}finally {
+					DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.SECONDS);
 				}
 				
-				if (DriverFactory.getInstance().getDriver().findElement(By.id("module.address._headerHide")).getAttribute("style").contains("none")){ //if select account and address is prepopulated.            if (!driver.findElement(By.id("address.alternate.contactName")).isDisplayed()) 
-					WebDriver_Functions.Click(By.id("module.address._headerEdit"));
-					WebDriver_Functions.WaitPresent(By.id("address.phoneNumber"));
-			    	WebDriver_Functions.Type(By.id("address.alternate.contactName"), "TestingName");
-			    	WebDriver_Functions.Type(By.id("address.phoneNumber"), Helper_Functions.myPhone);
-				}else if (WebDriver_Functions.isPresent(By.id("address.accountAddressOne.field1"))) { //if the account number was selected and all the address details are needed.
-					WebDriver_Functions.Type(By.id("address.alternate.company"), "CompanyName");
-			    	WebDriver_Functions.Type(By.id("address.alternate.contactName"), "TestingName");
-			    	WebDriver_Functions.Type(By.id("address.accountAddressOne.field1"), AddressDetails[0]);
-			    	WebDriver_Functions.Type(By.id("address.accountAddressTwo.field1"), AddressDetails[1]);
-			    	WebDriver_Functions.Type(By.id("address.alternate.city1"), AddressDetails[2]);
-			    	WebDriver_Functions.WaitForTextNot(By.id("address.accountStateProvince.field1"), "");//wait for the states to populate
-			    	WebDriver_Functions.Select(By.id("address.accountStateProvince.field1"), AddressDetails[4], "v");
-			    	WebDriver_Functions.Type(By.id("address.alternate.phoneNumber"), Helper_Functions.myPhone);
-			    	WebDriver_Functions.Type(By.id("address.alternate.zipPostal"), AddressDetails[5]);
-				}
+				 WDPA_LTL_Pickup_Address("Company", "TestingName", Helper_Functions.myPhone, AddressDetails);
 			}else{//user is not logged in
 				WebDriver_Functions.ChangeURL("WDPA_LTL", CountryCode, false);
-				
-				WebDriver_Functions.WaitPresent(By.id("address.alternate.company.ns"));
-			    WebDriver_Functions.Type(By.id("address.alternate.company.ns"), "CompanyName");
-			    WebDriver_Functions.Type(By.id("address.alternate.contactName.ns"), "TestingName");
-			    WebDriver_Functions.Type(By.id("address.accountAddressOne.field1"), AddressDetails[0]);
-			    WebDriver_Functions.Type(By.id("address.accountAddressTwo.field1"), AddressDetails[1]);
-			    WebDriver_Functions.Type(By.id("address.alternate.city1"), AddressDetails[2]);
-			    WebDriver_Functions.WaitForTextNot(By.id("address.accountStateProvince.field1"), "");
-			    WebDriver_Functions.Select(By.id("address.accountStateProvince.field1"), AddressDetails[3], "t");
-			    WebDriver_Functions.Type(By.id("address.alternate.phoneNumber"), Helper_Functions.myPhone);
-			    WebDriver_Functions.Type(By.id("address.alternate.zipPostal"), AddressDetails[5]);
+				WDPA_LTL_Pickup_Address("Company", "TestingName", Helper_Functions.myPhone, AddressDetails);
 			}
 
 			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='address.accountCountry.display']/div[1]/div/div[2]/label"), "*\nCountry/Territory", 116632); //Added the "* \n" due to dev has setup
@@ -359,6 +340,8 @@ public class WDPA_Functions{
 		    
 		    if (WebDriver_Functions.CheckBodyText("The system has experienced an unexpected problem and is unable to complete your request.")) {
 		    	throw new Exception ("The system has experienced an unexpected problem and is unable to complete your request.");
+		    }else if (WebDriver_Functions.CheckBodyText("Your account number could not be found.")) {
+		    	throw new Exception ("Your account number could not be found.");
 		    }
 		    
 		    WebDriver_Functions.WaitPresent(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
@@ -368,10 +351,10 @@ public class WDPA_Functions{
 		    WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationLeftPanel']/div[1]/div[1]/div/div/label"), "Country/Territory", 116629); 
 		    WebDriver_Functions.takeSnapShot("Confirmation.png");
 		    
-		    if (User != ""){
+		    if (UserID != ""){
 			    WebDriver_Functions.Click(By.id("menubar.nav.menu3_div"));
-			    WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
-			    WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), strAccountSelected, "t");
+			    //WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
+			    //WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), strAccountSelected, "t");
 			    
 			    WebDriver_Functions.WaitPresent(By.id("history.search"));
 			    WebDriver_Functions.Type(By.id("history.filterField"), strConfirmationNumber);
@@ -393,17 +376,58 @@ public class WDPA_Functions{
 			    WebDriver_Functions.takeSnapShot("LTLDetails.png");
 			    Helper_Functions.PrintOut("WDPALTLPickup Completed", true);
 		    }
+		    String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "T"}};
+			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
 		    return strConfirmationNumber;
 	     } catch (Exception e) {
-			 try{ 
-				 if (WebDriver_Functions.isPresent(By.xpath("//*[@id='primary.error.display']/div/label"))){
-					 Helper_Functions.PrintOut(WebDriver_Functions.GetText(By.xpath("//*[@id='primary.error.display']/div/label")), true);
-				 }
-			 }catch (Exception e2){}
-			 e.printStackTrace();
-			 throw e;
+			String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "F"}};
+			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+			try{
+				if (WebDriver_Functions.isPresent(By.xpath("//*[@id='primary.error.display']/div/label"))){
+					Helper_Functions.PrintOut(WebDriver_Functions.GetText(By.xpath("//*[@id='primary.error.display']/div/label")), true);
+				}
+			}catch (Exception e2){}
+			e.printStackTrace();
+			throw e;
 		 }
 	}//end WDPALTLPickup
+
+	public static boolean WDPA_LTL_Pickup_Address(String CompanyName, String Name, String PhoneNumber, String AddressDetails[]) throws Exception {
+		
+		if (DriverFactory.getInstance().getDriver().findElement(By.id("module.address._headerHide")).getAttribute("style").contains("none")){ //if select account and address is prepopulated.            if (!driver.findElement(By.id("address.alternate.contactName")).isDisplayed()) 
+			WebDriver_Functions.Click(By.id("module.address._headerEdit"));
+			WebDriver_Functions.WaitPresent(By.id("address.phoneNumber"));
+		    WebDriver_Functions.Type(By.id("address.alternate.contactName"), Name);
+		    WebDriver_Functions.Type(By.id("address.phoneNumber"), PhoneNumber);
+		    
+		//if the account number was selected and all the address details are needed.
+		}else if (WebDriver_Functions.isPresent(By.id("address.accountAddressOne.field1"))) { 
+			WebDriver_Functions.Type(By.id("address.alternate.company"), CompanyName);
+		    WebDriver_Functions.Type(By.id("address.alternate.contactName"), Name);
+		    WebDriver_Functions.Type(By.id("address.accountAddressOne.field1"), AddressDetails[0]);
+		    WebDriver_Functions.Type(By.id("address.accountAddressTwo.field1"), AddressDetails[1]);
+		    WebDriver_Functions.Type(By.id("address.alternate.city1"), AddressDetails[2]);
+		    WebDriver_Functions.WaitForTextNot(By.id("address.accountStateProvince.field1"), "");//wait for the states to populate
+		    WebDriver_Functions.Select(By.id("address.accountStateProvince.field1"), AddressDetails[4], "v");
+		    WebDriver_Functions.Type(By.id("address.alternate.phoneNumber"), PhoneNumber);
+		    WebDriver_Functions.Type(By.id("address.alternate.zipPostal"), AddressDetails[5]);
+		    
+		// this is specific for the non logged in flow
+		}else if (WebDriver_Functions.isPresent(By.id("address.alternate.company.ns"))) {
+			WebDriver_Functions.Type(By.id("address.alternate.company.ns"), CompanyName);
+			WebDriver_Functions.Type(By.id("address.alternate.contactName.ns"), Name);
+			WebDriver_Functions.Type(By.id("address.accountAddressOne.field1"), AddressDetails[0]);
+			WebDriver_Functions.Type(By.id("address.accountAddressTwo.field1"), AddressDetails[1]);
+			WebDriver_Functions.Type(By.id("address.alternate.city1"), AddressDetails[2]);
+			WebDriver_Functions.WaitForTextNot(By.id("address.accountStateProvince.field1"), "");
+			WebDriver_Functions.Select(By.id("address.accountStateProvince.field1"), AddressDetails[3], "t");
+			WebDriver_Functions.Type(By.id("address.alternate.phoneNumber"), PhoneNumber);
+			WebDriver_Functions.Type(By.id("address.alternate.zipPostal"), AddressDetails[5]);
+		}else {
+			throw new Exception("Unable to enter address details.");
+		}
+		return true;
+	}
 
 	public static void WDPAShipment(String CountryCode, String User, String Password, String Service,  String OriginAddressDetails[], String DestAddressDetails[]) throws Exception{
 		try {

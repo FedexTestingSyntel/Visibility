@@ -50,7 +50,7 @@ public class USRC_FDM {
 				break;
 			case "EndtoEndEnrollment_UserID":
 				
-					data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, "L3FDM111715491", "Test1234"});
+					data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, "L2FDM012919T124302pm", "Test1234"});
 				
 				
 				break;

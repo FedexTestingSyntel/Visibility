@@ -93,7 +93,7 @@ public class Environment {
 	}
 	
 	public static void getAddressList() {
-		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Accounts");//load the relevant information from excel file.
+		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
 	}
 	
 	public static ArrayList<String[]> getTaxData(String CountryCode) {
@@ -273,7 +273,7 @@ public class Environment {
 
 	public static Account_Data[] getAddressDetails() {
 		//if the data is already loaded then return the values
-		if (Address_Data!= null) {
+		if (Address_Data != null) {
 			return Address_Data;
 		}else if (AddressDetails == null || AddressDetails.size() == 0){
 			getAddressList();
@@ -401,6 +401,12 @@ public class Environment {
 					break;	
 		  		case "PASSKEY":
 		  			DataClass[pos].PASSKEY = Row[j];
+					break;
+		  		case "FDM_STATUS":
+		  			DataClass[pos].FDM_STATUS = Row[j];
+					break;	
+		  		case "FREIGHT_ENABLED":
+		  			DataClass[pos].FREIGHT_ENABLED = Row[j];
 					break;	
 		  		case "ERROR":
 		  			DataClass[pos].ERROR = Row[j];

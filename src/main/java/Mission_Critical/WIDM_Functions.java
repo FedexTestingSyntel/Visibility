@@ -28,10 +28,9 @@ public class WIDM_Functions{
 			WebDriver_Functions.takeSnapShot("Registration WIDM Confirmation.png");
 			String ReturnValue[] = new String[] {UserId, strPassword, UUID};
 			Helper_Functions.WriteUserToExcel(UserId, strPassword);
-			Helper_Functions.PrintOut("WIDM_Registration Completed: " +  Arrays.toString(ReturnValue), false);
+			Helper_Functions.PrintOut(Arrays.toString(ReturnValue), false);
 			return Arrays.toString(ReturnValue);
 		}catch (Exception e) {
-			e.printStackTrace();
 			throw e;
 		}
 	}//end WIDM_Registration
@@ -55,46 +54,56 @@ public class WIDM_Functions{
 			Helper_Functions.PrintOut("WIDM_Registration_EFWS Completed with: " + EfwsEmail, false);
 			return UserId + " " + EfwsEmail;
 		}catch (Exception e) {
-			e.printStackTrace();
+			WebDriver_Functions.GetCookieValue("fcl_uuid");//for debug to see if the user was created.
 			throw e;
 		}
 	}//end WIDM_Registration_EFWS
 	
 	public static void WIDM_Registration_Input(String AddressDetails[], String Name[], String UserId, String Email_Address) throws Exception{
-		WebDriver_Functions.Type(By.id("firstName"), Name[0]);
-		WebDriver_Functions.Type(By.id("lastName"), Name[2]);
-		WebDriver_Functions.Type(By.id("email"), Email_Address);
-		WebDriver_Functions.Type(By.id("retypeEmail"), Email_Address);
-		WebDriver_Functions.Type(By.id("address1"), AddressDetails[0]);
-		WebDriver_Functions.Type(By.id("address2"), AddressDetails[1]);
-		if (WebDriver_Functions.isPresent(By.id("city"))) {
-			WebDriver_Functions.Type(By.id("city"), AddressDetails[2]);
-		}
-
-		if (AddressDetails[4] != ""){
-			WebDriver_Functions.Type(By.id("state"),AddressDetails[4]);
+		WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
+		
+		if (Name != null && Name.length > 2) {
+			WebDriver_Functions.Type(By.id("firstName"), Name[0]);
+			WebDriver_Functions.Type(By.id("initials"), Name[1]);
+			WebDriver_Functions.Type(By.id("lastName"), Name[2]);
 		}
 		
-		if (AddressDetails[5] != ""){
-			WebDriver_Functions.Type(By.id("zip"),AddressDetails[5]);
-		}
+		WebDriver_Functions.Type(By.id("email"), Email_Address);
+		WebDriver_Functions.Type(By.id("retypeEmail"), Email_Address);
+		
+		if (AddressDetails != null) {
+			WebDriver_Functions.Type(By.id("address1"), AddressDetails[0]);
+			WebDriver_Functions.Type(By.id("address2"), AddressDetails[1]);
+			if (WebDriver_Functions.isPresent(By.id("city"))) {
+				WebDriver_Functions.Type(By.id("city"), AddressDetails[2]);
+			}
 
+			if (AddressDetails[4] != ""){
+				WebDriver_Functions.Type(By.id("state"),AddressDetails[4]);
+			}
+		
+			if (AddressDetails[5] != ""){
+				WebDriver_Functions.Type(By.id("zip"),AddressDetails[5]);
+			}		
+			
+			if (AddressDetails[6].toLowerCase().contains("ca")) {
+				//for Canada the list populates ca_english or ca_french
+				WebDriver_Functions.Select(By.id("country1"), "ca_english", "v");
+			}else{
+				WebDriver_Functions.Select(By.id("country1"), AddressDetails[6].toLowerCase(), "v");
+			}
+			
+			WebDriver_Functions.Type(By.id("phone"), Helper_Functions.ValidPhoneNumber(AddressDetails[6]));
+		}
+		
 		if (WebDriver_Functions.isPresent(By.xpath("//*[@id='module.registration._expanded']/table/tbody/tr/td[1]/table/tbody/tr[24]/td[2]"))) {
 			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='module.registration._expanded']/table/tbody/tr/td[1]/table/tbody/tr[24]/td[2]"), "Country/Territory", 116678);
 		}else {
 			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='module.registration._expanded']/table/tbody/tr/td[1]/table/tbody/tr[23]/td[2]"), "Country/Territory", 116678); //for non us
 		}
 		
-		if (AddressDetails[6].toLowerCase().contains("ca")) {
-			//for Canada the list populates ca_english or ca_french
-			WebDriver_Functions.Select(By.id("country1"), "ca_english", "v");
-		}else{
-			WebDriver_Functions.Select(By.id("country1"), AddressDetails[6].toLowerCase(), "v");
-		}
-
-		WebDriver_Functions.Type(By.id("phone"), Helper_Functions.ValidPhoneNumber(AddressDetails[6]));
 		WebDriver_Functions.Type(By.id("uid"), UserId); 
-		Helper_Functions.PrintOut("Userid is: " + UserId, true);
+		//Helper_Functions.PrintOut("Userid is: " + UserId, true);
 		WebDriver_Functions.Type(By.id("password"), strPassword);
 		WebDriver_Functions.Type(By.id("retypePassword"), strPassword);
 		WebDriver_Functions.Select(By.id("reminderQuestion"), "What is your mother's first name?", "t");
@@ -155,7 +164,6 @@ public class WIDM_Functions{
 			Helper_Functions.PrintOut("Failures: " + Failures, true);
 			return Failures;
 		}catch (Exception e) {
-			e.printStackTrace();
 			throw e;
 		}
 	}//end WIDM_Registration_Input
@@ -238,8 +246,7 @@ public class WIDM_Functions{
 
 			return strUserName + Email;
 		}catch(Exception e){
-			e.printStackTrace();
-	throw e;
+			throw e;
 		}
 	}//end ResetPasswordWIDM
 
@@ -256,7 +263,6 @@ public class WIDM_Functions{
 			Helper_Functions.PrintOut("Completed Forgot User Confirmation using " + Email, false);
 			return "Email sent to + " + Email;
 		}catch(Exception e){
-			e.printStackTrace();
 			throw e;
 		}
 	}//end ResetPasswordWIDM

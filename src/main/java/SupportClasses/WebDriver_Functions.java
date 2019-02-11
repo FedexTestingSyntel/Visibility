@@ -53,6 +53,7 @@ public class WebDriver_Functions{
     		case "Pref":  
     		case "PREF":  
     			AppUrl = LevelURL + "/preferences";
+    			//AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=fclfederate&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Ffcl%2FExistingAccountFclStep3.do&returnurl=" + LevelURL + "%2Fpreferences&programIndicator=ss90705920&fedId=Gpcenter";
     			break;		
     		case "JSP":  		
     			AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp";//independent of level
@@ -91,8 +92,9 @@ public class WebDriver_Functions{
     			AppUrl = LevelURL + "FID?clienttype=dotcom&clickedPrint=false&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&lang_code=en&initialrequest=y&option=fid";
 				break;						
     		case "WIDM":// this is the Find International documents link from GTM page
-    			AppUrl = LevelURL + "/FID?clienttype=dotcom&clickedPrint=false&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&lang_code=en&option=fid";
-				break;
+    			//AppUrl = LevelURL + "/FID?clienttype=dotcom&clickedPrint=false&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&lang_code=en&option=fid";
+    			AppUrl = LevelURL + "/FID?clienttype=dotcomreg&clickedPrint=false&locale=" + CCL + "_en&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&language=english&lang_code=en&initialrequest=y&option=fid&ccln=true";
+       			break;
     		case "HOME":  	
     			AppUrl = LevelURL + "/en-us/home.html";
 				break;
@@ -146,7 +148,7 @@ public class WebDriver_Functions{
 		}//end switch AppDesignation
 		
 		if (ClearCookies) {
-			DriverFactory.getInstance().getDriver().get(LevelURL + "/en-us/home.html");
+			//DriverFactory.getInstance().getDriver().get(LevelURL + "/en-us/home.html");
 			DriverFactory.getInstance().getDriver().manage().deleteAllCookies();
 			Helper_Functions.PrintOut("Cookies Deleted", true);
 		}

@@ -214,9 +214,10 @@ public class WFCL{
 			String UserName[] = Helper_Functions.LoadDummyName("INET", Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + Account + CountryCode);
 			String AddressDetails[] = Helper_Functions.AccountDetails(Account);
-			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
-			Result += WFCL_Functions.Admin_Registration(CountryCode, Account);
-			Helper_Functions.PrintOut(Result, false);
+			String Result[] = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
+			Result = Arrays.copyOf(Result, Result.length + 1);
+			Result[Result.length - 1] = "Admin:" + WFCL_Functions.Admin_Registration(CountryCode, Account);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -232,8 +233,8 @@ public class WFCL{
 			String AddressDetails[] = Helper_Functions.AccountDetails(Account);
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + "Inet" + CountryCode);
-			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
-			Helper_Functions.PrintOut(Result, false);
+			String Result[] = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -301,10 +302,10 @@ public class WFCL{
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
 			String UserID = Helper_Functions.LoadUserID("L" + Level + "GFBO" + CountryCode);
 			
-			String Result = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
-
-			Result = Arrays.toString(WFCL_Functions.WFCL_AccountRegistration_GFBO(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails));
-			Helper_Functions.PrintOut(Result, false);
+			String Result[] = WFCL_Functions.WFCL_AccountRegistration_INET(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
+			Result = Arrays.copyOf(Result, Result.length + 1);
+			Result[Result.length - 1] = "GFBO:" + WFCL_Functions.WFCL_AccountRegistration_GFBO(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

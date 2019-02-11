@@ -5,14 +5,14 @@
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   <test thread-count="8" name="WCRV_Test(failed)" parallel="methods">
-    <parameter name="Level" value="3"/>
+    <parameter name="Level" value="7"/>
     <classes>
-      <class name="WaterfallApplications.WCRV">
+      <class name="WCRV_Application.WCRV">
         <methods>
+          <include name="WCRV_Generate_RateSheet" invocation-numbers="6 7 0 5 4 2 1 3"/>
           <include name="beforeClass"/>
-          <include name="WCRV_Generate_RateSheet" invocation-numbers="0 8 7 4 6"/>
         </methods>
-      </class> <!-- WaterfallApplications.WCRV -->
+      </class> <!-- WCRV_Application.WCRV -->
     </classes>
   </test> <!-- WCRV_Test(failed) -->
 </suite> <!-- Failed suite [WCRV_Suite] -->

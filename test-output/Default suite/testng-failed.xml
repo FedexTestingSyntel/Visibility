@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="SupportClasses.Account_Lookup">
+      <class name="Mission_Critical.WFCL_SmokeTest">
         <methods>
+          <include name="CreditCardRegistrationEnroll" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="AccountCheck" invocation-numbers="6 16 11 22 20 30 39 29 35 34 42 52 51 50 48 60 58 57 56 62 61 66 64 82 69 80 78 76 98 93 103 94 92 100 111 109 106 116 113 136 135 152 151 160 159 157 162 179 183 184 195 194 191 190 210 209 207 205 216 215 234 221 241 235 246 252 251 262 272 288 282 303 312 315 313 316 322 338 335"/>
         </methods>
-      </class> <!-- SupportClasses.Account_Lookup -->
+      </class> <!-- Mission_Critical.WFCL_SmokeTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

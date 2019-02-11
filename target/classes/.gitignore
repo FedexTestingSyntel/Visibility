@@ -1,12 +1,6 @@
-/API_Calls/
-/AgileApplications/
-/CXS_Support/
-/Data_Structures/
+/SoapExample/
 /Mission_Critical/
-/SupportClasses/
-/TestingFunctions/
-/WCRV_Application/
+/CXS_Support/
 /WDPA_Application/
-/WPRL_Application/
-/WaterfallApplications/
-/XMLExecution/
+/Data_Structures/
+/SupportClasses/

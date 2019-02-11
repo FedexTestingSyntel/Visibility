@@ -1,7 +1,6 @@
 package WCRV_Application;
 
 import org.testng.annotations.Test;
-
 import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
@@ -25,6 +24,9 @@ public class WCRV{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
+		//CountryList = Environment.getCountryList("high");
+		//CountryList = new String[][]{{"US", "United States"},{"AU", "Australia"},{"CA", "Canada"},{"GB", "United Kingdom"},{"BR", "Brazil"},{"AE", "United Arab Emirates"}};
+
 		//CountryList = new String[][]{{"US", "United States"}};
 	}
 	
@@ -41,7 +43,7 @@ public class WCRV{
 					User_Data UD[] = Environment.Get_UserIds(intLevel);
 					for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].WCRV_ENABLED.contains("Enabled")) {
+		    				if (UD[k].WCRV_ENABLED.contains("Enabled") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    				}
 		    			}
@@ -51,9 +53,12 @@ public class WCRV{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].WCRV_ENABLED.contains("Enabled")) {
+		    				if (UD[k].WCRV_ENABLED.contains("Enabled") && UD[k].COUNTRY_CD.contains(CountryList[j][0])) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "INTRA_COUNTRY", 1});
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "EXPORT", 1});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "IMPORT", 1});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "THIRD_PARTY", 1});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "ANY", 4});
 		    					break;
 		    				}
 		    			}
@@ -114,7 +119,7 @@ public class WCRV{
 		}
 	}
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = false)
 	public void WCRV_CheckPermission(String Level, String CountryCode, String UserId, String Password) {
 		try {
 			boolean access = WCRV_Functions.WCRV_CheckPermission(CountryCode, UserId, Password);

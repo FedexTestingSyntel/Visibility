@@ -35,6 +35,7 @@ public class Helper_Functions{
 	public static String BaseDirectory = System.getProperty("user.dir").substring(0, System.getProperty("user.dir").lastIndexOf("\\") + 1);
 	public static String FileSaveDirectory = BaseDirectory + "EclipseScreenshots";
 	public static String DataDirectory = BaseDirectory + "Data";
+	public static String TestingData = DataDirectory + "\\TestingData.xls";
 	public final static Lock Excellock = new ReentrantLock();//prevent excel ready clashes
 	public static String Passed = "Passed", Failed = "Fail", Skipped = "Skipped";
 	
@@ -441,7 +442,7 @@ public class Helper_Functions{
 	
 	public static String LoadUserID(String Base){
 		String User = Base + CurrentDateTime() + getRandomString(4);
-		System.out.println("UserID: " + User);
+		Helper_Functions.PrintOut("UserID: " + User, false);
 		return User;
 	}
 	
@@ -589,6 +590,7 @@ public class Helper_Functions{
 		}finally {
 			Excellock.unlock();
 		}
+		PrintOut("Account number removed from testing file. " + Account_to_Delete, true);
 		return true;
 	}
 	
@@ -661,26 +663,30 @@ public class Helper_Functions{
 			
 			//Check the column headers for the key position
 			int KeyColumn = -1;
-			HSSFRow IdentifierRow = worksheet.getRow(0);
-			for (int i = 0; i < worksheet.getLastRowNum() + 1; i++) {
-				if (IdentifierRow.getCell(i) != null && IdentifierRow.getCell(i).getStringCellValue().contentEquals(Data[KeyPosition][0])) {
-					KeyColumn = i;
-					break;
+			HSSFRow IdentifierRow = null;
+			if (KeyPosition != -1) { //Only when making an update
+				IdentifierRow = worksheet.getRow(0);
+				for (int i = 0; i < worksheet.getLastRowNum() + 1; i++) {
+					if (IdentifierRow.getCell(i) != null && IdentifierRow.getCell(i).getStringCellValue().contentEquals(Data[KeyPosition][0])) {
+						KeyColumn = i;
+					}
 				}
-			}
-			//will add a colum header if not found.
-			if (KeyColumn == -1) {
-				throw new Exception("Key Not Found");
+				//will add a colum header if not found.
+				if (KeyColumn == -1) {
+					throw new Exception("Key Not Found");
+				}
 			}
 			
 			for (int j = 1; j < worksheet.getLastRowNum() + 1; j++) {
-				if (worksheet.getRow(j).getCell(KeyColumn) != null && worksheet.getRow(j).getCell(KeyColumn).getStringCellValue().contentEquals(Data[KeyPosition][1])) {
+				//Updating values
+				//System.out.print("j: " + j + "   ");//for debug
+				if (worksheet.getRow(j) != null && worksheet.getRow(j).getCell(KeyColumn) != null && worksheet.getRow(j).getCell(KeyColumn).getStringCellValue().contentEquals(Data[KeyPosition][1])) {
 					for (int k = 0; k < Data.length; k++) {
 						if (worksheet.getRow(j).getCell(k) == null) {//if cell not present create it
 							worksheet.getRow(j).createCell(k);
 						}
 						for(int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
-							if (IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
+							if (IdentifierRow.getCell(l) != null && IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
 								Cell cell = null; 
 								if (worksheet.getRow(j).getCell(l) == null) {//if cell not present create it
 									worksheet.getRow(j).createCell(l);
@@ -691,6 +697,8 @@ public class Helper_Functions{
 							}
 						}
 					}	
+				}else {//when making an addition
+					
 				}
 			}
 			//Close the InputStream  

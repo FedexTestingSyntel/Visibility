@@ -79,7 +79,7 @@ public class WRTT_Functions {
 			}else if (!List && Service > 10){
 				return "international do not have retail rates";
 			}
-			WebDriver_Functions.takeSnapShot(Title + ".png");
+			//WebDriver_Functions.takeSnapShot(Title + ".png");
 			WebDriver_Functions.Click(By.id("requestsheetbtn"));
 
 			//download the rates
