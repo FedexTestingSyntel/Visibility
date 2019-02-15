@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>Default test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>0/0/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>0/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Mon Feb 11 15:40:28 CST 2019</td>
+<td>Started on:</td><td>Fri Feb 15 15:38:32 CST 2019</td>
 </tr>
-<tr><td>Total time:</td><td>0 seconds (548 ms)</td>
+<tr><td>Total time:</td><td>1 seconds (1982 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -67,5 +67,117 @@ function toggleAllBoxes() {
 </tr>
 </table><p/>
 <small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-failed'>
+<tr><td colspan='4' align='center'><b>FAILED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='SoapExample.SoapAutomation.ADAT_PhoneVelocity()'><b>ADAT_PhoneVelocity</b><br>Test class: SoapExample.SoapAutomation<br>Parameters: 3, Data_Structures.ADAT_Data@3610efc0, FDM-PHONE-PIN</td>
+<td><div><pre>com.sun.xml.internal.messaging.saaj.SOAPExceptionImpl: com.sun.xml.internal.messaging.saaj.SOAPExceptionImpl: Bad response: (400Bad Request
+	at com.sun.xml.internal.messaging.saaj.client.p2p.HttpSOAPConnection.call(Unknown Source)
+	at SoapExample.GeneralSoapSupport.callSoapWebService(GeneralSoapSupport.java:57)
+	at SoapExample.SoapAutomation.ADAT_EvaluateRisk(SoapAutomation.java:274)
+	at SoapExample.SoapAutomation.VelocityCheck(SoapAutomation.java:112)
+	at SoapExample.SoapAutomation.ADAT_PhoneVelocity(SoapAutomation.java:91)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: com.sun.xml.internal.messaging.saaj.SOAPExceptionImpl: Bad response: (400Bad Request
+	at com.sun.xml.internal.messaging.saaj.client.p2p.HttpSOAPConnection.post(Unknown Source)
+	... 20 more
+
+CAUSE:
+
+com.sun.xml.internal.messaging.saaj.SOAPExceptionImpl: Bad response: (400Bad Request
+	at com.sun.xml.internal.messaging.saaj.client.p2p.HttpSOAPConnection.post(Unknown Source)
+	at com.sun.xml.internal.messaging.saaj.client.p2p.HttpSOAPConnection.call(Unknown Source)
+	at SoapExample.GeneralSoapSupport.callSoapWebService(GeneralSoapSupport.java:57)
+	at SoapExample.SoapAutomation.ADAT_EvaluateRisk(SoapAutomation.java:274)
+	at SoapExample.SoapAutomation.VelocityCheck(SoapAutomation.java:112)
+	at SoapExample.SoapAutomation.ADAT_PhoneVelocity(SoapAutomation.java:91)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div><a href='#' onClick='toggleBox("stack-trace308311203", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace308311203'><pre>com.sun.xml.internal.messaging.saaj.SOAPExceptionImpl: com.sun.xml.internal.messaging.saaj.SOAPExceptionImpl: Bad response: (400Bad Request
+	at com.sun.xml.internal.messaging.saaj.client.p2p.HttpSOAPConnection.call(Unknown Source)
+	at SoapExample.GeneralSoapSupport.callSoapWebService(GeneralSoapSupport.java:57)
+	at SoapExample.SoapAutomation.ADAT_EvaluateRisk(SoapAutomation.java:274)
+	at SoapExample.SoapAutomation.VelocityCheck(SoapAutomation.java:112)
+	at SoapExample.SoapAutomation.ADAT_PhoneVelocity(SoapAutomation.java:91)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: com.sun.xml.internal.messaging.saaj.SOAPExceptionImpl: Bad response: (400Bad Request
+	at com.sun.xml.internal.messaging.saaj.client.p2p.HttpSOAPConnection.post(Unknown Source)
+	... 20 more
+
+CAUSE:
+
+com.sun.xml.internal.messaging.saaj.SOAPExceptionImpl: Bad response: (400Bad Request
+	at com.sun.xml.internal.messaging.saaj.client.p2p.HttpSOAPConnection.post(Unknown Source)
+	at com.sun.xml.internal.messaging.saaj.client.p2p.HttpSOAPConnection.call(Unknown Source)
+	at SoapExample.GeneralSoapSupport.callSoapWebService(GeneralSoapSupport.java:57)
+	at SoapExample.SoapAutomation.ADAT_EvaluateRisk(SoapAutomation.java:274)
+	at SoapExample.SoapAutomation.VelocityCheck(SoapAutomation.java:112)
+	at SoapExample.SoapAutomation.ADAT_PhoneVelocity(SoapAutomation.java:91)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>1</td>
+<td>SoapExample.SoapAutomation@3439f68d</td></tr>
+</table><p>
 </body>
 </html>

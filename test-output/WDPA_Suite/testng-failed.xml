@@ -5,7 +5,7 @@
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   <test thread-count="8" name="WDPA_Test(failed)" parallel="methods">
-    <parameter name="Level" value="3"/>
+    <parameter name="Level" value="6"/>
     <classes>
       <class name="WDPA_Application.WDPA_SmokeTest">
         <methods>

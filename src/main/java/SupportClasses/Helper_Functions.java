@@ -680,23 +680,29 @@ public class Helper_Functions{
 			for (int j = 1; j < worksheet.getLastRowNum() + 1; j++) {
 				//Updating values
 				//System.out.print("j: " + j + "   ");//for debug
-				if (worksheet.getRow(j) != null && worksheet.getRow(j).getCell(KeyColumn) != null && worksheet.getRow(j).getCell(KeyColumn).getStringCellValue().contentEquals(Data[KeyPosition][1])) {
-					for (int k = 0; k < Data.length; k++) {
-						if (worksheet.getRow(j).getCell(k) == null) {//if cell not present create it
-							worksheet.getRow(j).createCell(k);
-						}
-						for(int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
-							if (IdentifierRow.getCell(l) != null && IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
-								Cell cell = null; 
-								if (worksheet.getRow(j).getCell(l) == null) {//if cell not present create it
-									worksheet.getRow(j).createCell(l);
+				if (worksheet.getRow(j) != null && worksheet.getRow(j).getCell(KeyColumn) != null) { //worksheet.getRow(j).getCell(KeyColumn).getStringCellValue().contentEquals(Data[KeyPosition][1]
+					//format the cell just in case it is not a string.
+					DataFormatter formatter = new DataFormatter();
+					String val = formatter.formatCellValue(worksheet.getRow(j).getCell(KeyColumn));
+					
+					if (val.contentEquals(Data[KeyPosition][1])){
+						for (int k = 0; k < Data.length; k++) {
+							if (worksheet.getRow(j).getCell(k) == null) {//if cell not present create it
+								worksheet.getRow(j).createCell(k);
+							}
+							for(int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
+								if (IdentifierRow.getCell(l) != null && IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
+									Cell cell = null; 
+									if (worksheet.getRow(j).getCell(l) == null) {//if cell not present create it
+										worksheet.getRow(j).createCell(l);
+									}
+									cell = worksheet.getRow(j).getCell(l);
+									cell.setCellValue(Data[k][1]);
+									break;
 								}
-								cell = worksheet.getRow(j).getCell(l);
-								cell.setCellValue(Data[k][1]);
-								break;
 							}
 						}
-					}	
+					}
 				}else {//when making an addition
 					
 				}

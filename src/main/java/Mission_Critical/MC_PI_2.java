@@ -48,7 +48,7 @@ public class MC_PI_2{
 			//String Invalid_Email_Special[] = new String[] {"acc`@fed.com", "ac*c@fed.com", "ac[c@fed.com", "ac\\c@fed.com", "ac\"c@fed.com"};
 			
 			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com"};	
-			String Valid_Emails_Special[] = new String[] {"ac=c@fed.com", "a.cc@fed.com", "a/cc@fed.com", "a?cc@fed.com", "a^cc@fed.com", "ac'c@fed.com", "ac&c@fed.com", "ac{c@fed.com", "ac}c@fed.com", "ac(c@fed.com", "ac)c@fed.com", "a~cc@fed.com", "ac_c@fed.com", "a-cc@fed.com", "a+cc@fed.com"};			
+			String Valid_Emails_Special[] = new String[] {"ac=c@fed.com", "a.cc@fed.com", "a/cc@fed.com", "a?cc@fed.com", "a^cc@fed.com", "ac'c@fed.com", "ac&c@fed.com", "ac{c@fed.com", "ac}c@fed.com", "ac(c@fed.com", "ac)c@fed.com", "a~cc@fed.com", "ac_c@fed.com", "a-cc@fed.com", "a+cc@fed.com", "s-r'i=p./?a^&r{}n(a)_+r@fedex.com"};			
 
 			//The below special char
 			

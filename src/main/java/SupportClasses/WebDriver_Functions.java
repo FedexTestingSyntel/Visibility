@@ -19,25 +19,23 @@ import org.openqa.selenium.support.ui.Select;
 
 public class WebDriver_Functions{
 	
-	public static void ChangeURL(String AppDesignation, String CountryCode, boolean ClearCookies) throws Exception {
+	public static void ChangeURL(String Designation, String CountryCode, boolean ClearCookies) throws Exception {
 		String LevelURL = null, AppUrl = null, CCL = CountryCode.toLowerCase(),CCU = CountryCode.toUpperCase();
 		LevelURL = LevelUrlReturn();
 		//String caller = Thread.currentThread().getStackTrace()[2].getMethodName();
+			String AppDesignation = Designation.toUpperCase();
+		
 		switch (AppDesignation) {
-			case "AdminReg":
 			case "ADMINREG":
     			AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?appName=fclpasskey&registration=true&countryCode=" + CCL + "&languageCode=en&fclHost=" + LevelURL + "&step3URL=" + LevelURL + "%2Fapps%2Fshipadmin&afterwardsURL=" + LevelURL + "%2Fapps%2Fshipadmin&locale=en_" + CCU + "&programIndicator=1";
-				break;
-			case "FCLCreate":  	
+				break;  	
 			case "FCLCREATE":  
     			//AppUrl = LevelURL + "/fcl/web/jsp/signup.jsp";
     			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=oadr&locale=" + CCL + "_en&step3URL=https%3A%2F%2F.fedex.com%3A443%2Ffcl%2Fweb%2Fjsp%2FfclValidateAndCreate.jsp&afterwardsURL=" + LevelURL + "%3A443%2Ffcl%2Fweb%2Fjsp%2Foadr.jsp&programIndicator=p314t9n1ey&accountOption=link";
 				break;
-    		case "FCLLink": 
     		case "FCLLINK":
     			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=oadr&locale=" + CCL + "_en&step3URL=https%3A%2F%2F.fedex.com%3A443%2Ffcl%2Fweb%2Fjsp%2FfclValidateAndCreate.jsp&afterwardsURL=" + LevelURL + "%3A443%2Ffcl%2Fweb%2Fjsp%2Foadr.jsp&programIndicator=p314t9n1ey&accountOption=link";
-				break;
-    		case "FCLLinkInter":  	
+				break; 	
     		case "FCLLINKINTER": 
     			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo.jsp?appName=fclfsm&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Fship%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fship%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&programIndicator=0";
     			if(Helper_Functions.Check_Country_Region(CountryCode).contains("APAC")){//APAC Country
@@ -47,10 +45,12 @@ public class WebDriver_Functions{
     		case "INET":		
     			AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";
     			break;
+    		case "INET_ADD_ACCOUNT":		
+    			AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?step3URL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF%26programIndicator%3D0&appName=fclfsm&countryCode=" + CCL + "&languageCode=en&programIndicator=1&rp=fclmyprofile";
+    			break;
     		case "WADM":
     			AppUrl = LevelURL + "/apps/shipadmin/";
 				break;
-    		case "Pref":  
     		case "PREF":  
     			AppUrl = LevelURL + "/preferences";
     			//AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=fclfederate&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Ffcl%2FExistingAccountFclStep3.do&returnurl=" + LevelURL + "%2Fpreferences&programIndicator=ss90705920&fedId=Gpcenter";
@@ -58,7 +58,6 @@ public class WebDriver_Functions{
     		case "JSP":  		
     			AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp";//independent of level
 				break;
-    		case "JSP_Express":
     		case "JSP_EXPRESS":
     			AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/express.jsp";
     			break;
@@ -101,7 +100,6 @@ public class WebDriver_Functions{
     		case "WDPA":  	
     			AppUrl = LevelURL + "/PickupApp/login?locale=en_" + CCL;
 				break;
-    		case "WDPA_Pickups":
     		case "WDPA_PICKUPS":
     			AppUrl = LevelURL + "/PickupApp/pickuphistory.do?method=doInit";
 				break;
@@ -141,7 +139,7 @@ public class WebDriver_Functions{
     		default: //as a fall back append the correct level to the AppDesignation that is sent.
     			if (AppDesignation.contains("Enrollment_")){//https://wwwdrt.idev.fedex.com/fcl/ALL?enrollmentid=ml18024117&language=en&country=us 
     				AppDesignation = AppDesignation.replace("Enrollment_", "");
-    				AppUrl = LevelURL + "/fcl/ALL?enrollmentid=" + AppDesignation + "&language=en&country=" + CCL;
+    				AppUrl = LevelURL + "/fcl/ALL?enrollmentid=" + Designation + "&language=en&country=" + CCL;
     			}else if (AppUrl == null) {
     				Helper_Functions.PrintOut("FAILURE, unable to recognise  " + AppDesignation, false);
     			}

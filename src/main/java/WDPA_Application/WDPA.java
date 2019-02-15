@@ -23,7 +23,7 @@ import SupportClasses.WebDriver_Functions;
 public class WDPA extends WDPA_Functions{
 	
 	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -61,9 +61,9 @@ public class WDPA extends WDPA_Functions{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].FREIGHT_ENABLED.contentEquals("T")) {
+		    				if (UD[k].FREIGHT_ENABLED.contentEquals("")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					break;
+		    					//break;
 		    				}
 		    			}
 					}

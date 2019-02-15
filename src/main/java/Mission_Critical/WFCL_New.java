@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "2";  
 	static String CountryList[][]; 
 	static List<String> Users = new ArrayList<String>();
 
@@ -30,10 +30,10 @@ public class WFCL_New{
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("BR");
-		//CountryList = Environment.getCountryList("JP");
+		//CountryList = Environment.getCountryList("GU");
 		//CountryList = Environment.getCountryList("high");
 		//Helper_Functions.MyEmail = "accept@fedex.com";
-		//CountryList = new String[][]{{"FR", "Japan"}, {"CA", "Singapore"}};
+		//CountryList = new String[][]{{"US", ""}, {"AU", ""}};
 	}
 	
 	@DataProvider (parallel = true)
@@ -242,6 +242,20 @@ public class WFCL_New{
 			String Result[] = new String[] {AccountDetails.UserId, AccountDetails.UUID, AccountDetails.Account_Number};
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 			Users.add(AccountDetails.UserId);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	public void Link_account_to_user(String Level, String Account, String UserID, String Password){
+		try {
+			Account_Data AccountDetails = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			AccountDetails = Account_Data.Set_Dummy_Contact_Name(AccountDetails);
+			AccountDetails.UserId = Helper_Functions.LoadUserID("L" + Level + "Acc" + Account);
+			
+			//String Result = WFCL_Functions_UsingData.Account_Number_Masking(Account_Info, Account_Info_Mismatch);
+			//Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

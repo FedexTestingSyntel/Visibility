@@ -286,7 +286,7 @@ public class WDPA_Functions{
 		String CountryCode = AddressDetails[6];
 		//https://wwwdev.idev.fedex.com/PickupApp/login?locale=en_US
 		
-		//String strAccountSelected = "";
+		String strAccountSelected = "", strConfirmationNumber = "";
 		try {
 			//check if logged in flow or not, blank user means non logged in flow.
 			if (UserID != ""){
@@ -295,12 +295,13 @@ public class WDPA_Functions{
 				WebDriver_Functions.ChangeURL("WDPA_LTL", CountryCode, false);
 				//wait for the WDPA page to load
 				WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
-				//WebDriver_Functions.Select(By.id("account.freight.accountBox._Dropdown"), "0", "i");
-				//strAccountSelected = WebDriver_Functions.GetText(By.xpath("//option"));
+				
 			
 				//Select account from dropdown
 				try {
 					DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);   
+					WebDriver_Functions.Select(By.id("account.freight.accountBox._Dropdown"), "0", "i");
+					strAccountSelected = WebDriver_Functions.GetText(By.xpath("//option"));
 					WebDriver_Functions.Click(By.xpath("//option"));
 					WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), "0", "i");
 				}catch (Exception e){   //account selection, Fix later
@@ -345,16 +346,19 @@ public class WDPA_Functions{
 		    }
 		    
 		    WebDriver_Functions.WaitPresent(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
-		    String strConfirmationNumber = WebDriver_Functions.GetText(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
+		    strConfirmationNumber = WebDriver_Functions.GetText(By.cssSelector("div.confirmationRtColumnRight > div.confirmationFullWidthColumn > div.confirmationContentRight > label"));
 		    strConfirmationNumber = strConfirmationNumber.substring(strConfirmationNumber.indexOf(".") + 2);
 		    Helper_Functions.PrintOut("Schedule LTL Pickup:   " + strConfirmationNumber, true);
 		    WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationLeftPanel']/div[1]/div[1]/div/div/label"), "Country/Territory", 116629); 
 		    WebDriver_Functions.takeSnapShot("Confirmation.png");
 		    
+		    String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "T"}};
+			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+		    
 		    if (UserID != ""){
 			    WebDriver_Functions.Click(By.id("menubar.nav.menu3_div"));
-			    //WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
-			    //WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), strAccountSelected, "t");
+			    WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
+			    WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), strAccountSelected, "t");
 			    
 			    WebDriver_Functions.WaitPresent(By.id("history.search"));
 			    WebDriver_Functions.Type(By.id("history.filterField"), strConfirmationNumber);
@@ -376,12 +380,15 @@ public class WDPA_Functions{
 			    WebDriver_Functions.takeSnapShot("LTLDetails.png");
 			    Helper_Functions.PrintOut("WDPALTLPickup Completed", true);
 		    }
-		    String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "T"}};
-			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+
 		    return strConfirmationNumber;
 	     } catch (Exception e) {
-			String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "F"}};
-			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+	    	 if (strConfirmationNumber.contentEquals("")) {
+	    		 //if not ablt to get the confirmaiton number then list as invalid.
+	 			String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "F"}};
+				Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+	    	 }
+
 			try{
 				if (WebDriver_Functions.isPresent(By.xpath("//*[@id='primary.error.display']/div/label"))){
 					Helper_Functions.PrintOut(WebDriver_Functions.GetText(By.xpath("//*[@id='primary.error.display']/div/label")), true);
