@@ -21,14 +21,14 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_General {
 
-	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public Iterator<Object[]> dp(Method m) {
 	    List<Object[]> data = new ArrayList<>();
 	    
@@ -61,17 +61,15 @@ public class USRC_General {
 					}		
 					//[Address_Line_1, Address_Line_2, City, State, State_Code, Zip, Country_Code, Region, Country]
 				}
-				break;
-				
-								
+				break;		
 			case "CheckLogin":
 				//loading the OAuth token and having all of the variables set.
 				PRDC_Data.LoadVariables(strLevel);
 				User_Data UD[] = Environment.Get_UserIds(intLevel);
 				for (int k = 0; k < UD.length; k++) {
-    				if (UD[k].GFBO_ENABLED.contentEquals("")) {
+    				//if (UD[k].GFBO_ENABLED.contentEquals("")) {
     					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-    				}
+    				//}
     			}
 				break;
 			case "Check_FDM_Status":
@@ -79,6 +77,16 @@ public class USRC_General {
 				UD = Environment.Get_UserIds(intLevel);
 				for (int k = 0; k < UD.length; k++) {
 					if(UD[k].FDM_STATUS.contentEquals("")) {
+    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    				}
+    			}
+				break;
+			case  "UpdateValue":
+			case "Check_WCRV_Status":
+				//loading the OAuth token and having all of the variables set.
+				UD = Environment.Get_UserIds(intLevel);
+				for (int k = 0; k < UD.length; k++) {
+					if(UD[k].WCRV_ENABLED.contentEquals("Enabled")) {
     					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
     				}
     			}
@@ -256,7 +264,7 @@ public class USRC_General {
 		String ContactDetailsParsed[][] = {{"UUID_NBR", ""},//index 0 and set below
 				{"SSO_LOGIN_DESC", UserID.replaceAll(" ", "")},
 				{"USER_PASSWORD_DESC", Password.replaceAll(" ", "")},
-				{"FDM_STATUS", "Na"} //index 3 below
+				{"FDM_STATUS", "F"} //index 3 below
 				};
 		
 		if (fdx_login_fcl_uuid != null){
@@ -267,6 +275,47 @@ public class USRC_General {
 			if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
 				ContactDetailsParsed[3][1] = Response;//store all of the FDM details
 			}
+		}else {
+			Assert.fail("Not able to login");
+		}
+		
+		String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
+		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, ContactDetailsParsed, 1);
+		Helper_Functions.PrintOut("Contact Details: " + Arrays.toString(ContactDetailsParsed), true);
+		if (!updatefile) {
+			Assert.fail("Not able to update file.");
+		}
+	}
+	
+	@Test (dataProvider = "dp", enabled = true)
+	public void Check_WCRV_Status(String Level, String UserID, String Password) {
+		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
+		
+		String Cookies = null, fdx_login_fcl_uuid[] = null;
+		//get the cookies and the uuid of the user
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		
+		//in case cannot login will check two of the generic other passwords
+		if (fdx_login_fcl_uuid == null && Password.contentEquals("Test1234")){
+			Password = "Test12345";
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		}else if (fdx_login_fcl_uuid == null && Password.contentEquals("Test12345")){
+			Password = "Test1234";
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		}
+		
+		String ContactDetailsParsed[][] = {{"UUID_NBR", ""},//index 0 and set below
+				{"SSO_LOGIN_DESC", UserID.replaceAll(" ", "")},
+				{"USER_PASSWORD_DESC", Password.replaceAll(" ", "")},
+				{"WCRV_ENABLED", "F"} //index 3 below
+				};
+		
+		if (fdx_login_fcl_uuid != null){
+			Cookies = fdx_login_fcl_uuid[0];
+			ContactDetailsParsed[0][1] = fdx_login_fcl_uuid[1];//save the uuid
+			
+			PRDC_Data PRDC_D = PRDC_Data.LoadVariables(Level);
+			ContactDetailsParsed[3][1] = WCRV_Access(PRDC_D.AccountsURL, Cookies);
 		}else {
 			Assert.fail("Not able to login");
 		}
@@ -290,13 +339,29 @@ public class USRC_General {
 		}
 	}
 	
+	@Test (dataProvider = "dp", enabled = false)
+	public void UpdateValue(String Level, String UserID, String Password) {
+		String ContactDetailsParsed[][] = {{"SSO_LOGIN_DESC", UserID},
+				{"WCRV_ENABLED", "T"}
+				};
+		
+		String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
+		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, ContactDetailsParsed, 0);
+		Helper_Functions.PrintOut("Contact Details: " + Arrays.toString(ContactDetailsParsed), true);
+		if (!updatefile) {
+			Assert.fail("Not able to update file.");
+		}
+	}
+	
+	
 	public String WCRV_Access(String Accounts_URL, String Cookies) {
 		String AccountDetails = PRDC_API_Endpoints.Accounts_Call(Accounts_URL, Cookies);
 		String WCRV_Access = "";
 		if (AccountDetails.contains("displayRateSheetFlag\":true") && AccountDetails.contains("discountPricingFlag\":true") && AccountDetails.contains("accountCountryEnabledFlag\":true")){
-			WCRV_Access = "Enabled";
+			WCRV_Access = "T";
 		}else if (!AccountDetails.contains("displayRateSheetFlag")){
-			Helper_Functions.PrintOut("Warning, PRDC call did not return premission status.", false);
+			Helper_Functions.PrintOut("PRDC call did not return premission status.", false);
+			WCRV_Access = "F";
 		}else {
 			if (AccountDetails.contains("displayRateSheetFlag\":false")){
 				//the user does not have the view rate sheet privilege

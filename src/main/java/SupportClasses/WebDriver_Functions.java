@@ -19,7 +19,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class WebDriver_Functions{
 	
-	public static void ChangeURL(String Designation, String CountryCode, boolean ClearCookies) throws Exception {
+	public static String ChangeURL(String Designation, String CountryCode, boolean ClearCookies) throws Exception {
 		String LevelURL = null, AppUrl = null, CCL = CountryCode.toLowerCase(),CCU = CountryCode.toUpperCase();
 		LevelURL = LevelUrlReturn();
 		//String caller = Thread.currentThread().getStackTrace()[2].getMethodName();
@@ -137,10 +137,16 @@ public class WebDriver_Functions{
 				break;
     			 */
     		default: //as a fall back append the correct level to the AppDesignation that is sent.
-    			if (AppDesignation.contains("Enrollment_")){//https://wwwdrt.idev.fedex.com/fcl/ALL?enrollmentid=ml18024117&language=en&country=us 
-    				AppDesignation = AppDesignation.replace("Enrollment_", "");
+    			if (Designation.contains("Enrollment_")){//https://wwwdrt.idev.fedex.com/fcl/ALL?enrollmentid=ml18024117&language=en&country=us 
+    				Designation = Designation.replace("Enrollment_", "");
     				AppUrl = LevelURL + "/fcl/ALL?enrollmentid=" + Designation + "&language=en&country=" + CCL;
-    			}else if (AppUrl == null) {
+    			}else if (Designation.contains("DT_")){   //https://wwwdev.idev.fedex.com/en-us/discount-programs/DT/cc16323414.html
+    				Designation = Designation.replace("DT_", "");
+    				AppUrl = LevelURL + "/en-" + CCL + "/discount-programs/DT/" + Designation + ".html";
+    			}else if (Designation.contains(LevelURL)){
+    				//try and navigate to the url that was passed.
+    				AppUrl = Designation;
+    			}else{
     				Helper_Functions.PrintOut("FAILURE, unable to recognise  " + AppDesignation, false);
     			}
 		}//end switch AppDesignation
@@ -150,13 +156,15 @@ public class WebDriver_Functions{
 			DriverFactory.getInstance().getDriver().manage().deleteAllCookies();
 			Helper_Functions.PrintOut("Cookies Deleted", true);
 		}
-		Helper_Functions.PrintOut("Navigating to " + AppUrl, true);
+		Helper_Functions.PrintOut("URL Used: " + AppUrl, true);
 		
 		DriverFactory.getInstance().getDriver().get(AppUrl);
 		
 		if (AppDesignation == "WGTM" && !CheckBodyText("English")) {
-			DriverFactory.getInstance().getDriver().get(AppUrl + "_english");
+			AppUrl = AppUrl + "_english";
+			DriverFactory.getInstance().getDriver().get(AppUrl);
 		}
+		return AppUrl;
 	}
 	
 	public static boolean CheckBodyText(String TextToCheck) {
@@ -347,6 +355,10 @@ public class WebDriver_Functions{
 		DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.textToBe(Ele, Text));
 	}
 	
+	public static void WaitForBodyText(String TextToCheck) throws Exception{
+		WaitForTextPresentIn(By.tagName("body"), TextToCheck);
+	}
+	
 	public static void WaitForTextNot(By Ele, String Text) throws Exception{
 		DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBe(Ele, Text)));
 	}
@@ -401,6 +413,15 @@ public class WebDriver_Functions{
 
     public static void WaitClickable(By Ele) throws Exception{
     	DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.elementToBeClickable(Ele));
+	}
+    
+    public static String getURLByLinkText(String LinkText)throws Exception{
+    	if (isPresent(By.linkText(LinkText))) {
+    		return DriverFactory.getInstance().getDriver().findElement(By.linkText(LinkText)).getAttribute("href");
+    	}else {
+    		return ""; //element is not preset on page.
+    	}
+    	
 	}
     
     public static boolean isSelected(By Ele) throws Exception{
@@ -481,8 +502,11 @@ public class WebDriver_Functions{
 	public static String GetText(By Ele) {
 		return DriverFactory.getInstance().getDriver().findElement(Ele).getText();
 	}
-
 	
+	public static String GetBodyText() {
+		return GetText(By.tagName("body"));
+	}
+
 	public static boolean Login(String UserName, String Password) throws Exception {
 		return Login(UserName, Password, "WFCLWIDMAEM");
 	}
@@ -578,10 +602,19 @@ public class WebDriver_Functions{
     	
       }//end Login    
   	
-  	public static String LevelUrlReturn() {
+  	public static String LevelUrlReturn() throws Exception {
+  		if (!Environment.getInstance().getLevel().contentEquals("")) {
+  			return LevelUrlReturn(Integer.valueOf(Environment.getInstance().getLevel()));
+  		}else {
+  			Helper_Functions.PrintOut("The level has not been set in the environment class. Please correct and retry. Environment.getInstance().getLevel()", false);
+  			throw new Exception("Environment level not set.");
+  		}
+  	}
+  	
+  	public static String LevelUrlReturn(int Level) {
   		String LevelURL = null;
   		//Helper_Functions.PrintOut(Environment.getInstance().getLevel(), false);
-  		switch (Integer.valueOf(Environment.getInstance().getLevel())) {
+  		switch (Level) {
       		case 1:
       			LevelURL = "https://wwwbase.idev.fedex.com"; break;
       		case 2:

@@ -5,25 +5,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
 import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
-import SupportClasses.WebDriver_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WDPA extends WDPA_Functions{
 	
-	static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -35,7 +30,7 @@ public class WDPA extends WDPA_Functions{
 		//CountryList = new String[][]{{"CA", "Canada"}};
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -45,14 +40,25 @@ public class WDPA extends WDPA_Functions{
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "Pickup_Ground":
-		    	case "Pickup_Express":
-		    	case "Pickup_ExpressFright"://need to fix this later, not for all countries.
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < UD.length; k++) {
-		    				if (UD[k].WDPA_ENABLED.contentEquals("T")) {
+		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].GROUND_ENABLED.contentEquals("") &&
+		    						(UD[k].COUNTRY_CD.contentEquals("US") || UD[k].COUNTRY_CD.contentEquals("CA"))) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					break;
+		    					//break;
+		    				}
+		    			}
+					}
+		    		break;
+		    	case "Pickup_Express":
+		    	case "Pickup_ExpressFright"://need to fix this later, not for all countries.
+		    		UD = Environment.Get_UserIds(intLevel);
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 1; k < UD.length; k++) {
+		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].EXPRESS_ENABLED.contentEquals("T")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					//break;
 		    				}
 		    			}
 					}
@@ -61,7 +67,9 @@ public class WDPA extends WDPA_Functions{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].FREIGHT_ENABLED.contentEquals("")) {
+		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].FREIGHT_ENABLED.contentEquals("T") 
+		    						// && UD[k].FREIGHT_ENABLED.contentEquals("") && (UD[k].COUNTRY_CD.contentEquals("US") || UD[k].COUNTRY_CD.contentEquals("CA") || UD[k].COUNTRY_CD.contentEquals("MX"))
+		    						) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					//break;
 		    				}
@@ -73,36 +81,12 @@ public class WDPA extends WDPA_Functions{
 		    			data.add( new Object[] {Level, CountryList[j][0]});
 					}
 		    	break;
-		    	
-		    	case "WDPACheck"://need to fix this later, not for all countries.
-		    		UD = Environment.Get_UserIds(intLevel);
-		    		for (int k = 1; k < UD.length; k++) {
-		    			if (!UD[k].ACCOUNT_NUMBER.contentEquals("")) {
-		    				data.add( new Object[] {Level, "US", UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    			}
-		    		}
-		    	break;
 			}
 		}	
 		return data.iterator();
 	}
-	
-	@Test(dataProvider = "dp")
-	public static void WDPACheck(String Level, String CountryCode, String UserID, String Password){
-		try {
-			WebDriver_Functions.Login(UserID, Password, "WDPA");
 
-			if (!WebDriver_Functions.isPresent(By.id("button.completePickup"))) {
-				Assert.fail();
-			}
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}//end WDPA_Pickup_Ground
-
-	
-	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = true)
 	public static void Pickup_Ground(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule a ground pickup.", false);
 		try {
@@ -114,7 +98,7 @@ public class WDPA extends WDPA_Functions{
 		}
 	}//end WDPA_Pickup_Ground
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = true)
 	public static void Pickup_Express(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule an express pickup.", false);
 		try {
@@ -125,7 +109,7 @@ public class WDPA extends WDPA_Functions{
 		}
 	}//end WDPA_Pickup_Express
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = false)
 	public static void Pickup_ExpressFright(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule an express freight pickup.", false);
 		try {
@@ -138,7 +122,7 @@ public class WDPA extends WDPA_Functions{
 		}
 	}//end WDPAPickup_ExpressFright
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = true)
 	public static void Pickup_LTLFreight(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule a LTL pickup while logged in.", false);
 		try {
@@ -150,7 +134,7 @@ public class WDPA extends WDPA_Functions{
 		}
 	}//end WDPAPickup_ExpressFright
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = false)
 	public static void Pickup_LTLFreight_Anonymous(String Level, String CountryCode){
 		Helper_Functions.PrintOut("Schedule a LTL pickup while not logged into FedEx.com", false);
 		try {
@@ -162,7 +146,7 @@ public class WDPA extends WDPA_Functions{
 		}
 	}//end WDPAPickup_ExpressFright
 	
-	@Test
+	@Test (enabled = false)
 	public static void Looping_LTL() {
 		Environment.getInstance().setLevel("6");
 		boolean breakout = false;

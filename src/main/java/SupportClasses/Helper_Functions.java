@@ -21,6 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import org.openqa.selenium.By;
 import Data_Structures.Account_Data;
+import Data_Structures.Enrollment_Data;
 import Data_Structures.User_Data;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -253,10 +254,15 @@ public class Helper_Functions{
 	public static String ValidPhoneNumber(String CountryCode){
 		switch (CountryCode) {
     		case "SG":  
-    			return "9011111";  //need to check to make sure valid
+    			return "64579846";  //verified on 2/22/19
     		default:
     			return myPhone;
 		}//end switch CountryCode
+	}
+	
+	public static void PrintOut(String Text){
+		//if boolean not sent will default to not printing timestamp
+		PrintOut(Text, false);
 	}
 	
 	public static void PrintOut(String Text, boolean TimeStamp){
@@ -276,11 +282,19 @@ public class Helper_Functions{
 	}
 	
 	public static void WriteUserToExcel(String UserID, String Password) {
+		
 		int intLevel = Integer.valueOf(Environment.getInstance().getLevel());
+		String Data[][] = new String[][] {{"SSO_LOGIN_DESC", UserID}, {"USER_PASSWORD_DESC", Password}};
+		WriteToExcel(DataDirectory + "\\TestingData.xls", "L" + intLevel, Data, -1); 
+		/*
+		 * delete this later if above words
 		User_Data UD[] =  Environment.Get_UserIds(intLevel);
+		
 		int Row = UD.length;            //////////Fix this later to write the whole line
-		writeExcelData(DataDirectory + "\\TestingData.xls", "L" + intLevel, UserID, Row, 1);
-		writeExcelData(DataDirectory + "\\TestingData.xls", "L" + intLevel, Password, Row, 2);
+		
+		writeExcelData(, "L" + intLevel, UserID, Row, 1);
+		writeExcelData(DataDirectory + "\\TestingData.xls", , Password, Row, 2);
+		*/
 	}
 	
 	
@@ -373,6 +387,7 @@ public class Helper_Functions{
 		throw new Error("Address not loaded");
 	}//end LoadAddress
 	
+	//////////////remove this later and use the Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 	public static String[] LoadEnrollmentIDs(String CountryCode){
 		PrintOut("LoadEnrollmentIDs Received: _" + CountryCode, true);
 		if (EnrollmentList.isEmpty()) {
@@ -389,6 +404,32 @@ public class Helper_Functions{
 		PrintOut("LoadEnrollmentIDs returning: _" + Arrays.toString(EnrollmentID), true);
 		return EnrollmentID;//enrollment for the given country not found
 	}
+	
+//////////////remove this later and use the Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
+	public static String[][] LoadAllEnrollmentIDs(String CountryCode){
+		PrintOut("LoadAllEnrollmentIDs Received: _" + CountryCode, true);
+		if (EnrollmentList.isEmpty()) {
+			EnrollmentList = getExcelData(DataDirectory + "\\EnrollmentIds.xls", "EnrollmentIds"); 
+		}
+		
+		ArrayList<String[]> CountrySpecific = new ArrayList<String[]>(EnrollmentList);
+		
+		for (int i = 0; i < CountrySpecific.size(); i++) {
+			if (!CountrySpecific.get(i)[1].contentEquals(CountryCode)) {
+				CountrySpecific.remove(i);
+				i--;
+			}
+		}
+
+		String[][] array = new String[CountrySpecific.size()][5];
+		for (int i = 0; i < CountrySpecific.size(); i++) {
+		    array[i] = CountrySpecific.get(i);
+		}
+		
+		PrintOut("LoadEnrollmentIDs returning: " + CountrySpecific.size() + " ids.", true);
+		return array;
+	}
+	
 	
 	public static String Check_Country_Region(String CountryCode) {
 		for (String CountrCode[] : ContactList) {
@@ -517,16 +558,18 @@ public class Helper_Functions{
 			for (int i= 0 ; i < totalNoOfRows; i++) { //change to start at 1 if want to ignore the first row.
 				String buffer[] = new String[totalNoOfCols];
 				boolean EmptyRow = true;
+				int EmptyCount = 0;
 				for (int j=0; j < totalNoOfCols; j++) {
 					String CellContents = sh.getCell(j, i).getContents();
-					if (CellContents == null) {
+					if (CellContents == null || CellContents.contentEquals("")) {
+						EmptyCount++;
 						CellContents = "";
 					}else {
 						EmptyRow = false;
 					}
 					buffer[j] = CellContents;
 				}
-				if (!EmptyRow) {
+				if (!EmptyRow && EmptyCount < totalNoOfCols) {
 					data.add(buffer);
 				}
 			}
@@ -664,14 +707,14 @@ public class Helper_Functions{
 			//Check the column headers for the key position
 			int KeyColumn = -1;
 			HSSFRow IdentifierRow = null;
+			IdentifierRow = worksheet.getRow(0);
 			if (KeyPosition != -1) { //Only when making an update
-				IdentifierRow = worksheet.getRow(0);
 				for (int i = 0; i < worksheet.getLastRowNum() + 1; i++) {
 					if (IdentifierRow.getCell(i) != null && IdentifierRow.getCell(i).getStringCellValue().contentEquals(Data[KeyPosition][0])) {
 						KeyColumn = i;
 					}
 				}
-				//will add a colum header if not found.
+				//header not found
 				if (KeyColumn == -1) {
 					throw new Exception("Key Not Found");
 				}
@@ -703,9 +746,29 @@ public class Helper_Functions{
 							}
 						}
 					}
-				}else {//when making an addition
-					
+				}else if (KeyPosition == -1){//when making an addition
+					j = worksheet.getLastRowNum() + 1;
+					for (int k = 0; k < Data.length; k++) {
+						if (worksheet.getRow(j) == null) {//if cell not present create it
+							worksheet.createRow(j);
+						}
+						if (worksheet.getRow(j).getCell(k) == null) {//if cell not present create it
+							worksheet.getRow(j).createCell(k);
+						}
+						for(int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
+							if (IdentifierRow.getCell(l) != null && IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
+								Cell cell = null; 
+								if (worksheet.getRow(j).getCell(l) == null) {//if cell not present create it
+									worksheet.getRow(j).createCell(l);
+								}
+								cell = worksheet.getRow(j).getCell(l);
+								cell.setCellValue(Data[k][1]);
+								break;
+							}
+						}
+					}
 				}
+
 			}
 			//Close the InputStream  
 			fsIP.close(); 

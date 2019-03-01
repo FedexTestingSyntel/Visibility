@@ -10,14 +10,14 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import Data_Structures.Account_Data;
+import Data_Structures.Credit_Card_Data;
+import Data_Structures.Enrollment_Data;
+import Data_Structures.Tax_Data;
 import Data_Structures.User_Data;
 
 public class Environment {
 	public static String LevelsToTest;
 	private static Environment instance = new Environment();
-	public static ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
-	public static ArrayList<String[]> TaxData = new ArrayList<String[]>();
-	public static Account_Data Account_Details[][] = new Account_Data[8][];
 	public static Account_Data Address_Data[];	
 		
 	private Environment(){
@@ -51,6 +51,9 @@ public class Environment {
 	}
 	
 	public String getLevel() {
+		if (Level.get() == null) {
+			System.err.print("Environment level not set: Please check Environment class" );
+		}
 		return Level.get();
 	}
 	
@@ -92,12 +95,8 @@ public class Environment {
 		return ReturnList;
 	}
 	
-	public static void getAddressList() {
-		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
-	}
-	
 	public static ArrayList<String[]> getTaxData(String CountryCode) {
-		if (TaxData == null) {
+			ArrayList<String[]> TaxData = new ArrayList<String[]>();
 			//Load all data from the excel into the array list
 			TaxData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TaxData.xls",  "TaxIds");
 		
@@ -109,7 +108,6 @@ public class Environment {
 					System.err.println("WARNING: mismatch with the tax data excel sheet");
 				}
 			}
-		}
 		return TaxData;
 	}
 	
@@ -142,12 +140,7 @@ public class Environment {
 	}
 	
 	public static Account_Data[] getAccountDetails(String Level){
-		int intLevel = Integer.parseInt(Level);
 		//if the data is already loaded then return the values
-		if (Account_Details[intLevel] != null) {
-			return Account_Details[intLevel];
-		}
-		
 		ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
 		Account_Data Account_Details[] = new Account_Data[AccountsAlreadyCreated.size()];
 		String Headers[] = AccountsAlreadyCreated.get(0);
@@ -267,17 +260,179 @@ public class Environment {
 				}//end switch
 			}
 		}
-  		//invalid input
   		return Account_Details;
 	}
+	
+	public static Enrollment_Data[] getEnrollmentDetails(int Level) {
+		//if the data is already loaded then return the values
+		ArrayList<String[]> EnrollmentDetails = new ArrayList<String[]>();
+		
+		EnrollmentDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\EnrollmentIds.xls",  "EnrollmentIds");//load the relevant information from excel file.
+		
+		Enrollment_Data Enrollment_D[] = new Enrollment_Data[EnrollmentDetails.size() - 1];
+		String Headers[] = EnrollmentDetails.get(0);
+		String LevelURL = WebDriver_Functions.LevelUrlReturn(Level);
+		for (int i = 1; i < EnrollmentDetails.size(); i++) {
+			String Row[] = EnrollmentDetails.get(i);
 
+			Enrollment_D[i -1] = new Enrollment_Data();
+			for (int j = 0; j <Headers.length; j++) {
+				int pos = i - 1;
+				switch (Headers[j]) {
+		  		case "ENROLLMENT_ID":
+		  			Enrollment_D[pos].ENROLLMENT_ID = Row[j];
+		  			break;
+		  		case "COUNTRY_CODE":
+		  			Enrollment_D[pos].COUNTRY_CODE = Row[j];
+		  			break;
+		  		case "PROGRAM_NAME":
+		  			Enrollment_D[pos].PROGRAM_NAME = Row[j];
+		  			break;
+		  		case "PASSCODE":
+		  			Enrollment_D[pos].PASSCODE = Row[j];
+		  			break;
+		  		case "MEMBERSHIP_ID":
+		  			Enrollment_D[pos].MEMBERSHIP_ID = Row[j];
+		  			break;
+		  		case "IDENTIFIER":
+		  			Enrollment_D[pos].IDENTIFIER = Row[j];
+		  			break;
+		  		case "AEM_LINK":
+		  			//The url in the excel should be for production
+		  			Enrollment_D[pos].AEM_LINK = Row[j].replace("https://www.fedex.com", LevelURL);
+		  			break;
+				}//end switch
+			}
+		}
+		
+  		return Enrollment_D;
+	}
+	
+	//will only return valid
+	public static Tax_Data getTaxDetails(String CountryCode) {
+		Tax_Data AllTD[] = getTaxDetails();
+		
+		for (Tax_Data TD: AllTD) {
+			if (TD.COUNTRY_CODE.contentEquals(CountryCode) && TD.ERROR_CODE.contentEquals("Valid")) {
+				return TD;
+			}
+		}
+		return null;
+	}
+	
+	public static Tax_Data[] getTaxDetails() {
+		//if the data is already loaded then return the values
+		ArrayList<String[]> TaxDetails = new ArrayList<String[]>();
+		
+		TaxDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TaxData.xls",  "TaxIds");//load the relevant information from excel file.
+		
+		Tax_Data Tax_D[] = new Tax_Data[TaxDetails.size() - 1];
+		String Headers[] = TaxDetails.get(0);
+		for (int i = 1; i < TaxDetails.size(); i++) {
+			String Row[] = TaxDetails.get(i);
+
+			Tax_D[i -1] = new Tax_Data();
+			for (int j = 0; j <Headers.length; j++) {
+				int pos = i - 1;
+				switch (Headers[j]) {
+				case "COUNTRY_CODE":
+		  			Tax_D[pos].COUNTRY_CODE = Row[j];
+		  			break;
+				case "TAX_ID":
+		  			Tax_D[pos].TAX_ID = Row[j];
+		  			break;
+				case "STATE_TAX_ID":
+		  			Tax_D[pos].STATE_TAX_ID = Row[j];
+		  			break;
+				case "ERROR_CODE":
+		  			Tax_D[pos].ERROR_CODE = Row[j];
+		  			break;
+				case "TYPE":
+		  			Tax_D[pos].TYPE = Row[j];
+		  			break;
+				case "REQUIREMENT":
+		  			Tax_D[pos].REQUIREMENT = Row[j];
+		  			break;
+				}//end switch
+			}
+		}
+		
+  		return Tax_D;
+	}
+	
+	//will return single card of specific type.
+	public static Credit_Card_Data getCreditCardDetails(String Level, String Type) {
+		Credit_Card_Data CreditCards[] = getCreditCardDetails(Level);
+		
+		for (Credit_Card_Data CD : CreditCards) {
+			if (CD.TYPE.contains(Type)) {
+				return CD;
+			}
+		}
+		return null;
+	}
+	
+	//will return all credit cards for the environment
+	public static Credit_Card_Data[] getCreditCardDetails(String Level) {
+		//if the data is already loaded then return the values
+		ArrayList<String[]> CCDetails = new ArrayList<String[]>();
+		
+		if (Level.contains("7")) {
+			Level = "Prod";
+		}else {
+			Level = "Test";
+		}
+		CCDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\CreditCardDetails.xls",  Level);//load the relevant information from excel file.
+		
+		Credit_Card_Data Credit_D[] = new Credit_Card_Data[CCDetails.size() - 1];
+		String Headers[] = CCDetails.get(0);
+		for (int i = 1; i < CCDetails.size(); i++) {
+			String Row[] = CCDetails.get(i);
+
+			Credit_D[i -1] = new Credit_Card_Data();
+			for (int j = 0; j <Headers.length; j++) {
+				int pos = i - 1;
+				switch (Headers[j]) {
+				case "TYPE":
+		  			Credit_D[pos].TYPE = Row[j];
+		  			break;
+				case "CARD_NUMBER":
+		  			Credit_D[pos].CARD_NUMBER = Row[j];
+		  			break;
+				case "CVV":
+		  			Credit_D[pos].CVV = Row[j];
+		  			break;
+				case "EXPIRATION_MONTH":
+		  			Credit_D[pos].EXPIRATION_MONTH = Row[j];
+		  			break;
+				case "EXPIRATION_YEAR":
+		  			Credit_D[pos].EXPIRATION_YEAR = Row[j];
+		  			break;
+				}//end switch
+			}
+		}
+		
+  		return Credit_D;
+	}
+	
+	public static Account_Data getAddressDetails(String CountryCode, String Level) {
+		Account_Data AllAddresses[] = getAddressDetails();
+		
+		for (Account_Data AD: AllAddresses) {
+			if (AD.Billing_Country_Code.contentEquals(CountryCode)) {
+				AD.Level = Level;
+				return AD;
+			}
+		}
+		System.err.println("Data not loaded for country of " + CountryCode);
+		return null;
+	}
+	
 	public static Account_Data[] getAddressDetails() {
 		//if the data is already loaded then return the values
-		if (Address_Data != null) {
-			return Address_Data;
-		}else if (AddressDetails == null || AddressDetails.size() == 0){
-			getAddressList();
-		}
+		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
+		
+		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
 		
 		Address_Data = new Account_Data[AddressDetails.size()];
 		String Headers[] = AddressDetails.get(0);
@@ -399,6 +554,12 @@ public class Environment {
 		  		case "WDPA_ENABLED":
 		  			DataClass[pos].WDPA_ENABLED = Row[j];
 					break;	
+		  		case "GROUND_ENABLED":
+		  			DataClass[pos].GROUND_ENABLED = Row[j];
+					break;
+		  		case "EXPRESS_ENABLED":
+		  			DataClass[pos].EXPRESS_ENABLED = Row[j];
+					break;
 		  		case "PASSKEY":
 		  			DataClass[pos].PASSKEY = Row[j];
 					break;
@@ -412,6 +573,10 @@ public class Environment {
 		  			DataClass[pos].ERROR = Row[j];
 					break;	
 				}//end switch
+			}
+			
+			if (DataClass[i - 1].SSO_LOGIN_DESC == null || DataClass[i - 1].SSO_LOGIN_DESC.contentEquals("")) {
+				DataClass[i - 1].ERROR = "asdfasdf";
 			}
 		}
 		return DataClass;

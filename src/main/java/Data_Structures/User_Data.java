@@ -18,9 +18,12 @@ public class User_Data {
 	public String GFBO_ENABLED;
 	public String WGRT_ENABLED;
 	public String WDPA_ENABLED;
+	public String GROUND_ENABLED;
+	public String EXPRESS_ENABLED;
+	public String FREIGHT_ENABLED;
 	public String PASSKEY;
 	public String FDM_STATUS;
-	public String FREIGHT_ENABLED;
+	
 	public String ERROR;
 }
 

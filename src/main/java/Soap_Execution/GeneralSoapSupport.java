@@ -1,4 +1,4 @@
-package SoapExample;
+package Soap_Execution;
 
 import java.io.ByteArrayOutputStream;
 import javax.xml.soap.MessageFactory;
@@ -40,37 +40,42 @@ public class GeneralSoapSupport {
         return message;
     }
 
+	//will execute the soap call and return the response as a string. In event of error will retrun error message as string.
 	public static String callSoapWebService(String soapEndpointUrl, SOAPMessage soapRequest) throws Exception {
-        try {
-    		String MethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        
+		SOAPMessage soapResponse = null;
+		String MethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+		
+		try {
     		// Save the SOAP Request
     		ByteArrayOutputStream out = new ByteArrayOutputStream();
             soapRequest.writeTo(out);
             String Request = new String(out.toByteArray()), Response = "";
-            System.out.println(Request);
+            //System.out.println("Request for debug: \n" + Request);
             
             // Create SOAP Connection
             SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
             SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
             // Send SOAP Message to SOAP Server
-            SOAPMessage soapResponse = soapConnection.call(soapRequest, soapEndpointUrl);
+            String RequestFormatted = Request.replaceAll("\n", "").replaceAll("\r", "");
+            Helper_Functions.PrintOut(MethodName + " soapEndpoint: " + soapEndpointUrl + "\n    " +
+            						MethodName + " soapRequest: " + RequestFormatted, true);
+            soapResponse = soapConnection.call(soapRequest, soapEndpointUrl);
             
             // Save the SOAP Response
             out.reset();
             soapResponse.writeTo(out);
             Response = new String(out.toByteArray());
-            
-            Helper_Functions.PrintOut(MethodName + " soapEndpoint: " + soapEndpointUrl + "\n    " +
-            						MethodName + " soapRequest: " + Request + "\n    " +
-            						MethodName +  " soapResponse: " + Response + "\n", true);
+            String ResponseFormatted = Response.replaceAll("\n", "").replaceAll("\r", "");
             
             soapConnection.close();
+            Helper_Functions.PrintOut("    " + MethodName +  " soapResponse: " + ResponseFormatted + "\n", false);
             return Response;
         } catch (Exception e) {
-            System.err.println("\nError occurred while sending SOAP Request to Server!"
-            		+ "\nMake sure you have the correct endpoint URL and SOAPAction!\n");
-            throw e;
+        	//try to find a way to return the soap message in the event of exception. Currently 400 errors are not returning the full soap message.
+        	Helper_Functions.PrintOut("    " + MethodName +  " soapResponse: " + e.getMessage() + "\n", false);
+        	return e.getMessage();
         }
     }
     

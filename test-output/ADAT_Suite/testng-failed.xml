@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [ADAT_Suite]" parallel="methods">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="ADAT_Test(failed)" parallel="methods">
+    <parameter name="Level" value="23"/>
+    <classes>
+      <class name="Soap_Execution.ADAT">
+        <methods>
+          <include name="beforeClass"/>
+          <include name="ADAT_PhoneVelocity" invocation-numbers="1"/>
+        </methods>
+      </class> <!-- Soap_Execution.ADAT -->
+    </classes>
+  </test> <!-- ADAT_Test(failed) -->
+</suite> <!-- Failed suite [ADAT_Suite] -->

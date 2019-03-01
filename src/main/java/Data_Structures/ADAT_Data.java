@@ -1,7 +1,5 @@
 package Data_Structures;
 
-import SupportClasses.Helper_Functions;
-
 public class ADAT_Data {
 
 	public String Level = "";
@@ -52,13 +50,13 @@ public class ADAT_Data {
 			DC.PhonePinVelocityThreshold = 3;
 			DC.AddressVelocityThreshold = 10;
   			break;
-  		case "4"://not confirmed since do not validate on L1
+  		case "4"://not confirmed since do not validate on L4
   			LevelIdentifier = "http://adat-satxws-l4-edcw.test.cloud.fedex.com"; 
   			DC.PostcardPinVelocityThreshold = 3;
-			DC.PhonePinVelocityThreshold = 500;
+			DC.PhonePinVelocityThreshold = 3;
 			DC.AddressVelocityThreshold = 10;
   			break;
-  		case "5"://not confirmed since do not validate on L1
+  		case "5"://not confirmed since do not validate on L4
   			LevelIdentifier = ""; 
   			DC.PostcardPinVelocityThreshold = 3;
 			DC.PhonePinVelocityThreshold = 3;

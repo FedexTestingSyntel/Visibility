@@ -9,17 +9,25 @@ import SupportClasses.WebDriver_Functions;
 
 public class WFCL_Functions{
 	
-	public static String[] CreditCardRegistrationEnroll(String EnrollmentID, String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId, String Email, boolean BusinessAccount, String TaxInfo[]) throws Exception{
+	public static String[] CreditCardRegistrationEnroll(String EnrollmentID[], String CreditCardDetils[], String AddressDetails[], String BillingAddressDetails[], String Name[], String UserId, String Email, boolean BusinessAccount, String TaxInfo[]) throws Exception{
 		try {
 			String CountryCode = AddressDetails[6];
 			//go to the INET page just to load the cookies
-			WebDriver_Functions.ChangeURL("INET", CountryCode, true);
-			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, CountryCode, false);
+			//WebDriver_Functions.ChangeURL("INET", CountryCode, true);
+			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID[0], CountryCode, true);
 
-			//add the country code to the screenshot name
+			//add the country code to the screenshot name 
 			DriverFactory.setScreenshotPath(DriverFactory.getScreenshotPath() + CountryCode + " ");
 			
 			if (WebDriver_Functions.isPresent(By.name("Apply Now"))) {
+				//if passcode is needed to be entered on discount page.
+				if (WebDriver_Functions.isPresent(By.name("passCode"))) {
+					WebDriver_Functions.Type(By.name("passCode"), EnrollmentID[3]);
+				}
+				if (WebDriver_Functions.isPresent(By.name("membershipID"))) {
+					WebDriver_Functions.Type(By.name("membershipID"), EnrollmentID[4]);
+				}
+				
 				WebDriver_Functions.takeSnapShot("Discount Page.png");
 				//apply link from marketing page
 				WebDriver_Functions.Click(By.name("Apply Now"));
@@ -40,13 +48,15 @@ public class WFCL_Functions{
 			if(TaxInfo != null && !TaxInfo[3].contains("Valid")) {
 				Multicard = false;
 				CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
+				WebDriver_Functions.takeSnapShot("Invalid attempt " +  TaxInfo[3] + ".png");
 				return new String[] {"Invalid attempt : " +  TaxInfo[3] };
 			}
 			CreditCardDetils = WFCL_CC_Page(CreditCardDetils, AddressDetails, BillingAddressDetails, BusinessAccount, Multicard, TaxInfo);
 			
 			//Step 3: Confirmation Page
-			//Domestic and international will be different  
-			WebDriver_Functions.WaitOr_TextToBe(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId, By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr[1]/td[2]"),  UserId);
+			//Domestic and international will be different
+			WebDriver_Functions.WaitForBodyText(UserId);    //will not check if in correct location
+			//WebDriver_Functions.WaitOr_TextToBe(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId, By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr[1]/td[2]"),  UserId);
 			String AccountNumber = WebDriver_Functions.GetText(By.xpath("//*[@id='acctNbr']"));
 			WebDriver_Functions.takeSnapShot("Confirmation.png");
 
@@ -484,6 +494,15 @@ public class WFCL_Functions{
 			//*[@id="vatNo"]/label[1]/b
 		}else if (WebDriver_Functions.isPresent(By.id("monthExpiry")) && MultiCard) {
 			Helper_Functions.PrintOut("Error on Credit Card entry screen. Attempting to register with differnet credit card", true);
+			
+			//will enter a new name to make easier to trace in the logs.
+			if (WebDriver_Functions.isPresent(By.name("editccinfo"))) {
+				WebDriver_Functions.Click(By.name("editccinfo"));//edit the billing address
+			}
+			if (WebDriver_Functions.isPresent(By.id("creditCardFirstName"))) {
+				WebDriver_Functions.Type(By.id("creditCardFirstName"), Helper_Functions.getRandomString(10));
+			}
+			
 			String NewCreditCard[] = Helper_Functions.LoadCreditCard(CreditCardDetils[1]);
 			return WFCL_CC_Page(NewCreditCard, ShippingAddress, BillingAddress, BusinessRegistration, MultiCard, TaxInfo);
 		}

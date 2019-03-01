@@ -1,13 +1,10 @@
 package Mission_Critical;
 
 import org.testng.annotations.Test;
-
 import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
-
 import org.testng.annotations.BeforeClass;
 import org.testng.Assert;
-import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import java.lang.reflect.Method;
@@ -20,13 +17,14 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
+		//CountryList = Environment.getCountryList("GB");
 	}
 	
 	@DataProvider (parallel = true)
@@ -42,7 +40,7 @@ public class WFCL_SmokeTest{
 		    	case "CreditCardRegistrationEnroll":
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs(CountryList[j][0]);
-		    			data.add( new Object[] {Level, EnrollmentID[0], CountryList[j][0]});
+		    			data.add( new Object[] {Level, EnrollmentID});
 					}
 		    		break;
 		    	case "UserRegistration":
@@ -57,6 +55,9 @@ public class WFCL_SmokeTest{
 		    		break;
 		    	case "AccountRegistration_INET":
 		    	case "AccountRegistration_WDPA":
+					if (!Level.contentEquals("6")) {
+						// don't Forcing skip due to level 6");
+					}
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			AccountDetails = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
 			    		data.add( new Object[] {Level, AccountDetails});
@@ -95,9 +96,10 @@ public class WFCL_SmokeTest{
 	}
 
 	@Test(dataProvider = "dp")
-	public void CreditCardRegistrationEnroll(String Level, String EnrollmentID, String CountryCode) {
+	public void CreditCardRegistrationEnroll(String Level, String EnrollmentID[]) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
+			String CountryCode = EnrollmentID[1];
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
@@ -168,9 +170,6 @@ public class WFCL_SmokeTest{
 	@Test(dataProvider = "dp")
 	public void AccountRegistration_WDPA(String Level, Account_Data AccountDetails){
 		try {
-			if (Level.contentEquals("6")) {
-				throw new SkipException("Forcing skip due to level 6");
-			}
 			String CountryCode = AccountDetails.Billing_Country_Code;
 			String Account = AccountDetails.Account_Number;
 			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};

@@ -13,6 +13,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -24,10 +25,10 @@ public class Create_Accounts{
 	private static String ECAMuserid;
 	private static String ECAMpassword;
 	
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	
-	@DataProvider //(parallel = true)
-	public static Iterator<Object[]> dp(Method m) {
+	@BeforeClass
+	public static void ECAM_Data(){
 		ArrayList<String[]> PersonalData = new ArrayList<String[]>();
 		PersonalData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\Load_Your_UserIds.xls",  "Data");//create your own file with the specific data
 		for(String s[]: PersonalData) {
@@ -35,8 +36,11 @@ public class Create_Accounts{
 				ECAMuserid = s[1];
 				ECAMpassword = s[2];
 			}
-		} 
-			
+		}
+	}
+	
+	@DataProvider (parallel = true)
+	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
@@ -65,6 +69,7 @@ public class Create_Accounts{
 				//if doing a single country
 				if (CountryList[6].contentEquals("US")) {
 					data.add( new Object[] {Level, CountryList});
+					break;
 				}
 			}
 		}
@@ -82,6 +87,7 @@ public class Create_Accounts{
 			if (CountryCode.contentEquals("us") || CountryCode.contentEquals("ca") || CountryCode.contentEquals("mx")) {
 				OperatingCompanies += "F";
 			}
+			//OperatingCompanies = "F";
 			Account_Data Account_Details = new Account_Data();
 			Account_Details.Level = Level;
 			Account_Details.Shipping_Address_Line_1 = CountryDetails[0];
@@ -213,12 +219,15 @@ public class Create_Accounts{
 			if(WebDriver_Functions.isVisable(By.id("adrs_val_non_modified"))){
 				WebDriver_Functions.Select(By.id("addr_validation_override_input_info"), "CUSTOMER_PROVIDED_PROOF", "v");
 				WebDriver_Functions.Click(By.id("adrs_val_non_modified"));
+			}else if (WebDriver_Functions.isVisable(By.id("nomatch"))){
+				WebDriver_Functions.Click(By.id("nomatch"));
 			}
 			
 			//Regulator Information page
 			String StateTax = "", CountryTax = "";
 			if (WebDriver_Functions.isVisable(By.id("next_reg"))) {
-				for (String s[]: Environment.TaxData) {
+				ArrayList<String[]> TaxData = Environment.getTaxData(BillingCountryCode) ;
+				for (String s[]: TaxData) {
 					if (s[0].contentEquals(BillingCountryCode)) {
 						StateTax = s[1];
 						CountryTax = s[2];

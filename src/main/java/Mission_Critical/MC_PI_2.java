@@ -22,7 +22,7 @@ import SupportClasses.WebDriver_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class MC_PI_2{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	final boolean EnableCompleted = false;
 	
@@ -30,7 +30,7 @@ public class MC_PI_2{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
-		CountryList = Environment.getCountryList("fr");
+		//CountryList = Environment.getCountryList("fr");
 	}
 	
 	@DataProvider (parallel = true)
@@ -147,9 +147,9 @@ public class MC_PI_2{
 	    			ArrayList<String[]> TaxInfo = Helper_Functions.getTaxInfo("BR");
 	    			for (String Tax[]: TaxInfo) {
 	    				if (Tax[4].contentEquals("B")) {
-	    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, true});		//REMOVE Comment after demo
+	    					data.add(new Object[] {Level, EnrollmentID, Tax, true});		//REMOVE Comment after demo
 	    				}else {
-	    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, false});
+	    					data.add(new Object[] {Level, EnrollmentID, Tax, false});
 	    				}
 	    				
 	    			}
@@ -386,13 +386,13 @@ public class MC_PI_2{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "419457", enabled = EnableCompleted)   
-	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
+	@Test(dataProvider = "dp", description = "419457", enabled = true)    //EnableCompleted
+	public void BR_TaxID(String Level, String EnrollmentID[], String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
-			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
+			String ShippingAddress[] = Helper_Functions.LoadAddress("BR"), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
-			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
+			String ContactName[] = Helper_Functions.LoadDummyName("BRCC", Level);
 
 			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, BuisnessAccount, VatNumber);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
@@ -402,9 +402,10 @@ public class MC_PI_2{
 	}
 	
 	@Test(dataProvider = "dp", description = "414270", enabled = true)   
-	public void TH_Welcome_Email_Disabled(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
+	public void TH_Welcome_Email_Disabled(String Level, String EnrollmentID[], String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
+			String CountryCode = EnrollmentID[1];
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);

@@ -10,25 +10,18 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
 import Data_Structures.User_Data;
 import SupportClasses.*;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class OADR{
-	static String LevelsToTest = "3";
-	final static boolean SmokeTest = true; // will limit the test cases to high level
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		//for (int i=0; i < Environment.LevelsToTest.length(); i++) {
-		//	String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-		//	Helper_Functions.LoadUserIds(Integer.parseInt(Level));
-		//}
-		//if (SmokeTest) 
 		CountryList = new String[][]{{"US", "United States"}};
 	}
 	
@@ -41,21 +34,47 @@ public class OADR{
 			int intLevel = Integer.parseInt(Level);
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
-		    	case "OADR_Apply_Discount_To_Account":
+		    	case "OADR_Smoke_ApplyDiscount":
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
-		    		String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs("US");
-		    		for (int j = 0; j < UD.length; j++) {
-	    				if (UD[j].COUNTRY_CD.contentEquals("US") && UD[j].SSO_LOGIN_DESC.contains("CC")) {
-	    					data.add( new Object[] {Level, EnrollmentID[0], EnrollmentID[1], UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
-	    					break;
-	    				}
-	    			}
+			    	for (int j = 0; j < UD.length; j++) {
+		    			if (UD[j].COUNTRY_CD.contentEquals("US") && UD[j].PASSKEY.contentEquals("T") ) {
+		    				// try the 16/8 discount
+		    				data.add( new Object[] {Level, "ss90705920", "US", UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
+		    				// try the American Society of Mechanical Engineers discount
+		    				data.add( new Object[] {Level, "w6rdem3647", "US", UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
+		    				break;
+		    			}
+		    		}
+		    	break;
+		    	case "OADR_Apply_Discount_To_Account":
+		    		UD = Environment.Get_UserIds(intLevel);
+		    		for (int j = 0; j < CountryList.length; j++) {
+			    		for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contentEquals("T") ) {
+		    					// try the 16/8 discount
+		    					data.add( new Object[] {Level, "ss90705920", CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					// try the American Society of Mechanical Engineers discount
+		    					data.add( new Object[] {Level, "w6rdem3647", CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					break;
+		    				}
+		    			}
+		    		}
 		    	break;
 			}
 		}
 		return data.iterator();
 	}
 	
+	
+	@Test(dataProvider = "dp")
+	public static void OADR_Smoke_ApplyDiscount(String Level, String EnrollmentID, String CountryCode, String UserId, String Password){
+		try {
+			String Result = OADR_ApplyDiscount(Level, EnrollmentID, CountryCode, UserId, Password);
+			Helper_Functions.PrintOut(Result, false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}//end OADR_ApplyDiscount
 	
 	@Test(dataProvider = "dp")
 	public static void OADR_Apply_Discount_To_Account(String Level, String EnrollmentID, String CountryCode, String UserId, String Password){
@@ -69,20 +88,12 @@ public class OADR{
 
 	public static String OADR_ApplyDiscount(String Level, String EnrollmentID, String CountryCode, String UserId, String Password) throws Exception{
 		try {
-			String Time = Helper_Functions.CurrentDateTime();
-			String SCPath = Time + " L" + Level + CountryCode + " OADR ApplyDiscount ";
-			
-			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, CountryCode, true);
-			WebDriver_Functions.WaitPresent(By.name("username"));
-			WebDriver_Functions.Type(By.name("username"), UserId);
-			WebDriver_Functions.Type(By.name("password"), Password);
-			WebDriver_Functions.Click(By.name("login"));
-
-			Helper_Functions.PrintOut("Logged in with " + UserId + "/" + Password, true);
+			WebDriver_Functions.Login(UserId, Password);
+			WebDriver_Functions.ChangeURL("Enrollment_" + EnrollmentID, CountryCode, false);
 	 		
 	 		//select the apply discount radio button and continue.
 			WebDriver_Functions.Click(By.xpath("//input[(@name='whichBillingAddress') and (@value = 'useContactAddress')]"));
-			WebDriver_Functions.takeSnapShot(SCPath + "Apply Discount.png");
+			WebDriver_Functions.takeSnapShot("Apply Discount.png");
 			WebDriver_Functions.Click(By.name("continue"));
 	 		
 	 		//after processing screen
@@ -93,12 +104,12 @@ public class OADR{
 	 		
 	 		if (WebDriver_Functions.isPresent(By.name("discountConflictResolution"))){
 	 			WebDriver_Functions.Click(By.xpath("//input[(@name='discountConflictResolution') and (@value = 'applyNewDiscount')]"));
-	 			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='content']/div/div[2]/p[2]/font"), "You have existing discounts for FedEx Express®, FedEx Ground®, and/or FedEx Freight® services on your account. Those discounts will be replaced with new discounts should you choose to enroll in this program. For more information about the new discounts, call a FedEx Advantage® representative at 1.800.434.9918.", 116519);
-	 			WebDriver_Functions.takeSnapShot(SCPath + "Discount Conflict.png");
+	 			//WebDriver_Functions.ElementMatches(By.xpath("//*[@id='content']/div/div[2]/p[2]/font"), "You have existing discounts for FedEx Express®, FedEx Ground®, and/or FedEx Freight® services on your account. Those discounts will be replaced with new discounts should you choose to enroll in this program. For more information about the new discounts, call a FedEx Advantage® representative at 1.800.434.9918.", 116519);
+	 			WebDriver_Functions.takeSnapShot("Discount Conflict.png");
 	 			
-	 			if (WebDriver_Functions.isPresent(By.name("lastFourDigits"))){
-	 				InvoiceOrCCValidaiton();
-	 			}else {
+	 			InvoiceOrCCValidaiton();
+	 			
+	 			if (WebDriver_Functions.isPresent(By.name("submit"))){
 	 				WebDriver_Functions.Click(By.name("submit"));
 	 			}
 	 			
@@ -106,7 +117,7 @@ public class OADR{
 	 		}
 	 		
 	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
-	 		WebDriver_Functions.takeSnapShot(SCPath + "Confirmation.png");
+	 		WebDriver_Functions.takeSnapShot("Confirmation.png");
 	 		
 		}catch (Exception e) {
 			throw e;
@@ -118,10 +129,10 @@ public class OADR{
 		InvoiceOrCCValidaiton("4460", "750000000", "750000001");
 	}
 
-	private static void InvoiceOrCCValidaiton(String CCNumber, String InvoiceA, String InvoiceB) throws Exception{
-		if (WebDriver_Functions.isPresent(By.name("invoiceNumberA"))){
-			WebDriver_Functions.Type(By.name("invoiceNumberA"), InvoiceA);
-			WebDriver_Functions.Type(By.name("invoiceNumberB"), InvoiceB);
+	private static void InvoiceOrCCValidaiton(String CCNumber, String Invoice1, String Invoice2) throws Exception{
+		if (WebDriver_Functions.isPresent(By.name("invoice1"))){
+			WebDriver_Functions.Type(By.name("invoice1"), Invoice1);
+			WebDriver_Functions.Type(By.name("invoice2"), Invoice2);
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("invoiceNumberB"));
 		}else if (WebDriver_Functions.isPresent(By.name("lastFourDigits"))) {

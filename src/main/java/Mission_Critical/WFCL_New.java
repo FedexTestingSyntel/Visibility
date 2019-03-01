@@ -2,6 +2,8 @@ package Mission_Critical;
 
 import org.testng.annotations.Test;
 import Data_Structures.Account_Data;
+import Data_Structures.Enrollment_Data;
+import Data_Structures.Tax_Data;
 import Data_Structures.User_Data;
 
 import org.testng.annotations.AfterClass;
@@ -30,10 +32,10 @@ public class WFCL_New{
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("BR");
-		//CountryList = Environment.getCountryList("GU");
+		//CountryList = Environment.getCountryList("AE");
 		//CountryList = Environment.getCountryList("high");
 		//Helper_Functions.MyEmail = "accept@fedex.com";
-		//CountryList = new String[][]{{"US", ""}, {"AU", ""}};
+		//CountryList = new String[][]{{"US", ""}, {"CA", ""}};
 	}
 	
 	@DataProvider (parallel = true)
@@ -47,13 +49,29 @@ public class WFCL_New{
 			//int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "CreditCardRegistrationEnroll":
+		    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs(CountryList[j][0]);
-		    			if (EnrollmentID != null) {
-		    				data.add( new Object[] {Level, EnrollmentID[0], CountryList[j][0]});
+		    			for (Enrollment_Data Enrollment: ED) {
+			    			if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0])) {
+			    				AccountDetails = Environment.getAddressDetails(Level, CountryList[j][0]);
+			    				AccountDetails.Account_Type = "B";//Personal account
+			    				data.add( new Object[] {Level, Enrollment, AccountDetails, Environment.getTaxDetails(CountryList[j][0])});
+			    				break;
+			    			}
 		    			}
 					}
 		    		break;
+		    	case "CreditCardRegistrationEnroll_All":
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			String EnrollmentID[][] = Helper_Functions.LoadAllEnrollmentIDs(CountryList[j][0]);
+		    			for(String Enrollment[]: EnrollmentID) {
+		    				if (Enrollment[2] != null && Enrollment[2].contains("Feb19") && Enrollment[2].contains("L3")) {
+		    					String UserId = Helper_Functions.LoadUserID("L" + Level + Enrollment[0] + "CC");
+		    					data.add( new Object[] {Level, UserId, Enrollment});
+		    				}
+		    			}
+					}
+		    		break;	
 		    	case "UserRegistration_Account_Data":
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
@@ -109,8 +127,8 @@ public class WFCL_New{
 		    		}
 		    		*/
 		    		
-		    		data.add( new Object[] {Level, "697561862"});
-		    		//data.add( new Object[] {Level, "642711326"});
+		    		data.add( new Object[] {Level, "643939363"});
+		    		//data.add( new Object[] {Level, "644280888"});
 		    		//data.add( new Object[] {Level, "642260243"});
 			    	//data.add( new Object[] {Level, "633504580"});
 		    		break;
@@ -120,47 +138,65 @@ public class WFCL_New{
 	}
 
 	@Test(dataProvider = "dp")
-	public void CreditCardRegistrationEnroll(String Level, String EnrollmentID, String CountryCode) {
+	public void CreditCardRegistrationEnroll(String Level, Enrollment_Data Enrollment_Info, Account_Data Account_Info, Tax_Data Tax_Info) {
 		try {
+			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
+			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+
+			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+			
+			/*
 			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
+			String CountryCode = Enrollment.COUNTRY_CODE;
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
 			String TaxInfo[] = Helper_Functions.getTaxInfo(CountryCode).get(0);
+			String EnrollmentID[] = new String[] {Enrollment.ENROLLMENT_ID, Enrollment.COUNTRY_CODE, Enrollment.PROGRAM_NAME, Enrollment.PASSCODE, Enrollment.MEMBERSHIP_ID};
 			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, false, TaxInfo);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+			*/
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 
 	@Test(dataProvider = "dp")
-	public void UserRegistration_Account_Data(String Level, Account_Data AccountDetails) {
+	public void UserRegistration_Account_Data(String Level, Account_Data Account_Info) {
 		try {
-			AccountDetails.Level = Level;
-			AccountDetails.UserId = Helper_Functions.LoadUserID("L" + Level  + AccountDetails.Billing_Country_Code + "Create");
-			AccountDetails = Account_Data.Set_Dummy_Contact_Name(AccountDetails);
-			AccountDetails.FirstName = "Resmi";
-			AccountDetails.LastName = "Raveendran";
-			String Result = Arrays.toString(WFCL_Functions_UsingData.WFCL_UserRegistration(AccountDetails));
+			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Country_Code + "Create");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			String Result = Arrays.toString(WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 3)//since this method will consume an acocunt number run after others have completed
-	public void AccountRegistration_Admin(String Level, Account_Data AccountDetails) {
+	@Test(dataProvider = "dp", priority = 9)//since this method will consume an account number run after others have completed
+	public void AccountRegistration_Admin(String Level, Account_Data Account_Info) {
 		try {
+			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			boolean INET_Result = WFCL_Functions_UsingData.INET_Registration(Account_Info);
+			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID, "INET: " + INET_Result};
+			Result = Arrays.copyOf(Result, Result.length + 1);
+			Result[Result.length - 1] = "Admin: " + WFCL_Functions.Admin_Registration(Account_Info.Billing_Country_Code, Account_Info.Account_Number);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+			/*
 			String UserName[] = Helper_Functions.LoadDummyName("INET", Level);
-			String CountryCode = AccountDetails.Billing_Country_Code;
-			String Account = AccountDetails.Account_Number;
-			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
+			String CountryCode = Account_Info.Billing_Country_Code;
+			String Account = Account_Info.Account_Number;
+			String AddressDetails[] = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2, Account_Info.Billing_City, Account_Info.Billing_State, Account_Info.Billing_State_Code, Account_Info.Billing_Zip, Account_Info.Billing_Country_Code};
 			String UserID = Helper_Functions.LoadUserID("L" + Level + Account + CountryCode);
 			String Result[] = WFCL_Functions.WFCL_AccountRegistration_INET(UserName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
 			Result = Arrays.copyOf(Result, Result.length + 1);
 			Result[Result.length - 1] = "Admin:" + WFCL_Functions.Admin_Registration(CountryCode, Account);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+			
+			*/
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -171,12 +207,13 @@ public class WFCL_New{
 		try {
 			String CountryCode = AccountDetails.Billing_Country_Code;
 			AccountDetails = Account_Data.Set_Dummy_Contact_Name(AccountDetails);
+			AccountDetails = Account_Data.Set_Account_Nickname(AccountDetails, AccountDetails.Account_Number + "_" + AccountDetails.Billing_Country_Code);
 			AccountDetails.UserId = Helper_Functions.LoadUserID("L" + Level + "Inet" + CountryCode);
 			//create user id and link to account number.
 			AccountDetails = WFCL_Functions_UsingData.Account_Linkage(AccountDetails);
-			//register the userid to INET
+			//register the user id to INET
 			WFCL_Functions_UsingData.INET_Registration(AccountDetails);
-			String Result[] = new String[] {AccountDetails.UserId, AccountDetails.UUID, AccountDetails.Account_Number};
+			String Result[] = new String[] {AccountDetails.UserId, AccountDetails.Account_Number, AccountDetails.UUID};
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -247,7 +284,7 @@ public class WFCL_New{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	@Test(dataProvider = "dp", priority = 1, enabled = false)
 	public void Link_account_to_user(String Level, String Account, String UserID, String Password){
 		try {
 			Account_Data AccountDetails = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
@@ -256,6 +293,22 @@ public class WFCL_New{
 			
 			//String Result = WFCL_Functions_UsingData.Account_Number_Masking(Account_Info, Account_Info_Mismatch);
 			//Helper_Functions.PrintOut(Result, false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", enabled = true)
+	public void CreditCardRegistrationEnroll_All(String Level, String UserId, String EnrollmentID[]) {
+		try {
+			Helper_Functions.PrintOut("Erollment with " + EnrollmentID[0], false);
+			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
+			String CountryCode = EnrollmentID[1];
+			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
+			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
+			String TaxInfo[] = Helper_Functions.getTaxInfo(CountryCode).get(0);
+			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, false, TaxInfo);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

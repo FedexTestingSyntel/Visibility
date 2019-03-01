@@ -2,8 +2,6 @@ package WDPA_Application;
 
 import static org.testng.Assert.assertEquals;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -18,9 +16,9 @@ public class WDPA_Functions{
 	//Address[] = Streetline1 - 0, Streetline2 - 1, City - 2, State - 3, StateCode - 4, postalCode - 5, CountryCode - 6, ShareID - 7
 	//PackageDetails for express/ground = {String Packages, String Weight, String WeightUnit (L or K), String Date, String ReadyTime, String CloseTime, String Special}
 	//PackageDetails for expressLTL =     {String Skids,    String Weight, String WeightUnit,          String ReadyTime, String CloseTime, String Name, String Service, String ConfirmationNo, String Special, String Length, String Width, String Height)
-	public static String[] WDPAPickupDetailed(String CountryCode, String User, String Password, String Service, String Company, String Name, String Phone, String Address[], String PackageDetails[], String ConfirmationRedirect) throws Exception{
+	public static String[] WDPAPickupDetailed(String CountryCode, String UserID, String Password, String Service, String Company, String Name, String Phone, String Address[], String PackageDetails[], String ConfirmationRedirect) throws Exception{
 		try {
-			WebDriver_Functions.Login(User, Password);
+			WebDriver_Functions.Login(UserID, Password);
 			
 			WebDriver_Functions.ChangeURL("WDPA", CountryCode, false);
 
@@ -61,10 +59,17 @@ public class WDPA_Functions{
 				//need to finish
 			}
 			
-			WDPAMyPickupsPage(Service, ConfirmationNumber, Address, PackageDetails);
-
+			boolean Cancelled =WDPACancelFromMyPickups(Service, ConfirmationNumber, Address, PackageDetails);
+			
+			if (Service.contentEquals("ground")) {
+				String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"GROUND_ENABLED", "T"}};
+				Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+			}else if (Service.contentEquals("express")) {
+				String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"EXPRESS_ENABLED", "T"}};
+				Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+			}
 			Helper_Functions.PrintOut(ConfirmationNumber, false);
-			return new String[] {ConfirmationNumber, ConfirmationRedirect, User};//need to add correct return valuers
+			return new String[] {UserID, ConfirmationNumber, ConfirmationRedirect, "Cancelled: " + Cancelled};//need to add correct return valuers
      }catch (Exception e){
     	throw e;
      }
@@ -121,7 +126,12 @@ public class WDPA_Functions{
 
 		//select the last select able day from the calendar.
 		WebDriver_Functions.WaitForTextPresentIn(By.id(strFieldType + ".closeTime"), "pm");
-		CalenderDate(strFieldType + ".pickupDate", null);
+		try {
+			CalenderDate(strFieldType + ".pickupDate", null);
+		}catch (Exception e){
+			Helper_Functions.PrintOut("Warning, not able to select pickup time.");
+		}
+		
 		
 		if (ReadyTime != null) {
 			WebDriver_Functions.Select(By.id(strFieldType + ".readyTime"), ReadyTime, "v");
@@ -249,7 +259,7 @@ public class WDPA_Functions{
 		}
 	}
 	
-	public static void WDPAMyPickupsPage(String Service, String ConfirmationNumber, String Address[], String PackageDetails[]) throws Exception{
+	public static boolean WDPACancelFromMyPickups(String Service, String ConfirmationNumber, String Address[], String PackageDetails[]) throws Exception{
 		//navigate to my pickups page
 		WebDriver_Functions.ChangeURL("WDPA_Pickups", Address[6], false);
 		
@@ -278,8 +288,12 @@ public class WDPA_Functions{
 		//make sure the pickup is cancelled
 		if (!(DriverFactory.getInstance().getDriver().findElement(By.id("table.pickupHistory._contents._row1._col6")).getText().contains("Cancelled"))){
 			Helper_Functions.PrintOut("    Pickup:" + ConfirmationNumber + " has not been cancelled", true);
+			return false;
+		}else {
+			WebDriver_Functions.takeSnapShot("Cancellation.png");
+			return true;
 		}
-		WebDriver_Functions.takeSnapShot("Cancellation.png");
+		
 	}
 	
 	public static String WDPALTLPickup(String AddressDetails[], String UserID, String Password, String HandelingUnits, String Weight) throws Exception{
@@ -294,24 +308,17 @@ public class WDPA_Functions{
 				// launch the browser and direct it to the Base URL  https://wwwdrt.idev.fedex.com/PickupApp/scheduleFreightPickup.do?method=doInit&locale=en_us
 				WebDriver_Functions.ChangeURL("WDPA_LTL", CountryCode, false);
 				//wait for the WDPA page to load
-				WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
-				
-			
-				//Select account from dropdown
 				try {
-					DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);   
-					WebDriver_Functions.Select(By.id("account.freight.accountBox._Dropdown"), "0", "i");
+					WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
 					strAccountSelected = WebDriver_Functions.GetText(By.xpath("//option"));
+					WebDriver_Functions.Select(By.id("account.freight.accountBox._Dropdown"), "0", "i");
 					WebDriver_Functions.Click(By.xpath("//option"));
 					WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), "0", "i");
-				}catch (Exception e){   //account selection, Fix later
-				}finally {
-					DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.SECONDS);
-				}
+				}catch (Exception e){}
 				
-				 WDPA_LTL_Pickup_Address("Company", "TestingName", Helper_Functions.myPhone, AddressDetails);
+				WDPA_LTL_Pickup_Address("Company", "TestingName", Helper_Functions.myPhone, AddressDetails);
 			}else{//user is not logged in
-				WebDriver_Functions.ChangeURL("WDPA_LTL", CountryCode, false);
+				WebDriver_Functions.ChangeURL("WDPA_LTL", CountryCode, true);
 				WDPA_LTL_Pickup_Address("Company", "TestingName", Helper_Functions.myPhone, AddressDetails);
 			}
 
@@ -383,8 +390,9 @@ public class WDPA_Functions{
 
 		    return strConfirmationNumber;
 	     } catch (Exception e) {
+	    	 e.printStackTrace();
 	    	 if (strConfirmationNumber.contentEquals("")) {
-	    		 //if not ablt to get the confirmaiton number then list as invalid.
+	    		 //if not able to get the confirmation number then list as invalid.
 	 			String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "F"}};
 				Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
 	    	 }
@@ -394,7 +402,6 @@ public class WDPA_Functions{
 					Helper_Functions.PrintOut(WebDriver_Functions.GetText(By.xpath("//*[@id='primary.error.display']/div/label")), true);
 				}
 			}catch (Exception e2){}
-			e.printStackTrace();
 			throw e;
 		 }
 	}//end WDPALTLPickup
@@ -617,8 +624,11 @@ public class WDPA_Functions{
 	}
 	
 	public static String WDPA_Confirmation_Page(String Phone, String PackageDetails[], String Service) throws Exception{
-		WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationLeftPanel']/div[8]/div[2]/div/div/label"), Phone, 0);
-		WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationRightPanel']/div[3]/div[2]/div/div/label"), PackageDetails[0], 0);//packages
+		//WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationLeftPanel']/div[8]/div[2]/div/div/label"), Phone, 0);
+		if (WebDriver_Functions.isPresent(By.xpath("//*[@id='confirmationRightPanel']/div[3]/div[2]/div/div/label"))) {
+			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationRightPanel']/div[3]/div[2]/div/div/label"), PackageDetails[0], 0);//packages
+		}
+
 		String Weight = null;
 		if (PackageDetails[2] == "L") {
 			Weight = PackageDetails[1] + " lbs";

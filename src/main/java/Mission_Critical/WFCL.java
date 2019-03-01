@@ -57,17 +57,7 @@ public class WFCL{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs(CountryList[j][0]);
 		    			if (EnrollmentID != null) {
-		    				data.add( new Object[] {Level, EnrollmentID[0], CountryList[j][0]});
-		    			}
-					}
-		    		break;
-		    	case "TNT_Vat_Validation":
-		    		String TNTValidation[] = {"GB", "NL", "CL", "FR", "BE", "LU"};
-		    		for (int j = 0; j < TNTValidation.length; j++) {
-		    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs(TNTValidation[j]);
-		    			ArrayList<String[]> TaxInfo = Helper_Functions.getTaxInfo(TNTValidation[j]);
-		    			for (String Tax[]: TaxInfo) {
-		    				data.add(new Object[] {Level, EnrollmentID[0], TNTValidation[j], Tax, true});
+		    				data.add( new Object[] {Level, EnrollmentID});
 		    			}
 					}
 		    		break;
@@ -151,44 +141,15 @@ public class WFCL{
 	}
 
 	@Test(dataProvider = "dp")
-	public void CreditCardRegistrationEnroll(String Level, String EnrollmentID, String CountryCode) {
+	public void CreditCardRegistrationEnroll(String Level, String EnrollmentID[]) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
+			String CountryCode = EnrollmentID[1];
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + Thread.currentThread().getId() + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
 			String[] TaxInfo = Helper_Functions.getTaxInfo(CountryCode).get(0);
 			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, false, TaxInfo);
-			Helper_Functions.PrintOut(Arrays.toString(Result), false);
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
-	
-	@Test(dataProvider = "dp", description = "349582", enabled = false)
-	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
-		try {
-			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
-			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
-			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
-			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
-
-			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, BuisnessAccount, VatNumber);
-			Helper_Functions.PrintOut(Arrays.toString(Result), false);
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
-	
-	@Test(dataProvider = "dp", enabled = false)
-	public void TNT_Vat_Validation(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
-		try {
-			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
-			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
-			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
-			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
-
-			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, BuisnessAccount, VatNumber);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

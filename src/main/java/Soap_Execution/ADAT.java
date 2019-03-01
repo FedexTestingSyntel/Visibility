@@ -1,7 +1,8 @@
-package SoapExample;
+package Soap_Execution;
 
 import javax.xml.soap.*;
 import static org.junit.Assert.assertThat;
+//import static org.hamcrest.core.IsNot.not;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,11 +16,13 @@ import Data_Structures.ADAT_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
+//listner needed for using overwrites for report generation and 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
-public class SoapAutomation {
+public class ADAT {
 
-	static String LevelsToTest = "3";
+	//will parse this string and run all the levels listed in the data provider.
+	static String LevelsToTest = "3";	
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -36,8 +39,8 @@ public class SoapAutomation {
 			}
 			ADAT_Data DC = ADAT_Data.LoadVariables(Level);
 			String Organizations[] = new String[] {
-					//DC.OrgPostcard, 
-					DC.OrgPhone
+					DC.OrgPostcard, 
+					//DC.OrgPhone
 					};
 			for (String Org: Organizations) {
 				switch (m.getName()) { //Based on the method that is being called the array list will be populated.
@@ -47,6 +50,7 @@ public class SoapAutomation {
 				case "ADAT_PostcardVelocity":
 				case "ADAT_PhoneVelocity":	
 				case "ADAT_VerifyPin":
+				case "ADAT_VerifyPin_Invalid":
 					data.add( new Object[] {Level, DC, Org});
 					break;
 				}
@@ -56,52 +60,76 @@ public class SoapAutomation {
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", priority=1)
+	@Test(dataProvider = "dp", priority = 1)
 	public void ADAT_CreateUser(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		//Using the assumption the organization will be in the "FDM-??-PIN" format
 		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN")));
-		ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
+		String Response = ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
+		
+        String Response_Variables[] = new String[] {"udsTransactionID", "The operation was successful!"};
+        for (String Variable: Response_Variables) {
+			assertThat(Response, CoreMatchers.containsString(Variable));
+		}
 	}
 	
-	@Test(dataProvider = "dp", priority=2)
+	@Test(dataProvider = "dp", priority = 2)
 	public void ADAT_CreatePin(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		//create the user to do the pin validation. Using the assumption the organization will be in the "FDM-??-PIN" format
 		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN")));
 		ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
 		
-		String Pin = ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
-		Helper_Functions.PrintOut("Pin Generated: " + Pin, false);
+		String Response = ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
+		
+        String Response_Variables[] = new String[] {Organization, "createTime", "validityStartTime", "validityEndTime", "otp"};
+        for (String Variable: Response_Variables) {
+			assertThat(Response, CoreMatchers.containsString(Variable));
+		}
 	}
 	
-	@Test(dataProvider = "dp", priority=3)
+	@Test(dataProvider = "dp", priority = 3)
 	public void ADAT_AddressVelocity(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		String UserName = Helper_Functions.LoadUserID("L" + Level + "AddVel");
 		VelocityCheck(UserName, Data_Class.CreateUserUrl, Data_Class.VelocityUrl, Organization, Data_Class.OrgAddressVelocity, Data_Class.AddressVelocityThreshold);
 	}
 	
-	@Test(dataProvider = "dp", priority=3)
+	@Test(dataProvider = "dp", priority = 3)
 	public void ADAT_PostcardVelocity(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		String UserName = Helper_Functions.LoadUserID("L" + Level + "PostVel");
 		VelocityCheck(UserName, Data_Class.CreateUserUrl, Data_Class.VelocityUrl, Organization, Data_Class.OrgPostcardVelocity, Data_Class.PostcardPinVelocityThreshold);
 	}
 	
-	@Test(dataProvider = "dp", priority=3)
+	@Test(dataProvider = "dp", priority = 3)
 	public void ADAT_PhoneVelocity(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		String UserName = Helper_Functions.LoadUserID("L" + Level + "PhoneVel");
 		VelocityCheck(UserName, Data_Class.CreateUserUrl, Data_Class.VelocityUrl, Organization, Data_Class.OrgPhoneVelocity, Data_Class.PhonePinVelocityThreshold);
 	}
 	
-	@Test(dataProvider = "dp", priority=4)
+	@Test(dataProvider = "dp", priority = 4)
 	public void ADAT_VerifyPin(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		//create the user to do the pin validation. Using the assumption the organization will be in the "FDM-??-PIN" format
 		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN")));
 		ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
 
-		String Pin = ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
-		Helper_Functions.PrintOut("Pin Generated: " + Pin, false);
+		String Response = ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
 		
-		String Response = ADAT_VerifyPin(Data_Class.VerifyPinUrl, Organization, UserName, Pin);
-		assertThat(Response, CoreMatchers.containsString("<cx:message>The operation was successful.</cx:message>"));
+		Response = ADAT_VerifyPin(Data_Class.VerifyPinUrl, Organization, UserName, ParsePin(Response));
+
+        String Response_Variables[] = new String[] {"transactionID", "message", "<cx:message>The operation was successful.</cx:message>"};
+        for (String Variable: Response_Variables) {
+			assertThat(Response, CoreMatchers.containsString(Variable));
+		}
+	}
+	
+	@Test(dataProvider = "dp", priority = 4)
+	public void ADAT_VerifyPin_Invalid(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
+		//create the user to do the pin validation. Using the assumption the organization will be in the "FDM-??-PIN" format
+		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN")));
+		ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
+
+		String Response = ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
+		
+		Response = ADAT_VerifyPin(Data_Class.VerifyPinUrl, Organization, UserName, ParsePin(Response) + "1");
+		assertThat(Response, CoreMatchers.containsString("400Bad"));
 	}
 	
 	public void VelocityCheck(String UserName, String soapCreateUserUrl, String soapVelocityUrl, String Organization, String EvaluateRiskOrganization, int Threshold) throws Exception {
@@ -154,11 +182,6 @@ public class SoapAutomation {
        
         // Send SOAP Message to SOAP Server
 	    String Response = GeneralSoapSupport.callSoapWebService(soapCreateUserUrl, request);
-        
-        String Response_Variables[] = new String[] {"udsTransactionID", "The operation was successful!"};
-        for (String Variable: Response_Variables) {
-			assertThat(Response, CoreMatchers.containsString(Variable));
-		}
         return Response;
 	}
 
@@ -193,14 +216,23 @@ public class SoapAutomation {
        
         // Send SOAP Message to SOAP Server
 	    String Response = GeneralSoapSupport.callSoapWebService(soapCreatePinUrl, request);
-        
-        String Response_Variables[] = new String[] {Organization, "createTime", "validityStartTime", "validityEndTime", "otp"};
-        for (String Variable: Response_Variables) {
-			assertThat(Response, CoreMatchers.containsString(Variable));
-		}
-        
+	    
+	    String Pin = ParsePin(Response);
+	    if (Pin != null) {
+	    	Helper_Functions.PrintOut("Pin Generated: " + Pin, false);
+	    }
+		
+		return Response;
+	}
+	
+	public String ParsePin(String Request){
         String Start = "<wfiss60xsd:otp>", End = "</wfiss60xsd:otp>";
-		return Response.substring(Response.indexOf(Start) + Start.length(), Response.indexOf(End));
+        if (Request != null && Request.contains(Start) && Request.contains(End)) {
+        	return Request.substring(Request.indexOf(Start) + Start.length(), Request.indexOf(End));
+        }else {
+        	return null;
+        }
+        
 	}
 	
 	public String ADAT_VerifyPin(String soapVerifyPinUrl, String Organization, String UserName, String Pin) throws Exception {
@@ -233,13 +265,6 @@ public class SoapAutomation {
        
         // Send SOAP Message to SOAP Server
 	    String Response = GeneralSoapSupport.callSoapWebService(soapVerifyPinUrl, request);
-        
-	    //quick check to see if response is recieved, only does hihg level check if correct response and not specific to a scenario
-        String Response_Variables[] = new String[] {"transactionID", "message"};
-        for (String Variable: Response_Variables) {
-			assertThat(Response, CoreMatchers.containsString(Variable));
-		}
-        
 		return Response;
 	}
 	

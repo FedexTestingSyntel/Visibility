@@ -17,7 +17,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WDPA_SmokeTest{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -35,33 +35,46 @@ public class WDPA_SmokeTest{
 			int intLevel = Integer.parseInt(Level);
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
-		    	case "Pickup_Ground":
-		    	case "Pickup_Express":
-		    	case "Pickup_ExpressFreight"://need to fix this later, not for all countries.
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
-		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 1; k < UD.length; k++) {
-		    				if (UD[k].WDPA_ENABLED.contains("T")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					break;
-		    				}
-		    			}
-		    		}
-		    		break;
-		    	case "Pickup_LTLFreight":
-		    		UD = Environment.Get_UserIds(intLevel);
-		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].FREIGHT_ENABLED.contains("T")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					break;
-		    				}
-		    			}
-					}
-		    	break;
+			case "Pickup_Ground":
+	    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+	    		for (int j = 0; j < CountryList.length; j++) {
+	    			for (int k = 1; k < UD.length; k++) {
+	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].GROUND_ENABLED.contentEquals("T")) {
+	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+	    					break;
+	    				}
+	    			}
+				}
+	    		break;
+	    	case "Pickup_Express":
+	    	case "Pickup_ExpressFright"://need to fix this later, not for all countries.
+	    		UD = Environment.Get_UserIds(intLevel);
+	    		for (int j = 0; j < CountryList.length; j++) {
+	    			for (int k = 1; k < UD.length; k++) {
+	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].EXPRESS_ENABLED.contentEquals("T")) {
+	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+	    					break;
+	    				}
+	    			}
+				}
+	    	break;
+	    	case "Pickup_LTLFreight":
+	    		UD = Environment.Get_UserIds(intLevel);
+	    		for (int j = 0; j < CountryList.length; j++) {
+	    			for (int k = 0; k < UD.length; k++) {
+	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].FREIGHT_ENABLED.contentEquals("T")) {
+	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+	    					break;
+	    				}
+	    			}
+				}
+	    	break;
 		    	case "Pickup_LTLFreight_Anonymous":    //update this later to restrict based on country
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			data.add( new Object[] {Level, CountryList[j][0]});
+		    			if (CountryList[j][0].contentEquals("US") || CountryList[j][0].contentEquals("CA") || CountryList[j][0].contentEquals("MX")){
+		    				data.add( new Object[] {Level, CountryList[j][0]});
+		    			}
+		    			
 					}
 		    	break;
 			}

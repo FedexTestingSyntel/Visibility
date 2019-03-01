@@ -5,12 +5,14 @@
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
-    <parameter name="Level" value="3"/>
+    <parameter name="Level" value="6"/>
     <classes>
       <class name="Mission_Critical.WFCL_SmokeTest">
         <methods>
           <include name="CreditCardRegistrationEnroll" invocation-numbers="0"/>
           <include name="AccountRegistration_WDPA" invocation-numbers="0"/>
+          <include name="UserRegistration" invocation-numbers="0"/>
+          <include name="AccountRegistration_Admin" invocation-numbers="0"/>
           <include name="AccountRegistration_INET" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>

@@ -37,9 +37,9 @@ public class MC_PI_1{
 		    			ArrayList<String[]> TaxInfo = Helper_Functions.getTaxInfo("BR");
 		    			for (String Tax[]: TaxInfo) {
 		    				if (Tax[4].contentEquals("B")) {
-		    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, true});
+		    					data.add(new Object[] {Level, EnrollmentID, Tax, true});
 		    				}else {
-		    					data.add(new Object[] {Level, EnrollmentID[0], "BR", Tax, false});
+		    					data.add(new Object[] {Level, EnrollmentID, Tax, false});
 		    				}
 		    				
 		    			}
@@ -72,9 +72,9 @@ public class MC_PI_1{
 		    			for (String Tax[]: TaxInfoLoc) {
 		    				
 		    				if (Tax[4].contentEquals("B")) {//business account
-		    					data.add(new Object[] {Level, EnrollmentID[0], Vat_Validation[j], Tax, Tax[2], true});
+		    					data.add(new Object[] {Level, EnrollmentID, Tax, Tax[2], true});
 		    				}else {
-		    					data.add(new Object[] {Level, EnrollmentID[0], Vat_Validation[j], Tax, Tax[2], false});
+		    					data.add(new Object[] {Level, EnrollmentID, Tax, Tax[2], false});
 		    				}
 		    				/*
 		    				if (Tax[4].contentEquals("B1")) {//when trying to test specific examples, need to update the excel sheet.
@@ -101,10 +101,10 @@ public class MC_PI_1{
 		    					String ZipCode = Address[5];
 		    					//attempt with no spaces
 		    					if (ZipCode.contains(" ")) {
-		    						data.add(new Object[] {Level, EnrollmentID[0], Address, ZipCode.replaceAll(" ", ""), Tax, BusinessAccount});
+		    						data.add(new Object[] {Level, EnrollmentID, Address, ZipCode.replaceAll(" ", ""), Tax, BusinessAccount});
 		    					}
 		    					//make zip code empty
-		    					data.add(new Object[] {Level, EnrollmentID[0], Address, "", Tax, BusinessAccount});
+		    					data.add(new Object[] {Level, EnrollmentID, Address, "", Tax, BusinessAccount});
 		    					//add a random character to the zip
 		    					//data.add(new Object[] {Level, EnrollmentID[0], Address, ZipCode + Helper_Functions.getRandomString(1), Tax, BusinessAccount});
 		    					//remove last character from zip
@@ -124,9 +124,10 @@ public class MC_PI_1{
 
 	//This story was overwritten in the next PI. Story 419457 reverted these changes and made the option change irrelevent.
 	@Test(dataProvider = "dp", description = "349582", enabled = false)   
-	public void BR_TaxID(String Level, String EnrollmentID, String CountryCode, String VatNumber[], boolean BuisnessAccount) {
+	public void BR_TaxID(String Level, String EnrollmentID[], String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
+			String CountryCode = EnrollmentID[1];
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
@@ -165,9 +166,10 @@ public class MC_PI_1{
 	}
 
 	@Test(dataProvider = "dp", description = "368854",enabled = true)
-	public void TNT_Vat_Validation(String Level, String EnrollmentID, String CountryCode, String VatNumber[], String TaxID, boolean BuisnessAccount) {
+	public void TNT_Vat_Validation(String Level, String EnrollmentID[], String VatNumber[], String TaxID, boolean BuisnessAccount) {
 		try {
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
+			String CountryCode = EnrollmentID[1];
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
 			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
 			Helper_Functions.PrintOut(DriverFactory.getScreenshotPath(), true);
@@ -183,7 +185,7 @@ public class MC_PI_1{
 	}
 	
 	@Test(dataProvider = "dp",  description = "368854", enabled = true)
-	public void TNT_Zip_Validation(String Level, String EnrollmentID, String Address[], String ZipCode, String VatNumber[], boolean BuisnessAccount) {
+	public void TNT_Zip_Validation(String Level, String EnrollmentID[], String Address[], String ZipCode, String VatNumber[], boolean BuisnessAccount) {
 		try {
 			String CountryCode = Address[6];
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
