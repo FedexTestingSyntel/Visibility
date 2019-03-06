@@ -16,7 +16,7 @@ import TestingFunctions.WRTT_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WRTT{
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	static boolean SmokeTest = true;
 	
@@ -24,7 +24,7 @@ public class WRTT{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("US");
-		CountryList = Environment.getCountryList("FULL");
+		//CountryList = Environment.getCountryList("FULL");
 		SmokeTest = false;
 
 	}

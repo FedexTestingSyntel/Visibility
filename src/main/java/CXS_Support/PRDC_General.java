@@ -48,7 +48,7 @@ public class PRDC_General {
 	public void Check_WCRV_Access(String Level, USRC_Data USRC_Details, PRDC_Data PRDC_Details, String UserID, String Password) {
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID, Password);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID, Password);
 		
 		String WCRV_Access_List[][] = {{"UUID_NBR", ""},//index 0 and set below
 				{"SSO_LOGIN_DESC", UserID.replaceAll(" ", "")},
@@ -85,7 +85,7 @@ public class PRDC_General {
 			String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
 			Helper_Functions.WriteToExcel(FileName, "L" + Level, WCRV_Access_List, 1);
 			
-			USRC_API_Endpoints.Logout(USRC_Details.LoginUserURL);
+			USRC_API_Endpoints.Logout(USRC_Details.GenericUSRCURL);
 		}
 	}
 	

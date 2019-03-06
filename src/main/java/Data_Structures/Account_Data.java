@@ -1,5 +1,7 @@
 package Data_Structures;
 
+import java.util.Arrays;
+
 import SupportClasses.Helper_Functions;
 
 public class Account_Data {
@@ -56,10 +58,10 @@ public class Account_Data {
 	public String FirstName = "";
 	public String MiddleName = "";
 	public String LastName = "";
-	public String Email = "";
+	public String Email = "accept@testing.com";
 	
 	public String UserId = "";
-	public String Password = "";
+	public String Password = "Test1234";
 	public String UUID = "";
 	public String Secret_Question = "SP2Q1"; //"What is your mother's first name?"
 	public String Secret_Answer = "mom";
@@ -68,6 +70,11 @@ public class Account_Data {
 		//generic constructor
 	}
 
+	public static void Print_Account_Address(Account_Data Account_Info) {
+		String Address[] = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2, Account_Info.Billing_City, Account_Info.Billing_State_Code, Account_Info.Billing_Zip, Account_Info.Billing_Country_Code, Account_Info.Billing_Region};
+		Helper_Functions.PrintOut(Arrays.toString(Address));
+	}
+	
 	public static Account_Data Set_Account_Nickname(Account_Data Account_Info, String Nickname) {
 		Account_Info.Account_Nickname = Nickname;
 		String Last_Three_Digits = Account_Info.Account_Number.substring(Account_Info.Account_Number.length() - 3, Account_Info.Account_Number.length());

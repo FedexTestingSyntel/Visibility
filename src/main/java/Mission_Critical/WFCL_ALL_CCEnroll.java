@@ -1,7 +1,8 @@
 package Mission_Critical;
 
 import org.testng.annotations.Test;
-
+import CXS_Support.USRC_API_Endpoints;
+import CXS_Support.USRC_Data;
 import Data_Structures.Enrollment_Data;
 import Data_Structures.User_Data;
 import org.testng.annotations.BeforeClass;
@@ -19,7 +20,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_ALL_CCEnroll{
-	static String LevelsToTest = "6";  
+	static String LevelsToTest = "2";  
 	static String CountryList[][]; 
 	static List<String> Users = new ArrayList<String>();
 
@@ -60,7 +61,7 @@ public class WFCL_ALL_CCEnroll{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < UD.length; k++) {
 		    				//user must have an account number and be checking below to see if pass key user.
-		    				if (!UD[k].ACCOUNT_NUMBER.contentEquals("") && UD[k].PASSKEY.contentEquals("T") && !UD[k].SSO_LOGIN_DESC.contentEquals("L6RegGrdUS")) {
+		    				if (!UD[k].ACCOUNT_NUMBER.contentEquals("") && UD[k].PASSKEY.contentEquals("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].SSO_LOGIN_DESC.contains("CC")){
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
@@ -109,12 +110,16 @@ public class WFCL_ALL_CCEnroll{
 												{"Incorrect Link on Apply now button:", ""}};
 			WebDriver_Functions.Login(UserId, Password);
 			
+			String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
+			USRC_Data UD = USRC_Data.LoadVariables(Level);
+			String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(UD.GenericUSRCURL, "fdx_login=" + Login_Cookie);
+			
 			Enrollment_Data ED[] = Environment.getEnrollmentDetails(Integer.parseInt(Level));
 
 			for (Enrollment_Data EN: ED) {
-				if (EN != null && EN.IDENTIFIER.contains("Feb19")) {
+				if (EN != null && !EN.AEM_LINK.contentEquals("")) {
 					WebDriver_Functions.ChangeURL("DT_" + EN.ENROLLMENT_ID, EN.COUNTRY_CODE, false);
-					//WebDriver_Functions.takeSnapShot(En[0] + " DT Value.png");
+					WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " DT Value.png");
 					String DTValue = WebDriver_Functions.GetBodyText();
 					if (DTValue.contains("Discount program is pending") && !DTValue.contains(EN.ENROLLMENT_ID)) {
 						Helper_Functions.PrintOut("     For " + EN.ENROLLMENT_ID + " the enrollment id is not correct in the DT file", false);
@@ -147,65 +152,16 @@ public class WFCL_ALL_CCEnroll{
 					}
 					
 					if (WebDriver_Functions.CheckBodyText(DTValue)) {
-							DT_Status[0][1] += EN.ENROLLMENT_ID + ", ";
-							//WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Discount Matching.png");
-						
-							try {
-								//select the apply discount radio button and continue.
-								if (WebDriver_Functions.isPresent(By.name("continue"))) {
-									WebDriver_Functions.Click(By.xpath("//input[(@name='whichBillingAddress') and (@value = 'useContactAddress')]"));
-									//WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Apply Discount.png");
-									WebDriver_Functions.Click(By.name("continue"));
-							 		
-							 		//after processing screen
-							 		try {
-							 			WebDriver_Functions.WaitForTextPresentIn(By.tagName("body"), "We are processing your request.");
-							 			if (WebDriver_Functions.CheckBodyText("An error has occurred and we are unable to process your request. Please try again.")) {
-											throw new Exception("An error has occurred and we are unable to process your request. Please try again.");
-										}
-							 			WebDriver_Functions.WaitForTextNotPresentIn(By.tagName("body"), "We are processing your request.");
-									}catch (Exception e) {}
-							 		
-							 		if (WebDriver_Functions.CheckBodyText("An error has occurred and we are unable to process your request. Please try again.")) {
-										throw new Exception("An error has occurred and we are unable to process your request. Please try again.");
-									}
-							 		
-							 		if (WebDriver_Functions.isPresent(By.name("discountConflictResolution"))){
-							 			if (!WebDriver_Functions.CheckBodyText(DTValue)) {
-											DT_Status[6][1] += EN.ENROLLMENT_ID + ", ";
-							 			}
-							 			WebDriver_Functions.Click(By.xpath("//input[(@name='discountConflictResolution') and (@value = 'applyNewDiscount')]"));
-							 			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='content']/div/div[2]/p[2]/font"), "You have existing discounts for FedEx Express®, FedEx Ground®, and/or FedEx Freight® services on your account. Those discounts will be replaced with new discounts should you choose to enroll in this program. For more information about the new discounts, call a FedEx Advantage® representative at 1.800.434.9918.", 116519);
-							 			//WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Discount Conflict.png");
-							 			
-							 			if (WebDriver_Functions.isPresent(By.name("lastFourDigits"))){
-							 				InvoiceOrCCValidaiton();
-							 			}else {
-							 				WebDriver_Functions.Click(By.name("submit"));
-							 			}
-							 			
-							 			WebDriver_Functions.WaitForTextNotPresentIn(By.className("mainheader1"), "We are processing your request. Please wait...");
-							 		}
-							 		
-							 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
-							 		if (!WebDriver_Functions.CheckBodyText(DTValue)) {
-										DT_Status[7][1] += EN.ENROLLMENT_ID + ", ";
-						 			}
-							 		//WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Confirmation.png");
-								}else {
-									DT_Status[8][1] += EN.ENROLLMENT_ID + ", ";
-								}
-							}catch(Exception e) {
-								DT_Status[8][1] += EN.ENROLLMENT_ID + ", ";
-							}
-							
+						DT_Status[0][1] += EN.ENROLLMENT_ID + ", ";
+						WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Discount Matching.png");
+						//Apply_Discount(DT_Status, EN, Credit_Card, DTValue, UserId);
+					}else {
+						if (WebDriver_Functions.CheckBodyText("Sorry, we cannot find the web page you are looking for.")) {
+							DT_Status[2][1] += EN.ENROLLMENT_ID + ", ";
 						}else {
-							if (WebDriver_Functions.CheckBodyText("Sorry, we cannot find the web page you are looking for.")) {
-								DT_Status[2][1] += EN.ENROLLMENT_ID + ", ";
-							}else {
-								DT_Status[1][1] += EN.ENROLLMENT_ID + ", ";//DiscountNotMatchingOnLandingPage
-							}
+							DT_Status[1][1] += EN.ENROLLMENT_ID + ", ";//DiscountNotMatchingOnLandingPage
 						}
+					}
 				}
 			}
 			
@@ -217,15 +173,6 @@ public class WFCL_ALL_CCEnroll{
 			}
 			Helper_Functions.PrintOut(Results, false);
 			
-			/*
-			Helper_Functions.PrintOut("\nDiscountAppearingCorrectly: " + DiscountAppearingCorrectly + "\n" + 
-										"DiscountNotMatching: " + DiscountNotMatching + "\n" + 
-										"SorryMessage: " + SorryMessage + "\n" + 
-										"WFCLMarketing: " + WFCLMarketing + "\n" + 
-										"EnrollmentIDRequired: " + EnrollmentIDRequired + "\n" + 
-										"WFCLMarketingIncorrectDiscount: " + WFCLMarketingIncorrectDiscount + "\n" + 
-										"DiscountAppledSuccessfully: " + DiscountAppledSuccessfully, false);
-		*/
 		}catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
@@ -267,7 +214,7 @@ public class WFCL_ALL_CCEnroll{
 	@Test
 	public void TesitngRollingBounce(){
 		try {
-			String Level = "6";
+			String Level = "7";
 			Environment.getInstance().setLevel(Level);
 			boolean flag = false;
 			String LevelURL = WebDriver_Functions.LevelUrlReturn(Integer.parseInt(Level));
@@ -277,6 +224,7 @@ public class WFCL_ALL_CCEnroll{
 				DriverFactory.getInstance().getDriver().get(URL);
 				if (!WebDriver_Functions.CheckBodyText("Application Access Page")) {
 					Helper_Functions.PrintOut("\nPage is not present " + Helper_Functions.CurrentDateTime());
+					WebDriver_Functions.takeSnapShot("Page not up.png");
 					Helper_Functions.PrintOut(WebDriver_Functions.GetBodyText());
 					for (int j = 1; ;j++) {
 						DriverFactory.getInstance().getDriver().get(URL);
@@ -287,8 +235,9 @@ public class WFCL_ALL_CCEnroll{
 						}
 					}
 					while(!WebDriver_Functions.CheckBodyText("Application Access Page")) {
-						
+						DriverFactory.getInstance().getDriver().get(URL);
 					}
+					WebDriver_Functions.takeSnapShot("Page Back Online.png");
 					Helper_Functions.PrintOut("Page Back Online " + Helper_Functions.CurrentDateTime());
 				}
 				if (!WebDriver_Functions.CheckBodyText("WFCL3010") && !flag) {
@@ -308,7 +257,7 @@ public class WFCL_ALL_CCEnroll{
 		Helper_Functions.PrintOut("Done");
 	}
 	
-	private static void InvoiceOrCCValidaiton() throws Exception{
+	private static void InvoiceOrCCValidaiton(String CCNumber) throws Exception{
 		if (WebDriver_Functions.isPresent(By.name("invoiceNumberA"))){
 			String InvoiceA = "750000000", InvoiceB = "750000001";
 			WebDriver_Functions.Type(By.name("invoiceNumberA"), InvoiceA);
@@ -316,10 +265,61 @@ public class WFCL_ALL_CCEnroll{
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("invoiceNumberB"));
 		}else if (WebDriver_Functions.isPresent(By.name("lastFourDigits"))) {
-			String CCNumber = "4460";/////////need to make this dynamic
 			WebDriver_Functions.Type(By.name("lastFourDigits"), CCNumber);//this is just a guess as the number most commonly used. 
 			WebDriver_Functions.Click(By.name("submit"));
 			WebDriver_Functions.WaitNotPresent(By.name("lastFourDigits"));
 		}
+	}
+	
+	public String[][] Apply_Discount(String DT_Status[][], Enrollment_Data EN, String Credit_Card, String DTValue, String UserId){
+		try {
+			//select the apply discount radio button and continue.
+			if (WebDriver_Functions.isPresent(By.name("continue"))) {
+				WebDriver_Functions.Click(By.xpath("//input[(@name='whichBillingAddress') and (@value = 'useContactAddress')]"));
+				WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Apply Discount.png");
+				WebDriver_Functions.Click(By.name("continue"));
+		 		
+		 		//after processing screen
+		 		try {
+		 			WebDriver_Functions.WaitForTextPresentIn(By.tagName("body"), "We are processing your request.");
+		 			if (WebDriver_Functions.CheckBodyText("An error has occurred and we are unable to process your request. Please try again.")) {
+						throw new Exception("An error has occurred and we are unable to process your request. Please try again.");
+					}
+		 			WebDriver_Functions.WaitForTextNotPresentIn(By.tagName("body"), "We are processing your request.");
+				}catch (Exception e) {}
+		 		
+		 		if (WebDriver_Functions.CheckBodyText("An error has occurred and we are unable to process your request. Please try again.")) {
+					throw new Exception("An error has occurred and we are unable to process your request. Please try again.");
+				}
+		 		
+		 		if (WebDriver_Functions.isPresent(By.name("discountConflictResolution"))){
+		 			if (!WebDriver_Functions.CheckBodyText(DTValue)) {
+						DT_Status[6][1] += EN.ENROLLMENT_ID + ", ";
+		 			}
+		 			WebDriver_Functions.Click(By.xpath("//input[(@name='discountConflictResolution') and (@value = 'applyNewDiscount')]"));
+		 			
+		 			WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Discount Conflict.png");
+		 			
+		 			if (WebDriver_Functions.isPresent(By.name("lastFourDigits"))){
+		 				InvoiceOrCCValidaiton(Credit_Card);
+		 			}else {
+		 				WebDriver_Functions.Click(By.name("submit"));
+		 			}
+		 			
+		 			WebDriver_Functions.WaitForTextNotPresentIn(By.className("mainheader1"), "We are processing your request. Please wait...");
+		 		}
+		 		
+		 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
+		 		if (!WebDriver_Functions.CheckBodyText(DTValue)) {
+					DT_Status[7][1] += EN.ENROLLMENT_ID + ", ";
+	 			}
+		 		WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Confirmation.png");
+			}else {
+				DT_Status[8][1] += EN.ENROLLMENT_ID + ", ";
+			}
+		}catch(Exception e) {
+			DT_Status[8][1] += EN.ENROLLMENT_ID + ", ";
+		}
+		return DT_Status;
 	}
 }

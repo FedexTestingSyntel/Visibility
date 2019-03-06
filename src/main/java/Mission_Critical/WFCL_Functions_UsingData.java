@@ -35,7 +35,7 @@ public class WFCL_Functions_UsingData{
 		if (Account_Info.Billing_State != ""){
 			try {
 				//for the legacy registration page such as WDPA the code must be entered as text
-				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_State);
+				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_State_Code);
 			}catch (Exception e){}
 		}
 		if (Account_Info.Billing_State_Code != "") {
@@ -425,12 +425,12 @@ public class WFCL_Functions_UsingData{
  			Account_Entry_Screen(Account_Info);
 	 		
  			Verify_Confirmaiton_Page("WDPA", Account_Info);
+		    Account_Info.UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
 		    
 		    WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
 		    WebDriver_Functions.WaitPresent(By.id("module.account._headerTitle"));
 		    
-		    String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		    String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Account_Number, UUID};
+		    String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
 		    Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
 		    return ReturnValue;
  		}catch (Exception e) {
@@ -528,7 +528,7 @@ public class WFCL_Functions_UsingData{
 		}catch (Exception e) {}
 
 		//If the user is still on the CC entry page will try and enter a different credit card type.
-		if (WebDriver_Functions.isPresent(By.id("monthExpiry")) && Tax_Info.ERROR_CODE.contentEquals("Valid")) {
+		if (WebDriver_Functions.isPresent(By.id("monthExpiry")) && (Tax_Info == null || Tax_Info.ERROR_CODE.contentEquals("Valid"))) {
 			Helper_Functions.PrintOut("Error on Credit Card entry screen. Attempting to register with differnet credit card", true);
 			String NewCreditCard[] = Helper_Functions.LoadCreditCard(Account_Info.Credit_Card_Number);
 			//{Card Type - 0, Card Number - 1, CVV - 2, Expiration Month - 3, Expiration year - 4}

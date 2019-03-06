@@ -52,7 +52,7 @@ public class WDPA extends WDPA_Functions{
 					}
 		    		break;
 		    	case "Pickup_Express":
-		    	case "Pickup_ExpressFright"://need to fix this later, not for all countries.
+		    	case "Pickup_ExpressFreight"://need to fix this later, not for all countries.
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < UD.length; k++) {
@@ -110,7 +110,7 @@ public class WDPA extends WDPA_Functions{
 	}//end WDPA_Pickup_Express
 	
 	@Test(dataProvider = "dp", enabled = false)
-	public static void Pickup_ExpressFright(String Level, String CountryCode, String UserID, String Password){
+	public static void Pickup_ExpressFreight(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule an express freight pickup.", false);
 		try {
 			String PackageDetails[] = {"1", "444", "L", "1400", "1800", "ExpLTL Attempt", "FedEx 1Day Freight", "ConfFiller", "side of barn", "5", "6", "7"};
@@ -129,6 +129,9 @@ public class WDPA extends WDPA_Functions{
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String Result = WDPALTLPickup(Address, UserID, Password, "10", "400");
 			Helper_Functions.PrintOut(Result, false);
+		    String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "T"}};
+			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+		    
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

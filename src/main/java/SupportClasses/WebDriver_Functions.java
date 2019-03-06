@@ -201,6 +201,7 @@ public class WebDriver_Functions{
     }
 	
 	public static void Click(By Ele) throws Exception{
+		//String CurrentURL = WebDriver_Functions.GetCurrentURL();
 		JavascriptExecutor js = ((JavascriptExecutor) DriverFactory.getInstance().getDriver());
 		Actions a = new Actions(DriverFactory.getInstance().getDriver());
 		Helper_Functions.PrintOut("    E--Element Clicked " + Ele.toString(), true);
@@ -225,6 +226,13 @@ public class WebDriver_Functions{
 			//set the timeout back to the original value.
 			DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.SECONDS);
 		}
+		/*
+		if (CurrentURL.contentEquals(WebDriver_Functions.GetCurrentURL()) && !Thread.currentThread().getStackTrace()[2].getMethodName().contentEquals("Click")) {
+			//if on the same page will try to click again. In this case will only regressively call itself once.
+			if (isPresent(Ele) && !isSelected(Ele))
+			Click(Ele);
+		}
+		*/
 		
 		// js.executeScript("window.scrollBy(0, -100)");//scroll down
 		//js.executeScript("window.scrollBy(0,-2000)");// This  will scroll up the page by 500 pixel vertical	

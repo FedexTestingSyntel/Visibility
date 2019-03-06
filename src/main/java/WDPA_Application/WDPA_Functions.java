@@ -79,7 +79,9 @@ public class WDPA_Functions{
 	public static void WDPAExpressContactInformation(String Company, String Name, String AddressDetails[], String Phone) throws Exception {
 		try{
 			String Address1 = AddressDetails[0], Address2 = AddressDetails[1], City = AddressDetails[2], StateCode = AddressDetails[4], Zip = AddressDetails[5], Country = AddressDetails[6];
-	    	if (Country != null && WebDriver_Functions.isPresent(By.id("address.accountAddressLinks"))) {
+	    	
+			if (Country != null && WebDriver_Functions.isPresent(By.id("address.accountAddressLinks")) && Address1.contentEquals("")) {
+				//use the account address only if the address line 1 is sent as blank
 				WebDriver_Functions.Click(By.id("address.accountAddressLinks"));
 			}
 			//WebDriver_Functions.WaitPresent(By.id("button.completePickup")));
@@ -116,7 +118,7 @@ public class WDPA_Functions{
 		//String Date = PackageDetails[3];
 		
 		String strFieldType = "package." + Service;
-		if (!DriverFactory.getInstance().getDriver().findElement(By.id(strFieldType + ".field")).isSelected()){
+		if (!WebDriver_Functions.isSelected(By.id(strFieldType + ".field"))) {//  !DriverFactory.getInstance().getDriver().findElement(By.id(strFieldType + ".field")).isSelected()){
 			WebDriver_Functions.Click(By.id(strFieldType + ".field"));
 		}
 		
@@ -358,9 +360,6 @@ public class WDPA_Functions{
 		    Helper_Functions.PrintOut("Schedule LTL Pickup:   " + strConfirmationNumber, true);
 		    WebDriver_Functions.ElementMatches(By.xpath("//*[@id='confirmationLeftPanel']/div[1]/div[1]/div/div/label"), "Country/Territory", 116629); 
 		    WebDriver_Functions.takeSnapShot("Confirmation.png");
-		    
-		    String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "T"}};
-			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
 		    
 		    if (UserID != ""){
 			    WebDriver_Functions.Click(By.id("menubar.nav.menu3_div"));

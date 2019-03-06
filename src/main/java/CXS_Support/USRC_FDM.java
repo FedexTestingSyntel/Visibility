@@ -9,20 +9,18 @@ import org.testng.annotations.DataProvider;
 import CXS_Support.USRC_Data;
 import CXS_Support.MFAC_Helper_Functions;
 import SupportClasses.Environment;
-import SupportClasses.ThreadLogger;
 import SupportClasses.Helper_Functions;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
 import API_Calls.*;
-import Data_Structures.*;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class USRC_FDM {
 
-	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -73,7 +71,7 @@ public class USRC_FDM {
 			assertThat(Response, containsString("successful\":true"));
 			
 			//get the cookies and the uuid of the new user
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID, Password);
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID, Password);
 			Cookie = fdx_login_fcl_uuid[0];
 			UUID = fdx_login_fcl_uuid[1];
 				
@@ -103,7 +101,7 @@ public class USRC_FDM {
 
 			//6 - Verify the above enrollment completed succsessfully.
 			Helper_Functions.PrintOut("Check recipient profile for new FDM user through USRC", false);
-			Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.LoginUserURL, Cookie);
+			Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookie);
 			
 			Helper_Functions.PrintOut(UserID + "/" + Password + "--" + fdx_login_fcl_uuid[1] + "--" + USRC_Org, false);
 			
@@ -128,7 +126,7 @@ public class USRC_FDM {
 			}
 			
 			//get the cookies and the uuid of the new user
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID, Password);
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID, Password);
 			Cookie = fdx_login_fcl_uuid[0];
 			UUID = fdx_login_fcl_uuid[1];
 				
@@ -158,7 +156,7 @@ public class USRC_FDM {
 
 			//6 - Verify the above enrollment completed succsessfully.
 			Helper_Functions.PrintOut("Check recipient profile for new FDM user through USRC", false);
-			Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.LoginUserURL, Cookie);
+			Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookie);
 			
 			Helper_Functions.PrintOut(UserID + "/" + Password + "--" + fdx_login_fcl_uuid[1] + "--" + USRC_Org, false);
 			

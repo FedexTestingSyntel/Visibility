@@ -107,8 +107,8 @@ public class MFAC_Data {
 			DC.AddressVelocityThreshold = 10;
 			break;
 		case "6"://need to update these values manually, do not share
-			DC.OAuth_Token_Client_ID = "";
-			DC.OAuth_Token_Client_Secret ="";
+			DC.OAuth_Token_Client_ID = "l7xx55c591482e9c47bfb0556561cb9e8cfa";
+			DC.OAuth_Token_Client_Secret ="0c33a18ff14c4bc7bc4880ef30067c52";
 			DC.PinVelocityThresholdPostcard = 3;
 			DC.PinVelocityThresholdPhone = 3;
 			DC.AddressVelocityThreshold = 10;

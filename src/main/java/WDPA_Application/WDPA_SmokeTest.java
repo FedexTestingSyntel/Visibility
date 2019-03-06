@@ -47,7 +47,7 @@ public class WDPA_SmokeTest{
 				}
 	    		break;
 	    	case "Pickup_Express":
-	    	case "Pickup_ExpressFright"://need to fix this later, not for all countries.
+	    	case "Pickup_ExpressFreight"://need to fix this later, not for all countries.
 	    		UD = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 1; k < UD.length; k++) {

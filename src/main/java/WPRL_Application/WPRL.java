@@ -19,7 +19,7 @@ import SupportClasses.Helper_Functions;
 
 public class WPRL {
 
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -91,11 +91,9 @@ public class WPRL {
 		    	case "WPRL_FDM_Enroll":
 	    			for (int j = 22; j < 29; j++) {
 	    				data.add( new Object[] {Level, j});
-	    				break;
+	    				//break;
 	    			}
 		    		break;
-		    	
-		    	
 			}
 		}	
 		return data.iterator();

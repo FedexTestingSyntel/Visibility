@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.testng.annotations.Test;
 import Data_Structures.Account_Data;
-import Data_Structures.User_Data;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.openqa.selenium.By;

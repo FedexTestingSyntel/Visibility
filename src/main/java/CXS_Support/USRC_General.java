@@ -21,7 +21,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_General {
 
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -127,7 +127,7 @@ public class USRC_General {
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID, Password);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID, Password);
 		UUID = fdx_login_fcl_uuid[1];
 			
 		Helper_Functions.PrintOut(UserID + "/" + Password + "--" + UUID, false);
@@ -149,7 +149,7 @@ public class USRC_General {
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID, Password);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID, Password);
 		UUID = fdx_login_fcl_uuid[1];
 			
 		Helper_Functions.PrintOut(UserID + "/" + Password + "--" + UUID, false);
@@ -162,15 +162,15 @@ public class USRC_General {
 		
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		
 		//in case cannot login will check two of the generic other passwords
 		if (fdx_login_fcl_uuid == null && Password.contentEquals("Test1234")){
 			Password = "Test12345";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}else if (fdx_login_fcl_uuid == null && Password.contentEquals("Test12345")){
 			Password = "Test1234";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}
 		
 		String ContactDetailsParsed[][] = {{"UUID_NBR", ""},//index 0 and set below
@@ -198,7 +198,7 @@ public class USRC_General {
 			Cookies = fdx_login_fcl_uuid[0];
 			ContactDetailsParsed[0][1] = fdx_login_fcl_uuid[1];//save the uuid
 			
-			String AccountRetrievalRequest = USRC_API_Endpoints.AccountRetrievalRequest(USRC_Details.LoginUserURL, Cookies);
+			String AccountRetrievalRequest = USRC_API_Endpoints.AccountRetrievalRequest(USRC_Details.GenericUSRCURL, Cookies);
 			
 			//Check if user has GFBO access
 			if (AccountRetrievalRequest.contains("appName\":\"fclgfbo\",\"roleCode\":\"")){
@@ -217,7 +217,7 @@ public class USRC_General {
 				ContactDetailsParsed[17][1] = "T";
 			}
 			
-			String Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.LoginUserURL, Cookies);
+			String Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookies);
 			if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
 				ContactDetailsParsed[18][1] = Response;//store all of the FDM details
 			}
@@ -250,15 +250,15 @@ public class USRC_General {
 		
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		
 		//in case cannot login will check two of the generic other passwords
 		if (fdx_login_fcl_uuid == null && Password.contentEquals("Test1234")){
 			Password = "Test12345";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}else if (fdx_login_fcl_uuid == null && Password.contentEquals("Test12345")){
 			Password = "Test1234";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}
 		
 		String ContactDetailsParsed[][] = {{"UUID_NBR", ""},//index 0 and set below
@@ -271,7 +271,7 @@ public class USRC_General {
 			Cookies = fdx_login_fcl_uuid[0];
 			ContactDetailsParsed[0][1] = fdx_login_fcl_uuid[1];//save the uuid
 			
-			String Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.LoginUserURL, Cookies);
+			String Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookies);
 			if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
 				ContactDetailsParsed[3][1] = Response;//store all of the FDM details
 			}
@@ -293,15 +293,15 @@ public class USRC_General {
 		
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		
 		//in case cannot login will check two of the generic other passwords
 		if (fdx_login_fcl_uuid == null && Password.contentEquals("Test1234")){
 			Password = "Test12345";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}else if (fdx_login_fcl_uuid == null && Password.contentEquals("Test12345")){
 			Password = "Test1234";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}
 		
 		String ContactDetailsParsed[][] = {{"UUID_NBR", ""},//index 0 and set below
@@ -333,7 +333,7 @@ public class USRC_General {
 		String fdx_login_fcl_uuid[] = null;
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.LoginUserURL, UserID, Password);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID, Password);
 		if (fdx_login_fcl_uuid == null){
 			Assert.fail(UserID);
 		}

@@ -307,6 +307,7 @@ public class Account_Lookup extends Helper_Functions{
 			
 			Account_Details.Account_Number = AccountNumber;
 			Account_Details.Account_Nickname = AccountNumber + "_" + Account_Details.Billing_Country_Code;
+			Account_Details.Masked_Account_Number = Account_Details.Account_Nickname + " - " + Account_Details.Account_Number.substring(Account_Details.Account_Number.length() - 3, Account_Details.Account_Number.length());
 			Account_Details.Credit_Card_Type = Credit_Card_Type;
 			Account_Details.Credit_Card_Number = Credit_Card_Number;
 			Account_Details.Credit_Card_CVV = Credit_Card_CVV;
@@ -319,6 +320,9 @@ public class Account_Lookup extends Helper_Functions{
 			Account_Details.Tax_ID_Two = "";
 			String BillingAddress[] = {Account_Details.Billing_Address_Line_1, Account_Details.Billing_Address_Line_2, Account_Details.Billing_City, Account_Details.Billing_State_Code, Account_Details.Billing_Zip, Account_Details.Billing_Country_Code}; 
 			PrintOut("Address Returned: " + Arrays.toString(BillingAddress), true);
+			//will load dummy values
+			Account_Details.Email = Helper_Functions.MyEmail;
+			Account_Details.Password = Helper_Functions.myPassword;
 			return Account_Details;
  		}catch (Exception e){
  			e.printStackTrace();

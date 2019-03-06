@@ -10,13 +10,15 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import Data_Structures.Enrollment_Data;
 import Data_Structures.User_Data;
 import SupportClasses.*;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class OADR{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -36,26 +38,33 @@ public class OADR{
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "OADR_Smoke_ApplyDiscount":
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		boolean SixteenEight = false;//will do the diffferent discounts on different user ids.
 			    	for (int j = 0; j < UD.length; j++) {
 		    			if (UD[j].COUNTRY_CD.contentEquals("US") && UD[j].PASSKEY.contentEquals("T") ) {
-		    				// try the 16/8 discount
-		    				data.add( new Object[] {Level, "ss90705920", "US", UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
-		    				// try the American Society of Mechanical Engineers discount
-		    				data.add( new Object[] {Level, "w6rdem3647", "US", UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
-		    				break;
+		    				if (!SixteenEight) {
+		    					// try the 16/8 discount
+			    				data.add( new Object[] {Level, "ss90705920", "US", UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
+		    					SixteenEight = true;
+	    					}else {
+	    						// try the American Society of Mechanical Engineers discount
+			    				data.add( new Object[] {Level, "w6rdem3647", "US", UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
+			    				break;
+	    					}
 		    			}
 		    		}
 		    	break;
 		    	case "OADR_Apply_Discount_To_Account":
 		    		UD = Environment.Get_UserIds(intLevel);
+		    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-			    		for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contentEquals("T") ) {
-		    					// try the 16/8 discount
-		    					data.add( new Object[] {Level, "ss90705920", CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					// try the American Society of Mechanical Engineers discount
-		    					data.add( new Object[] {Level, "w6rdem3647", CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					break;
+		    			for (Enrollment_Data Enrollment: ED) {
+		    				if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0])) {
+					    		for (int k = 0; k < UD.length; k++) {
+				    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contentEquals("T")) {
+				    					data.add( new Object[] {Level, Enrollment.ENROLLMENT_ID, CountryList[j][0], UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
+					    				break;
+				    				}
+				    			}
 		    				}
 		    			}
 		    		}

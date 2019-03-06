@@ -15,7 +15,7 @@ public class USRC_Data {
 	public String PendingAddressURL = "";
 	public String VerifyPinURL = "";
 	public String CancelEnrollmentURL = "";
-	public String LoginUserURL = "";
+	public String GenericUSRCURL = "";
 	public String REGCCreateNewUserURL = "";
 	public String ViewUserProfileWIDMURL = "";
 	
@@ -71,7 +71,7 @@ public class USRC_Data {
   		
   		//currently uses a generic URL.
   		String GenericLevel = LevelUrlReturn(Level);
-  		DC.LoginUserURL = GenericLevel + "/userCal/user";	
+  		DC.GenericUSRCURL = GenericLevel + "/userCal/user";	
   		DC.REGCCreateNewUserURL = GenericLevel + "/regcal/registration/newfcluser";
   		DC.ViewUserProfileWIDMURL = GenericLevel + "/userCal/rest/v2/ViewUserProfileWIDM";
 
@@ -111,7 +111,7 @@ public class USRC_Data {
 		ArrayList<String[]> ContactList = new ArrayList<String[]>();
 		String Phone = "9011111111", Email = "YouNeedToUpdateThisLater@fedex.com";
 		if (Level.contentEquals("6")) {//need to user real data in L6
-			
+			ContactList.add(new String[] {"PavanKumar", "", "Bindela", Phone, Email, "2717 W Royal Ln", "Apt 315", "Irving", "TX", "75063", "US", ""});
 		}else if (Level.contentEquals("7")) {//need to user real data in LP
 			
 		}else {

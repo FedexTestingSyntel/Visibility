@@ -415,11 +415,11 @@ public class Environment {
   		return Credit_D;
 	}
 	
-	public static Account_Data getAddressDetails(String CountryCode, String Level) {
+	public static Account_Data getAddressDetails(String Level, String CountryCode) {
 		Account_Data AllAddresses[] = getAddressDetails();
 		
 		for (Account_Data AD: AllAddresses) {
-			if (AD.Billing_Country_Code.contentEquals(CountryCode)) {
+			if (AD != null && AD.Billing_Country_Code.contentEquals(CountryCode)) {
 				AD.Level = Level;
 				return AD;
 			}
