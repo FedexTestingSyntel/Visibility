@@ -2,7 +2,7 @@ package Soap_Execution;
 
 import javax.xml.soap.*;
 
-public class soapExample {
+public class Create_SOAP_Structure {
 
     // SAAJ - SOAP Client Testing
     public static void main(String args[]) {
