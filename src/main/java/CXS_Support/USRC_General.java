@@ -21,14 +21,14 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_General {
 
-	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 	}
 	
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public Iterator<Object[]> dp(Method m) {
 	    List<Object[]> data = new ArrayList<>();
 	    
@@ -67,9 +67,9 @@ public class USRC_General {
 				PRDC_Data.LoadVariables(strLevel);
 				User_Data UD[] = Environment.Get_UserIds(intLevel);
 				for (int k = 0; k < UD.length; k++) {
-    				//if (UD[k].GFBO_ENABLED.contentEquals("")) {
+    				if (UD[k].EMAIL_ADDRESS.contentEquals("")) {
     					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-    				//}
+    				}
     			}
 				break;
 			case "Check_FDM_Status":
@@ -191,7 +191,8 @@ public class USRC_General {
 				{"WGRT_ENABLED", "F"},//index 15 and set below
 				{"WDPA_ENABLED", "F"},//index 16 and set below
 				{"PASSKEY", "F"},//index 17 and set below
-				{"FDM_STATUS", "F"} //index 18 below
+				{"FDM_STATUS", "F"}, //index 18 below
+				{"EMAIL_ADDRESS", ""}
 				};
 		
 		if (fdx_login_fcl_uuid != null){

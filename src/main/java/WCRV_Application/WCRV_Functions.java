@@ -567,4 +567,40 @@ public class WCRV_Functions{
 			return false;
 		}
  	}//end WCRV_Generate
+
+ 	public static boolean  WCRV_Check_Help_Links(String CountryCode, String User, String Password){
+ 		boolean Response = false;
+ 		String mainWindowHandle = DriverFactory.getInstance().getDriver().getWindowHandle();
+ 		try {
+ 			//to load the cookies for the given country
+ 	 		WebDriver_Functions.ChangeURL("WDPA", CountryCode, false);
+ 	 		WebDriver_Functions.ChangeURL("WCRV", CountryCode, false);
+ 	 		
+ 	 		WebDriver_Functions.Click(By.id("help"));
+ 	 		
+ 	 		//view the new help file
+ 			for (String childWindowHandle : DriverFactory.getInstance().getDriver().getWindowHandles()) {
+ 				//If window handle is not main window handle then close it 
+ 				if(!childWindowHandle.equals(mainWindowHandle)){
+ 					DriverFactory.getInstance().getDriver().switchTo().window(childWindowHandle);
+ 					WebDriver_Functions.WaitForTextNot(By.tagName("body"), (""));
+ 					if (WebDriver_Functions.CheckBodyText("Generate a Rate Sheet")) {
+ 						Response = true;
+ 					}			
+ 					// Close child windows
+ 					DriverFactory.getInstance().getDriver().close(); 
+ 					
+ 					//switch back to main window
+	
+ 				}
+ 			}//end for child window
+ 			
+ 		}catch (Exception e) {
+ 			
+ 		}finally {
+ 			DriverFactory.getInstance().getDriver().switchTo().window(mainWindowHandle);
+ 		}
+ 		
+		return Response;
+ 	}	
 }

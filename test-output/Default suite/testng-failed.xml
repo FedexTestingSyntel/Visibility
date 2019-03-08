@@ -5,8 +5,8 @@
     <classes>
       <class name="Mission_Critical.WFCL_New">
         <methods>
-          <include name="AccountRegistration_INET_Test" invocation-numbers="0"/>
           <include name="beforeClass"/>
+          <include name="UserRegistration_Account_Data" invocation-numbers="0"/>
         </methods>
       </class> <!-- Mission_Critical.WFCL_New -->
     </classes>

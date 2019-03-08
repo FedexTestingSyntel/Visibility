@@ -400,7 +400,8 @@ public class USRC_API_Endpoints {
 							{"CITY_NM", "\"city\":\"", "\",\""}, 
 							{"STATE_CD", "\"stateOrProvinceCode\":\"", "\",\""}, 
 							{"POSTAL_CD", "\"postalCode\":\"", "\",\""}, 
-							{"COUNTRY_CD", "\",\"countryCode\":\"", "\",\""}};
+							{"COUNTRY_CD", "\",\"countryCode\":\"", "\",\""}, 
+							{"EMAIL_ADDRESS", "emailAddress\":\"", "\"},\""}};
 		
 		for(int i = 0; i < ParseCheck.length; i++){
 			for (int j = 0; j < Parse.length; j++) {
@@ -608,7 +609,7 @@ public class USRC_API_Endpoints {
 		 if (EnterpriseCustomerResponse.contains("\"creditCardStatus\"")) {
 			 //return the credit card linked to the account
 			 String FullCreditCard = ParseRequest (EnterpriseCustomerResponse, "\"number\":\"" , "\"},\"creditCardStatus\"");
-			 Helper_Functions.PrintOut(Arrays.toString(new String[] {Account_Value, Account_Key, FullCreditCard}));
+			 Helper_Functions.PrintOut("    " + Arrays.toString(new String[] {Account_Value, Account_Key, FullCreditCard}));
 			 //return the last 4 digits of the credit card
 			 return FullCreditCard.substring(FullCreditCard.length() - 4, FullCreditCard.length());
 		 }else {

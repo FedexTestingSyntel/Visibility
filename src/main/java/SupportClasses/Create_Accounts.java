@@ -39,7 +39,7 @@ public class Create_Accounts{
 		}
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
@@ -306,8 +306,8 @@ public class Create_Accounts{
 			    
 			    if (Payment.contentEquals("Invoice")) {
 			    	//load the dummy invoice numbers.
-			    	Account_Details[i].Invoice_Number_A = "750000000";
-			    	Account_Details[i].Invoice_Number_B = "750000001";
+			    	Account_Details[i].Invoice_Number_A = Environment.DummyInvoiceOne;
+			    	Account_Details[i].Invoice_Number_B = Environment.DummyInvoiceTwo;
 			    }else {
 			    	Account_Details[i].Credit_Card_CVV = CreditCard[2];
 			    	Account_Details[i].Credit_Card_Expiration_Month = CreditCard[3];

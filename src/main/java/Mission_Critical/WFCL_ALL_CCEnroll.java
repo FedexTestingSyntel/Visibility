@@ -17,10 +17,11 @@ import java.util.Iterator;
 import java.util.List;
 import SupportClasses.*;
 
+@SuppressWarnings("unused")
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_ALL_CCEnroll{
-	static String LevelsToTest = "2";  
+	static String LevelsToTest = "3";  
 	static String CountryList[][]; 
 	static List<String> Users = new ArrayList<String>();
 
@@ -95,35 +96,35 @@ public class WFCL_ALL_CCEnroll{
 	
 	@Test(dataProvider = "dp", enabled = true)
 	public void DiscountValidate(String Level, String CountryCode, String UserId, String Password) {
-		try {
+		
+		String DT_Status[][] = new String[][] {{"DiscountAppearingCorrectly", ""}, 
+			{"DiscountNotMatchingOnLandingPage", ""}, //1
+			{"SorryMessage", ""}, 
+			{"WFCLMarketing", ""}, //3
+			{"EnrollmentIDRequired", ""}, 
+			{"WFCLMarketingIncorrectDiscount", ""},//5 
+			{"IncorrectDiscountOnConfilctPage", ""}, 
+			{"IncorrectDiscountOnConfirmationPage", ""},  //7
+			{"UnableToCompleteEndToEnd", ""}, 
+			{"CompletedEndToEnd", ""}, //9
+			{"Incorrect Link on Apply now button:", ""}};
 			
-			String DT_Status[][] = new String[][] {{"DiscountAppearingCorrectly", ""}, 
-												{"DiscountNotMatchingOnLandingPage", ""}, //1
-												{"SorryMessage", ""}, 
-												{"WFCLMarketing", ""}, //3
-												{"EnrollmentIDRequired", ""}, 
-												{"WFCLMarketingIncorrectDiscount", ""},//5 
-												{"IncorrectDiscountOnConfilctPage", ""}, 
-												{"IncorrectDiscountOnConfirmationPage", ""},  //7
-												{"UnableToCompleteEndToEnd", ""}, 
-												{"CompletedEndToEnd", ""}, //9
-												{"Incorrect Link on Apply now button:", ""}};
+		try {
 			WebDriver_Functions.Login(UserId, Password);
 			
+			/*
 			String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
 			USRC_Data UD = USRC_Data.LoadVariables(Level);
 			String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(UD.GenericUSRCURL, "fdx_login=" + Login_Cookie);
+			*/
 			
 			Enrollment_Data ED[] = Environment.getEnrollmentDetails(Integer.parseInt(Level));
 
 			for (Enrollment_Data EN: ED) {
-				if (EN != null && !EN.AEM_LINK.contentEquals("")) {
+				if (EN != null && !EN.AEM_LINK.contentEquals("") && (EN.PASSCODE.contentEquals("") && EN.MEMBERSHIP_ID.contentEquals(""))) {
 					WebDriver_Functions.ChangeURL("DT_" + EN.ENROLLMENT_ID, EN.COUNTRY_CODE, false);
 					WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " DT Value.png");
 					String DTValue = WebDriver_Functions.GetBodyText();
-					if (DTValue.contains("Discount program is pending") && !DTValue.contains(EN.ENROLLMENT_ID)) {
-						Helper_Functions.PrintOut("     For " + EN.ENROLLMENT_ID + " the enrollment id is not correct in the DT file", false);
-					}
 
 					String ApplyNowUrlOne = "";
 					if (!EN.AEM_LINK.contentEquals("")) {
@@ -132,6 +133,7 @@ public class WFCL_ALL_CCEnroll{
 						//String ApplyNowUrlTwo = WebDriver_Functions.getURLByLinkText("Apply Now");//orange button
 					}
 		
+					/////Need to redesign this, for the membership and passcode will be in the url https://wwwdrt.idev.fedex.com/fcl/ALL?enrollmentid=ml18024117&language=en&country=us 
 					String ExpectedUrl = WebDriver_Functions.ChangeURL("Enrollment_" + EN.ENROLLMENT_ID, EN.COUNTRY_CODE, false);
 					
 					if (!ApplyNowUrlOne.contentEquals("") && !ExpectedUrl.contentEquals(ApplyNowUrlOne)) {
@@ -144,6 +146,19 @@ public class WFCL_ALL_CCEnroll{
 							DT_Status[4][1] += EN.ENROLLMENT_ID + ", ";
 						}else {
 							DT_Status[3][1] += EN.ENROLLMENT_ID + ", ";
+							
+							//if passcode is needed to be entered on discount page.
+							if (WebDriver_Functions.isPresent(By.name("passCode"))) {
+								WebDriver_Functions.Type(By.name("passCode"), EN.PASSCODE);
+							}
+							if (WebDriver_Functions.isPresent(By.name("membershipID"))) {
+								WebDriver_Functions.Type(By.name("membershipID"), EN.MEMBERSHIP_ID);
+							}
+							
+							WebDriver_Functions.takeSnapShot("Discount Page.png");
+							//apply link from marketing page
+							WebDriver_Functions.Click(By.name("Apply Now"));
+							
 							WebDriver_Functions.Click(By.name("Apply Now"));
 							if (!WebDriver_Functions.CheckBodyText(DTValue)) {
 								DT_Status[5][1] += EN.ENROLLMENT_ID + ", ";
@@ -165,18 +180,20 @@ public class WFCL_ALL_CCEnroll{
 				}
 			}
 			
-			String Results = "";
-			for(String[] Line: DT_Status){
-				if (!Line[1].contentEquals("")) {
-					Results += Arrays.toString(Line)  + "\n   ";
-				}
-			}
-			Helper_Functions.PrintOut(Results, false);
+			
 			
 		}catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
+		
+		String Results = "";
+		for(String[] Line: DT_Status){
+			if (!Line[1].contentEquals("")) {
+				Results += Arrays.toString(Line)  + "\n   ";
+			}
+		}
+		Helper_Functions.PrintOut(Results, false);
 	}
 	
 	@Test (enabled = false)

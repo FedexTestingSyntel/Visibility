@@ -1,8 +1,6 @@
 package Soap_Execution;
 
-import javax.xml.soap.*;
 import static org.junit.Assert.assertThat;
-//import static org.hamcrest.core.IsNot.not;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,7 +20,7 @@ import SupportClasses.Helper_Functions;
 public class ADAT {
 
 	//will parse this string and run all the levels listed in the data provider.
-	static String LevelsToTest = "3";	
+	static String LevelsToTest = "23";	
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -40,7 +38,7 @@ public class ADAT {
 			ADAT_Data DC = ADAT_Data.LoadVariables(Level);
 			String Organizations[] = new String[] {
 					DC.OrgPostcard, 
-					//DC.OrgPhone
+					DC.OrgPhone
 					};
 			for (String Org: Organizations) {
 				switch (m.getName()) { //Based on the method that is being called the array list will be populated.
@@ -63,7 +61,7 @@ public class ADAT {
 	@Test(dataProvider = "dp", priority = 1)
 	public void ADAT_CreateUser(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		//Using the assumption the organization will be in the "FDM-??-PIN" format
-		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN")));
+		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN"))) + "-" + Helper_Functions.CurrentDateTime();
 		String Response = ADAT_Endpoints.ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
 		
         String Response_Variables[] = new String[] {"udsTransactionID", "The operation was successful!"};

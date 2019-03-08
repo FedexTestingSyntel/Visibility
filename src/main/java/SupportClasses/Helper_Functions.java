@@ -904,6 +904,7 @@ public class Helper_Functions{
 		Account_Data D[] = Environment.getAddressDetails();
 		for (Account_Data Current: D) {
 			if (Current != null && Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
+				Current.Level = Level;
 				return new Account_Data(Current);
 			}
 		}

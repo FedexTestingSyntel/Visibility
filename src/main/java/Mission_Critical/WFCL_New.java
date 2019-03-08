@@ -29,9 +29,9 @@ public class WFCL_New{
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("BR");
-		//CountryList = Environment.getCountryList("AE");
+		//CountryList = Environment.getCountryList("FR");
 		//CountryList = Environment.getCountryList("high");
-		Helper_Functions.MyEmail = "accept@fedex.com";
+		//Helper_Functions.MyEmail = "accept@fedex.com";
 		//CountryList = new String[][]{{"US", ""}, {"CA", ""}};
 	}
 	
@@ -41,7 +41,7 @@ public class WFCL_New{
 
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-			Account_Data AccountDetails = null;
+			Account_Data Account_Info = null;
 			int intLevel = Integer.parseInt(Level);
 			//int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
@@ -50,9 +50,9 @@ public class WFCL_New{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (Enrollment_Data Enrollment: ED) {
 			    			if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0]) ) {   //&& Enrollment.ENROLLMENT_ID.contentEquals("cc16323414")
-			    				AccountDetails = Environment.getAddressDetails(Level, CountryList[j][0]);
-			    				AccountDetails.Account_Type = "P";//Personal account
-			    				data.add( new Object[] {Level, Enrollment, AccountDetails, Environment.getTaxDetails(CountryList[j][0])});
+			    				Account_Info = Environment.getAddressDetails(Level, CountryList[j][0]);
+			    				Account_Info.Account_Type = "P";//Personal account
+			    				data.add( new Object[] {Level, Enrollment, Account_Info, Environment.getTaxDetails(CountryList[j][0])});
 			    				break;
 			    			}
 		    			}
@@ -60,7 +60,8 @@ public class WFCL_New{
 		    		break;
 		    	case "UserRegistration_Account_Data":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
+		    			Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
+		    			data.add( new Object[] {Level, Account_Info});
 					}
 		    		break;
 		    	case "AccountRegistration_Admin":
@@ -68,15 +69,15 @@ public class WFCL_New{
 		    			break;
 		    		}
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			AccountDetails = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
+		    			Account_Info = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
 					}
-		    		data.add( new Object[] {Level, AccountDetails});
+		    		data.add( new Object[] {Level, Account_Info});
 		    		break;
 		    	case "AccountRegistration_INET":
 		    	case "AccountRegistration_WDPA":
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			AccountDetails = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
-			    		data.add( new Object[] {Level, AccountDetails});
+		    			Account_Info = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
+			    		data.add( new Object[] {Level, Account_Info});
 					}
 		    		break;
 		    	case "Forgot_User_Email":
@@ -88,8 +89,8 @@ public class WFCL_New{
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC + "A", UD[k].SECRET_ANSWER_DESC});
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].SECRET_ANSWER_DESC.contentEquals("")) {
+		    					data.add( new Object[] {Level, UD[k], UD[k].USER_PASSWORD_DESC + "A"});
 		    					break;
 		    				}
 		    			}
@@ -99,8 +100,21 @@ public class WFCL_New{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    				//make sure have your email address set as the Helper_Functions.MyEmail
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
+		    					data.add( new Object[] {Level, UD[k]});
+		    					break;
+		    				}
+		    			}
+					}
+		    		break;
+		    	case "FCLA_WADM_Invitaiton":
+		    		UD = Environment.Get_UserIds(intLevel);
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 0; k < UD.length; k++) {
+		    				//make sure have your email address set as the Helper_Functions.MyEmail
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contains("T")) {
+		    					data.add( new Object[] {Level, UD[k]});
 		    					break;
 		    				}
 		    			}
@@ -113,7 +127,7 @@ public class WFCL_New{
 		    		}
 		    		*/
 		    		
-		    		data.add( new Object[] {Level, "642178660"});
+		    		data.add( new Object[] {Level, "700865177"});
 		    		//data.add( new Object[] {Level, "644280888"});
 		    		//data.add( new Object[] {Level, "642260243"});
 			    	//data.add( new Object[] {Level, "633504580"});
@@ -134,17 +148,6 @@ public class WFCL_New{
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 			
-			/*
-			String CreditCard[] = Helper_Functions.LoadCreditCard("M");
-			String CountryCode = Enrollment.COUNTRY_CODE;
-			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
-			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
-			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
-			String TaxInfo[] = Helper_Functions.getTaxInfo(CountryCode).get(0);
-			String EnrollmentID[] = new String[] {Enrollment.ENROLLMENT_ID, Enrollment.COUNTRY_CODE, Enrollment.PROGRAM_NAME, Enrollment.PASSCODE, Enrollment.MEMBERSHIP_ID};
-			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, false, TaxInfo);
-			Helper_Functions.PrintOut(Arrays.toString(Result), false);
-			*/
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -156,8 +159,8 @@ public class WFCL_New{
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Country_Code + "Create");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			String Result = Arrays.toString(WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info));
-			Helper_Functions.PrintOut(Result, false);
+			String Result[] = WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -200,7 +203,7 @@ public class WFCL_New{
 	@Test(dataProvider = "dp")
 	public void Forgot_User_Email(String Level, String CountryCode, String Email) {
 		try {
-			String Result = WFCL_Functions.Forgot_User_Email(CountryCode, Email);
+			String Result = WFCL_Functions_UsingData.Forgot_User_Email(CountryCode, Email);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -217,26 +220,15 @@ public class WFCL_New{
 			String Result[] = WFCL_Functions_UsingData.WDPA_Registration(Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 			
-			/*
-			Account_Data.Print_Account_Address(Account_Info);
-			String CountryCode = Account_Info.Billing_Country_Code;
-			String Account = Account_Info.Account_Number;
-			String AddressDetails[] = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2, Account_Info.Billing_City, Account_Info.Billing_State, Account_Info.Billing_State_Code, Account_Info.Billing_Zip, Account_Info.Billing_Country_Code};
-
-			String ContactName[] = Helper_Functions.LoadDummyName("WDPA", Level);
-			String UserID = Helper_Functions.LoadUserID("L" + Level + CountryCode + Thread.currentThread().getId() + "WDPA");
-			String Result[] = WFCL_Functions.WDPA_Registration(ContactName, UserID, Helper_Functions.MyEmail, Account, AddressDetails);
-			Helper_Functions.PrintOut(Arrays.toString(Result), false);
-			*/
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
 	@Test(dataProvider = "dp")
-	public void Password_Reset_Secret(String Level, String Country, String UserId, String newPassword, String SecretAnswer){
+	public void Password_Reset_Secret(String Level, User_Data User_Info, String newPassword){
 		try {
-			String Result = WFCL_Functions.WFCL_Secret_Answer(Country, UserId, newPassword, SecretAnswer, false);
+			String Result = WFCL_Functions_UsingData.WFCL_Secret_Answer(User_Info, newPassword);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -244,9 +236,9 @@ public class WFCL_New{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void Reset_Password_Email(String Level, String CountryCode, String UserId, String Password) {
+	public void Reset_Password_Email(String Level, User_Data User_Info) {
 		try {
-			String Result = WFCL_Functions.ResetPasswordWFCL_Email(CountryCode, UserId, Password);
+			String Result = WFCL_Functions_UsingData.ResetPasswordWFCL_Email(User_Info);
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -256,14 +248,14 @@ public class WFCL_New{
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_INET_Test(String Level, String Account){
 		try {
-			Account_Data AccountDetails = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
-			AccountDetails = Account_Data.Set_Dummy_Contact_Name(AccountDetails);
-			AccountDetails.UserId = Helper_Functions.LoadUserID("L" + Level + "Acc" + Account + "N");
+			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
 			//create user id and link to account number.
-			AccountDetails = WFCL_Functions_UsingData.Account_Linkage(AccountDetails);
+			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			//register the userid to INET
-			WFCL_Functions_UsingData.INET_Registration(AccountDetails);
-			String Result[] = new String[] {AccountDetails.UserId, AccountDetails.Password, AccountDetails.Account_Number, AccountDetails.UUID};
+			WFCL_Functions_UsingData.INET_Registration(Account_Info);
+			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -271,11 +263,10 @@ public class WFCL_New{
 	}
 	
 	@Test(dataProvider = "dp", priority = 1, enabled = false)
-	public void Link_account_to_user(String Level, String Account, String UserID, String Password){
+	public void Link_account_to_user(String Level, User_Data User_Info, String Account){
 		try {
-			Account_Data AccountDetails = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
-			AccountDetails = Account_Data.Set_Dummy_Contact_Name(AccountDetails);
-			AccountDetails.UserId = Helper_Functions.LoadUserID("L" + Level + "Acc" + Account);
+			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			
 			//String Result = WFCL_Functions_UsingData.Account_Number_Masking(Account_Info, Account_Info_Mismatch);
 			//Helper_Functions.PrintOut(Result, false);
@@ -283,4 +274,15 @@ public class WFCL_New{
 			Assert.fail(e.getMessage());
 		}
 	}
+	
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	public void FCLA_WADM_Invitaiton(User_Data User_Info, Account_Data Account_Info, String Email) {
+		try {
+			String Result[] = WFCL_Functions_UsingData.WFCL_WADM_Invitaiton(User_Info, Account_Info, Email);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
 }

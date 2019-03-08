@@ -17,13 +17,15 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
+import Data_Structures.Enrollment_Data;
+
 public class WebDriver_Functions{
 	
 	public static String ChangeURL(String Designation, String CountryCode, boolean ClearCookies) throws Exception {
 		String LevelURL = null, AppUrl = null, CCL = CountryCode.toLowerCase(),CCU = CountryCode.toUpperCase();
 		LevelURL = LevelUrlReturn();
 		//String caller = Thread.currentThread().getStackTrace()[2].getMethodName();
-			String AppDesignation = Designation.toUpperCase();
+		String AppDesignation = Designation.toUpperCase();
 		
 		switch (AppDesignation) {
 			case "ADMINREG":
@@ -42,6 +44,10 @@ public class WebDriver_Functions{
 					AppUrl = AppUrl.replaceAll("%2Fship%2", "%2Fshipping_apac%2");
  	 			}
     			break;	
+    		case "WFCLForgot":
+    			//https://wwwdrt.idev.fedex.com/fcl/web/jsp/forgotPassword.jsp?appName=fclfsm&locale=us_en&step3URL=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&returnurl=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&programIndicator=0
+    			AppUrl = "";
+				break; 	
     		case "INET":		
     			AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";
     			break;
@@ -167,6 +173,26 @@ public class WebDriver_Functions{
 		return AppUrl;
 	}
 	
+	
+	public static String ChangeURL_EnrollmentID(Enrollment_Data ED, boolean AEM, boolean ClearCookies) throws Exception {
+		String LevelURL = LevelUrlReturn();
+		String AppUrl = null;
+		if (AEM) {
+			AppUrl = ED.AEM_LINK;
+		}else {
+			AppUrl = LevelURL + "/fcl/ALL?enrollmentid=" + ED.ENROLLMENT_ID + "&language=en&country=" + ED.COUNTRY_CODE.toLowerCase();
+			
+			if (!ED.MEMBERSHIP_ID.contentEquals("")) {
+				AppUrl = AppUrl + "&membershipID=" + ED.MEMBERSHIP_ID;
+			}
+			if (!ED.PASSCODE.contentEquals("")) {
+				AppUrl = AppUrl + "&passcode=" + ED.PASSCODE;
+			}
+		}
+		
+		return ChangeURL(AppUrl, "", ClearCookies);
+	}
+	
 	public static boolean CheckBodyText(String TextToCheck) {
 		String bodyText = DriverFactory.getInstance().getDriver().findElement(By.tagName("body")).getText();
 		if (bodyText.contains(TextToCheck)) {
@@ -271,42 +297,47 @@ public class WebDriver_Functions{
 	}
 	
     public static void takeSnapShot(String FileName) throws Exception{
-    	FileName = DriverFactory.getScreenshotPath() + FileName;
-    	if (DriverFactory.BrowserCurrent == 0) {
-    		return;
-    	}
-    	String CallingClass = Thread.currentThread().getStackTrace()[2].getClassName();
-    	CallingClass = CallingClass.substring(CallingClass.indexOf(".") + 1, CallingClass.length());//remove the package of the class
-    	if (CallingClass.contains("_")) {
-    		CallingClass = CallingClass.substring(0, CallingClass.indexOf("_"));
-    	}
-    	//The below assumes that the classes follow the format of the APPName_Method. ex. If the app is WFCL then the class name would be WFCL_JUnit or WFCL_TestNG
-    	//uncomment to test the stack trace.  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println(ste);}
-    	
-    	Thread.sleep(1000); //added to give page extra time to load 
-    	
-        //Convert web driver object to TakeScreenshot
-        TakesScreenshot scrShot =((TakesScreenshot) DriverFactory.getInstance().getDriver());
-        //Call getScreenshotAs method to create image file
-        File SrcFile=scrShot.getScreenshotAs(OutputType.FILE);
-        //Move image file to new destination
-        String FilePath = Helper_Functions.FileSaveDirectory + "\\" + CallingClass + "\\" + FileName;
+    	try {
+    		FileName = DriverFactory.getScreenshotPath() + FileName;
+        	if (DriverFactory.BrowserCurrent == 0) {
+        		return;
+        	}
+        	String CallingClass = Thread.currentThread().getStackTrace()[2].getClassName();
+        	CallingClass = CallingClass.substring(CallingClass.indexOf(".") + 1, CallingClass.length());//remove the package of the class
+        	if (CallingClass.contains("_")) {
+        		CallingClass = CallingClass.substring(0, CallingClass.indexOf("_"));
+        	}
+        	//The below assumes that the classes follow the format of the APPName_Method. ex. If the app is WFCL then the class name would be WFCL_JUnit or WFCL_TestNG
+        	//uncomment to test the stack trace.  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println(ste);}
+        	
+        	Thread.sleep(1000); //added to give page extra time to load 
+        	
+            //Convert web driver object to TakeScreenshot
+            TakesScreenshot scrShot =((TakesScreenshot) DriverFactory.getInstance().getDriver());
+            //Call getScreenshotAs method to create image file
+            File SrcFile=scrShot.getScreenshotAs(OutputType.FILE);
+            //Move image file to new destination
+            String FilePath = Helper_Functions.FileSaveDirectory + "\\" + CallingClass + "\\" + FileName;
 
-        String Folder = FilePath;
-		try {
-			Folder = FilePath.substring(0, FilePath.lastIndexOf("\\"));
-			if (!(new File(Folder)).exists()) {
-				new File(Folder).mkdir();
-			}
-		} catch (Exception e) {  
-			System.out.println("Warning, Unable to create directory for: " + Folder);
-		}
+            String Folder = FilePath;
+    		try {
+    			Folder = FilePath.substring(0, FilePath.lastIndexOf("\\"));
+    			if (!(new File(Folder)).exists()) {
+    				new File(Folder).mkdir();
+    			}
+    		} catch (Exception e) {  
+    			System.out.println("Warning, Unable to create directory for: " + Folder);
+    		}
 
-		File DestFile=new File(FilePath);
-        
-        //Copy file at destination
-        FileUtils.copyFile(SrcFile, DestFile);
-        Helper_Functions.PrintOut("Screenshot Taken:  " + FileName, false);
+    		File DestFile=new File(FilePath);
+            
+            //Copy file at destination
+            FileUtils.copyFile(SrcFile, DestFile);
+            Helper_Functions.PrintOut("Screenshot Taken:  " + FileName, false);
+    	}catch (Exception e) {
+    		System.out.println("Warning, Unable to take screenshot.");
+    	}
+    	
     }
 	
 	public static boolean isPresent(By Ele){
@@ -323,6 +354,14 @@ public class WebDriver_Functions{
 	    }
 	
 	    return result;
+	}
+	
+	public static boolean ClickIfPresent(By Ele) throws Exception{
+		if (isPresent(Ele)) {
+			Click(Ele);
+			return true;
+		}
+		return false;
 	}
 	
 	public static boolean isVisable(By Ele) {

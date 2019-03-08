@@ -237,6 +237,7 @@ public class WFCL_Functions{
 		
 		return true;
 	}
+
 	
 	public static String WFCL_AccountLinkage(String Name[], String UserId, String Email, String AccountNumber, String AddressDetails[], String AccountNickname) throws Exception{
 		Helper_Functions.PrintOut("Attempting to register with " + AccountNumber, true);
@@ -323,6 +324,7 @@ public class WFCL_Functions{
 			WebDriver_Functions.takeSnapShot("Forgot User Id.png");
 			WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[3]/form/table/tbody/tr[6]/td/input[2]"));
 			WebDriver_Functions.WaitPresent(By.id("linkaction"));
+			String Text = WebDriver_Functions.GetText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td"));
 			WebDriver_Functions.takeSnapShot("Forgot User Confirmation.png");
 			Helper_Functions.PrintOut("Completed Forgot User Confirmation using " + Email + ". An email has been triggered and that test must be completed manually by to see the user list.", true);
 			return Email;

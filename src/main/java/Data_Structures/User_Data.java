@@ -8,6 +8,7 @@ public class User_Data {
 	public String SECRET_ANSWER_DESC;
 	public String FIRST_NM;
 	public String LAST_NM;
+	public String EMAIL_ADDRESS;
 	public String STREET_DESC;
 	public String CITY_NM;
 	public String STATE_CD;

@@ -3,9 +3,12 @@ package Mission_Critical;
 import java.util.Arrays;
 import org.openqa.selenium.By;
 
+import CXS_Support.USRC_API_Endpoints;
+import CXS_Support.USRC_Data;
 import Data_Structures.Account_Data;
 import Data_Structures.Enrollment_Data;
 import Data_Structures.Tax_Data;
+import Data_Structures.User_Data;
 import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
@@ -168,6 +171,33 @@ public class WFCL_Functions_UsingData{
 		return Account_Info;
 	}//end WFCL_AccountLinkage
 	
+	//will return the updated Account_Data with the uuid added.
+	public static User_Data Account_Linkage(User_Data User_Info, Account_Data Account_Info) throws Exception{
+		Helper_Functions.PrintOut("Attempting to link " + User_Info.SSO_LOGIN_DESC + " with " + Account_Info.Account_Number, true);
+		String CountryCode = Account_Info.Billing_Country_Code.toUpperCase();
+//////////////////////////////////////////////////////////////////////////////////not complete
+		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
+			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
+			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
+			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
+			ContactInfo_Page(Account_Info, true); //enters all of the details
+		}else{
+			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
+			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
+			ContactInfo_Page(Account_Info, true); //enters all of the details
+		}
+
+		//Step 2 Account information
+		Account_Entry_Screen(Account_Info);
+
+		Verify_Confirmaiton_Page("WFCL_Link", Account_Info);
+			
+		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
+		Account_Info.UUID = UUID; 
+		Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+		return User_Info;
+	}//end Account_Linkage
+	
 	public static void AddressMismatchPage(Account_Data Account_Info) throws Exception {
 		if (WebDriver_Functions.isPresent(By.name("address1"))) {
 			WebDriver_Functions.WaitPresent(By.name("address1"));
@@ -262,7 +292,8 @@ public class WFCL_Functions_UsingData{
 		try {
 			//go to the INET page just to load the cookies
 			WebDriver_Functions.ChangeURL("INET", Account_Info.Billing_Country_Code, true);
-			WebDriver_Functions.ChangeURL("Enrollment_" + Enrollment.ENROLLMENT_ID, Account_Info.Billing_Country_Code, false);
+			WebDriver_Functions.ChangeURL_EnrollmentID(Enrollment, false, false);
+			//WebDriver_Functions.ChangeURL("Enrollment_" + Enrollment.ENROLLMENT_ID, Account_Info.Billing_Country_Code, false);
 
 			WebDriver_Functions.takeSnapShot("Discount Page.png");
 			
@@ -349,8 +380,8 @@ public class WFCL_Functions_UsingData{
 		String CountryCode = Account_Info.Billing_Country_Code;
 		try {
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
-			//WebDriver_Functions.Click(By.id("registernow"));
-			
+			WebDriver_Functions.ClickIfPresent(By.id("registernow"));
+
 			ContactInfo_Page(Account_Info, true); //enters all of the details
 
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
@@ -444,15 +475,16 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.ChangeURL("INET", CountryCode, true);//go to the INET page just to load the cookies
 			WebDriver_Functions.Click(By.name("forgotUidPwd"));
 			//wait for text box for user id to appear
-			WebDriver_Functions.Type(By.name("email"),Email);
+			WebDriver_Functions.Type(By.name("email"), Email);
 
 			WebDriver_Functions.takeSnapShot("Forgot User Id.png");
 			WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[3]/form/table/tbody/tr[6]/td/input[2]"));
+			WebDriver_Functions.WaitPresent(By.id("linkaction"));
+			//String Text = WebDriver_Functions.GetText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td"));
+			WebDriver_Functions.CheckBodyText(Email);
 			WebDriver_Functions.takeSnapShot("Forgot User Confirmation.png");
-			Helper_Functions.PrintOut("Completed Forgot User Confirmation using " + Email + ". An email has been triggered and that test must be completed manually by to see the user list.", true);
-			return Email;
+			return Email + " - An email has been triggered and that test must be completed manually by to see the user list.";
 		}catch(Exception e){
-			Helper_Functions.PrintOut("General failure in Forgot_User_Email" + "  " + e.getMessage(), true);
 			throw e;
 		}
 	}//end Forgot_User_Email
@@ -529,14 +561,22 @@ public class WFCL_Functions_UsingData{
 
 		//If the user is still on the CC entry page will try and enter a different credit card type.
 		if (WebDriver_Functions.isPresent(By.id("monthExpiry")) && (Tax_Info == null || Tax_Info.ERROR_CODE.contentEquals("Valid"))) {
-			Helper_Functions.PrintOut("Error on Credit Card entry screen. Attempting to register with differnet credit card", true);
-			String NewCreditCard[] = Helper_Functions.LoadCreditCard(Account_Info.Credit_Card_Number);
-			//{Card Type - 0, Card Number - 1, CVV - 2, Expiration Month - 3, Expiration year - 4}
-			Account_Info.Credit_Card_Type = NewCreditCard[0];
-			Account_Info.Credit_Card_Number = NewCreditCard[1];
-			Account_Info.Credit_Card_CVV = NewCreditCard[2];
-			Account_Info.Credit_Card_Expiration_Month = NewCreditCard[3];
-			Account_Info.Credit_Card_Expiration_Year = NewCreditCard[4];
+			//will try different cards three times.
+			if (!Account_Info.LastName.contains("Attempt")) {
+				Account_Info.LastName = "AttemptTwo" + Helper_Functions.getRandomString(6);
+			}else if (Account_Info.LastName.contains("AttemptTwo")) {
+				Account_Info.LastName = "AttemptThree" + Helper_Functions.getRandomString(6);
+			}else {
+				throw new Exception("User is still on the credit card entry page");
+			}
+			Helper_Functions.PrintOut("Error on Credit Card entry screen. Attempting to register with differnet credit card. " + Account_Info.LastName, true);
+			//update the last name of the billing address, this is for tracing the attempt in logs.
+			if (WebDriver_Functions.isPresent(By.name("editccinfo"))) {
+				WebDriver_Functions.Click(By.name("editccinfo"));//edit the billing address
+				WebDriver_Functions.Type(By.id("creditCardLastName"), Account_Info.LastName);
+			}
+			
+			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Environment.getInstance().getLevel(), Account_Info.Credit_Card_Type, Account_Info.Credit_Card_Number));
 			
 			return WFCL_CC_Page(Account_Info, Tax_Info);
 		}
@@ -560,23 +600,23 @@ public class WFCL_Functions_UsingData{
 		}
 	}
 
-	public static String WFCL_Secret_Answer(Account_Data Account_Info, String NewPassword) throws Exception{
- 		WebDriver_Functions.ChangeURL("INET", Account_Info.Billing_Country_Code, true);
+	public static String WFCL_Secret_Answer(User_Data User_Info, String NewPassword) throws Exception{
+ 		WebDriver_Functions.ChangeURL("INET", User_Info.COUNTRY_CD, true);
  		
     	try{
     		//click the forgot password link
     		WebDriver_Functions.Click(By.name("forgotUidPwd"));
-    		WebDriver_Functions.Type(By.name("userID"), Account_Info.UserId);
+    		WebDriver_Functions.Type(By.name("userID"), User_Info.SSO_LOGIN_DESC);
     		
     		WebDriver_Functions.takeSnapShot("Password Reset.png");
             //click the option 1 button and try to answer with secret question
     		//WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[6]/td/input[2]"));//updated the below as not working on 10-29-18
-    		WebDriver_Functions.Click(By.xpath("//*[@id='module.forgotuseridandpassword._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[6]/td/span[2]/input"));
+    		WebDriver_Functions.Click(By.id("ada_forgotpwdcontinue"));
                                 
-    		//click the continue button
+    		//click the Answer question button
     		WebDriver_Functions.Click(By.xpath("//*[@id='module.resetpasswordoptions._expanded']/table/tbody/tr/td[1]/form/table/tbody/tr[5]/td/input"));
 
-            WebDriver_Functions.Type(By.name("answer"), Account_Info.Secret_Answer);
+            WebDriver_Functions.Type(By.name("answer"), User_Info.SECRET_ANSWER_DESC);
             WebDriver_Functions.takeSnapShot("Reset Password Secret.png");
             WebDriver_Functions.Click(By.name("action1"));
             
@@ -585,50 +625,51 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.takeSnapShot("New Password.png");
 			WebDriver_Functions.Click(By.name("confirm"));
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td/h1"), "Thank you.");
-			boolean loginAttempt = WebDriver_Functions.Login(Account_Info.UserId, NewPassword);
-			Helper_Functions.PrintOut(Account_Info.UserId + " has had the password changed to " + NewPassword, true);
+			boolean loginAttempt = WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, NewPassword);
+			Helper_Functions.PrintOut(User_Info.SSO_LOGIN_DESC + " has had the password changed to " + NewPassword, true);
 			
 			//if recursive the password already changed once
 			if (Thread.currentThread().getStackTrace()[2].getMethodName().contentEquals("WFCL_Secret_Answer")){
-		    	return Account_Info.UserId + " " + NewPassword;
+		    	return User_Info.SSO_LOGIN_DESC + " " + NewPassword;
 			}else if (loginAttempt){
-				return WFCL_Secret_Answer(Account_Info, Account_Info.Password);//change the password back
+				return WFCL_Secret_Answer(User_Info,  User_Info.USER_PASSWORD_DESC);//change the password back
 			}else{
 				throw new Exception("Error.");
 			}
 		}catch (Exception e){
-			Helper_Functions.PrintOut("Secret quesiton " + Account_Info.Secret_Answer + " was not accepted.", true);
+			Helper_Functions.PrintOut("Secret quesiton " + User_Info.SECRET_ANSWER_DESC + " was not accepted.", true);
 			return e.getMessage();
 		}
 	}//end ResetPasswordWFCLSecret
 
-	public static String ResetPasswordWFCL_Email(String CountryCode, String strUserName, String Password) throws Exception{
+	public static String ResetPasswordWFCL_Email(User_Data User_Info) throws Exception{
     	try{
-    		WebDriver_Functions.Login(strUserName, Password);
+    		//WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
 
     		String Email = "--Could not retrieve email--";
     		
     		try {
-    			WebDriver_Functions.ChangeURL("WPRL", CountryCode, false);
-    			WebDriver_Functions.WaitPresent(By.id("ci_fullname_val"));
-    			String UserDetails = WebDriver_Functions.GetText(By.id("ci_fullname_val"));
-    			Email = UserDetails.substring(UserDetails.lastIndexOf('\n') + 1, UserDetails.length());
-    			WebDriver_Functions.takeSnapShot("Password Reset Email UserDetails.png");
+    			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
+    			String[] fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+    			String ContactDetailsResponse = USRC_API_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, fdx_login_fcl_uuid[0]);
+    			String ContactDetailsParsed[][] = new String[][] {{"EMAIL_ADDRESS", ""}};
+    			ContactDetailsParsed = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, ContactDetailsParsed);
+    			Email = ContactDetailsParsed[0][1];
     		}catch (Exception e) {
     			Helper_Functions.PrintOut("Error " + e.getMessage() + "   " + Email, true);
     		}
     		
     		//trigger the password reset email
-    		WebDriver_Functions.ChangeURL("INET", CountryCode, true);
+    		WebDriver_Functions.ChangeURL("INET", User_Info.COUNTRY_CD, true);
     		WebDriver_Functions.Click(By.name("forgotUidPwd"));
-    		WebDriver_Functions.Type(By.name("userID"),strUserName);
+    		WebDriver_Functions.Type(By.name("userID"), User_Info.SSO_LOGIN_DESC);
     		
     		WebDriver_Functions.Click(By.id("ada_forgotpwdcontinue"));
     		//*[@id="ada_forgotpwdcontinue"]
     		//click the option 1 button and try to answer with secret question
     		WebDriver_Functions.Click(By.name("action2"));
     		WebDriver_Functions.takeSnapShot("Password Reset Email.png");
-    		Helper_Functions.PrintOut("Completed ResetPasswordWFCL using " + strUserName + ". An email has been triggered and that test must be completed manually by " + Email, true);
+    		Helper_Functions.PrintOut("Completed ResetPasswordWFCL using " + User_Info.SSO_LOGIN_DESC + ". An email has been triggered and that test must be completed manually by " + Email, true);
     					
     		return Email;
     	}catch(Exception e){
@@ -652,18 +693,17 @@ public class WFCL_Functions_UsingData{
     	return new String[] {TaxID, StateTaxID};
     }
     
-	public static String[] WFCL_WADM_Invitaiton(String UserID, String Password, String Name[], String Email) throws Exception{	
+	public static String[] WFCL_WADM_Invitaiton(User_Data User_Info, Account_Data Account_Info, String Email) throws Exception{	
 		try {
-			WebDriver_Functions.Login(UserID, Password);
+			WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
 			WebDriver_Functions.ChangeURL("WADM", "US", false);
-			
 			WebDriver_Functions.takeSnapShot("UserTable before invite.png");
 			
 			WebDriver_Functions.Click(By.id("createNewUsers"));
 			WebDriver_Functions.WaitNotPresent(By.id("loading-div"));//wait for the loading overlay to not be present
-			WebDriver_Functions.Type(By.name("userfirstName"), Name[0]);
-			WebDriver_Functions.Type(By.name("middleName"), Name[1]);
-			WebDriver_Functions.Type(By.name("userlastName"), Name[2]);
+			WebDriver_Functions.Type(By.name("userfirstName"), Account_Info.FirstName);
+			WebDriver_Functions.Type(By.name("middleName"), Account_Info.MiddleName);
+			WebDriver_Functions.Type(By.name("userlastName"), Account_Info.LastName);
 			
 			String Time = Helper_Functions.CurrentDateTime();
 			String UniqueID = Time.substring(Time.length() - 13, 10);
@@ -683,8 +723,8 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.Select(By.id("manageTableDropDown"), "Unique ID", "t"); // select to search by id
 			WebDriver_Functions.Click(By.id("goSearch"));
 			//Check if the invited user is listed on user tab
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id=\"tableBody\"]/tr/td[1]"), Name[0]); //check first name
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id=\"tableBody\"]/tr/td[2]"), Name[2]); //check last name
+			WebDriver_Functions.WaitForText(By.xpath("//*[@id=\"tableBody\"]/tr/td[1]"), Account_Info.FirstName); //check first name
+			WebDriver_Functions.WaitForText(By.xpath("//*[@id=\"tableBody\"]/tr/td[2]"), Account_Info.LastName); //check last name
 			WebDriver_Functions.takeSnapShot("Invitation Sent.png");
 			
 			return new String[] {Email, UniqueID};
@@ -798,7 +838,7 @@ public class WFCL_Functions_UsingData{
 		Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
 		return ReturnValue;
 	}//end WFCL_AccountRegistration
-	
+		
 }//End Class
 
 /*	

@@ -17,8 +17,8 @@ import Data_Structures.User_Data;
 
 public class Environment {
 	public static String LevelsToTest;
+	public static String DummyInvoiceOne = "750000000", DummyInvoiceTwo = "750000001";
 	private static Environment instance = new Environment();
-	public static Account_Data Address_Data[];	
 		
 	private Environment(){
 		//Do-nothing..Do not allow to initialize this class from outside
@@ -363,11 +363,29 @@ public class Environment {
 	//will return single card of specific type.
 	public static Credit_Card_Data getCreditCardDetails(String Level, String Type) {
 		Credit_Card_Data CreditCards[] = getCreditCardDetails(Level);
-		
+
 		for (Credit_Card_Data CD : CreditCards) {
 			if (CD.TYPE.contains(Type)) {
 				return CD;
 			}
+		}
+		return null;
+	}
+	
+	//will return the next card on the list after the one given
+	public static Credit_Card_Data getCreditCardDetails(String Level, String Type, String CardNumber) {
+		Credit_Card_Data CreditCards[] = getCreditCardDetails(Level);
+		boolean returnNextCard = false;
+		for (Credit_Card_Data CD : CreditCards) {
+			if (CD.TYPE.contains(Type) && CD.CARD_NUMBER.contentEquals(CardNumber)){
+				returnNextCard = true;
+			}else if (returnNextCard && !CD.TYPE.contains(Type)) {
+				return CD;
+			}
+		}
+		//if the card given was last in the list will return the card that was first.
+		if (returnNextCard && CreditCards != null) {
+			return CreditCards[0];
 		}
 		return null;
 	}
@@ -421,6 +439,7 @@ public class Environment {
 		for (Account_Data AD: AllAddresses) {
 			if (AD != null && AD.Billing_Country_Code.contentEquals(CountryCode)) {
 				AD.Level = Level;
+				Account_Data.Set_Dummy_Contact_Name(AD);
 				return AD;
 			}
 		}
@@ -433,8 +452,8 @@ public class Environment {
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 		
 		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
-		
-		Address_Data = new Account_Data[AddressDetails.size()];
+
+		Account_Data Address_Data[] = new Account_Data[AddressDetails.size()];
 		String Headers[] = AddressDetails.get(0);
 		for (int i = 1; i < AddressDetails.size(); i++) {
 			String Row[] = AddressDetails.get(i);
@@ -523,6 +542,9 @@ public class Environment {
 					break;
 		  		case "LAST_NM":
 		  			DataClass[pos].LAST_NM = Row[j];
+					break;
+		  		case "EMAIL_ADDRESS":
+		  			DataClass[pos].EMAIL_ADDRESS = Row[j];
 					break;
 		  		case "STREET_DESC":
 		  			DataClass[pos].STREET_DESC = Row[j];

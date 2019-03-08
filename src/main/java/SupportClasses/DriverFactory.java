@@ -68,7 +68,7 @@ public class DriverFactory{
 		   //SEVERE: org.apache.commons.exec.ExecuteException: Process exited with an error: 1 (Exit value: 1)
 		   try {
 			   if (DriverType == 0) {//Chrome
-				  //make sure driver in the project folder
+				  //make sure driver in the project folder         https://sites.google.com/a/chromium.org/chromedriver/
 				   String Location = System.getProperty("user.dir") + "\\chromedriver.exe";
 				   System.setProperty("webdriver.chrome.driver", Location);
 		   
@@ -89,7 +89,7 @@ public class DriverFactory{
 				   cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 				   cap.setCapability(ChromeOptions.CAPABILITY, options);
 			   
-				   Locdriver = new ChromeDriver(options);
+				   Locdriver = new ChromeDriver(options);  
 				   Locdriver.manage().timeouts().implicitlyWait(WaitTimeOut, TimeUnit.SECONDS);   
 			   }else if (DriverType == 1) {//IE
 				   String Location = System.getProperty("user.dir") + "\\IEDriverServer.exe";

@@ -10,7 +10,9 @@
       <class name="Mission_Critical.WFCL_SmokeTest">
         <methods>
           <include name="CreditCardRegistrationEnroll" invocation-numbers="0"/>
-          <include name="Password_Reset_Secret" invocation-numbers="0"/>
+          <include name="UserRegistration_Account_Data" invocation-numbers="0"/>
+          <include name="AccountRegistration_Admin" invocation-numbers="0"/>
+          <include name="AccountRegistration_INET" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
       </class> <!-- Mission_Critical.WFCL_SmokeTest -->
