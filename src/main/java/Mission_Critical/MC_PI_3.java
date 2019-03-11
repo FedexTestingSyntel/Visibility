@@ -17,6 +17,8 @@ import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
+import WFCL_Application.WFCL_Functions;
+import WIDM_Application.WIDM_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 

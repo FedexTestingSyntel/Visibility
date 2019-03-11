@@ -9,7 +9,7 @@
 		<parameter name="Level" value= "3" />
 		<classes>
 			<class name="SupportClasses.Environment"/>
-      		<class name="Mission_Critical.WFCL_ALL_CCEnroll"/>
+      		<class name="WFCL_Application.WFCL_SmokeTest"/>
     	</classes>
   	</test> <!-- WFCL_Test -->
 </suite> <!-- WFCL_Suite -->

@@ -1,4 +1,4 @@
-package Mission_Critical;
+package WFCL_Application;
 
 import org.testng.annotations.Test;
 import CXS_Support.USRC_API_Endpoints;

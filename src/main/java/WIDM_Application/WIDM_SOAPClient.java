@@ -1,4 +1,4 @@
-package Mission_Critical;
+package WIDM_Application;
 
 /** 
  * SOAPClient4XG. Read the SOAP envelope file passed as the second

@@ -1,4 +1,4 @@
-package Mission_Critical;
+package WFCL_Application;
 
 import java.util.Arrays;
 import org.openqa.selenium.By;

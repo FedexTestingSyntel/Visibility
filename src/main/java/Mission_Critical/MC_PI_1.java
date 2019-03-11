@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import SupportClasses.*;
+import WFCL_Application.WFCL_Functions;
+import WFCL_Application.WFCL_Functions_UsingData;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
