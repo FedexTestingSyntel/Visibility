@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Mission_Critical.WFCL_New">
+      <class name="SupportClasses.Create_Accounts">
         <methods>
-          <include name="beforeClass"/>
-          <include name="UserRegistration_Account_Data" invocation-numbers="0"/>
+          <include name="Account_Creation" invocation-numbers="1"/>
+          <include name="ECAM_Data"/>
         </methods>
-      </class> <!-- Mission_Critical.WFCL_New -->
+      </class> <!-- SupportClasses.Create_Accounts -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

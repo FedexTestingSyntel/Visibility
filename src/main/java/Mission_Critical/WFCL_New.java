@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "2";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -58,6 +58,7 @@ public class WFCL_New{
 		    			}
 					}
 		    		break;
+		    	case "UserRegistration_Account_Data_Captcha":
 		    	case "UserRegistration_Account_Data":
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
@@ -161,6 +162,20 @@ public class WFCL_New{
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			String Result[] = WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", enabled = false)
+	public void UserRegistration_Account_Data_Captcha(String Level, Account_Data Account_Info) {
+		try {
+			Account_Data.Print_Account_Address(Account_Info);
+			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Country_Code + "Create");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			Account_Info.Email = Helper_Functions.getRandomString(12) + "@fedex.com";
+			WFCL_Functions_UsingData.WFCL_UserRegistration_Captcha(Account_Info);
+			Thread.sleep(10000);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

@@ -25,8 +25,8 @@ public class Create_Accounts{
 	private static String ECAMuserid;
 	private static String ECAMpassword;
 	
-	static String LevelsToTest = "3";
-	
+	static String LevelsToTest = "2";
+	static String CountryList[][]; 
 	@BeforeClass
 	public static void ECAM_Data(){
 		ArrayList<String[]> PersonalData = new ArrayList<String[]>();
@@ -41,35 +41,26 @@ public class Create_Accounts{
 	
 	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
+		CountryList = Environment.getCountryList("US");
+		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
+		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
+		//CountryList = Environment.getCountryList("BR");
+		//CountryList = Environment.getCountryList("FR");
+		CountryList = Environment.getCountryList("high");
+		//Helper_Functions.MyEmail = "accept@fedex.com";
+		CountryList = new String[][]{{"US", ""}, {"CA", ""}};
+		
 		List<Object[]> data = new ArrayList<Object[]>();
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
 		for (int i=0; i < LevelsToTest.length(); i++) {
 			String Level = String.valueOf(LevelsToTest.charAt(i));
-					
-			for (int j = 1; j < AddressDetails.size(); j++) {
-				String CountryList[] = AddressDetails.get(j);
-				/*
-				ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
-				
-				int ExistingAccounts = 0;
-				for(String Account[]: AccountsAlreadyCreated) {
-					//Compare address line 1 vs billing address L1	//compare country code vs billing country code
-					if (CountryList[0].contentEquals(Account[11]) && CountryList[6].contentEquals(Account[18])) {
-						ExistingAccounts++;
+			for (int j = 0; j < CountryList.length; j++) {
+				for (String CountryAddress[]: AddressDetails) {
+					if (CountryAddress[6].contentEquals(CountryList[j][0])) {
+						data.add( new Object[] {Level, CountryAddress});
+						break;
 					}
-				}
-				
-				//attempt to create all account numbers
-				//if (ExistingAccounts < 3 || (CountryList[6].contentEquals("US") && ExistingAccounts < 8)) {
-				//	data.add( new Object[] {Level, CountryList});//break;
-				//}	
-				 * */
-				
-				//if doing a single country
-				if (CountryList[6].contentEquals("US")) {
-					data.add( new Object[] {Level, CountryList});
-					break;
 				}
 			}
 		}
@@ -209,6 +200,11 @@ public class Create_Accounts{
 			if (WebDriver_Functions.isVisable(By.id("nomatch"))) {
 				WebDriver_Functions.Click(By.id("nomatch"));
 			}
+			
+			if (WebDriver_Functions.isVisable(By.id("adrs_val_modified"))) {
+				WebDriver_Functions.Click(By.id("adrs_val_modified"));
+			}
+			
 			
 			Helper_Functions.Wait(4); //need to remove later, issue is page not passing the regulatory section.
 			if (WebDriver_Functions.isVisable(By.id("next_payment"))) {

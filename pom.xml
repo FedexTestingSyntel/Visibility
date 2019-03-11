@@ -10,6 +10,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <maven.compiler.source>1.8</maven.compiler.source>
   </properties>
 
+<pluginRepositories>
+    <pluginRepository>
+        <id>smartbear-sweden-plugin-repository</id>
+        <url>http://www.soapui.org/repository/maven2/</url>
+    </pluginRepository>
+</pluginRepositories>
+
 <repositories>
     <repository>
         <id>smartbear</id>
@@ -33,6 +40,18 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <artifactId>selenium-java</artifactId>
     <version>2.53.0</version>
 </dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
+<dependency>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpcore</artifactId>
+    <version>4.4.11</version>
+</dependency>
+<dependency>
+  <groupId>org.apache.httpcomponents</groupId>
+  <artifactId>httpclient</artifactId>
+  <version>4.3.6</version>
+</dependency>
+
 <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
 <dependency>
     <groupId>org.apache.maven.plugins</groupId>

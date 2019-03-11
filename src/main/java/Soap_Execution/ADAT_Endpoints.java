@@ -12,6 +12,8 @@ import SupportClasses.Helper_Functions;
 
 public class ADAT_Endpoints {
 
+	private static String MainNaimspace = "http://www.w3.org/2003/05/soap-envelope", MainPrefix;
+	
 	public static void VelocityCheck(String UserName, String soapCreateUserUrl, String soapVelocityUrl, String Organization, String EvaluateRiskOrganization, int Threshold) throws Exception {
 		ADAT_UserCreation(soapCreateUserUrl, Organization, UserName);
 		
@@ -30,7 +32,7 @@ public class ADAT_Endpoints {
 	//will take in the url, organization, and user name
 	//will return the soap message as a string
 	public static String ADAT_UserCreation(String soapCreateUserUrl, String Organization, String UserName) throws Exception {
-		SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation();
+		SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
 		SOAPPart soapPart = request.getSOAPPart();
 		SOAPEnvelope envelope = soapPart.getEnvelope();;
 		//add the name space for the msgs prefix
@@ -68,7 +70,7 @@ public class ADAT_Endpoints {
 	//will take in the endpoint, organization, and user name
 	//will return the pin number that was generated
 	public static String ADAT_PinCreation(String soapCreatePinUrl, String Organization, String UserName) throws Exception {
-		SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation();
+		SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
 		SOAPPart soapPart = request.getSOAPPart();
 		SOAPEnvelope envelope = soapPart.getEnvelope();;
 		String NSmsgs = "http://ws.arcot.com/WebFortIssuanceAPI/7.0/msgs";
@@ -116,7 +118,7 @@ public class ADAT_Endpoints {
 	}
 	
 	public static String ADAT_VerifyPin(String soapVerifyPinUrl, String Organization, String UserName, String Pin) throws Exception {
-		SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation();
+		SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
 		SOAPPart soapPart = request.getSOAPPart();
 		SOAPEnvelope envelope = soapPart.getEnvelope();;
 		String NSmsgs = "http://ws.arcot.com/WebFortAuthAPI/7.0/msgs";
@@ -149,7 +151,7 @@ public class ADAT_Endpoints {
 	}
 	
 	public static String ADAT_EvaluateRisk(String soapEvaluateRiskUrl, String Organization, String UserName) throws Exception{
-		SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation();
+		SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
 		SOAPPart soapPart = request.getSOAPPart();
 		SOAPEnvelope envelope = soapPart.getEnvelope();;
 		//add the name space for the ns prefix

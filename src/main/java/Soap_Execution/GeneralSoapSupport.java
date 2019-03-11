@@ -15,8 +15,8 @@ import SupportClasses.Helper_Functions;
 
 public class GeneralSoapSupport {
 
-	public static SOAPMessage Soap_Message_Creation() throws Exception {
-    	//needed to change the default name space from "http://schemas.xmlsoap.org/soap/envelope/" to "http://www.w3.org/2003/05/soap-envelope"
+	public static SOAPMessage Soap_Message_Creation(String MainNs, String Preferred_Prefix) throws Exception {
+    	//needed to customize the default namespace
 	    SOAPMessage message = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL).createMessage();
 	    SOAPPart soapPart = message.getSOAPPart();
 	    SOAPEnvelope envelope = soapPart.getEnvelope();  
@@ -27,8 +27,7 @@ public class GeneralSoapSupport {
 	    //get rid of default name space
 	    envelope.removeNamespaceDeclaration(envelope.getPrefix());
 	    
-	    String Preferred_Prefix = "soap";
-	    envelope.addNamespaceDeclaration(Preferred_Prefix, "http://www.w3.org/2003/05/soap-envelope");
+	    envelope.addNamespaceDeclaration(Preferred_Prefix, MainNs);  
 	    envelope.setPrefix(Preferred_Prefix);
 	    body.setPrefix(Preferred_Prefix);
 	    header.setPrefix(Preferred_Prefix);

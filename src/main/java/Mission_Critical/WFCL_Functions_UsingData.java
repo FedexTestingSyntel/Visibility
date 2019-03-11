@@ -380,6 +380,7 @@ public class WFCL_Functions_UsingData{
 		String CountryCode = Account_Info.Billing_Country_Code;
 		try {
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
+			WebDriver_Functions.WaitClickable(By.id("registernow"));
 			WebDriver_Functions.ClickIfPresent(By.id("registernow"));
 
 			ContactInfo_Page(Account_Info, true); //enters all of the details
@@ -405,6 +406,22 @@ public class WFCL_Functions_UsingData{
 			}
 			throw e;
 		}
+	}//end WFCL_UserRegistration
+	
+	//will return a string array with 0 as the user id and 1 as the password, 2 is the uuid
+	public static void WFCL_UserRegistration_Captcha(Account_Data Account_Info) throws Exception{
+		String CountryCode = Account_Info.Billing_Country_Code;
+		try {
+			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
+			WebDriver_Functions.WaitClickable(By.id("registernow"));
+			WebDriver_Functions.ClickIfPresent(By.id("registernow"));
+			
+			WebDriver_Functions.ChangeURL(WebDriver_Functions.GetCurrentURL() + "&captcha=true", CountryCode, false);
+			
+			ContactInfo_Page(Account_Info, true); //enters all of the details
+			
+			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
+		}catch (Exception e) {}
 	}//end WFCL_UserRegistration
 	
 	public static boolean Admin_Registration(Account_Data Account_Info) throws Exception {

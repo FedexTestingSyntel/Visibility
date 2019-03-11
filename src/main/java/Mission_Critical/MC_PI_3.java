@@ -39,8 +39,7 @@ public class MC_PI_3{
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
 			
-			String Valid_Emails[] = new String[] {"accept@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com","a@b.c", "tencharacttencharacttencharacttencharacttencharacttencharact1234@accept.com", "tencharacttencharacttencharacttencharacttencharacttencharact1234@tencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharacttencharact1234567.com"};	
-			String InValid_Emails[] = new String[] {"abc~cde@fedex.com"};	
+			String InValid_Email = "abc~cde@fedex.com";	
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WIDM_Registration_Email_Validation":
@@ -48,20 +47,18 @@ public class MC_PI_3{
 				case "WFCL_Forgot_UserID_Email_Validation":
 				case "WIDM_Forgot_UserID_Email_Validation":
 					for (int j=0; j < CountryList.length; j++) {				
-						for (String Email: Valid_Emails) {
-							data.add( new Object[] {Level, CountryList[j][0], Email, false});
-						}
+						data.add( new Object[] {Level, CountryList[j][0], InValid_Email, false});
 					}
 					break;
 				case "WIDM_Registration_Email_Error":
 					for (int j=0; j < CountryList.length; j++) {				
-						data.add( new Object[] {Level, CountryList[j][0], InValid_Emails, true});
+						data.add( new Object[] {Level, CountryList[j][0], InValid_Email, true});
 					}
 					break;
 				case "WIDM_Email_BounceBack":
 					if (Level.contentEquals("2")) {
 						data.add( new Object[] {Level, "L2BadEmail110718T134301xv", "Test1234", Helper_Functions.getRandomString(22) + "@gmail.com"});
-					}else if (Level.contentEquals("3")) {
+					} else if (Level.contentEquals("3")) {
 						data.add( new Object[] {Level, "L3USCreate120518T194625px", "Test1234", Helper_Functions.getRandomString(22) + "@gmail.com"});
 					}
 					break;
@@ -77,50 +74,13 @@ public class MC_PI_3{
 						data.add( new Object[] {Level, "L2UpdatePassword122718T135503lf", "Test1234"});
 					}
 					break;
-				case "WFCL_Registration_Email_Validation_Legacy":
-					for (int j=0; j < CountryList.length; j++) {				
-						for (String Email: Valid_Emails) {
-							Account_Data AccountDetails = Helper_Functions.getFreshAccount(Level,  "US");
-							String UserID = Helper_Functions.LoadUserID("L" + Level + "WFCLLegacy");
-				    		data.add( new Object[] {Level, AccountDetails, UserID, Email, false});
-						}
-					}
-					break;
-				case "WFCL_Reset_Password_Email_Validation":
-					for (int j=0; j < CountryList.length; j++) {				
-						for (String Email: Valid_Emails) {
-							data.add( new Object[] {Level, CountryList[j][0], Email, false});
-						}
-					}
-					break;
-		    	case "BR_TaxID":
-	    			String EnrollmentID[] = Helper_Functions.LoadEnrollmentIDs("BR");
-	    			ArrayList<String[]> TaxInfo = Helper_Functions.getTaxInfo("BR");
-	    			for (String Tax[]: TaxInfo) {
-	    				if (Tax[4].contentEquals("B")) {
-	    					data.add(new Object[] {Level, EnrollmentID, Tax, true});		//REMOVE Comment after demo
-	    				}else {
-	    					data.add(new Object[] {Level, EnrollmentID, Tax, false});
-	    				}
-	    				
-	    			}
-	    			break;
-		    	case "TH_Welcome_Email_Disabled":
-	    			EnrollmentID = Helper_Functions.LoadEnrollmentIDs("TH");
-	    			data.add(new Object[] {Level, EnrollmentID[0], "TH", null, false});
-	    			data.add(new Object[] {Level, EnrollmentID[0], "TH", null, true});
-	    			break; 
 				case "WFCL_Email_BounceBack_Email_Error":
 					for (int j=0; j < CountryList.length; j++) {
 						String UserID = "", Password = "Test1234";
 						if (intLevel == 2) {
 							UserID = "L2UpdatePassword012919T123552nj";
 						}
-						
-						//data.add( new Object[] {Level, CountryList[j][0], UserID, Password, Invalid_Email, true});
-						//data.add( new Object[] {Level, CountryList[j][0], UserID, Password, Invalid_Email_Special, true});
-						data.add( new Object[] {Level, CountryList[j][0], UserID, Password, Valid_Emails, false});
-						
+						data.add( new Object[] {Level, CountryList[j][0], UserID, Password, InValid_Email, true});
 					}
 					break;
 	    		
