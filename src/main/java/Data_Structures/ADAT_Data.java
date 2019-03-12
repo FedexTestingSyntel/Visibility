@@ -11,7 +11,7 @@ public class ADAT_Data {
 	public String OrgPhone = "FDM-PHONE-PIN";
 	public String OrgAddressVelocity = "FDM-ADDRESS-VELOCITY";
 	public String OrgPostcardVelocity = "FDM-POSTCARD-VELOCITY";
-	public String OrgPhoneVelocity = "FDM-PHONE-VELOCITY";
+	public String OrgPhoneVelocity = "FDM-PHONEPIN-VELOCITY";
 	public int PostcardPinVelocityThreshold = 0;
 	public int PhonePinVelocityThreshold = 0;
 	public int AddressVelocityThreshold = 0;

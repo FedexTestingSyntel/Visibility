@@ -9,14 +9,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
   </properties>
-
-<pluginRepositories>
-    <pluginRepository>
-        <id>smartbear-sweden-plugin-repository</id>
-        <url>http://www.soapui.org/repository/maven2/</url>
-    </pluginRepository>
-</pluginRepositories>
-
+  
 <repositories>
     <repository>
         <id>smartbear</id>

@@ -146,7 +146,7 @@ public class USRC_API_Endpoints {
   				if (Header.getName().contentEquals("Set-Cookie") && Header.getValue().contains("fdx_login")) {
   					fdx_login = Header.toString().replace("Set-Cookie: ", "").replace("; domain=.fedex.com; path=/; secure", "");
   				}else if (Header.getName().contentEquals("Set-Cookie") && Header.getValue().contains("fcl_uuid")) {
-  					fcl_uuid = Header.toString().replace("Set-Cookie: fcl_uuid=", "").replace("; domain=.fedex.com; path=/", "");
+  					fcl_uuid = Header.toString().replace("Set-Cookie: fcl_uuid=", "").replace("; domain=.fedex.com; path=/; secure", "");
   				}
   				if (Header.getName().contentEquals("Set-Cookie")) {
   					full_cookies += Header.toString(); 

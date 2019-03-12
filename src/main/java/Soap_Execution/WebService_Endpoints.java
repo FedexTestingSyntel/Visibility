@@ -21,7 +21,7 @@ public class WebService_Endpoints {
 		SOAPEnvelope envelope = soapPart.getEnvelope();;
 		//add the name space for the v5 prefix
 		String NSv5 = "http://fedex.com/ws/registration/v5";
-		envelope.addNamespaceDeclaration("msgs", NSv5 );
+		envelope.addNamespaceDeclaration("v5", NSv5 );
 
 	    //add the header content
 	    MimeHeaders headers = request.getMimeHeaders();
@@ -39,16 +39,16 @@ public class WebService_Endpoints {
 	    /// WebAuthenticationDetail section starts
 	    SOAPElement WebAuthenticationDetail = SubscriptionRequest.addChildElement(envelope.createName("WebAuthenticationDetail","v5", NSv5));
 	    
-		String strCspKey = "RZEndj3VoTN7IZPr";
-		String strCspPassword = "FyOhzHVSNhQOhGlOoT7R5DRAW";
+		String strCspKey = "kTsV6Z3Y6N7g0a5f";
+		String strCspPassword = "7s885IZAOL1kn2TBuvSAWRvTU";
 	    SOAPElement CspCredential = WebAuthenticationDetail.addChildElement(envelope.createName("CspCredential","v5", NSv5));
 	    SOAPElement Key1 = CspCredential.addChildElement("Key", "v5");
 	    Key1.addTextNode(strCspKey);
 	    SOAPElement Password1 = CspCredential.addChildElement("Password", "v5");
 	    Password1.addTextNode(strCspPassword);
        
-		String strUserKey = "IwxibuPidazmPdWY";
-		String strUserPassword = "lqPWoVeWGAFboqFOtiBU9qfCy";
+		String strUserKey = "YIgDGJacGdJ8uHeX";
+		String strUserPassword = "FOuKkbBHpjO4uGm8FqifCfGQC";
 	    SOAPElement UserCredential = WebAuthenticationDetail.addChildElement(envelope.createName("UserCredential","v5", NSv5));
 	    SOAPElement Key2 = UserCredential.addChildElement("Key", "v5");
 	    Key2.addTextNode(strUserKey);

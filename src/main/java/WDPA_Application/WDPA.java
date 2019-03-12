@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 
 public class WDPA extends WDPA_Functions{
 	
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -56,7 +56,7 @@ public class WDPA extends WDPA_Functions{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < UD.length; k++) {
-		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].EXPRESS_ENABLED.contentEquals("T")) {
+		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].EXPRESS_ENABLED.contentEquals("")) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					//break;
 		    				}
@@ -93,6 +93,9 @@ public class WDPA extends WDPA_Functions{
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String Result = Arrays.toString(WDPAPickupDetailed(CountryCode, UserID, Password, "ground", "CompanyNameHere", "John Doe", "9011111111", Address, null, "INET"));
 			Helper_Functions.PrintOut(Result, false);
+			
+			String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"GROUND_ENABLED", "T"}};
+			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -103,7 +106,11 @@ public class WDPA extends WDPA_Functions{
 		Helper_Functions.PrintOut("Schedule an express pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
+			Address = Helper_Functions.LoadAddress("CN");
 			WDPAPickupDetailed(CountryCode, UserID, Password, "express", "CompanyNameHere", "John Doe", "9011111111", Address, null, "INET");
+
+			String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"EXPRESS_ENABLED", "T"}};
+			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

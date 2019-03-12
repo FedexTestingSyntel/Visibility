@@ -45,7 +45,7 @@ public class WebServices {
 		Account_Info.Company_Name = "DummyCompany";
 		String Response = WebService_Endpoints.CreateMeterNumber(URL, Account_Info);
 		
-        String Response_Variables[] = new String[] {"udsTransactionID", "The operation was successful!"};
+        String Response_Variables[] = new String[] {"<HighestSeverity>SUCCESS</HighestSeverity>", "MeterNumber", "GroundShipperNumber"};
         for (String Variable: Response_Variables) {
 			assertThat(Response, CoreMatchers.containsString(Variable));
 		}

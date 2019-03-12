@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "2";  
+	static String LevelsToTest = "3";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -29,10 +29,10 @@ public class WFCL_New{
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("BR");
-		//CountryList = Environment.getCountryList("FR");
+		//CountryList = Environment.getCountryList("JP");
 		//CountryList = Environment.getCountryList("high");
-		//Helper_Functions.MyEmail = "accept@fedex.com";
-		//CountryList = new String[][]{{"US", ""}, {"CA", ""}};
+		Helper_Functions.MyEmail = "accept@fedex.com";
+		//CountryList = new String[][]{{"AU", ""}, {"JP", ""}};
 	}
 	
 	@DataProvider (parallel = true)
@@ -144,6 +144,7 @@ public class WFCL_New{
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
 			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
+			Account_Info.UserId = "L" + Level + "WCRVMarketing";
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);

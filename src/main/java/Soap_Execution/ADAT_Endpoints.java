@@ -12,7 +12,7 @@ import SupportClasses.Helper_Functions;
 
 public class ADAT_Endpoints {
 
-	private static String MainNaimspace = "http://www.w3.org/2003/05/soap-envelope", MainPrefix;
+	private static String MainNaimspace = "http://www.w3.org/2003/05/soap-envelope", MainPrefix = "soap";
 	
 	public static void VelocityCheck(String UserName, String soapCreateUserUrl, String soapVelocityUrl, String Organization, String EvaluateRiskOrganization, int Threshold) throws Exception {
 		ADAT_UserCreation(soapCreateUserUrl, Organization, UserName);

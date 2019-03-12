@@ -26,5 +26,9 @@ public class User_Data {
 	public String FDM_STATUS;
 	
 	public String ERROR;
+	
+	public User_Data() {
+		//generic constructor
+	}
 }
 

@@ -60,14 +60,6 @@ public class WDPA_Functions{
 			}
 			
 			boolean Cancelled =WDPACancelFromMyPickups(Service, ConfirmationNumber, Address, PackageDetails);
-			
-			if (Service.contentEquals("ground")) {
-				String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"GROUND_ENABLED", "T"}};
-				Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
-			}else if (Service.contentEquals("express")) {
-				String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"EXPRESS_ENABLED", "T"}};
-				Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
-			}
 			Helper_Functions.PrintOut(ConfirmationNumber, false);
 			return new String[] {UserID, ConfirmationNumber, ConfirmationRedirect, "Cancelled: " + Cancelled};//need to add correct return valuers
      }catch (Exception e){
