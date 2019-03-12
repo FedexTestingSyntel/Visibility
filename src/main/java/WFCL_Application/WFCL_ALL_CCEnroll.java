@@ -1,9 +1,9 @@
 package WFCL_Application;
 
 import org.testng.annotations.Test;
-import CXS_Support.USRC_API_Endpoints;
-import CXS_Support.USRC_Data;
+
 import Data_Structures.Enrollment_Data;
+import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
 import org.testng.annotations.BeforeClass;
 import org.openqa.selenium.By;
@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import SupportClasses.*;
+import USRC_Application.USRC_API_Endpoints;
 
 @SuppressWarnings("unused")
 @Listeners(SupportClasses.TestNG_TestListener.class)

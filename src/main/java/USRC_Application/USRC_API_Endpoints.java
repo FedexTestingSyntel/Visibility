@@ -1,4 +1,4 @@
-package CXS_Support;
+package USRC_Application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +15,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+
+import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
 
 public class USRC_API_Endpoints {

@@ -1,4 +1,4 @@
-package CXS_Support;
+package USRC_Application;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -6,15 +6,17 @@ import java.util.Iterator;
 import java.util.List;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import CXS_Support.USRC_Data;
-import CXS_Support.MFAC_Helper_Functions;
+
+import Data_Structures.MFAC_Data;
+import Data_Structures.USRC_Data;
+import MFAC_Application.MFAC_API_Endpoints;
+import MFAC_Application.MFAC_Helper_Functions;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
-import API_Calls.*;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 

@@ -9,7 +9,7 @@
   		<parameter name="Level" value="23" />
     	<classes>
     		<class name="SupportClasses.Environment"/>
-      		<class name="Soap_Execution.ADAT"/>
+      		<class name="ADAT_Application.ADAT"/>
 		</classes>
   	</test> <!-- WCRV_Test -->
 </suite> <!-- WCRV_Suite -->

@@ -1,4 +1,4 @@
-package Soap_Execution;
+package ADAT_Application;
 
 import static org.junit.Assert.assertThat;
 import java.lang.reflect.Method;

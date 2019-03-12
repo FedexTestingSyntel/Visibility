@@ -1,4 +1,4 @@
-package CXS_Support;
+package USRC_Application;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -8,8 +8,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import CXS_Support.USRC_Data;
+
+import Data_Structures.PRDC_Data;
+import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
+import PRDC_Application.PRDC_API_Endpoints;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import org.testng.annotations.Test;

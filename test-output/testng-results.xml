@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="0" total="28" passed="28">
+<testng-results skipped="0" failed="2" ignored="0" total="8" passed="6">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="27833" started-at="2019-03-12T15:47:31Z" finished-at="2019-03-12T15:47:59Z">
+  <suite name="WFCL_Suite" duration-ms="532286" started-at="2019-03-12T16:50:55Z" finished-at="2019-03-12T16:59:47Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="27833" started-at="2019-03-12T15:47:31Z" finished-at="2019-03-12T15:47:59Z">
-      <class name="Soap_Execution.ADAT">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:Soap_Execution.ADAT@1442d7b5]" name="beforeClass" is-config="true" duration-ms="26" started-at="2019-03-12T15:47:32Z" finished-at="2019-03-12T15:47:32Z">
+    <test name="WFCL_Test" duration-ms="532286" started-at="2019-03-12T16:50:55Z" finished-at="2019-03-12T16:59:47Z">
+      <class name="WFCL_Application.WFCL_SmokeTest">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WFCL_Application.WFCL_SmokeTest@11c20519]" name="beforeClass" is-config="true" duration-ms="15" started-at="2019-03-12T16:50:56Z" finished-at="2019-03-12T16:50:56Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="ADAT_CreateUser(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:1, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_CreateUser" duration-ms="740" started-at="2019-03-12T15:47:32Z" data-provider="dp" finished-at="2019-03-12T15:47:32Z">
+        <test-method status="PASS" signature="Forgot_User_Email(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:WFCL_Application.WFCL_SmokeTest@11c20519]" name="Forgot_User_Email" duration-ms="62311" started-at="2019-03-12T16:50:56Z" data-provider="dp" finished-at="2019-03-12T16:51:58Z">
           <params>
             <param index="0">
               <value>
@@ -20,19 +20,19 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
+                <![CDATA[US]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
+                <![CDATA[sean.kauffman.osv@fedex.com]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ADAT_CreateUser -->
-        <test-method status="PASS" signature="ADAT_CreateUser(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:1, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_CreateUser" duration-ms="765" started-at="2019-03-12T15:47:32Z" data-provider="dp" finished-at="2019-03-12T15:47:32Z">
+        </test-method> <!-- Forgot_User_Email -->
+        <test-method status="PASS" signature="UserRegistration_Account_Data(java.lang.String, Data_Structures.Account_Data)[pri:0, instance:WFCL_Application.WFCL_SmokeTest@11c20519]" name="UserRegistration_Account_Data" duration-ms="123490" started-at="2019-03-12T16:50:57Z" data-provider="dp" finished-at="2019-03-12T16:53:00Z">
           <params>
             <param index="0">
               <value>
@@ -41,61 +41,14 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
+                <![CDATA[Data_Structures.Account_Data@62dffbb2]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ADAT_CreateUser -->
-        <test-method status="PASS" signature="ADAT_CreateUser(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:1, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_CreateUser" duration-ms="502" started-at="2019-03-12T15:47:32Z" data-provider="dp" finished-at="2019-03-12T15:47:32Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_CreateUser -->
-        <test-method status="PASS" signature="ADAT_CreateUser(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:1, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_CreateUser" duration-ms="502" started-at="2019-03-12T15:47:32Z" data-provider="dp" finished-at="2019-03-12T15:47:32Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_CreateUser -->
-        <test-method status="PASS" signature="ADAT_CreatePin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:2, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_CreatePin" duration-ms="1543" started-at="2019-03-12T15:47:32Z" data-provider="dp" finished-at="2019-03-12T15:47:34Z">
+        </test-method> <!-- UserRegistration_Account_Data -->
+        <test-method status="PASS" signature="Reset_Password_Email(java.lang.String, Data_Structures.User_Data)[pri:0, instance:WFCL_Application.WFCL_SmokeTest@11c20519]" name="Reset_Password_Email" duration-ms="96253" started-at="2019-03-12T16:50:57Z" data-provider="dp" finished-at="2019-03-12T16:52:34Z">
           <params>
             <param index="0">
               <value>
@@ -104,19 +57,14 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
+                <![CDATA[Data_Structures.User_Data@599d6bac]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ADAT_CreatePin -->
-        <test-method status="PASS" signature="ADAT_CreatePin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:2, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_CreatePin" duration-ms="1548" started-at="2019-03-12T15:47:32Z" data-provider="dp" finished-at="2019-03-12T15:47:34Z">
+        </test-method> <!-- Reset_Password_Email -->
+        <test-method status="FAIL" signature="AccountRegistration_WDPA(java.lang.String, Data_Structures.Account_Data)[pri:0, instance:WFCL_Application.WFCL_SmokeTest@11c20519]" name="AccountRegistration_WDPA" duration-ms="122656" started-at="2019-03-12T16:50:57Z" data-provider="dp" finished-at="2019-03-12T16:53:00Z">
           <params>
             <param index="0">
               <value>
@@ -125,61 +73,50 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
+                <![CDATA[Data_Structures.Account_Data@28d35a98]]>
               </value>
             </param>
           </params>
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[Timed out after 30 seconds waiting for text to be "L2WdpaUS031219T115058ovff". Current text: "null"
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'WTC-5159473-l2', ip: '172.27.142.145', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55815}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir15472_29727}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=72.0.3626.121, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 12be2ba1dedadbfd62879abf717d1401]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: Timed out after 30 seconds waiting for text to be "L2WdpaUS031219T115058ovff". Current text: "null"
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'WTC-5159473-l2', ip: '172.27.142.145', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55815}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir15472_29727}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=72.0.3626.121, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 12be2ba1dedadbfd62879abf717d1401
+at org.testng.Assert.fail(Assert.java:96)
+at WFCL_Application.WFCL_SmokeTest.AccountRegistration_WDPA(WFCL_SmokeTest.java:192)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+at java.lang.reflect.Method.invoke(Unknown Source)
+at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+at java.util.concurrent.FutureTask.run(Unknown Source)
+at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+at java.util.concurrent.FutureTask.run(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+at java.lang.Thread.run(Unknown Source)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ADAT_CreatePin -->
-        <test-method status="PASS" signature="ADAT_CreatePin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:2, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_CreatePin" duration-ms="201" started-at="2019-03-12T15:47:32Z" data-provider="dp" finished-at="2019-03-12T15:47:33Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_CreatePin -->
-        <test-method status="PASS" signature="ADAT_CreatePin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:2, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_CreatePin" duration-ms="196" started-at="2019-03-12T15:47:32Z" data-provider="dp" finished-at="2019-03-12T15:47:33Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_CreatePin -->
-        <test-method status="PASS" signature="ADAT_AddressVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_AddressVelocity" duration-ms="10289" started-at="2019-03-12T15:47:34Z" data-provider="dp" finished-at="2019-03-12T15:47:44Z">
+        </test-method> <!-- AccountRegistration_WDPA -->
+        <test-method status="PASS" signature="CreditCardRegistrationEnroll(java.lang.String, Data_Structures.Enrollment_Data, Data_Structures.Account_Data, Data_Structures.Tax_Data)[pri:0, instance:WFCL_Application.WFCL_SmokeTest@11c20519]" name="CreditCardRegistrationEnroll" duration-ms="221083" started-at="2019-03-12T16:50:58Z" data-provider="dp" finished-at="2019-03-12T16:54:39Z">
           <params>
             <param index="0">
               <value>
@@ -188,61 +125,22 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
+                <![CDATA[Data_Structures.Enrollment_Data@29f52949]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
+                <![CDATA[Data_Structures.Account_Data@2dcaa8af]]>
               </value>
+            </param>
+            <param index="3">
+              <value is-null="true"/>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ADAT_AddressVelocity -->
-        <test-method status="PASS" signature="ADAT_AddressVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_AddressVelocity" duration-ms="1362" started-at="2019-03-12T15:47:34Z" data-provider="dp" finished-at="2019-03-12T15:47:35Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_AddressVelocity -->
-        <test-method status="PASS" signature="ADAT_AddressVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_AddressVelocity" duration-ms="1433" started-at="2019-03-12T15:47:34Z" data-provider="dp" finished-at="2019-03-12T15:47:35Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_AddressVelocity -->
-        <test-method status="PASS" signature="ADAT_AddressVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_AddressVelocity" duration-ms="10297" started-at="2019-03-12T15:47:34Z" data-provider="dp" finished-at="2019-03-12T15:47:44Z">
+        </test-method> <!-- CreditCardRegistrationEnroll -->
+        <test-method status="PASS" signature="Password_Reset_Secret(java.lang.String, Data_Structures.User_Data, java.lang.String)[pri:1, instance:WFCL_Application.WFCL_SmokeTest@11c20519]" name="Password_Reset_Secret" duration-ms="244604" started-at="2019-03-12T16:54:39Z" data-provider="dp" finished-at="2019-03-12T16:58:44Z">
           <params>
             <param index="0">
               <value>
@@ -251,19 +149,19 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
+                <![CDATA[Data_Structures.User_Data@41b7b681]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[FDM-PHONE-PIN]]>
+                <![CDATA[Test1234A]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ADAT_AddressVelocity -->
-        <test-method status="PASS" signature="ADAT_PhoneVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_PhoneVelocity" duration-ms="5418" started-at="2019-03-12T15:47:44Z" data-provider="dp" finished-at="2019-03-12T15:47:50Z">
+        </test-method> <!-- Password_Reset_Secret -->
+        <test-method status="FAIL" signature="AccountRegistration_INET(java.lang.String, Data_Structures.Account_Data)[pri:1, instance:WFCL_Application.WFCL_SmokeTest@11c20519]" name="AccountRegistration_INET" duration-ms="56333" started-at="2019-03-12T16:54:40Z" data-provider="dp" finished-at="2019-03-12T16:55:36Z">
           <params>
             <param index="0">
               <value>
@@ -272,82 +170,50 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
+                <![CDATA[Data_Structures.Account_Data@34357c4f]]>
               </value>
             </param>
           </params>
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[Timed out after 30 seconds waiting for text to be "L2InetUS031219T115440gfrx". Current text: "null"
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'WTC-5159473-l2', ip: '172.27.142.145', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55840}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir7680_3167}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=72.0.3626.121, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: a8a8683bf51c01de00e9d97ae4c171ec]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: Timed out after 30 seconds waiting for text to be "L2InetUS031219T115440gfrx". Current text: "null"
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'WTC-5159473-l2', ip: '172.27.142.145', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55840}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir7680_3167}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=72.0.3626.121, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: a8a8683bf51c01de00e9d97ae4c171ec
+at org.testng.Assert.fail(Assert.java:96)
+at WFCL_Application.WFCL_SmokeTest.AccountRegistration_INET(WFCL_SmokeTest.java:167)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+at java.lang.reflect.Method.invoke(Unknown Source)
+at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+at java.util.concurrent.FutureTask.run(Unknown Source)
+at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+at java.util.concurrent.FutureTask.run(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+at java.lang.Thread.run(Unknown Source)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ADAT_PhoneVelocity -->
-        <test-method status="PASS" signature="ADAT_PhoneVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_PhoneVelocity" duration-ms="593" started-at="2019-03-12T15:47:44Z" data-provider="dp" finished-at="2019-03-12T15:47:45Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_PhoneVelocity -->
-        <test-method status="PASS" signature="ADAT_PhoneVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_PhoneVelocity" duration-ms="5412" started-at="2019-03-12T15:47:44Z" data-provider="dp" finished-at="2019-03-12T15:47:50Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_PhoneVelocity -->
-        <test-method status="PASS" signature="ADAT_PhoneVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_PhoneVelocity" duration-ms="598" started-at="2019-03-12T15:47:44Z" data-provider="dp" finished-at="2019-03-12T15:47:45Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_PhoneVelocity -->
-        <test-method status="PASS" signature="ADAT_PostcardVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_PostcardVelocity" duration-ms="5792" started-at="2019-03-12T15:47:50Z" data-provider="dp" finished-at="2019-03-12T15:47:56Z">
+        </test-method> <!-- AccountRegistration_INET -->
+        <test-method status="PASS" signature="AccountRegistration_Admin(java.lang.String, Data_Structures.Account_Data)[pri:9, instance:WFCL_Application.WFCL_SmokeTest@11c20519]" name="AccountRegistration_Admin" duration-ms="63011" started-at="2019-03-12T16:58:44Z" data-provider="dp" finished-at="2019-03-12T16:59:47Z">
           <params>
             <param index="0">
               <value>
@@ -356,250 +222,14 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
+                <![CDATA[Data_Structures.Account_Data@4db2ae5e]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ADAT_PostcardVelocity -->
-        <test-method status="PASS" signature="ADAT_PostcardVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_PostcardVelocity" duration-ms="5954" started-at="2019-03-12T15:47:50Z" data-provider="dp" finished-at="2019-03-12T15:47:56Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_PostcardVelocity -->
-        <test-method status="PASS" signature="ADAT_PostcardVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_PostcardVelocity" duration-ms="615" started-at="2019-03-12T15:47:50Z" data-provider="dp" finished-at="2019-03-12T15:47:50Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_PostcardVelocity -->
-        <test-method status="PASS" signature="ADAT_PostcardVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_PostcardVelocity" duration-ms="591" started-at="2019-03-12T15:47:50Z" data-provider="dp" finished-at="2019-03-12T15:47:50Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_PostcardVelocity -->
-        <test-method status="PASS" signature="ADAT_VerifyPin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_VerifyPin" duration-ms="1983" started-at="2019-03-12T15:47:56Z" data-provider="dp" finished-at="2019-03-12T15:47:58Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_VerifyPin -->
-        <test-method status="PASS" signature="ADAT_VerifyPin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_VerifyPin" duration-ms="303" started-at="2019-03-12T15:47:56Z" data-provider="dp" finished-at="2019-03-12T15:47:56Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_VerifyPin -->
-        <test-method status="PASS" signature="ADAT_VerifyPin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_VerifyPin" duration-ms="2140" started-at="2019-03-12T15:47:56Z" data-provider="dp" finished-at="2019-03-12T15:47:58Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_VerifyPin -->
-        <test-method status="PASS" signature="ADAT_VerifyPin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_VerifyPin" duration-ms="332" started-at="2019-03-12T15:47:56Z" data-provider="dp" finished-at="2019-03-12T15:47:56Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_VerifyPin -->
-        <test-method status="PASS" signature="ADAT_VerifyPin_Invalid(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_VerifyPin_Invalid" duration-ms="1140" started-at="2019-03-12T15:47:58Z" data-provider="dp" finished-at="2019-03-12T15:47:59Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_VerifyPin_Invalid -->
-        <test-method status="PASS" signature="ADAT_VerifyPin_Invalid(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_VerifyPin_Invalid" duration-ms="1282" started-at="2019-03-12T15:47:58Z" data-provider="dp" finished-at="2019-03-12T15:47:59Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@7d61c41b]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_VerifyPin_Invalid -->
-        <test-method status="PASS" signature="ADAT_VerifyPin_Invalid(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_VerifyPin_Invalid" duration-ms="297" started-at="2019-03-12T15:47:58Z" data-provider="dp" finished-at="2019-03-12T15:47:58Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-POSTCARD-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_VerifyPin_Invalid -->
-        <test-method status="PASS" signature="ADAT_VerifyPin_Invalid(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:Soap_Execution.ADAT@1442d7b5]" name="ADAT_VerifyPin_Invalid" duration-ms="219" started-at="2019-03-12T15:47:58Z" data-provider="dp" finished-at="2019-03-12T15:47:58Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.ADAT_Data@5bcc5eb1]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[FDM-PHONE-PIN]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ADAT_VerifyPin_Invalid -->
-      </class> <!-- Soap_Execution.ADAT -->
-    </test> <!-- Default test -->
-  </suite> <!-- Default suite -->
+        </test-method> <!-- AccountRegistration_Admin -->
+      </class> <!-- WFCL_Application.WFCL_SmokeTest -->
+    </test> <!-- WFCL_Test -->
+  </suite> <!-- WFCL_Suite -->
 </testng-results>

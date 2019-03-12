@@ -3,16 +3,16 @@ package WFCL_Application;
 import java.util.Arrays;
 import org.openqa.selenium.By;
 
-import CXS_Support.USRC_API_Endpoints;
-import CXS_Support.USRC_Data;
 import Data_Structures.Account_Data;
 import Data_Structures.Enrollment_Data;
 import Data_Structures.Tax_Data;
+import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
 import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
+import USRC_Application.USRC_API_Endpoints;
 
 public class WFCL_Functions_UsingData{ 
 	

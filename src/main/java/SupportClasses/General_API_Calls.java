@@ -1,4 +1,4 @@
-package API_Calls;
+package SupportClasses;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -14,8 +14,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-
-import SupportClasses.Helper_Functions;
 
 public class General_API_Calls {
 	
@@ -63,8 +61,9 @@ public class General_API_Calls {
 	}//end getAuthToken
 	
 	public static String HTTPCall(HttpRequest Request, String Request_Body) throws Exception {
-		lock.lock();
 		String RequestHeaders = "", Response = "";
+		lock.lock();
+		httpclient = HttpClients.createDefault();//create new connection. This is used to remove static cookies.
 		String MethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
 		try {
 			Header[] headers = Request.getAllHeaders();
@@ -81,10 +80,11 @@ public class General_API_Calls {
 			Response = e.getMessage() + e.getCause();
 			return e.getMessage() + e.getCause();
 		}finally {
-			Helper_Functions.PrintOut(MethodName + " URL: " + Request.toString(), true); //print out the URL that was used
-			Helper_Functions.PrintOut(MethodName + " Headers: " + RequestHeaders, true); //print out all of the headers
-			Helper_Functions.PrintOut(MethodName + " Request: " + Request_Body, true);//print out the request body
-			Helper_Functions.PrintOut(MethodName + " Response: " + Response, true);
+			//print out the URL that was used
+			Helper_Functions.PrintOut(MethodName + " URL: " + Request.toString() + "\n    " + 
+									  MethodName + " Headers: " + RequestHeaders + "\n    " +
+									  MethodName + " Request: " + Request_Body + "\n    " + 
+									  MethodName + " Response: " + Response, true); 
 			lock.unlock();
 		} 
 	}

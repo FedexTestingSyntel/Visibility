@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
-  <test thread-count="5" name="Default test(failed)">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WFCL_Suite]">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
+    <parameter name="Level" value="2"/>
     <classes>
-      <class name="Soap_Execution.ADAT">
+      <class name="WFCL_Application.WFCL_SmokeTest">
         <methods>
-          <include name="ADAT_CreatePin" invocation-numbers="2 1 3 0"/>
-          <include name="ADAT_AddressVelocity" invocation-numbers="3 2 1 0"/>
-          <include name="ADAT_VerifyPin" invocation-numbers="2 1 3 0"/>
+          <include name="AccountRegistration_INET" invocation-numbers="0"/>
+          <include name="AccountRegistration_WDPA" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="ADAT_PhoneVelocity" invocation-numbers="1 2 3 0"/>
-          <include name="ADAT_PostcardVelocity" invocation-numbers="2 3 1 0"/>
-          <include name="ADAT_VerifyPin_Invalid" invocation-numbers="1 3 2 0"/>
-          <include name="ADAT_CreateUser" invocation-numbers="1 2 0 3"/>
         </methods>
-      </class> <!-- Soap_Execution.ADAT -->
+      </class> <!-- WFCL_Application.WFCL_SmokeTest -->
     </classes>
-  </test> <!-- Default test(failed) -->
-</suite> <!-- Failed suite [Default suite] -->
+  </test> <!-- WFCL_Test(failed) -->
+</suite> <!-- Failed suite [WFCL_Suite] -->

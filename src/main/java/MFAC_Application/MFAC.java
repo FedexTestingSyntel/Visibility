@@ -1,4 +1,4 @@
-package AgileApplications;
+package MFAC_Application;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
@@ -17,9 +17,9 @@ import java.util.TimeZone;
 import org.hamcrest.CoreMatchers;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
-import API_Calls.*;
 import Data_Structures.*;
 import SupportClasses.Environment;
+import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)

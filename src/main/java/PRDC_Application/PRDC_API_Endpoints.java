@@ -1,7 +1,8 @@
-package CXS_Support;
+package PRDC_Application;
 
 import org.apache.http.client.methods.HttpGet;
-import CXS_Support.General_API_Calls;
+
+import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
 
 public class PRDC_API_Endpoints {

@@ -1,4 +1,4 @@
-package Soap_Execution;
+package ADAT_Application;
 
 import static org.junit.Assert.assertThat;
 import javax.xml.soap.MimeHeaders;
@@ -8,6 +8,8 @@ import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 import org.hamcrest.CoreMatchers;
+
+import Soap_Execution.GeneralSoapSupport;
 import SupportClasses.Helper_Functions;
 
 public class ADAT_Endpoints {

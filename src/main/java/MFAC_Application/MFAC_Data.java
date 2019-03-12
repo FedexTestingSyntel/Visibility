@@ -1,6 +1,6 @@
-package CXS_Support;
+package MFAC_Application;
 
-import API_Calls.General_API_Calls;
+import SupportClasses.General_API_Calls;
 
 public class MFAC_Data {
 	public String OAuth_Token_URL = "";

@@ -700,7 +700,7 @@ public class WPRL_Functions {
 			break;
 		case "postcard":
 			String uuid = WebDriver_Functions.GetCookieValue("fcl_uuid");
-			Integer PinNumber = AgileApplications.MFAC.IssuePinExternal(uuid + "-" + ShareID, "POSTAL");
+			Integer PinNumber = MFAC_Application.MFAC.IssuePinExternal(uuid + "-" + ShareID, "POSTAL");
 			//confirmation on request submitted
 			WebDriver_Functions.WaitPresent(By.id("postcardConfModuleDescription"));
 			WebDriver_Functions.takeSnapShot("FDM Registration.png");	

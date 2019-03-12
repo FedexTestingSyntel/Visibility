@@ -1,8 +1,10 @@
-package API_Calls;
+package MFAC_Application;
 
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
+
+import SupportClasses.General_API_Calls;
 
 public class MFAC_API_Endpoints {
 	

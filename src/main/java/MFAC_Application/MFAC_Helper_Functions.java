@@ -1,4 +1,4 @@
-package CXS_Support;
+package MFAC_Application;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,7 +8,6 @@ import java.util.TimeZone;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import API_Calls.MFAC_API_Endpoints;
 import SupportClasses.Helper_Functions;
 
 public class MFAC_Helper_Functions {

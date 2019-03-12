@@ -11,11 +11,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import CXS_Support.USRC_API_Endpoints;
-import CXS_Support.USRC_Data;
 import Data_Structures.Enrollment_Data;
+import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
 import SupportClasses.*;
+import USRC_Application.USRC_API_Endpoints;
 import edu.emory.mathcs.backport.java.util.Arrays;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)

@@ -1,7 +1,8 @@
-package CXS_Support;
+package Data_Structures;
 
 import java.util.ArrayList;
-import API_Calls.General_API_Calls;
+
+import SupportClasses.General_API_Calls;
 
 public class USRC_Data {
 	public String OAuth_Token_URL = "";
