@@ -9,9 +9,8 @@
     <classes>
       <class name="WDPA_Application.WDPA_SmokeTest">
         <methods>
-          <include name="Pickup_ExpressFreight" invocation-numbers="0"/>
           <include name="Pickup_LTLFreight_Anonymous" invocation-numbers="0"/>
-          <include name="Pickup_LTLFreight" invocation-numbers="0"/>
+          <include name="Pickup_Express" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
       </class> <!-- WDPA_Application.WDPA_SmokeTest -->

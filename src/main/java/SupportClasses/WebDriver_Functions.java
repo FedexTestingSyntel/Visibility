@@ -1,6 +1,7 @@
 package SupportClasses;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +28,7 @@ public class WebDriver_Functions{
 		//String caller = Thread.currentThread().getStackTrace()[2].getMethodName();
 		String AppDesignation = Designation.toUpperCase();
 		
-		switch (AppDesignation) {
+		switch (AppDesignation) { 
 			case "ADMINREG":
     			AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?appName=fclpasskey&registration=true&countryCode=" + CCL + "&languageCode=en&fclHost=" + LevelURL + "&step3URL=" + LevelURL + "%2Fapps%2Fshipadmin&afterwardsURL=" + LevelURL + "%2Fapps%2Fshipadmin&locale=en_" + CCU + "&programIndicator=1";
 				break;  	
@@ -43,7 +44,10 @@ public class WebDriver_Functions{
     			if(Helper_Functions.Check_Country_Region(CountryCode).contains("APAC")){//APAC Country
 					AppUrl = AppUrl.replaceAll("%2Fship%2", "%2Fshipping_apac%2");
  	 			}
-    			break;	
+    			break;
+    		case "FCLLINKACCOUNT":
+    			AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?step3URL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3Dus%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3Dus%26sType%3DF%26programIndicator%3D0&appName=fclfsm&countryCode=" + CCL + "&languageCode=en&programIndicator=1&rp=fclmyprofile";
+    			break;
     		case "WFCLForgot":
     			//https://wwwdrt.idev.fedex.com/fcl/web/jsp/forgotPassword.jsp?appName=fclfsm&locale=us_en&step3URL=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&returnurl=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&programIndicator=0
     			AppUrl = "";
@@ -137,6 +141,10 @@ public class WebDriver_Functions{
     		case "GFBO":  	
     			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo.jsp?appName=fclgfbo&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Ffedexbillingonline%2Fregistration.jsp%3FuserRegistration%3DY%26locale%3Den_" + CCU + "&afterwardsURL=" + LevelURL + "%2Ffedexbillingonline%3F%26locale%3Den_" + CCU + "&programIndicator";
 				break;
+    		case "GFBO_LOGIN":
+    			//https://wwwtest.fedex.com
+    			AppUrl = LevelURL + "/fedexbillingonline/pages/accountsummary/accountSummaryFBO.xhtml";
+				break;
     			/*
     			case "":  	
     			AppUrl = LevelURL + ;
@@ -172,7 +180,6 @@ public class WebDriver_Functions{
 		}
 		return AppUrl;
 	}
-	
 	
 	public static String ChangeURL_EnrollmentID(Enrollment_Data ED, boolean AEM, boolean ClearCookies) throws Exception {
 		String LevelURL = LevelUrlReturn();
@@ -224,6 +231,16 @@ public class WebDriver_Functions{
 			}
 		}
 		throw new Exception("Not able to enter text");
+    }
+	
+	public static String CloseNewTabAndNavigateInCurrent() throws Exception {
+		ArrayList<String> tabs2 = new ArrayList<String> (DriverFactory.getInstance().getDriver().getWindowHandles());
+	    DriverFactory.getInstance().getDriver().switchTo().window(tabs2.get(1));
+	    String RedirectURL = WebDriver_Functions.GetCurrentURL();
+	    DriverFactory.getInstance().getDriver().close();
+	    DriverFactory.getInstance().getDriver().switchTo().window(tabs2.get(0));
+	    ChangeURL(RedirectURL, "US", false); //US is a filler value
+	    return RedirectURL;
     }
 	
 	public static void Click(By Ele) throws Exception{
@@ -356,6 +373,21 @@ public class WebDriver_Functions{
 	    return result;
 	}
 	
+	public static String getClass(By Ele){
+		String result = "";
+	    try {
+	    	DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.MICROSECONDS); //sets the timeout for short to make reduce delay
+	    	DriverFactory.getInstance().getDriver().findElement(Ele);
+	    	result = DriverFactory.getInstance().getDriver().findElement(Ele).getAttribute("class");
+	    }catch (Exception e) {
+	    	Helper_Functions.PrintOut("Unable to retrive class of " + Ele.toString());
+	    }finally {
+	    	DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.SECONDS);
+	    }
+	
+	    return result;
+	}
+	
 	public static boolean ClickIfPresent(By Ele) throws Exception{
 		if (isPresent(Ele)) {
 			Click(Ele);
@@ -372,34 +404,57 @@ public class WebDriver_Functions{
 	}
 	
 	public static boolean WaitNotPresent(By Ele) throws Exception{
-		boolean Result = false;
 		for(int i = 0; i < DriverFactory.WaitTimeOut; i++) {
-			Result = isPresent(Ele);
-			if (!Result) {
-				return Result;
+			if (!isPresent(Ele)) {
+				return true;
 			}
 			Thread.sleep(1000);
 		}
 		throw new Exception ("Element is still present on page.  " + Ele.toString());
 	}
 	
-	public static void WaitNotVisable(By Ele) throws Exception{
-		DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.invisibilityOfElementLocated(Ele));
+	public static boolean WaitNotVisable(By Ele) throws Exception{
+		for(int i = 0; i < DriverFactory.WaitTimeOut; i++) {
+			if (!isVisable(Ele)) {
+				return true;
+			}
+			Thread.sleep(1000);
+		}
+		throw new Exception ("Element is still visable on page.  " + Ele.toString());
+		//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.invisibilityOfElementLocated(Ele));
 	}
     
-    public static void WaitPresent(By Ele) throws Exception{
-    	DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.presenceOfElementLocated(Ele));
+    public static boolean WaitPresent(By Ele) throws Exception{
+		for(int i = 0; i < DriverFactory.WaitTimeOut; i++) {
+			if (isPresent(Ele)) {
+				return true;
+			}
+			Thread.sleep(1000);
+		}
+		throw new Exception ("Element is not present on page.  " + Ele.toString());
+    	//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.presenceOfElementLocated(Ele));
 	}
     
-    public static void WaitPresent(By Ele1, By Ele2) throws Exception{
-    	DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.or(
-				ExpectedConditions.presenceOfElementLocated(Ele1), 
-				ExpectedConditions.presenceOfElementLocated(Ele2)
-				));
+    public static boolean WaitPresent(By Ele1, By Ele2) throws Exception{
+		for(int i = 0; i < DriverFactory.WaitTimeOut; i++) {
+			if (isPresent(Ele1) || isPresent(Ele2)) {
+				return true;
+			}
+			Thread.sleep(1000);
+		}
+		throw new Exception ("Elements not present on page.  " + Ele1.toString() + ", " + Ele2.toString());
+    	//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.or(ExpectedConditions.presenceOfElementLocated(Ele1), ExpectedConditions.presenceOfElementLocated(Ele2)));
 	}
     
-	public static void WaitForText(By Ele, String Text) throws Exception{
-		DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.textToBe(Ele, Text));
+	public static boolean WaitForText(By Ele, String Text) throws Exception{
+		for(int i = 0; i < DriverFactory.WaitTimeOut; i++) {
+			if (GetText(Ele).contentEquals(Text)) {
+				return true;
+			}
+			Thread.sleep(1000);
+		}
+		throw new Exception ("Text not present.  " + Ele.toString() + " - " + Text);
+		//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.textToBe(Ele, Text));
 	}
 	
 	public static void WaitForBodyText(String TextToCheck) throws Exception{
@@ -437,7 +492,7 @@ public class WebDriver_Functions{
 				}else if (DriverText!= null && DriverText.contains(Text)) {
 					return true;
 				}else if (i == DriverFactory.WaitTimeOut) {
-					throw new Exception ("Text does not match.  " + Ele.toString());
+					throw new Exception ("Text does not match.  " + Ele.toString() + "   " + Text);
 				}
 			}
 			Thread.sleep(1000);//will give time incase the element needs to load on the page.
@@ -561,7 +616,10 @@ public class WebDriver_Functions{
     public static boolean Login(String UserName, String Password, String Application) throws Exception {
     	if(UserName == null || UserName == ""){
     		Helper_Functions.PrintOut("Cannot login with user id as null. Recieved from " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
-    		throw new Exception("User not working.");
+    		throw new Exception("User not provided");
+    	}else if (Password == null || Password == "") {
+    		Helper_Functions.PrintOut("Cannot login with password as null. Recieved from " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
+    		throw new Exception("Password not provided.");
     	}
     	ChangeURL("HOME", "US", true);
     	

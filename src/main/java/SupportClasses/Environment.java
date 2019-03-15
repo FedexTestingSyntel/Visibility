@@ -2,6 +2,7 @@ package SupportClasses;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.testng.SkipException;
@@ -95,22 +96,6 @@ public class Environment {
 		return ReturnList;
 	}
 	
-	public static ArrayList<String[]> getTaxData(String CountryCode) {
-			ArrayList<String[]> TaxData = new ArrayList<String[]>();
-			//Load all data from the excel into the array list
-			TaxData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TaxData.xls",  "TaxIds");
-		
-			//This is a check to see if there have been any changes to the excel data
-			String Column_Headers[] = TaxData.get(0);
-			String Expected_Headers[] = new String[] {"Country_Code", "Tax_ID", "State_Tax_ID", "Error_Code"};
-			for (int j = 0; j < Expected_Headers.length; j++) {
-				if (!Column_Headers[j].contentEquals(Expected_Headers[j])) {
-					System.err.println("WARNING: mismatch with the tax data excel sheet");
-				}
-			}
-		return TaxData;
-	}
-	
 	public static ArrayList<String[]> getAccountList(String Level){
 		//load the data from excel
 		ArrayList<String[]> AccountsAlreadyCreated = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls", "Account_Numbers");
@@ -142,6 +127,7 @@ public class Environment {
 	public static Account_Data[] getAccountDetails(String Level){
 		//if the data is already loaded then return the values
 		ArrayList<String[]> AccountsAlreadyCreated = Environment.getAccountList(Level);
+		AccountsAlreadyCreated.removeAll(Collections.singleton(null));
 		Account_Data Account_Details[] = new Account_Data[AccountsAlreadyCreated.size()];
 		String Headers[] = AccountsAlreadyCreated.get(0);
 		for (int i = 1; i < AccountsAlreadyCreated.size(); i++) {
@@ -366,6 +352,7 @@ public class Environment {
 
 		for (Credit_Card_Data CD : CreditCards) {
 			if (CD.TYPE.contains(Type)) {
+				Helper_Functions.PrintOut("Credit Card: " + Arrays.toString(Credit_Card_Data.CreditCardStringArray(CD)), false);
 				return CD;
 			}
 		}
@@ -379,7 +366,10 @@ public class Environment {
 		for (Credit_Card_Data CD : CreditCards) {
 			if (CD.TYPE.contains(Type) && CD.CARD_NUMBER.contentEquals(CardNumber)){
 				returnNextCard = true;
+			}else if (CD.CARD_NUMBER.contentEquals(CardNumber)){
+				returnNextCard = true;
 			}else if (returnNextCard && !CD.TYPE.contains(Type)) {
+				Helper_Functions.PrintOut("Credit Card: " + Arrays.toString(Credit_Card_Data.CreditCardStringArray(CD)), false);
 				return CD;
 			}
 		}

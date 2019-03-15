@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-
 import Data_Structures.MFAC_Data;
 import Data_Structures.USRC_Data;
 import MFAC_Application.MFAC_API_Endpoints;

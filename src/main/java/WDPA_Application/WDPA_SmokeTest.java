@@ -127,7 +127,7 @@ public class WDPA_SmokeTest{
 		Helper_Functions.PrintOut("Schedule a LTL pickup while logged in.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = WDPA_Functions.WDPALTLPickup(Address, UserID, Password, "10", "400");
+			String Result = Arrays.toString(WDPA_Functions.WDPALTLPickup(Address, UserID, Password, "10", "400"));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -139,7 +139,7 @@ public class WDPA_SmokeTest{
 		Helper_Functions.PrintOut("Schedule a LTL pickup while not logged into FedEx.com", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = WDPA_Functions.WDPALTLPickup(Address, "", "", "10", "400");
+			String Result = Arrays.toString(WDPA_Functions.WDPALTLPickup(Address, "", "", "10", "400"));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

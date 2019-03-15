@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" name="WIDM_Suite" parallel="methods">
-  	<listeners>
+<suite thread-count="8" name="WDPA_Suite">
+	<listeners>
     	<listener class-name="SupportClasses.TestNG_ReportListener"/>
   	</listeners>
   
-  	<test thread-count="8" name="WIDM_Test" parallel="methods" group-by-instances="true">
+  	<test thread-count="8" name="WDPA_Test" parallel="methods" group-by-instances="true">
   		<parameter name="Level" value="3" />
     	<classes>
     		<class name="SupportClasses.Environment"/>
-      		<class name="WIDM_Application.WIDM_SmokeTest"/>
+      		<class name="WDPA_Application.WDPA"/>
     	</classes>
-  	</test> <!-- WIDM_Test -->
-</suite> <!-- WIDM_Suite -->
+  	</test> <!-- WDPA_Test -->
+</suite> <!-- WDPA_Suite -->

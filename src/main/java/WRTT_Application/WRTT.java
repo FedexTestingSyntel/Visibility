@@ -1,4 +1,4 @@
-package WaterfallApplications;
+package WRTT_Application;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import TestingFunctions.WRTT_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WRTT{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 	static boolean SmokeTest = true;
 	
@@ -25,8 +25,6 @@ public class WRTT{
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("US");
 		//CountryList = Environment.getCountryList("FULL");
-		SmokeTest = false;
-
 	}
 	
 	@DataProvider (parallel = true)

@@ -8,44 +8,11 @@
 <body>
 <table>
 <tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
-<tr><th colspan="7">WFCL_Suite</th></tr>
-<tr><td><a href="#t0">WFCL_Test</a></td><td class="num">6</td><td class="num">0</td><td class="num attn">2</td><td class="num">532,286</td><td></td><td></td></tr>
+<tr><th colspan="7">Default suite</th></tr>
+<tr><td><a href="#t0">Default test</a></td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">31,309</td><td></td><td></td></tr>
 </table>
-<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">WFCL_Suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">WFCL_Test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="2">WFCL_Application.WFCL_SmokeTest</td><td><a href="#m0">AccountRegistration_INET</a></td><td rowspan="1">1552409680189</td><td rowspan="1">56333</td></tr><tr class="failedeven"><td><a href="#m1">AccountRegistration_WDPA</a></td><td rowspan="1">1552409457882</td><td rowspan="1">122656</td></tr><tr><th colspan="4">WFCL_Test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="6">WFCL_Application.WFCL_SmokeTest</td><td><a href="#m2">AccountRegistration_Admin</a></td><td rowspan="1">1552409924894</td><td rowspan="1">63011</td></tr><tr class="passedeven"><td><a href="#m3">CreditCardRegistrationEnroll</a></td><td rowspan="1">1552409458307</td><td rowspan="1">221083</td></tr><tr class="passedeven"><td><a href="#m4">Forgot_User_Email</a></td><td rowspan="1">1552409456261</td><td rowspan="1">62311</td></tr><tr class="passedeven"><td><a href="#m5">Password_Reset_Secret</a></td><td rowspan="1">1552409679946</td><td rowspan="1">244604</td></tr><tr class="passedeven"><td><a href="#m6">Reset_Password_Email</a></td><td rowspan="1">1552409457757</td><td rowspan="1">96253</td></tr><tr class="passedeven"><td><a href="#m7">UserRegistration_Account_Data</a></td><td rowspan="1">1552409457358</td><td rowspan="1">123490</td></tr></tbody>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="1">WDPA_Application.WDPA_SmokeTest</td><td><a href="#m0">Pickup_LTLFreight_Anonymous</a></td><td rowspan="1">1552674922420</td><td rowspan="1">30898</td></tr></tbody>
 </table>
-<h2>WFCL_Test</h2><h3 id="m0">WFCL_Application.WFCL_SmokeTest#AccountRegistration_INET</h3><table class="result"><tr class="param"><th>Parameter #1</th><th>Parameter #2</th></tr><tr class="param stripe"><td>2</td><td>Data_Structures.Account_Data@34357c4f</td></tr><tr><th colspan="2">Exception</th></tr><tr><td colspan="2"><div class="stacktrace">java.lang.AssertionError: Timed out after 30 seconds waiting for text to be &quot;L2InetUS031219T115440gfrx&quot;. Current text: &quot;null&quot;
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55840}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir7680_3167}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=72.0.3626.121, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: a8a8683bf51c01de00e9d97ae4c171ec
-	at WFCL_Application.WFCL_SmokeTest.AccountRegistration_INET(WFCL_SmokeTest.java:167)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m1">WFCL_Application.WFCL_SmokeTest#AccountRegistration_WDPA</h3><table class="result"><tr class="param"><th>Parameter #1</th><th>Parameter #2</th></tr><tr class="param stripe"><td>2</td><td>Data_Structures.Account_Data@28d35a98</td></tr><tr><th colspan="2">Exception</th></tr><tr><td colspan="2"><div class="stacktrace">java.lang.AssertionError: Timed out after 30 seconds waiting for text to be &quot;L2WdpaUS031219T115058ovff&quot;. Current text: &quot;null&quot;
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55815}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir15472_29727}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=72.0.3626.121, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 12be2ba1dedadbfd62879abf717d1401
-	at WFCL_Application.WFCL_SmokeTest.AccountRegistration_WDPA(WFCL_SmokeTest.java:192)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m2">WFCL_Application.WFCL_SmokeTest#AccountRegistration_Admin</h3><table class="result"><tr class="param"><th>Parameter #1</th><th>Parameter #2</th></tr><tr class="param stripe"><td>2</td><td>Data_Structures.Account_Data@4db2ae5e</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m3">WFCL_Application.WFCL_SmokeTest#CreditCardRegistrationEnroll</h3><table class="result"><tr class="param"><th>Parameter #1</th><th>Parameter #2</th><th>Parameter #3</th><th>Parameter #4</th></tr><tr class="param stripe"><td>2</td><td>Data_Structures.Enrollment_Data@29f52949</td><td>Data_Structures.Account_Data@2dcaa8af</td><td>null</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m4">WFCL_Application.WFCL_SmokeTest#Forgot_User_Email</h3><table class="result"><tr class="param"><th>Parameter #1</th><th>Parameter #2</th><th>Parameter #3</th></tr><tr class="param stripe"><td>2</td><td>US</td><td>sean.kauffman.osv@fedex.com</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m5">WFCL_Application.WFCL_SmokeTest#Password_Reset_Secret</h3><table class="result"><tr class="param"><th>Parameter #1</th><th>Parameter #2</th><th>Parameter #3</th></tr><tr class="param stripe"><td>2</td><td>Data_Structures.User_Data@41b7b681</td><td>Test1234A</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m6">WFCL_Application.WFCL_SmokeTest#Reset_Password_Email</h3><table class="result"><tr class="param"><th>Parameter #1</th><th>Parameter #2</th></tr><tr class="param stripe"><td>2</td><td>Data_Structures.User_Data@599d6bac</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m7">WFCL_Application.WFCL_SmokeTest#UserRegistration_Account_Data</h3><table class="result"><tr class="param"><th>Parameter #1</th><th>Parameter #2</th></tr><tr class="param stripe"><td>2</td><td>Data_Structures.Account_Data@62dffbb2</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h2>Default test</h2><h3 id="m0">WDPA_Application.WDPA_SmokeTest#Pickup_LTLFreight_Anonymous</h3><table class="result"><tr class="param"><th>Parameter #1</th><th>Parameter #2</th></tr><tr class="param stripe"><td>3</td><td>US</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
 </body>
 </html>

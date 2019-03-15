@@ -59,7 +59,7 @@ public class WDPA_Functions{
 				//need to finish
 			}
 			
-			boolean Cancelled =WDPACancelFromMyPickups(Service, ConfirmationNumber, Address, PackageDetails);
+			boolean Cancelled = WDPACancelFromMyPickups(Service, ConfirmationNumber, Address, PackageDetails);
 			Helper_Functions.PrintOut(ConfirmationNumber, false);
 			return new String[] {UserID, ConfirmationNumber, ConfirmationRedirect, "Cancelled: " + Cancelled};//need to add correct return valuers
      }catch (Exception e){
@@ -72,12 +72,15 @@ public class WDPA_Functions{
 		try{
 			String Address1 = AddressDetails[0], Address2 = AddressDetails[1], City = AddressDetails[2], StateCode = AddressDetails[4], Zip = AddressDetails[5], Country = AddressDetails[6];
 	    	
-			if (Country != null && WebDriver_Functions.isPresent(By.id("address.accountAddressLinks")) && Address1.contentEquals("")) {
+			if (Country != null && WebDriver_Functions.isPresent(By.id("address.accountAddressLinks")) && !Address1.contentEquals("")) {
 				//use the account address only if the address line 1 is sent as blank
-				WebDriver_Functions.Click(By.id("address.accountAddressLinks"));
+				if (WebDriver_Functions.GetText(By.id("address.accountAddressLinks")).contains("Change pickup address")) {
+					WebDriver_Functions.Click(By.id("address.accountAddressLinks"));
+				}
+				
 			}
 			//WebDriver_Functions.WaitPresent(By.id("button.completePickup")));
-			if (WebDriver_Functions.isVisable(By.id("address.alternate.address1"))) {
+ 			if (WebDriver_Functions.isVisable(By.id("address.alternate.address1"))) {
 				WebDriver_Functions.Type(By.id("address.alternate.contactName"), Name);
 				WebDriver_Functions.Type(By.id("address.phoneNumber"), Phone);
 			}else {
@@ -253,44 +256,49 @@ public class WDPA_Functions{
 		}
 	}
 	
-	public static boolean WDPACancelFromMyPickups(String Service, String ConfirmationNumber, String Address[], String PackageDetails[]) throws Exception{
-		//navigate to my pickups page
-		WebDriver_Functions.ChangeURL("WDPA_Pickups", Address[6], false);
-		
-		//change to 14 days in the future
-		WebDriver_Functions.Select(By.id("history.futureDaysToDisplayId"), "14", "t");
-		
-		//search for the pickup just created
-		WebDriver_Functions.Type(By.id("history.filterField"), ConfirmationNumber);
-		WebDriver_Functions.Select(By.id("history.filterColumn"), "Confirmation no.", "t");
-		WebDriver_Functions.Click(By.id("history.search"));
+	public static boolean WDPACancelFromMyPickups(String Service, String ConfirmationNumber, String Address[], String PackageDetails[]){
+		try {
+			//navigate to my pickups page
+			WebDriver_Functions.ChangeURL("WDPA_Pickups", Address[6], false);
+			
+			//change to 14 days in the future
+			WebDriver_Functions.Select(By.id("history.futureDaysToDisplayId"), "14", "t");
+			
+			//search for the pickup just created
+			WebDriver_Functions.Type(By.id("history.filterField"), ConfirmationNumber);
+			WebDriver_Functions.Select(By.id("history.filterColumn"), "Confirmation no.", "t");
+			WebDriver_Functions.Click(By.id("history.search"));
 
-		assertEquals(ConfirmationNumber, DriverFactory.getInstance().getDriver().findElement(By.id("table.pickupHistory._contents._row1._col4")).getText());
-		
-		//cancel the pickup
-		WebDriver_Functions.Click(By.id("row.check1"));
-		WebDriver_Functions.Click(By.id("history.cancelPickup"));
-		WebDriver_Functions.Click(By.id("history.cancelConfirm"));
-	    
-		//check that the pickup is cancelled
-		WebDriver_Functions.Type(By.id("history.filterField"), ConfirmationNumber);
-		WebDriver_Functions.Select(By.id("history.filterColumn"), "Confirmation no.", "t");
-		WebDriver_Functions.Click(By.id("history.search"));
+			assertEquals(ConfirmationNumber, DriverFactory.getInstance().getDriver().findElement(By.id("table.pickupHistory._contents._row1._col4")).getText());
+			
+			//cancel the pickup
+			WebDriver_Functions.Click(By.id("row.check1"));
+			WebDriver_Functions.Click(By.id("history.cancelPickup"));
+			WebDriver_Functions.Click(By.id("history.cancelConfirm"));
+		    
+			//check that the pickup is cancelled
+			WebDriver_Functions.Type(By.id("history.filterField"), ConfirmationNumber);
+			WebDriver_Functions.Select(By.id("history.filterColumn"), "Confirmation no.", "t");
+			WebDriver_Functions.Click(By.id("history.search"));
 
-		//make sure the pickup is present
-		assertEquals(ConfirmationNumber, DriverFactory.getInstance().getDriver().findElement(By.id("table.pickupHistory._contents._row1._col4")).getText());
-		//make sure the pickup is cancelled
-		if (!(DriverFactory.getInstance().getDriver().findElement(By.id("table.pickupHistory._contents._row1._col6")).getText().contains("Cancelled"))){
-			Helper_Functions.PrintOut("    Pickup:" + ConfirmationNumber + " has not been cancelled", true);
-			return false;
-		}else {
-			WebDriver_Functions.takeSnapShot("Cancellation.png");
-			return true;
+			//make sure the pickup is present
+			assertEquals(ConfirmationNumber, DriverFactory.getInstance().getDriver().findElement(By.id("table.pickupHistory._contents._row1._col4")).getText());
+			//make sure the pickup is cancelled
+			if (!(DriverFactory.getInstance().getDriver().findElement(By.id("table.pickupHistory._contents._row1._col6")).getText().contains("Cancelled"))){
+				Helper_Functions.PrintOut("    Pickup:" + ConfirmationNumber + " has not been cancelled", true);
+				return false;
+			}else {
+				WebDriver_Functions.takeSnapShot("Cancellation.png");
+				return true;
+			}
+			
+		}catch (Exception e) {
+			
 		}
-		
+		return false;
 	}
 	
-	public static String WDPALTLPickup(String AddressDetails[], String UserID, String Password, String HandelingUnits, String Weight) throws Exception{
+	public static String[] WDPALTLPickup(String AddressDetails[], String UserID, String Password, String HandelingUnits, String Weight) throws Exception{
 		String CountryCode = AddressDetails[6];
 		//https://wwwdev.idev.fedex.com/PickupApp/login?locale=en_US
 		
@@ -354,39 +362,40 @@ public class WDPA_Functions{
 		    WebDriver_Functions.takeSnapShot("Confirmation.png");
 		    
 		    if (UserID != ""){
-			    WebDriver_Functions.Click(By.id("menubar.nav.menu3_div"));
-			    WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
-			    WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), strAccountSelected, "t");
-			    
-			    WebDriver_Functions.WaitPresent(By.id("history.search"));
-			    WebDriver_Functions.Type(By.id("history.filterField"), strConfirmationNumber);
-			    WebDriver_Functions.Select(By.id("history.filterColumn"), "Confirmation no.", "t");
-			    WebDriver_Functions.Click(By.id("history.search"));
-			    WebDriver_Functions.takeSnapShot("LTL MyPickups.png");
-			    WebDriver_Functions.WaitPresent(By.id("row.check1"));
-			    assertEquals("Scheduled", WebDriver_Functions.GetText(By.id("statusLink0")));
-			    assertEquals(strConfirmationNumber, WebDriver_Functions.GetText(By.id("confNumLink0")));
-			    
-			    WebDriver_Functions.Click(By.id("row.check1"));
-			    WebDriver_Functions.Click(By.id("history.viewPrintPickupDetails"));
-			    
-			    WebDriver_Functions.WaitPresent(By.cssSelector("div.confirmationAlertMessage.pickupAlertMessageText"));
-			    assertEquals(HandelingUnits, WebDriver_Functions.GetText(By.xpath("//div[@id='confirmationRightPanel']/div[5]/div[2]/div/div/label")));
-			    assertEquals(Weight, WebDriver_Functions.GetText(By.xpath("//div[@id='confirmation.weight']/label")));
-			    assertEquals("3:00pm - 11:00pm", WebDriver_Functions.GetText(By.xpath("//div[@id='confirmation.pickuptime']/label")));
-			    assertEquals(AddressDetails[5], WebDriver_Functions.GetText(By.id("confirmation.lineItems.zipPostal")));
-			    WebDriver_Functions.takeSnapShot("LTLDetails.png");
-			    Helper_Functions.PrintOut("WDPALTLPickup Completed", true);
+		    	boolean MyPickupsCheck = false;
+		    	try {
+		    		WebDriver_Functions.Click(By.id("menubar.nav.menu3_div"));
+				    try {
+				    	WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
+					    WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), strAccountSelected, "t");
+				    }catch (Exception e) {}
+				        
+				    WebDriver_Functions.WaitPresent(By.id("history.search"));
+				    WebDriver_Functions.Type(By.id("history.filterField"), strConfirmationNumber);
+				    WebDriver_Functions.Select(By.id("history.filterColumn"), "Confirmation no.", "t");
+				    WebDriver_Functions.Click(By.id("history.search"));
+				    WebDriver_Functions.takeSnapShot("LTL MyPickups.png");
+				    WebDriver_Functions.WaitPresent(By.id("row.check1"));
+				    assertEquals("Scheduled", WebDriver_Functions.GetText(By.id("statusLink0")));
+				    assertEquals(strConfirmationNumber, WebDriver_Functions.GetText(By.id("confNumLink0")));
+				    
+				    WebDriver_Functions.Click(By.id("row.check1"));
+				    WebDriver_Functions.Click(By.id("history.viewPrintPickupDetails"));
+				    
+				    WebDriver_Functions.WaitPresent(By.cssSelector("div.confirmationAlertMessage.pickupAlertMessageText"));
+				    assertEquals(HandelingUnits, WebDriver_Functions.GetText(By.xpath("//div[@id='confirmationRightPanel']/div[5]/div[2]/div/div/label")));
+				    assertEquals(Weight, WebDriver_Functions.GetText(By.xpath("//div[@id='confirmation.weight']/label")));
+				    assertEquals("3:00pm - 11:00pm", WebDriver_Functions.GetText(By.xpath("//div[@id='confirmation.pickuptime']/label")));
+				    assertEquals(AddressDetails[5], WebDriver_Functions.GetText(By.id("confirmation.lineItems.zipPostal")));
+				    WebDriver_Functions.takeSnapShot("LTLDetails.png");
+				    MyPickupsCheck= true;
+		    	}catch (Exception e2) {}
+		    	 return new String[]{UserID, strConfirmationNumber, "MyPickups: " + MyPickupsCheck};
 		    }
 
-		    return strConfirmationNumber;
+		    return new String[] {"Anonymous User", strConfirmationNumber};
 	     } catch (Exception e) {
 	    	 e.printStackTrace();
-	    	 if (strConfirmationNumber.contentEquals("")) {
-	    		 //if not able to get the confirmation number then list as invalid.
-	 			String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "F"}};
-				Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
-	    	 }
 
 			try{
 				if (WebDriver_Functions.isPresent(By.xpath("//*[@id='primary.error.display']/div/label"))){
@@ -406,7 +415,7 @@ public class WDPA_Functions{
 		    WebDriver_Functions.Type(By.id("address.phoneNumber"), PhoneNumber);
 		    
 		//if the account number was selected and all the address details are needed.
-		}else if (WebDriver_Functions.isPresent(By.id("address.accountAddressOne.field1"))) { 
+		}else if (WebDriver_Functions.isPresent(By.id("address.alternate.company"))) { 
 			WebDriver_Functions.Type(By.id("address.alternate.company"), CompanyName);
 		    WebDriver_Functions.Type(By.id("address.alternate.contactName"), Name);
 		    WebDriver_Functions.Type(By.id("address.accountAddressOne.field1"), AddressDetails[0]);
@@ -598,7 +607,7 @@ public class WDPA_Functions{
 						return LastAvailable;
 					}
 				}else if (week == 6){
-					if (!AddtionalMonth && WebDriver_Functions.isPresent(By.id(IdFormat + "._nextMonth"))) {
+					if (!AddtionalMonth && WebDriver_Functions.isPresent(By.id(IdFormat + "._nextMonth"))) {   ///fix later, clicks next month even when not enabled,  && !WebDriver_Functions.getClass(By.id(IdFormat + "._nextMonth")).contains("Disable") tried adding check and then doesn't click date
 						WebDriver_Functions.Click(By.id(IdFormat + "._nextMonth"));
 						week = 1;
 						day  = 0;

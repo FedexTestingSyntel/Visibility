@@ -18,6 +18,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import Data_Structures.Account_Data;
+import Data_Structures.Tax_Data;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
@@ -222,21 +223,18 @@ public class Create_Accounts{
 			//Regulator Information page
 			String StateTax = "", CountryTax = "";
 			if (WebDriver_Functions.isVisable(By.id("next_reg"))) {
-				ArrayList<String[]> TaxData = Environment.getTaxData(BillingCountryCode) ;
-				for (String s[]: TaxData) {
-					if (s[0].contentEquals(BillingCountryCode)) {
-						StateTax = s[1];
-						CountryTax = s[2];
-						break;
+				Tax_Data Tax_Info = Environment.getTaxDetails(BillingCountryCode);
+				if (Tax_Info != null) {
+					StateTax = Tax_Info.STATE_TAX_ID;
+					CountryTax = Tax_Info.TAX_ID;
+					if (WebDriver_Functions.isVisable(By.xpath("//*[@id='mand']"))){//Tax id 1
+						WebDriver_Functions.Type(By.id("reg_tax_id_one"), StateTax);
+					}
+					if (WebDriver_Functions.isVisable(By.xpath("//*[@id='mand1']"))){//Tax id 2
+						WebDriver_Functions.Type(By.id("reg_tax_id_two"), CountryTax);
 					}
 				}
 				
-				if (WebDriver_Functions.isVisable(By.xpath("//*[@id='mand']")) && StateTax != null){//Tax id 1
-					WebDriver_Functions.Type(By.id("reg_tax_id_one"), StateTax);
-				}
-				if (WebDriver_Functions.isVisable(By.xpath("//*[@id='mand1']")) && CountryTax != null){//Tax id 2
-					WebDriver_Functions.Type(By.id("reg_tax_id_two"), CountryTax);
-				}
 				WebDriver_Functions.Click(By.id("next_reg"));
 			}
 			

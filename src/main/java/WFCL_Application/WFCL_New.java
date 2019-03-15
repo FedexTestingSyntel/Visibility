@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "6";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -31,10 +31,10 @@ public class WFCL_New{
 		//CountryList = Environment.getCountryList("BR");
 		//CountryList = Environment.getCountryList("JP");
 		//CountryList = Environment.getCountryList("high");
-		Helper_Functions.MyEmail = "accept@fedex.com";
+		//Helper_Functions.MyEmail = "accept@fedex.com";
 		//CountryList = new String[][]{{"AU", ""}, {"JP", ""}};
 	}
-	
+	 
 	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
@@ -128,10 +128,34 @@ public class WFCL_New{
 		    		}
 		    		*/
 		    		
-		    		data.add( new Object[] {Level, "700865177"});
+		    		data.add( new Object[] {Level, "930626813"});
 		    		//data.add( new Object[] {Level, "644280888"});
 		    		//data.add( new Object[] {Level, "642260243"});
 			    	//data.add( new Object[] {Level, "633504580"});
+		    		break;
+		    	case "Link_account_to_user":
+		    		UD = Environment.Get_UserIds(intLevel);
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 30; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contains("F")) {
+		    					Account_Info = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
+		    					data.add( new Object[] {Level, UD[k], Account_Info});
+		    					break;
+		    				}
+		    			}
+					}
+		    		break;
+		    	case "WFCL_GFBO_Registration":
+		    		UD = Environment.Get_UserIds(intLevel);
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 30; k < UD.length; k++) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].GFBO_ENABLED.contains("F") && !UD[k].ACCOUNT_NUMBER.contentEquals("")) {
+		    					Account_Info = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
+		    					data.add( new Object[] {Level, UD[k], Account_Info});
+		    					break;
+		    				}
+		    			}
+					}
 		    		break;
 			}
 		}	
@@ -142,9 +166,13 @@ public class WFCL_New{
 	public void CreditCardRegistrationEnroll(String Level, Enrollment_Data Enrollment_Info, Account_Data Account_Info, Tax_Data Tax_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
-			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
+			//Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
+			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V", "5472332002526049"));
+			
+			///5472332002526122
+			//5472332002526189
+
 			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
-			Account_Info.UserId = "L" + Level + "WCRVMarketing";
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
@@ -278,23 +306,31 @@ public class WFCL_New{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 1, enabled = false)
-	public void Link_account_to_user(String Level, User_Data User_Info, String Account){
-		try {
-			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
-			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			
-			//String Result = WFCL_Functions_UsingData.Account_Number_Masking(Account_Info, Account_Info_Mismatch);
-			//Helper_Functions.PrintOut(Result, false);
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	public void Link_account_to_user(String Level, User_Data User_Info, Account_Data Account_Info){
+		try {			
+			String Result[] = WFCL_Functions_UsingData.Account_Linkage(User_Info, Account_Info);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
-	public void FCLA_WADM_Invitaiton(User_Data User_Info, Account_Data Account_Info, String Email) {
+	public void FCLA_WADM_Invitaiton(String Level, User_Data User_Info, Account_Data Account_Info, String Email) {
 		try {
+			////////////////////not finished
 			String Result[] = WFCL_Functions_UsingData.WFCL_WADM_Invitaiton(User_Info, Account_Info, Email);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	public void WFCL_GFBO_Registration(String Level, User_Data User_Info, Account_Data Account_Info) {
+		try {
+			String Result[] = WFCL_Functions_UsingData.WFCL_GFBO_Registration(User_Info, Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

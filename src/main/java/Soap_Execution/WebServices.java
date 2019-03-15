@@ -22,16 +22,21 @@ public class WebServices {
 		Environment.SetLevelsToTest(LevelsToTest);
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp (Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 				switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WebServices_CreateMeterNumber":
-					Account_Data Account_Info = Helper_Functions.getFreshAccount(Level, "US");
+					Account_Data D[] = Environment.getAccountDetails(Level);
 					String URL = "https://wsdrt.idev.fedex.com/web-services";
-					data.add( new Object[] {Level, Account_Info, URL});
+					for (Account_Data Account_Info: D) {
+						//Account_Data Account_Info = Helper_Functions.getFreshAccount(Level, "US");
+						if (Account_Info != null && Account_Info.Level.contentEquals("3")) {
+							data.add( new Object[] {Level, Account_Info, URL});
+						}
+					}
 					break;
 				}
 		}

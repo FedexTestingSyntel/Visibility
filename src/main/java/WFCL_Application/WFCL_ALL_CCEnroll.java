@@ -1,9 +1,7 @@
 package WFCL_Application;
 
 import org.testng.annotations.Test;
-
 import Data_Structures.Enrollment_Data;
-import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
 import org.testng.annotations.BeforeClass;
 import org.openqa.selenium.By;
@@ -16,13 +14,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import SupportClasses.*;
-import USRC_Application.USRC_API_Endpoints;
 
-@SuppressWarnings("unused")
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_ALL_CCEnroll{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "2";  
 	static String CountryList[][]; 
 	static List<String> Users = new ArrayList<String>();
 
@@ -30,13 +26,7 @@ public class WFCL_ALL_CCEnroll{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("US");
-		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
-		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
-		//CountryList = Environment.getCountryList("BR");
-		//CountryList = Environment.getCountryList("GU");
-		//CountryList = Environment.getCountryList("high");
 		//Helper_Functions.MyEmail = "accept@fedex.com";
-		//CountryList = new String[][]{{"US", ""}, {"AU", ""}};
 	}
 	
 	@DataProvider (parallel = true)
@@ -122,40 +112,54 @@ public class WFCL_ALL_CCEnroll{
 			Enrollment_Data ED[] = Environment.getEnrollmentDetails(Integer.parseInt(Level));
 
 			for (Enrollment_Data EN: ED) {
-				if (EN != null && !EN.AEM_LINK.contentEquals("") && (EN.PASSCODE.contentEquals("") && EN.MEMBERSHIP_ID.contentEquals(""))) {
-					WebDriver_Functions.ChangeURL("DT_" + EN.ENROLLMENT_ID, EN.COUNTRY_CODE, false);
-					WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " DT Value.png");
-					String DTValue = WebDriver_Functions.GetBodyText();
+				try {
+					if (EN != null && !EN.AEM_LINK.contentEquals("")) { //&& (!EN.PASSCODE.contentEquals("") || !EN.MEMBERSHIP_ID.contentEquals(""))
+						WebDriver_Functions.ChangeURL("DT_" + EN.ENROLLMENT_ID, EN.COUNTRY_CODE, false);
+						WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " DT Value.png");
+						String DTValue = WebDriver_Functions.GetBodyText();
 
-					String ApplyNowUrlOne = "";
-					if (!EN.AEM_LINK.contentEquals("")) {
-						WebDriver_Functions.ChangeURL(EN.AEM_LINK, EN.COUNTRY_CODE, false);
-						ApplyNowUrlOne = WebDriver_Functions.getURLByLinkText("APPLY NOW");
-						//String ApplyNowUrlTwo = WebDriver_Functions.getURLByLinkText("Apply Now");//orange button
-					}
-		
-					/////Need to redesign this, for the membership and passcode will be in the url https://wwwdrt.idev.fedex.com/fcl/ALL?enrollmentid=ml18024117&language=en&country=us 
-					String ExpectedUrl = WebDriver_Functions.ChangeURL("Enrollment_" + EN.ENROLLMENT_ID, EN.COUNTRY_CODE, false);
-					
-					if (!ApplyNowUrlOne.contentEquals("") && !ExpectedUrl.contentEquals(ApplyNowUrlOne)) {
-						DT_Status[10][1] += EN.ENROLLMENT_ID + ", ";
-					}
-					
-					if (WebDriver_Functions.isPresent(By.name("Apply Now"))) {
-						//if passcode is needed to be entered on discount page.
-						if (WebDriver_Functions.isPresent(By.name("passCode")) || WebDriver_Functions.isPresent(By.name("membershipID"))) {
-							DT_Status[4][1] += EN.ENROLLMENT_ID + ", ";
+						String ApplyNowUrlOne = "";
+						if (!EN.AEM_LINK.contentEquals("")) {
+							WebDriver_Functions.ChangeURL(EN.AEM_LINK, EN.COUNTRY_CODE, false);
+							ApplyNowUrlOne = WebDriver_Functions.getURLByLinkText("APPLY NOW");
+							//String ApplyNowUrlTwo = WebDriver_Functions.getURLByLinkText("Apply Now");//orange button
+						}
+			
+						//when membership/pass codes are not needed then check the link of the apply now button.
+						if (EN.MEMBERSHIP_ID.contentEquals("") && EN.PASSCODE.contentEquals("")) {
+							String ExpectedUrl = WebDriver_Functions.ChangeURL("Enrollment_" + EN.ENROLLMENT_ID, EN.COUNTRY_CODE, false);
+							if (!ApplyNowUrlOne.contentEquals("") && !ExpectedUrl.contentEquals(ApplyNowUrlOne)) {
+								DT_Status[10][1] += EN.ENROLLMENT_ID + ", ";
+							}
 						}else {
+							if (WebDriver_Functions.isPresent(By.id("field_Passcode"))) {
+								WebDriver_Functions.Type(By.id("field_Passcode"), EN.PASSCODE);
+							}
+							if (WebDriver_Functions.isPresent(By.id("field_Membership ID"))) {
+								WebDriver_Functions.Type(By.id("field_Membership ID"), EN.MEMBERSHIP_ID);
+							}
+							WebDriver_Functions.Click(By.cssSelector("div#overview button[type=\"submit\"]"));
+							String RedirectURL = WebDriver_Functions.CloseNewTabAndNavigateInCurrent();
+						    String ExpectedURL = WebDriver_Functions.ChangeURL_EnrollmentID(EN, false, false);
+						    if (!RedirectURL.contentEquals(ExpectedURL)) {
+						    	DT_Status[10][1] += EN.ENROLLMENT_ID + ", ";
+						    }
+						}
+						
+						if (WebDriver_Functions.isPresent(By.name("Apply Now"))) {
 							DT_Status[3][1] += EN.ENROLLMENT_ID + ", ";
-							
-							//if passcode is needed to be entered on discount page.
-							if (WebDriver_Functions.isPresent(By.name("passCode"))) {
-								WebDriver_Functions.Type(By.name("passCode"), EN.PASSCODE);
+							if (WebDriver_Functions.isPresent(By.name("passCode")) || WebDriver_Functions.isPresent(By.name("membershipID"))) {
+								DT_Status[4][1] += EN.ENROLLMENT_ID + ", ";
+								//if pass code is needed to be entered on discount page.
+								if (WebDriver_Functions.isPresent(By.name("passCode"))) {
+									WebDriver_Functions.Type(By.name("passCode"), EN.PASSCODE);
+								}
+								//if membershipID is needed to be entered on discount page.
+								if (WebDriver_Functions.isPresent(By.name("membershipID"))) {
+									WebDriver_Functions.Type(By.name("membershipID"), EN.MEMBERSHIP_ID);
+								}
 							}
-							if (WebDriver_Functions.isPresent(By.name("membershipID"))) {
-								WebDriver_Functions.Type(By.name("membershipID"), EN.MEMBERSHIP_ID);
-							}
-							
+
 							WebDriver_Functions.takeSnapShot("Discount Page.png");
 							//apply link from marketing page
 							WebDriver_Functions.Click(By.name("Apply Now"));
@@ -165,24 +169,23 @@ public class WFCL_ALL_CCEnroll{
 								DT_Status[5][1] += EN.ENROLLMENT_ID + ", ";
 							}
 						}
-					}
-					
-					if (WebDriver_Functions.CheckBodyText(DTValue)) {
-						DT_Status[0][1] += EN.ENROLLMENT_ID + ", ";
-						WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Discount Matching.png");
-						//Apply_Discount(DT_Status, EN, Credit_Card, DTValue, UserId);
-					}else {
-						if (WebDriver_Functions.CheckBodyText("Sorry, we cannot find the web page you are looking for.")) {
-							DT_Status[2][1] += EN.ENROLLMENT_ID + ", ";
+						
+						if (WebDriver_Functions.CheckBodyText(DTValue)) {
+							DT_Status[0][1] += EN.ENROLLMENT_ID + ", ";
+							WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Discount Matching.png");
+							//Apply_Discount(DT_Status, EN, Credit_Card, DTValue, UserId);
 						}else {
-							DT_Status[1][1] += EN.ENROLLMENT_ID + ", ";//DiscountNotMatchingOnLandingPage
+							if (WebDriver_Functions.CheckBodyText("Sorry, we cannot find the web page you are looking for.")) {
+								DT_Status[2][1] += EN.ENROLLMENT_ID + ", ";
+							}else {
+								DT_Status[1][1] += EN.ENROLLMENT_ID + ", ";//DiscountNotMatchingOnLandingPage
+							}
 						}
 					}
+				}catch (Exception e) {
+					Helper_Functions.PrintOut("Error on enrollment: " + EN.ENROLLMENT_ID);
 				}
 			}
-			
-			
-			
 		}catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());

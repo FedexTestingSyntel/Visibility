@@ -1,4 +1,4 @@
-package WaterfallApplications;
+package OADR_Application;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class OADR{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 	
 	@BeforeClass

@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-
 import Data_Structures.PRDC_Data;
 import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
@@ -24,14 +23,14 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_General {
 
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public Iterator<Object[]> dp(Method m) {
 	    List<Object[]> data = new ArrayList<>();
 	    
@@ -168,15 +167,16 @@ public class USRC_General {
 		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		
 		//in case cannot login will check two of the generic other passwords
-		if (fdx_login_fcl_uuid == null && Password.contentEquals("Test1234")){
+		if (fdx_login_fcl_uuid == null){
 			Password = "Test12345";
 			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		}else if (fdx_login_fcl_uuid == null && Password.contentEquals("Test12345")){
+		}
+		if(fdx_login_fcl_uuid == null){
 			Password = "Test1234";
 			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}
 		
-		String ContactDetailsParsed[][] = {{"UUID_NBR", ""},//index 0 and set below
+		String Details[][] = {{"UUID_NBR", ""},//index 0 and set below
 				{"SSO_LOGIN_DESC", UserID},
 				{"USER_PASSWORD_DESC", Password},
 				{"SECRET_QUESTION_DESC", ""}, 
@@ -188,59 +188,34 @@ public class USRC_General {
 				{"STATE_CD", ""}, 
 				{"POSTAL_CD", ""}, 
 				{"COUNTRY_CD", ""}, 
-				{"ACCOUNT_NUMBER", "F"},//index 12 and set below
-				{"WCRV_ENABLED", "F"},//index 13 and set below
-				{"GFBO_ENABLED", "F"},//index 14 and set below
-				{"WGRT_ENABLED", "F"},//index 15 and set below
-				{"WDPA_ENABLED", "F"},//index 16 and set below
-				{"PASSKEY", "F"},//index 17 and set below
-				{"FDM_STATUS", "F"}, //index 18 below
+				{"FDM_STATUS", "F"}, //index 12 below
 				{"EMAIL_ADDRESS", ""}
 				};
 		
 		if (fdx_login_fcl_uuid != null){
 			Cookies = fdx_login_fcl_uuid[0];
-			ContactDetailsParsed[0][1] = fdx_login_fcl_uuid[1];//save the uuid
-			
-			String AccountRetrievalRequest = USRC_API_Endpoints.AccountRetrievalRequest(USRC_Details.GenericUSRCURL, Cookies);
-			
-			//Check if user has GFBO access
-			if (AccountRetrievalRequest.contains("appName\":\"fclgfbo\",\"roleCode\":\"")){
-				ContactDetailsParsed[14][1] = "T";
-			}
-			//Check if user has WGRT access
-			if (AccountRetrievalRequest.contains("appName\":\"fclrates\",\"roleCode\":\"")){
-				ContactDetailsParsed[15][1] = "T";
-			}
-			//Check if user has WDPA access
-			if (AccountRetrievalRequest.contains("appName\":\"fclpickup\",\"roleCode\":\"")){
-				ContactDetailsParsed[16][1] = "T";
-			}
-			//Check if the user is administered, not able to narrow down if they are IPAS or WADM
-			if (AccountRetrievalRequest.contains("appName\":\"fclpasskey\",\"roleCode\":\"")) {
-				ContactDetailsParsed[17][1] = "T";
-			}
-			
+			Details[0][1] = fdx_login_fcl_uuid[1];//save the uuid
+
+			Details = App_Role_Info_Check(Level, Details, Cookies);
+
 			String Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookies);
 			if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
-				ContactDetailsParsed[18][1] = Response;//store all of the FDM details
+				Details[12][1] = Response;//store all of the FDM details
 			}
-			
-			ContactDetailsParsed[12][1] = USRC_API_Endpoints.Parse_AccountRetrievalRequest_AccountNumber(AccountRetrievalRequest);
+
 			String ContactDetailsResponse = USRC_API_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, Cookies);
-			ContactDetailsParsed = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, ContactDetailsParsed);
+			Details = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, Details);
 			
-			PRDC_Data PRDC_D = PRDC_Data.LoadVariables(Level);
-			ContactDetailsParsed[13][1] = WCRV_Access(PRDC_D.AccountsURL, Cookies);
+			Details = WCRV_Access(Level, Details, Cookies);
 		}else {
 			//will save the current time of the failure.
-			ContactDetailsParsed = new String[][]{{"SSO_LOGIN_DESC", UserID.replaceAll(" ", "")},
+			Details = new String[][]{{"SSO_LOGIN_DESC", UserID},
 					{"ERROR", Helper_Functions.CurrentDateTime(true)}};
 		}
 		
 		String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
-		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, ContactDetailsParsed, 1);
-		Helper_Functions.PrintOut("Contact Details: " + Arrays.toString(ContactDetailsParsed), true);
+		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, 1);
+		Helper_Functions.PrintOut("Contact Details: " + Arrays.toString(Details), true);
 		if (!updatefile) {
 			Assert.fail("Not able to update file.");
 		}else if (fdx_login_fcl_uuid == null) {
@@ -248,118 +223,9 @@ public class USRC_General {
 		}
 	}
 	
-	@Test (dataProvider = "dp", enabled = false)
-	public void Check_FDM_Status(String Level, String UserID, String Password) {
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
-		
-		String Cookies = null, fdx_login_fcl_uuid[] = null;
-		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		
-		//in case cannot login will check two of the generic other passwords
-		if (fdx_login_fcl_uuid == null && Password.contentEquals("Test1234")){
-			Password = "Test12345";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		}else if (fdx_login_fcl_uuid == null && Password.contentEquals("Test12345")){
-			Password = "Test1234";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		}
-		
-		String ContactDetailsParsed[][] = {{"UUID_NBR", ""},//index 0 and set below
-				{"SSO_LOGIN_DESC", UserID.replaceAll(" ", "")},
-				{"USER_PASSWORD_DESC", Password.replaceAll(" ", "")},
-				{"FDM_STATUS", "F"} //index 3 below
-				};
-		
-		if (fdx_login_fcl_uuid != null){
-			Cookies = fdx_login_fcl_uuid[0];
-			ContactDetailsParsed[0][1] = fdx_login_fcl_uuid[1];//save the uuid
-			
-			String Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookies);
-			if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
-				ContactDetailsParsed[3][1] = Response;//store all of the FDM details
-			}
-		}else {
-			Assert.fail("Not able to login");
-		}
-		
-		String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
-		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, ContactDetailsParsed, 1);
-		Helper_Functions.PrintOut("Contact Details: " + Arrays.toString(ContactDetailsParsed), true);
-		if (!updatefile) {
-			Assert.fail("Not able to update file.");
-		}
-	}
-	
-	@Test (dataProvider = "dp", enabled = true)
-	public void Check_WCRV_Status(String Level, String UserID, String Password) {
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
-		
-		String Cookies = null, fdx_login_fcl_uuid[] = null;
-		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		
-		//in case cannot login will check two of the generic other passwords
-		if (fdx_login_fcl_uuid == null && Password.contentEquals("Test1234")){
-			Password = "Test12345";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		}else if (fdx_login_fcl_uuid == null && Password.contentEquals("Test12345")){
-			Password = "Test1234";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		}
-		
-		String ContactDetailsParsed[][] = {{"UUID_NBR", ""},//index 0 and set below
-				{"SSO_LOGIN_DESC", UserID.replaceAll(" ", "")},
-				{"USER_PASSWORD_DESC", Password.replaceAll(" ", "")},
-				{"WCRV_ENABLED", "F"} //index 3 below
-				};
-		
-		if (fdx_login_fcl_uuid != null){
-			Cookies = fdx_login_fcl_uuid[0];
-			ContactDetailsParsed[0][1] = fdx_login_fcl_uuid[1];//save the uuid
-			
-			PRDC_Data PRDC_D = PRDC_Data.LoadVariables(Level);
-			ContactDetailsParsed[3][1] = WCRV_Access(PRDC_D.AccountsURL, Cookies);
-		}else {
-			Assert.fail("Not able to login");
-		}
-		
-		String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
-		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, ContactDetailsParsed, 1);
-		Helper_Functions.PrintOut("Contact Details: " + Arrays.toString(ContactDetailsParsed), true);
-		if (!updatefile) {
-			Assert.fail("Not able to update file.");
-		}
-	}
-	
-	@Test (dataProvider = "dp", enabled = false)
-	public void CheckIfUserInvalidLogin(String Level, String UserID, String Password) {
-		String fdx_login_fcl_uuid[] = null;
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
-		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID, Password);
-		if (fdx_login_fcl_uuid == null){
-			Assert.fail(UserID);
-		}
-	}
-	
-	@Test (dataProvider = "dp", enabled = false)
-	public void UpdateValue(String Level, String UserID, String Password) {
-		String ContactDetailsParsed[][] = {{"SSO_LOGIN_DESC", UserID},
-				{"WCRV_ENABLED", "T"}
-				};
-		
-		String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
-		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, ContactDetailsParsed, 0);
-		Helper_Functions.PrintOut("Contact Details: " + Arrays.toString(ContactDetailsParsed), true);
-		if (!updatefile) {
-			Assert.fail("Not able to update file.");
-		}
-	}
-	
-	
-	public String WCRV_Access(String Accounts_URL, String Cookies) {
-		String AccountDetails = PRDC_API_Endpoints.Accounts_Call(Accounts_URL, Cookies);
+	public String[][] WCRV_Access(String Level, String Details[][], String Cookies) {
+		PRDC_Data PRDC_D = PRDC_Data.LoadVariables(Level);
+		String AccountDetails = PRDC_API_Endpoints.Accounts_Call(PRDC_D.AccountsURL, Cookies);
 		String WCRV_Access = "";
 		if (AccountDetails.contains("displayRateSheetFlag\":true") && AccountDetails.contains("discountPricingFlag\":true") && AccountDetails.contains("accountCountryEnabledFlag\":true")){
 			WCRV_Access = "T";
@@ -380,6 +246,35 @@ public class USRC_General {
 				WCRV_Access += "accountCountryEnabledFlag_False";
 			}
 		}
-		return WCRV_Access;
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		Details[Details.length - 1] = new String[] {"WCRV_ENABLED", WCRV_Access};
+		return Details;
 	}
+
+	public String[][] App_Role_Info_Check(String Level, String Details[][], String Cookies){
+		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
+		
+		String AccountRetrievalRequest = USRC_API_Endpoints.AccountRetrievalRequest(USRC_Details.GenericUSRCURL, Cookies);
+		
+		String Parse[][] = {{"GFBO_ENABLED", "appName\":\"fclgfbo\",\"roleCode\":\""},
+				{"WGRT_ENABLED", "appName\":\"fclrates\",\"roleCode\":\""}, 
+				{"WDPA_ENABLED", "appName\":\"fclpickup\",\"roleCode\":\""}, 
+				{"PASSKEY", "appName\":\"fclpasskey\",\"roleCode\":\""}
+				};
+
+		for (int j = 0; j < Parse.length; j++) {
+			Details = Arrays.copyOf(Details, Details.length + 1);
+			if (AccountRetrievalRequest.contains(Parse[j][1])) {
+				Details[Details.length - 1] = new String[] {Parse[j][0], "T"};
+			}else {
+				Details[Details.length - 1] = new String[] {Parse[j][0], "F"};
+			}
+		}
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		Details[Details.length - 1] = new String[] {"ACCOUNT_NUMBER", USRC_API_Endpoints.Parse_AccountRetrievalRequest_AccountNumber(AccountRetrievalRequest)};
+
+	
+		return Details;
+	}
+	
 }

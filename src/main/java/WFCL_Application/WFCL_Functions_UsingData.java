@@ -14,7 +14,7 @@ import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 import USRC_Application.USRC_API_Endpoints;
 
-public class WFCL_Functions_UsingData{ 
+public class WFCL_Functions_UsingData{
 	
 	public static boolean ContactInfo_Page(Account_Data Account_Info, boolean Submit) throws Exception{
 		//wait for secret questions to load.
@@ -86,23 +86,7 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.name("submit"));
 		}
-
-		InvoiceOrCCValidaiton(Account_Info);
-
-		Helper_Functions.Wait(2);//////////////Need to delete this later, facing issue with the loading time.
 		
-		if (WebDriver_Functions.isPresent(By.id("accountNumber"))|| WebDriver_Functions.isPresent(By.name("newAccountNumber"))) {
-			WebDriver_Functions.Click(By.name("submit"));
-			Helper_Functions.PrintOut("Warning, still on account entry screen. The address entered may be incorrect.", true);
-			throw new Exception("Still on Accounts Screen");
-		}else if (WebDriver_Functions.CheckBodyText("Request Access from the Account Administrator")) {
-			//remove the account number from local storage as it is now locked to the company that was just created.
-			Helper_Functions.RemoveAccountFromAccount_Numbers(Account_Info.Level, Account_Info.Account_Number);
-			Helper_Functions.PrintOut("Request Access from the Account Administrator", true);
-			throw new Exception("Request Access from the Account Administrator");
-		}
-		
-		WebDriver_Functions.WaitNotPresent(By.id("createUserID"));
 		return true;
 	}//end WFCL_AccountEntryScreen
 	
@@ -114,7 +98,9 @@ public class WFCL_Functions_UsingData{
 			case "WFCL_Link"://WFCL linkage page
 				if (CC.contains("US")){
 					WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), Account_Info.UserId);
-					WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), Account_Info.Masked_Account_Number);    //will need to update due to account masking
+					if (!Account_Info.Masked_Account_Number.contentEquals("")) {
+						WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), Account_Info.Masked_Account_Number);    //will need to update due to account masking
+					}
 				}
 				break;
 			case "WFCL_CC":
@@ -126,7 +112,9 @@ public class WFCL_Functions_UsingData{
 			case "INET":
 			case "GFBO":
 				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.UserId);
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.Masked_Account_Number);
+				if (!Account_Info.Masked_Account_Number.contentEquals("")) {
+					WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.Masked_Account_Number);
+				}
 				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.Account_Nickname);
 				//WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[4]/table/tbody/tr[2]/td/table/tbody/tr/td[2]/b"), AddressDetails[0] + "\n" + AddressDetails[2] + ", " + AddressDetails[4] + " " + AddressDetails[5] + "\n" + AddressDetails[6].toLowerCase());
 				break;
@@ -172,30 +160,31 @@ public class WFCL_Functions_UsingData{
 	}//end WFCL_AccountLinkage
 	
 	//will return the updated Account_Data with the uuid added.
-	public static User_Data Account_Linkage(User_Data User_Info, Account_Data Account_Info) throws Exception{
+	public static String[] Account_Linkage(User_Data User_Info, Account_Data Account_Info) throws Exception{
 		Helper_Functions.PrintOut("Attempting to link " + User_Info.SSO_LOGIN_DESC + " with " + Account_Info.Account_Number, true);
 		String CountryCode = Account_Info.Billing_Country_Code.toUpperCase();
-//////////////////////////////////////////////////////////////////////////////////not complete
-		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
-			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
-			WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]"));//select the link account radio button
-			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
-			ContactInfo_Page(Account_Info, true); //enters all of the details
-		}else{
-			WebDriver_Functions.ChangeURL("FCLLinkInter", CountryCode, true);
-			WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion"));
-			ContactInfo_Page(Account_Info, true); //enters all of the details
+		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
+		if (UUID == null) {
+			//if user is not logged in then do so.
+			 WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+			 UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
 		}
+
+		WebDriver_Functions.ChangeURL("FCLLINKACCOUNT", CountryCode, false);
 
 		//Step 2 Account information
 		Account_Entry_Screen(Account_Info);
+		
+		if (WebDriver_Functions.CheckBodyText("This Account Number is already registered for this application")) {
+			throw new Exception("Account " + Account_Info.Account_Number + " is already linked to user " + User_Info.SSO_LOGIN_DESC);
+		}
+		
+		AddressMismatchPage(Account_Info);
+		InvoiceOrCCValidaiton(Account_Info);
 
-		Verify_Confirmaiton_Page("WFCL_Link", Account_Info);
-			
-		String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-		Account_Info.UUID = UUID; 
-		Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
-		return User_Info;
+		Verify_Confirmaiton_Page("INET", Account_Info);
+
+		return new String[] {User_Info.SSO_LOGIN_DESC, Account_Info.Account_Number};
 	}//end Account_Linkage
 	
 	public static void AddressMismatchPage(Account_Data Account_Info) throws Exception {
@@ -510,7 +499,7 @@ public class WFCL_Functions_UsingData{
 		String CountryCode = Account_Info.Billing_Country_Code;
 		Helper_Functions.PrintOut("WFCL_CC_Page recieved: " + Account_Info.Credit_Card_Number + ", " + CountryCode + " From: " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
 
-		WebDriver_Functions.WaitForTextPresentIn(By.cssSelector("#CCType"), Account_Info.Credit_Card_Type);//wait for the credit card types to load
+		WebDriver_Functions.WaitForTextPresentIn(By.cssSelector("#CCType"), Account_Info.Credit_Card_Type.substring(0, 1));//wait for the credit card types to load, check for first character since Mastercard and MasterCard issue.
 
 		WebDriver_Functions.Type(By.id("creditCardNumber"), Account_Info.Credit_Card_Number);
 		WebDriver_Functions.Type(By.id("creditCardIDNumber"), Account_Info.Credit_Card_CVV);
@@ -565,8 +554,14 @@ public class WFCL_Functions_UsingData{
 		}else if (WebDriver_Functions.isPresent(By.name("vatNo"))) {
 			WebDriver_Functions.Type(By.name("vatNo"), Tax_Info.STATE_TAX_ID);
 		}
-
-		WebDriver_Functions.Select(By.id("CCType"), Account_Info.Credit_Card_Type, "t");
+		
+		String CreditCardTypes = WebDriver_Functions.GetText(By.id("CCType"));
+		if (CreditCardTypes.contains(Account_Info.Credit_Card_Type)) {
+			WebDriver_Functions.Select(By.id("CCType"), Account_Info.Credit_Card_Type, "t");
+		}else if(Account_Info.Credit_Card_Type.toLowerCase().contentEquals("mastercard")){
+			Account_Info.Credit_Card_Type = "Mastercard";//for US they use a lower case 'c'.
+			WebDriver_Functions.Select(By.id("CCType"), Account_Info.Credit_Card_Type, "t");
+		}
 
 		WebDriver_Functions.takeSnapShot("CreditCard Entry.png");
 		WebDriver_Functions.Click(By.id("Complete"));
@@ -856,6 +851,28 @@ public class WFCL_Functions_UsingData{
 		return ReturnValue;
 	}//end WFCL_AccountRegistration
 		
+	public static String[] WFCL_GFBO_Registration(User_Data User_Info, Account_Data Account_Info) throws Exception{
+
+ 		try {
+ 			WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+			WebDriver_Functions.ChangeURL("GFBO_Login", User_Info.COUNTRY_CD, false);
+			
+			if (WebDriver_Functions.isPresent(By.name("accountNumber"))){ 
+				WebDriver_Functions.Select(By.name("accountNumber"), "1", "i");
+				WebDriver_Functions.Click(By.name("submit"));
+			}
+
+			Helper_Functions.Wait(2);
+			
+			if (WebDriver_Functions.isPresent(By.name("invoiceNumberA")) || WebDriver_Functions.isPresent(By.name("creditCardNumber"))) {
+				InvoiceOrCCValidaiton(Account_Info);
+			}
+			
+ 		}catch (Exception e){
+ 		
+ 		}
+		return null;
+	}
 }//End Class
 
 /*	

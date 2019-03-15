@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 
 public class WDPA extends WDPA_Functions{
 	
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -30,7 +30,7 @@ public class WDPA extends WDPA_Functions{
 		//CountryList = new String[][]{{"CA", "Canada"}};
 	}
 	
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -67,7 +67,7 @@ public class WDPA extends WDPA_Functions{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].FREIGHT_ENABLED.contentEquals("T") 
+		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].FREIGHT_ENABLED.contentEquals("") 
 		    						// && UD[k].FREIGHT_ENABLED.contentEquals("") && (UD[k].COUNTRY_CD.contentEquals("US") || UD[k].COUNTRY_CD.contentEquals("CA") || UD[k].COUNTRY_CD.contentEquals("MX"))
 		    						) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
@@ -106,9 +106,9 @@ public class WDPA extends WDPA_Functions{
 		Helper_Functions.PrintOut("Schedule an express pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			Address = Helper_Functions.LoadAddress("CN");
-			WDPAPickupDetailed(CountryCode, UserID, Password, "express", "CompanyNameHere", "John Doe", "9011111111", Address, null, "INET");
-
+			//Address = Helper_Functions.LoadAddress("CN");
+			String Result = Arrays.toString(WDPAPickupDetailed(CountryCode, UserID, Password, "express", "CompanyNameHere", "John Doe", "9011111111", Address, null, "INET"));
+			Helper_Functions.PrintOut(Result, false);
 			String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"EXPRESS_ENABLED", "T"}};
 			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
 		}catch (Exception e) {
@@ -134,11 +134,11 @@ public class WDPA extends WDPA_Functions{
 		Helper_Functions.PrintOut("Schedule a LTL pickup while logged in.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = WDPALTLPickup(Address, UserID, Password, "10", "400");
+			String Result = Arrays.toString(WDPALTLPickup(Address, UserID, Password, "10", "400"));
 			Helper_Functions.PrintOut(Result, false);
+			
 		    String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "T"}};
 			Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
-		    
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -149,7 +149,7 @@ public class WDPA extends WDPA_Functions{
 		Helper_Functions.PrintOut("Schedule a LTL pickup while not logged into FedEx.com", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = WDPALTLPickup(Address, "", "", "10", "400");
+			String Result = Arrays.toString(WDPALTLPickup(Address, "", "", "10", "400"));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -163,7 +163,7 @@ public class WDPA extends WDPA_Functions{
 		while  (!breakout) {
 			try {
 				String Address[] = Helper_Functions.LoadAddress("US");
-				String Result = WDPALTLPickup(Address, "", "", "10", "400");
+				String Result = Arrays.toString(WDPALTLPickup(Address, "", "", "10", "400"));
 				Helper_Functions.PrintOut(Result, false);
 				
 			}catch (Exception e) {

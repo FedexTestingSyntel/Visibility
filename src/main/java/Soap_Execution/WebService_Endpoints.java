@@ -4,8 +4,12 @@ import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPFault;
+import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
+
+import org.w3c.dom.Node;
 
 import Data_Structures.Account_Data;
 
@@ -16,20 +20,21 @@ public class WebService_Endpoints {
 	//will take in the url, organization, and user name
 	//will return the soap message as a string
 	public static String CreateMeterNumber(String soapCreateMeterNumberURL, Account_Data Account_Info) throws Exception {
-		SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
-		SOAPPart soapPart = request.getSOAPPart();
-		SOAPEnvelope envelope = soapPart.getEnvelope();;
+		SOAPMessage message = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
+		SOAPPart soapPart = message.getSOAPPart();
+		SOAPEnvelope envelope = soapPart.getEnvelope();
+
 		//add the name space for the v5 prefix
 		String NSv5 = "http://fedex.com/ws/registration/v5";
 		envelope.addNamespaceDeclaration("v5", NSv5 );
 
 	    //add the header content
-	    MimeHeaders headers = request.getMimeHeaders();
-        headers.addHeader("Accept-Encoding", "gzip,deflate");
-        headers.addHeader("Content-Type", "application/soap+xml;charset=UTF-8;action=\"urn:deleteAssociation3012\"");
+	    MimeHeaders header = message.getMimeHeaders();
+        header.addHeader("Accept-Encoding", "gzip,deflate");
+        header.addHeader("Content-Type", "application/soap+xml;charset=UTF-8;action=\"urn:deleteAssociation3012\"");
         String Host = soapCreateMeterNumberURL.replace("http://", "");
         Host = Host.substring(0, Host.indexOf("/"));
-        headers.addHeader("Host", Host);
+        header.addHeader("Host", Host);
 	    
 	    SOAPBody body = envelope.getBody();
 	    
@@ -39,16 +44,16 @@ public class WebService_Endpoints {
 	    /// WebAuthenticationDetail section starts
 	    SOAPElement WebAuthenticationDetail = SubscriptionRequest.addChildElement(envelope.createName("WebAuthenticationDetail","v5", NSv5));
 	    
-		String strCspKey = "kTsV6Z3Y6N7g0a5f";
-		String strCspPassword = "7s885IZAOL1kn2TBuvSAWRvTU";
+		String strCspKey = "RZEndj3VoTN7IZPr";
+		String strCspPassword = "FyOhzHVSNhQOhGlOoT7R5DRAW";
 	    SOAPElement CspCredential = WebAuthenticationDetail.addChildElement(envelope.createName("CspCredential","v5", NSv5));
 	    SOAPElement Key1 = CspCredential.addChildElement("Key", "v5");
 	    Key1.addTextNode(strCspKey);
 	    SOAPElement Password1 = CspCredential.addChildElement("Password", "v5");
 	    Password1.addTextNode(strCspPassword);
        
-		String strUserKey = "YIgDGJacGdJ8uHeX";
-		String strUserPassword = "FOuKkbBHpjO4uGm8FqifCfGQC";
+		String strUserKey = "IwxibuPidazmPdWY";
+		String strUserPassword = "lqPWoVeWGAFboqFOtiBU9qfCy";
 	    SOAPElement UserCredential = WebAuthenticationDetail.addChildElement(envelope.createName("UserCredential","v5", NSv5));
 	    SOAPElement Key2 = UserCredential.addChildElement("Key", "v5");
 	    Key2.addTextNode(strUserKey);
@@ -104,15 +109,20 @@ public class WebService_Endpoints {
 	    AccountNumber_Subscriber.addTextNode(Account_Info.Account_Number);
 	    
 	    ////Contact starts
+	    
 	    SOAPElement Contact = Subscriber.addChildElement(envelope.createName("Contact","v5", NSv5));
 	    SOAPElement PersonName = Contact.addChildElement("PersonName", "v5");
-	    PersonName.addTextNode(Account_Info.FirstName);
+	    //PersonName.addTextNode(Account_Info.FirstName);
+	    PersonName.addTextNode("Anshul");
 	    SOAPElement CompanyName = Contact.addChildElement("CompanyName", "v5");
-	    CompanyName.addTextNode(Account_Info.Company_Name);
+	    //CompanyName.addTextNode(Account_Info.Company_Name);
+	    CompanyName.addTextNode("STORAGETEK PR-SOUTH");
 	    SOAPElement PhoneNumber = Contact.addChildElement("PhoneNumber", "v5");
-	    PhoneNumber.addTextNode(Account_Info.Billing_Phone_Number);
-	    SOAPElement EMailAddress = Contact.addChildElement("EMailAddress", "v5");
-	    EMailAddress.addTextNode(Account_Info.Email);
+	    //PhoneNumber.addTextNode(Account_Info.Billing_Phone_Number);
+	    PhoneNumber.addTextNode("1234567890");
+	    SOAPElement EmailAddress = Contact.addChildElement("EMailAddress", "v5");
+	    //EmailAddress.addTextNode(Account_Info.Email);
+	    EmailAddress.addTextNode("ansh@ayhoo.co.in");
 	    ////Contact ends
 	    
 	    ////Address starts
@@ -151,7 +161,7 @@ public class WebService_Endpoints {
 	    //SubscriptionRequest ends
 	    
         // Send SOAP Message to SOAP Server
-	    String Response = GeneralSoapSupport.callSoapWebService(soapCreateMeterNumberURL, request);
+	    String Response = GeneralSoapSupport.callSoapWebService(soapCreateMeterNumberURL, message);
         return Response;
 	}
 	
