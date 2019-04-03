@@ -16,7 +16,7 @@ public class USRC_Data {
 	public String PendingAddressURL = "";
 	public String VerifyPinURL = "";
 	public String CancelEnrollmentURL = "";
-	public String GenericUSRCURL = "";
+	public String GenericUSRCURL = ""; 
 	public String REGCCreateNewUserURL = "";
 	public String ViewUserProfileWIDMURL = "";
 	

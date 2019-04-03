@@ -8,7 +8,7 @@ public class Account_Data {
 	//Note: When adding a value make sure to check that same reflects in the Environment class
 	
 	//general Account Information
-	public String Level = "";
+	public String Level = ""; 
 	
 	//Shipping Address
 	public String Shipping_Address_Line_1 = "";

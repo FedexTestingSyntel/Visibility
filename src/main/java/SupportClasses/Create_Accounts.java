@@ -26,7 +26,7 @@ public class Create_Accounts{
 	private static String ECAMuserid;
 	private static String ECAMpassword;
 	
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][]; 
 	@BeforeClass
 	public static void ECAM_Data(){
@@ -47,20 +47,25 @@ public class Create_Accounts{
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("BR");
 		//CountryList = Environment.getCountryList("FR");
-		CountryList = Environment.getCountryList("high");
+		//CountryList = Environment.getCountryList("high");
 		//Helper_Functions.MyEmail = "accept@fedex.com";
-		CountryList = new String[][]{{"US", ""}, {"CA", ""}};
+		//CountryList = new String[][]{{"US", ""}};
 		
 		List<Object[]> data = new ArrayList<Object[]>();
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
+		String Validation = "US US";
 		for (int i=0; i < LevelsToTest.length(); i++) {
 			String Level = String.valueOf(LevelsToTest.charAt(i));
 			for (int j = 0; j < CountryList.length; j++) {
 				for (String CountryAddress[]: AddressDetails) {
-					if (CountryAddress[6].contentEquals(CountryList[j][0])) {
+					/*if (CountryAddress[6].contentEquals(CountryList[j][0])) {
 						data.add( new Object[] {Level, CountryAddress});
 						break;
+					}*/
+					if (Validation.contains(CountryAddress[6])) {
+						data.add( new Object[] {Level, CountryAddress});
+						Validation = Validation.replace(CountryAddress[6], "");
 					}
 				}
 			}

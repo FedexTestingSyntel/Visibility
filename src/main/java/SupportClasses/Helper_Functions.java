@@ -21,8 +21,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import org.openqa.selenium.By;
 import Data_Structures.Account_Data;
-import Data_Structures.Enrollment_Data;
-import Data_Structures.User_Data;
 import jxl.Sheet;
 import jxl.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -790,69 +788,7 @@ public class Helper_Functions{
 		}
 		return FileUpdated;
 	}
-	
-	public static void PrintOutTable(ArrayList<String[]> List) {
-		try {
-			if (List != null) {
-				int cells =  List.get(0).length;
-				String[][] R = new String [List.size()][cells];
-				for(int i = 0; i < List.size(); i++) {
-					String []L =  List.get(i);
-					for (int j = 0; j < cells; j++) {
-						R[i][j] = L[j];
-					}
-				}
-				PrintOutTable(R);
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
-	public static void PrintOutTable(String[][] Results) {
-		try {			
-			int Lenghts[] = new int[Results[0].length];
-			Arrays.fill(Lenghts, 1);
-			
-			for (int i = 0; i < Results.length; i++) { //find the max lengths for formatting sake.
-				for (int j = 0 ; j < Results[0].length; j++) {
-					if (Results[i][j] != null && Results[i][j].length() > Lenghts[j]) {
-						Lenghts[j] = Results[i][j].length();
-					}
-				}
-			}
-
-			//for formatting of the table that is being printed  "____" on the top
-			//need to determine why cannot use int sum = IntStream.of(a).sum(); when using java8, compiler error
-			int SumOfLengths = 0;
-			for (int i : Lenghts)
-				SumOfLengths += i;
-			char[] c = new char[SumOfLengths + 5]; 
-		    Arrays.fill(c, '_');
-			PrintOut("\n" + new String(c), false);
-			
-			int passedcnt = 0, failedcnt = 0;//failed starts as -1 as the first line will be the execution time and status will be marked as failed.
-			for (int i = 0; i < Results.length; i++) { //find the max lengths for formatting sake.
-				String StrFormat = "|";
-				for(int j = 0; j < Results[i].length; j++) {
-					StrFormat += String.format("%" + Lenghts[j] + "s|", Results[i][j]);
-				}
-				PrintOut(StrFormat, false);
-				if (Results[i][1].contains(Passed)) {
-					passedcnt+=1;
-				}else if (Results[i][1].contains(Failed)) {
-					failedcnt+=1;
-				}
-			}
-			
-			//for formatting of the table that is being printed  "____" on the bottom
-			PrintOut("|" + new String(c).substring(0, c.length-2) + "|", false);
-			PrintOut("Passed: " + passedcnt + " - " + "Failed: " + failedcnt + "\n", false);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	//{{Phone number country code, Phone Number}, {...}{Mobile...}, { ...}{Fax...}, {}{email address}}}
 	public static String[][] LoadPhone_Mobile_Fax_Email(String CountryCode){
 		CountryCode = CountryCode.toUpperCase();
@@ -892,6 +828,7 @@ public class Helper_Functions{
 	
 	public static Account_Data getFreshAccount(String Level, String CountryCode){
 		Account_Data D[] = Environment.getAccountDetails(Level);
+		CountryCode = CountryCode.toUpperCase();
 		for (Account_Data Current: D) {
 			if (Current != null && Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
 				return Current;

@@ -576,6 +576,7 @@ public class WCRV_Functions{
  	 		WebDriver_Functions.ChangeURL("WDPA", CountryCode, false);
  	 		WebDriver_Functions.ChangeURL("WCRV", CountryCode, false);
  	 		
+ 	 		WebDriver_Functions.WaitClickable(By.id("help"));
  	 		WebDriver_Functions.Click(By.id("help"));
  	 		
  	 		//view the new help file

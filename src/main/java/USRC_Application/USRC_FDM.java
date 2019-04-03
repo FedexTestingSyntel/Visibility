@@ -20,8 +20,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class USRC_FDM {
-
-	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+ 
+	static String LevelsToTest = "23"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -64,7 +64,9 @@ public class USRC_FDM {
 		try {
 			String Response = "";
 			String ContactDetails[] = USRC_Data.ContactDetailsList.get(Contact);
-			
+			String Phone = "9011111111", Email = "YouNeedToUpdateThisLater@fedex.com";
+			ContactDetails = new String[] {"SRAVAN", "", "PINGILI", Phone, Email, "11810 City Park Central Ln", "APT 212", "HOUSTON", "TX", "77009", "US", "5ur1aurli0jy91wrhwncqt7hh"};
+
 			//create the new user
 			Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
 			
@@ -110,6 +112,8 @@ public class USRC_FDM {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 	@Test (dataProvider = "dp", priority = 1, description = "380527")
 	public void EndtoEndEnrollment_UserID(USRC_Data USRC_Details, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password) {

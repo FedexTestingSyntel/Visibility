@@ -113,7 +113,7 @@ public class WFCL_ALL_CCEnroll{
 
 			for (Enrollment_Data EN: ED) {
 				try {
-					if (EN != null && !EN.AEM_LINK.contentEquals("")) { //&& (!EN.PASSCODE.contentEquals("") || !EN.MEMBERSHIP_ID.contentEquals(""))
+					if (EN != null && !EN.AEM_LINK.contentEquals("") && (!EN.PASSCODE.contentEquals("") || !EN.MEMBERSHIP_ID.contentEquals(""))) { //
 						WebDriver_Functions.ChangeURL("DT_" + EN.ENROLLMENT_ID, EN.COUNTRY_CODE, false);
 						WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " DT Value.png");
 						String DTValue = WebDriver_Functions.GetBodyText();
@@ -200,37 +200,7 @@ public class WFCL_ALL_CCEnroll{
 		Helper_Functions.PrintOut(Results, false);
 	}
 	
-	@Test (enabled = false)
-	public void DTFileCheck() {
-		try {
-			String Enrollments[][] = Helper_Functions.LoadAllEnrollmentIDs("US");
-			Environment.getInstance().setLevel("3");
-			String EnrollmentsPresent = "", EnrollmentsNotPresent = "", NonGeneric = "";
-			for(String En[] : Enrollments) {
-				if (En[2].contains("Feb19")) {
-					WebDriver_Functions.ChangeURL("DT_" + En[0], En[1], false);
-					if (WebDriver_Functions.CheckBodyText("FedEx") && 
-							!WebDriver_Functions.CheckBodyText("Sorry, we cannot find the web page you are looking for.") && 
-							!WebDriver_Functions.CheckBodyText("Page Not Found")) {
-						EnrollmentsPresent += En[0] + ", ";
-					}else {
-						EnrollmentsNotPresent += En[0] + ", ";
-					}
-					
-					if (!WebDriver_Functions.CheckBodyText("Discount program is pending.")) {
-						NonGeneric += En[0] + ", ";
-					}
-				}
 
-			}
-			
-			Helper_Functions.PrintOut("EnrollmentsPresent: " + EnrollmentsPresent + "\n" + 
-										"EnrollmentsNotPresent: " + EnrollmentsNotPresent + "\n" + 
-										"Non generic discounts: " + NonGeneric, false);
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
 	
 	@Test
 	public void TesitngRollingBounce(){

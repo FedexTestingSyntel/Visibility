@@ -9,5 +9,4 @@ public class Enrollment_Data {
 	public String MEMBERSHIP_ID;
 	public String IDENTIFIER;
 	public String AEM_LINK;
-
 }

@@ -227,7 +227,7 @@ public class WRTT_Functions {
 		}
 	}//end WRTT_eCRV_Service_Links
 
- 	public static String eCRVNavigation(String CountryCode) {
+ 	public static String eCRVNavigation(String CountryCode) throws Exception {
 		// launch the browser and direct it to the Base URL
 		try{
 			WebDriver_Functions.ChangeURL("WGRT", CountryCode, true);
@@ -237,7 +237,7 @@ public class WRTT_Functions {
 			WebDriver_Functions.isPresent(By.xpath("//*[@id='content']/form/div[4]/div[1]/div/button/label"));
 			return CountryCode + " Rate sheet link in WGRT is enabled";
 		}catch (Exception e){
-			return CountryCode + " Link is not present";
+			throw e;
 		}
 	}
 }

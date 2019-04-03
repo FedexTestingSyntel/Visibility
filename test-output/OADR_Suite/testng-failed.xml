@@ -5,13 +5,14 @@
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   <test thread-count="8" name="OADR_Test(failed)" parallel="methods">
+    <parameter name="Level" value="3"/>
     <classes>
-      <class name="WaterfallApplications.OADR">
+      <class name="OADR_Application.OADR">
         <methods>
           <include name="beforeClass"/>
-          <include name="OADR_Apply_Discount_To_Account" invocation-numbers="0"/>
+          <include name="OADR_Apply_Discount_To_Account" invocation-numbers="4 0 1 3"/>
         </methods>
-      </class> <!-- WaterfallApplications.OADR -->
+      </class> <!-- OADR_Application.OADR -->
     </classes>
   </test> <!-- OADR_Test(failed) -->
 </suite> <!-- Failed suite [OADR_Suite] -->

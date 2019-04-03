@@ -1,5 +1,7 @@
 package Data_Structures;
 
+import SupportClasses.Helper_Functions;
+
 public class User_Data {
 	public String UUID_NBR;
 	public String SSO_LOGIN_DESC;
@@ -29,6 +31,17 @@ public class User_Data {
 	
 	public User_Data() {
 		//generic constructor
+		this.USER_PASSWORD_DESC = Helper_Functions.myPassword;
+		this.SECRET_QUESTION_DESC = "SP2Q1";//ask for mothers name by default
+		this.SECRET_ANSWER_DESC = "mom";
+		this.EMAIL_ADDRESS = Helper_Functions.MyEmail;
+	}
+	
+	public static User_Data Set_Dummy_Contact_Name(User_Data User_Info, String CountryCode, String Level) {
+		String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
+		User_Info.FIRST_NM = ContactName[0];
+		User_Info.LAST_NM = ContactName[2];
+		return User_Info;
 	}
 }
 

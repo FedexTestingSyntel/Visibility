@@ -16,7 +16,7 @@ import TestingFunctions.WRTT_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WRTT{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 	static boolean SmokeTest = true;
 	
@@ -63,7 +63,7 @@ public class WRTT{
 		    			}
 		    		}
 		    	break;
-		    	case "WRTT_eCRV_Page":
+		    	case "WRTT_SpalshPage_eCRV":
 		    	case "WRTT_eCRV_WRTTLink":
 		    		//data.add( new Object[] {Level, "US"});
 		    		for (int j=0; j < CountryList.length; j++) {				
@@ -86,7 +86,7 @@ public class WRTT{
 		}
 	}//end WRTT_Rate_Sheet
 	
-	@Test(dataProvider = "dp", enabled = false)
+	@Test(dataProvider = "dp", enabled = true)
 	public static void WRTT_eCRV_WRTTLink(String Level, String CountryCode){
 		Helper_Functions.PrintOut("Validate the eCRV page for " + CountryCode, false);
 		try {
@@ -97,7 +97,7 @@ public class WRTT{
 		}
 	}//end WRTT_eCRV
 	
-	@Test(dataProvider = "dp", enabled = false)
+	@Test(dataProvider = "dp", enabled = true)
 	public static void WRTT_SpalshPage_eCRV(String Level, String CountryCode){
 		Helper_Functions.PrintOut("Validate the RateSheets link is present in WGRT page for " + CountryCode, false);
 		try {

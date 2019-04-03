@@ -36,7 +36,8 @@ public class Create_Accounts_New{
 		}
 		
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("CN");
+		CountryList = Environment.getCountryList("PH");
+		//CountryList = new String[][]{{"JP", ""}, {"MY", ""}, {"PH", ""}, {"SG", ""}, {"KR", ""}, {"TW", ""}, {"TH", ""}};
 	}
 	
 	@DataProvider //(parallel = true)
@@ -66,6 +67,7 @@ public class Create_Accounts_New{
 			Account_Data[] Accounts = null;
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Info.Email = Helper_Functions.MyFakeEmail;
+			Account_Info.Level = Level;
 			Account_Info.Company_Name = Helper_Functions.CurrentDateTime();
 			Accounts = CreateAccountNumbers(Account_Info, Operating_Companies, 10);
 			writeAccountsToExcel(Accounts, Operating_Companies);
@@ -108,7 +110,7 @@ public class Create_Accounts_New{
 			WebDriver_Functions.Select(By.id("acct_info_source_grp"), "ALLIANCES","v");//the Source group of the account numbers
 			
 			WebDriver_Functions.WaitPresent(By.id("acctinfo_customertype"));
-			String Account_Type = "BUSINESS " + OperatingCompanies;
+			String Account_Type = "BUSINESS";
 			WebDriver_Functions.Select(By.id("acctinfo_customertype") , Account_Type,"v");//Customer WebDriver_Functions.Type
 			
 			//This next section will populate based on the country and the customer type
@@ -125,6 +127,8 @@ public class Create_Accounts_New{
 				WebDriver_Functions.Select(By.id("acct_type_fht") , "SHIPPER","v");//Freight WebDriver_Functions.Type
 				WebDriver_Functions.Select(By.id("acct_sub_type_fht") , "DOCK","v");//Freight Sub WebDriver_Functions.Type
 			}
+			
+			Account_Type += OperatingCompanies;
 			
 			WebDriver_Functions.Type(By.id("acctinfo_no_acct"), Integer.toString(NumAccounts)); //number of account numbers that should be created
 			WebDriver_Functions.Click(By.id("next_contact"));
@@ -170,9 +174,10 @@ public class Create_Accounts_New{
 			}
 			
 			//if the address validation page is displayed.
-			if(WebDriver_Functions.isVisable(By.id("adrs_val_non_modified"))){
-				WebDriver_Functions.Select(By.id("addr_validation_override_input_info"), "CUSTOMER_PROVIDED_PROOF", "v");
-				WebDriver_Functions.Click(By.id("adrs_val_non_modified"));
+			boolean ModifiedAddress = false;
+			if(WebDriver_Functions.isVisable(By.id("adrs_val_modified"))){
+				WebDriver_Functions.Click(By.id("adrs_val_modified"));
+				ModifiedAddress = true;
 			}else if (WebDriver_Functions.isVisable(By.id("nomatch"))){
 				WebDriver_Functions.Click(By.id("nomatch"));
 			}
@@ -180,10 +185,14 @@ public class Create_Accounts_New{
 			//Regulator Information page
 			String StateTax = "", CountryTax = "";
 			if (WebDriver_Functions.isVisable(By.id("next_reg"))) {
+				if (WebDriver_Functions.isVisable(By.id("dyn_vat_lbl"))){//Vat Number
+					WebDriver_Functions.Type(By.id("dyn_vat_lbl"), Account_Info.Billing_Country_Code + "000000000000000000"); //generic no vat number
+				}
+				
 				Tax_Data Tax_Info = Environment.getTaxDetails(BillingCountryCode);
 				if (Tax_Info != null) {
 					StateTax = Tax_Info.STATE_TAX_ID;
-					CountryTax = Tax_Info.TAX_ID;
+					CountryTax = Tax_Info.TAX_ID;	
 					if (WebDriver_Functions.isVisable(By.xpath("//*[@id='mand']"))){//Tax id 1
 						WebDriver_Functions.Type(By.id("reg_tax_id_one"), StateTax);
 					}
@@ -191,7 +200,6 @@ public class Create_Accounts_New{
 						WebDriver_Functions.Type(By.id("reg_tax_id_two"), CountryTax);
 					}
 				}
-				
 				WebDriver_Functions.Click(By.id("next_reg"));
 			}
 			
@@ -246,10 +254,17 @@ public class Create_Accounts_New{
 			
 			Account_Data Account_Details[] = new Account_Data[NumAccounts];
 			StringTokenizer tok = new StringTokenizer(AccountNumbers, ",", true);
+			
 
+			
 			for (int i = 0 ; i < NumAccounts; i++) {
 				Account_Details[i] = new Account_Data(Account_Info);
 				String token = tok.nextToken();
+				if (ModifiedAddress) {
+					Account_Info = Account_Lookup.Account_DataAccountDetails(token, Account_Info.Level, "FX");
+					Account_Details[i] = new Account_Data(Account_Info);
+					ModifiedAddress = false;
+				}
 				Account_Details[i].Account_Number = token;
 			    Account_Details[i].Account_Type = Account_Type;
 			    Account_Details[i].Tax_ID_One = StateTax;

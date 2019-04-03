@@ -21,7 +21,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class OADR{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -41,6 +41,7 @@ public class OADR{
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "OADR_Apply_Discount_To_Account":
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		int Enrollments = 0;
 		    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (Enrollment_Data Enrollment: ED) {
@@ -49,13 +50,15 @@ public class OADR{
 				    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contentEquals("T")) {
 				    					data.add( new Object[] {Level, Enrollment, UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
 				    					UD[k].COUNTRY_CD = "";//so the same user will not be used again for same scenario
+				    					Enrollments++;
 					    				break;
 				    				}
 				    			}
 		    				}
-		    			}
-		    			
-		    			
+		    				if (Enrollments > 4) {
+		    					break;
+		    				}
+		    			}	
 		    		}
 		    	break;
 			}
@@ -82,6 +85,11 @@ public class OADR{
 			
 			WebDriver_Functions.ChangeURL_EnrollmentID(ED, false, false);
 
+			if (WebDriver_Functions.isPresent(By.id("apply discounts"))) {
+				WebDriver_Functions.Click(By.id("apply discounts"));
+				Helper_Functions.PrintOut("Discount " + ED.ENROLLMENT_ID + " is not migrationed to AEM");
+			}
+				
 	 		//select the apply discount radio button and continue.
 			WebDriver_Functions.Click(By.xpath("//input[(@name='whichBillingAddress') and (@value = 'useContactAddress')]"));
 			WebDriver_Functions.takeSnapShot("Apply Discount.png");
@@ -93,9 +101,10 @@ public class OADR{
 	 			WebDriver_Functions.WaitForTextNotPresentIn(By.tagName("body"), "We are processing your request.");
 			}catch (Exception e) {}
 	 		
-	 		if (WebDriver_Functions.isPresent(By.name("discountConflictResolution"))){
+	 		Helper_Functions.Wait(1);
+	 		
+	 		if (WebDriver_Functions.isPresent(By.xpath("//input[(@name='discountConflictResolution') and (@value = 'applyNewDiscount')]"))){
 	 			WebDriver_Functions.Click(By.xpath("//input[(@name='discountConflictResolution') and (@value = 'applyNewDiscount')]"));
-	 			//WebDriver_Functions.ElementMatches(By.xpath("//*[@id='content']/div/div[2]/p[2]/font"), "You have existing discounts for FedEx Express®, FedEx Ground®, and/or FedEx Freight® services on your account. Those discounts will be replaced with new discounts should you choose to enroll in this program. For more information about the new discounts, call a FedEx Advantage® representative at 1.800.434.9918.", 116519);
 	 			WebDriver_Functions.takeSnapShot("Discount Conflict.png");
 	 			
 	 			InvoiceOrCCValidaiton(Credit_Card);
@@ -110,17 +119,13 @@ public class OADR{
 	 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), UserId);
 	 		WebDriver_Functions.takeSnapShot("Confirmation.png");
 	 		
+	 		String Results[] = new String[] {UserId, ED.ENROLLMENT_ID};
+			return Results;
 		}catch (Exception e) {
 			throw e;
 		}
-		
-		String Results[] = new String[] {UserId, ED.ENROLLMENT_ID};
-		
-		return Results;
 	}//end OADR_ApplyDiscount
 
-
-	
 	public void Apply_Discount(Enrollment_Data EN, String Credit_Card, String DTValue, String UserId) throws Exception{
 		//select the apply discount radio button and continue.
 		WebDriver_Functions.Click(By.xpath("//input[(@name='whichBillingAddress') and (@value = 'useContactAddress')]"));

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="4" total="5" passed="1">
+<testng-results skipped="0" failed="0" ignored="2" total="18" passed="16">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="31309" started-at="2019-03-15T18:35:22Z" finished-at="2019-03-15T18:35:53Z">
+  <suite name="Default suite" duration-ms="57141" started-at="2019-04-03T21:36:54Z" finished-at="2019-04-03T21:37:51Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="31309" started-at="2019-03-15T18:35:22Z" finished-at="2019-03-15T18:35:53Z">
-      <class name="WDPA_Application.WDPA_SmokeTest">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WDPA_Application.WDPA_SmokeTest@dd0c991]" name="beforeClass" is-config="true" duration-ms="41" started-at="2019-03-15T18:35:22Z" finished-at="2019-03-15T18:35:22Z">
+    <test name="Default test" duration-ms="57141" started-at="2019-04-03T21:36:54Z" finished-at="2019-04-03T21:37:51Z">
+      <class name="USRC_Application.USRC_General">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="beforeClass" is-config="true" duration-ms="24" started-at="2019-04-03T21:36:54Z" finished-at="2019-04-03T21:36:54Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="Pickup_LTLFreight_Anonymous(java.lang.String, java.lang.String)[pri:0, instance:WDPA_Application.WDPA_SmokeTest@dd0c991]" name="Pickup_LTLFreight_Anonymous" duration-ms="30898" started-at="2019-03-15T18:35:22Z" data-provider="dp" finished-at="2019-03-15T18:35:53Z">
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="3258" started-at="2019-04-03T21:36:58Z" data-provider="dp" finished-at="2019-04-03T21:37:01Z">
           <params>
             <param index="0">
               <value>
@@ -20,14 +20,334 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[US]]>
+                <![CDATA[L3WIDMUS032019T141106uvgd]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- Pickup_LTLFreight_Anonymous -->
-      </class> <!-- WDPA_Application.WDPA_SmokeTest -->
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="1655" started-at="2019-04-03T21:37:01Z" data-provider="dp" finished-at="2019-04-03T21:37:03Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3USCreate032019T160304kdoc]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="1950" started-at="2019-04-03T21:37:03Z" data-provider="dp" finished-at="2019-04-03T21:37:05Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3InetUS032019T160552jpyd]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4539" started-at="2019-04-03T21:37:05Z" data-provider="dp" finished-at="2019-04-03T21:37:10Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3700832996US032019T161109vtid]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="2187" started-at="2019-04-03T21:37:10Z" data-provider="dp" finished-at="2019-04-03T21:37:12Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3WIDMUS032119T152250xcdz]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="2078" started-at="2019-04-03T21:37:12Z" data-provider="dp" finished-at="2019-04-03T21:37:14Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3WdpaUS040319T163050osxd]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4630" started-at="2019-04-03T21:37:14Z" data-provider="dp" finished-at="2019-04-03T21:37:18Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3USss90705920CC040319T162134gplr]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="1896" started-at="2019-04-03T21:37:18Z" data-provider="dp" finished-at="2019-04-03T21:37:20Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3USCreate040319T162133hrub]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="2090" started-at="2019-04-03T21:37:20Z" data-provider="dp" finished-at="2019-04-03T21:37:22Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3WdpaUS040319T162134hpuc]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4894" started-at="2019-04-03T21:37:22Z" data-provider="dp" finished-at="2019-04-03T21:37:27Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3GBgb03501617CC032119T174207tvwu]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4372" started-at="2019-04-03T21:37:27Z" data-provider="dp" finished-at="2019-04-03T21:37:32Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3BRcb12265612CC032119T174207iijo]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4819" started-at="2019-04-03T21:37:32Z" data-provider="dp" finished-at="2019-04-03T21:37:37Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3AUau17787717CC032119T174207jrnw]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="3193" started-at="2019-04-03T21:37:37Z" data-provider="dp" finished-at="2019-04-03T21:37:40Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3CAbb11030210CC032119T174207nbzh]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4132" started-at="2019-04-03T21:37:40Z" data-provider="dp" finished-at="2019-04-03T21:37:44Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3USss90705920CC032119T174207wsgd]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4253" started-at="2019-04-03T21:37:44Z" data-provider="dp" finished-at="2019-04-03T21:37:48Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3AErv12265612CC032119T174207eylw]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="3266" started-at="2019-04-03T21:37:48Z" data-provider="dp" finished-at="2019-04-03T21:37:51Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[L3Acc642304305N032219T114543siwh]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Test1234]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CheckLogin -->
+      </class> <!-- USRC_Application.USRC_General -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

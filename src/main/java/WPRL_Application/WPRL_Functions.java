@@ -264,6 +264,33 @@ public class WPRL_Functions {
 		return new String[] {"Nickname: " + Nickname, "FedExOnlineSolutions: " + FedExOnlineSolutions, "ShippingAddress: " + ShippingAddress, "CreditCard:" + CreditCard, "Invoice:" + Invoice};
 	}//end WPRL_Contact
 
+	public static boolean WPRL_FDM_RecipientContactInformation(String CountryCode, String AddressDetails[], String Name[]) throws Exception{
+		try{
+			WebDriver_Functions.WaitForTextNot(By.id("rc_country_val"), (""));
+			WebDriver_Functions.Click(By.xpath("//*[@id='edit']"));
+			WPRL_Contact_Input(AddressDetails, Name, Helper_Functions.LoadPhone_Mobile_Fax_Email("US"), Helper_Functions.MyFakeEmail, "rc");
+			WebDriver_Functions.Click(By.id("rc_savebtn"));
+		
+			//confirm that updates have been made
+			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
+			if(WebDriver_Functions.isPresent(By.id("general-errors-contact"))){
+				Helper_Functions.PrintOut("--" + WebDriver_Functions.GetText(By.id("general-errors-contact")) + "--", true);
+				WebDriver_Functions.ChangeURL("WPRL_FDM", CountryCode, false);
+				WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
+				throw new Exception();
+			}
+			WebDriver_Functions.WaitForText(By.id("rc_update_msg"), "Your updates have been saved.");
+			WebDriver_Functions.takeSnapShot("FDM contactEdit.png");
+			return true;
+		}catch(Exception e){
+			Helper_Functions.PrintOut("Not able to update contact information ", true);
+			WebDriver_Functions.ChangeURL("WPRL_FDM", CountryCode, false);
+			//e.printStackTrace();
+			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
+		}
+		return false;
+	}
+	
 	public static String[] WPRL_FDM(String CountryCode, String User, String Password, String AddressDetails[], String CardDetails[], String Name[]) throws Exception{
 		//https://wwwdev.idev.fedex.com/apps/myprofile/deliverymanager/?locale=en_us&cntry_code=us
 		
@@ -286,28 +313,7 @@ public class WPRL_Functions {
 			}
 	 			
 // Recipient Contact Information
-			try{
-				WebDriver_Functions.WaitForTextNot(By.id("rc_country_val"), (""));
-				WebDriver_Functions.Click(By.xpath("//*[@id='edit']"));
-				WPRL_Contact_Input(AddressDetails, Name, Helper_Functions.LoadPhone_Mobile_Fax_Email("US"), Helper_Functions.MyFakeEmail, "rc");
-				WebDriver_Functions.Click(By.id("rc_savebtn"));
-			
-				//confirm that updates have been made
-				WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
-				if(WebDriver_Functions.isPresent(By.id("general-errors-contact"))){
-					Helper_Functions.PrintOut("--" + WebDriver_Functions.GetText(By.id("general-errors-contact")) + "--", true);
-					WebDriver_Functions.ChangeURL("WPRL_FDM", CountryCode, false);
-					WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
-					throw new Exception();
-				}
-				WebDriver_Functions.WaitForText(By.id("rc_update_msg"), "Your updates have been saved.");
-				WebDriver_Functions.takeSnapShot("FDM contactEdit.png");
-			}catch(Exception e){
-				Helper_Functions.PrintOut("Not able to update contact information ", true);
-				WebDriver_Functions.ChangeURL("WPRL_FDM", CountryCode, false);
-				e.printStackTrace();
-				WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
-			}
+			boolean RecipientContactInformation = WPRL_FDM_RecipientContactInformation(CountryCode, AddressDetails, Name);
 			
 // Test the Credit Card Section
 			try{

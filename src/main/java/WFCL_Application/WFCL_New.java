@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "6";  
+	static String LevelsToTest = "3";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -128,12 +128,12 @@ public class WFCL_New{
 		    		}
 		    		*/
 		    		
-		    		data.add( new Object[] {Level, "930626813"});
+		    		data.add( new Object[] {Level, "762983540"});
 		    		//data.add( new Object[] {Level, "644280888"});
 		    		//data.add( new Object[] {Level, "642260243"});
 			    	//data.add( new Object[] {Level, "633504580"});
 		    		break;
-		    	case "Link_account_to_user":
+		    	case "Link_Account_To_User":
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 30; k < UD.length; k++) {
@@ -145,11 +145,20 @@ public class WFCL_New{
 		    			}
 					}
 		    		break;
+		    	case "Link_Account_To_Specific_User":
+		    		User_Data User_Info = new User_Data();
+					User_Info.SSO_LOGIN_DESC = "L6Acc700232794N032019T104345twxs";
+					User_Info.USER_PASSWORD_DESC = "Test1234";
+					String AccountNumber = "700195279";
+		    		data.add( new Object[] {Level, User_Info, AccountNumber});
+		    		AccountNumber = "700194795";
+		    		data.add( new Object[] {Level, User_Info, AccountNumber});
+		    		break;
 		    	case "WFCL_GFBO_Registration":
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 30; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].GFBO_ENABLED.contains("F") && !UD[k].ACCOUNT_NUMBER.contentEquals("")) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contains("F") && UD[k].GFBO_ENABLED.contains("F")) {
 		    					Account_Info = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
 		    					data.add( new Object[] {Level, UD[k], Account_Info});
 		    					break;
@@ -166,23 +175,36 @@ public class WFCL_New{
 	public void CreditCardRegistrationEnroll(String Level, Enrollment_Data Enrollment_Info, Account_Data Account_Info, Tax_Data Tax_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
-			//Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
-			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V", "5472332002526049"));
-			
-			///5472332002526122
-			//5472332002526189
+			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
 
 			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
-			
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	public void AccountRegistration_INET_Test(String Level, String Account){
+		try {
+			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
+			//Account_Info.UserId = "L3WFCLUSERID01";
+			//create user id and link to account number.
+			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
+			//register the userid to INET
+			WFCL_Functions_UsingData.INET_Registration(Account_Info);
+			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
 	@Test(dataProvider = "dp")
 	public void UserRegistration_Account_Data(String Level, Account_Data Account_Info) {
 		try {
@@ -227,7 +249,7 @@ public class WFCL_New{
 	}
 	
 	@Test(dataProvider = "dp", priority = 1)
-	public void AccountRegistration_INET(String Level, Account_Data Account_Info){
+	public void rese(String Level, Account_Data Account_Info){
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
@@ -290,16 +312,9 @@ public class WFCL_New{
 	}	
 	
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
-	public void AccountRegistration_INET_Test(String Level, String Account){
+	public void Link_Account_To_User(String Level, User_Data User_Info, Account_Data Account_Info){
 		try {
-			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
-			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
-			//create user id and link to account number.
-			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
-			//register the userid to INET
-			WFCL_Functions_UsingData.INET_Registration(Account_Info);
-			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
+			String Result[] = WFCL_Functions_UsingData.Account_Linkage(User_Info, Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -307,8 +322,9 @@ public class WFCL_New{
 	}
 	
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
-	public void Link_account_to_user(String Level, User_Data User_Info, Account_Data Account_Info){
-		try {			
+	public void Link_Account_To_Specific_User(String Level, User_Data User_Info, String Account_Number){
+		try {
+			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account_Number, Level, "FX");
 			String Result[] = WFCL_Functions_UsingData.Account_Linkage(User_Info, Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
@@ -330,6 +346,7 @@ public class WFCL_New{
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void WFCL_GFBO_Registration(String Level, User_Data User_Info, Account_Data Account_Info) {
 		try {
+			Account_Info = Account_Lookup.Account_DataAccountDetails("642893645", Level, "FX");
 			String Result[] = WFCL_Functions_UsingData.WFCL_GFBO_Registration(User_Info, Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {

@@ -19,13 +19,13 @@ import java.util.List;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WCRV{
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("smoke");
+		//CountryList = Environment.getCountryList("smoke");
 		CountryList = Environment.getCountryList("full");
 		//CountryList = Environment.getCountryList("high");
 		//CountryList = new String[][]{{"US", "United States"},{"AU", "Australia"},{"CA", "Canada"},{"GB", "United Kingdom"},{"BR", "Brazil"},{"AE", "United Arab Emirates"}};
@@ -56,7 +56,7 @@ public class WCRV{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].WCRV_ENABLED.contains("T") && UD[k].COUNTRY_CD.contains(CountryList[j][0])) {
+		    				if (UD[k].WCRV_ENABLED.contains("T") && UD[k].COUNTRY_CD.contains(CountryList[j][0]) && !UD[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "INTRA_COUNTRY", 1});
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "EXPORT", 1});
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "IMPORT", 1});
