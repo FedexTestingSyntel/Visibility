@@ -85,7 +85,6 @@ public class TestNG_ReportListener implements IReporter {
 			//Add the test case count to the file name.
 			outputDirectory += String.format(" T%sP%sF%s.html", totalTestCount, totalTestPassed, totalTestFailed);
 			File targetFile = new File(outputDirectory);
-			System.out.println("Report Saved: " + outputDirectory);
 			
 			//Create folder directory for writing the report.
 			String Folder = outputDirectory;
@@ -97,6 +96,9 @@ public class TestNG_ReportListener implements IReporter {
 				}
 				fw = new FileWriter(targetFile);
 				fw.write(customReportTemplateStr);
+				System.out.println("Report Saved: " + outputDirectory);
+				//open the newly created report.
+				WebDriver_Functions.OpenFile(outputDirectory);
 			} catch (Exception e) {  
 				System.out.println("Warning, Unable to create directory for: " + Folder);
 			}finally {

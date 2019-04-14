@@ -150,7 +150,7 @@ public class WFCL_SmokeTest{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 1)
+	@Test(dataProvider = "dp")
 	public void AccountRegistration_INET(String Level, Account_Data Account_Info){
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
@@ -193,7 +193,7 @@ public class WFCL_SmokeTest{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 1)
+	@Test(dataProvider = "dp")
 	public void Password_Reset_Secret(String Level, User_Data User_Info, String newPassword){
 		try {
 			String Result = WFCL_Functions_UsingData.WFCL_Secret_Answer(User_Info, newPassword);
@@ -212,6 +212,5 @@ public class WFCL_SmokeTest{
 			Assert.fail(e.getMessage());
 		}
 	}	
-	
 
 }

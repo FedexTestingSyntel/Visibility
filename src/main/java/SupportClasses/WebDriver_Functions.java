@@ -12,6 +12,7 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
@@ -60,8 +61,8 @@ public class WebDriver_Functions{
     		case "HOME":  		AppUrl = LevelURL + "/en-us/home.html";break;
     		case "INET":		AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";break;
     		case "INET_ADD_ACCOUNT":		AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?step3URL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF%26programIndicator%3D0&appName=fclfsm&countryCode=" + CCL + "&languageCode=en&programIndicator=1&rp=fclmyprofile";break;
-    		case "JSP":  		AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp";//independent of levelbreak;
-    		case "JSP_EXPRESS":	AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/express.jsp";break;
+    		case "JSP":  		AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp"; break;
+    		case "JSP_EXPRESS":	AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/express.jsp"; break;
     		case "PREF":  AppUrl = LevelURL + "/preferences";break;	
     		case "WFCLForgot":
     			//https://wwwdrt.idev.fedex.com/fcl/web/jsp/forgotPassword.jsp?appName=fclfsm&locale=us_en&step3URL=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&returnurl=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&programIndicator=0
@@ -523,7 +524,15 @@ public class WebDriver_Functions{
     	}else {
     		return ""; //element is not preset on page.
     	}
-    	
+	}
+    
+    public static String getURLByhref(By Ele)throws Exception{
+    	if (isPresent(Ele)) {
+    		String ElementURL = DriverFactory.getInstance().getDriver().findElement(Ele).getAttribute("href");
+    		return ElementURL;
+    	}else {
+    		return ""; //element is not preset on page.
+    	}
 	}
     
     public static boolean isSelected(By Ele) throws Exception{
@@ -535,6 +544,16 @@ public class WebDriver_Functions{
     	
     }
 	
+    public static boolean OpenFile(String FilePath) {
+    	try {
+        	DriverFactory.getInstance().getDriver().get(FilePath);
+    		return true;
+    	}catch(Exception e) {
+    		Helper_Functions.PrintOut("Counld not open file: " + FilePath);
+    		return false;//False if file could not be opened.
+    	}
+    }
+    
     public static String GetCookieUUID(){
     	return GetCookieValue("fcl_uuid");
     }
@@ -618,6 +637,7 @@ public class WebDriver_Functions{
 	}
 	
     public static boolean Login(String UserName, String Password, String Application) throws Exception {
+    	//high level 
     	if(UserName == null || UserName == ""){
     		Helper_Functions.PrintOut("Cannot login with user id as null. Recieved from " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
     		throw new Exception("User not provided");
@@ -625,6 +645,8 @@ public class WebDriver_Functions{
     		Helper_Functions.PrintOut("Cannot login with password as null. Recieved from " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
     		throw new Exception("Password not provided.");
     	}
+    	
+    	//navigate to US home page and clear cookies.
     	ChangeURL("HOME", "US", true);
     	
     	if (Application.contains("WFCL")) {
@@ -701,11 +723,8 @@ public class WebDriver_Functions{
         		Helper_Functions.PrintOut("Not able to login through US home page", true);
         	}//end try catch for logging into home page
     	}
-
     	
-
-    	
-    	Helper_Functions.PrintOut("Not able to login through any flow, check user id.", true);
+    	Helper_Functions.PrintOut("Not able to login through " + Application + " flows, check user id.", true);
     	//Need to add a scenario to login through WIDM
 		return false;
     	

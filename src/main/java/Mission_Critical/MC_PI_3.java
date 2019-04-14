@@ -43,7 +43,7 @@ public class MC_PI_3{
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
 			String Rewards_APAC_AND_LAC[] = new String[] {"au", "cn", "hk", "jp", "my", "nz", "ph", "sg", "kr", "tw", "th", "br", "mx"};
-			
+
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case"WIDM_Registration_Email_Validation":
 				case"WFCL_Registration_Email_Validation":
@@ -115,6 +115,7 @@ public class MC_PI_3{
 					break;
 			}
 		}
+
 		System.out.println("Starting " + m.getName() + " : There are " + data.size() + " scenarios.");
 		return data.iterator();
 	}
@@ -162,7 +163,7 @@ public class MC_PI_3{
 
 	//443446 alliance program page transition - getting rid of old WFCL marketing page
 	//443452 loading dt.html
-	@Test(dataProvider = "dp", description = "443496, 443446, 443452", enabled = true) 
+	@Test(dataProvider = "dp", description = "443496, 443446, 443452", enabled = false) 
 	public void WFCL_Alliance_Marketing(String Level, User_Data User_Info, Enrollment_Data Enrollment_Info) {
 		try {
 			String Result[] = WFCL_Functions_UsingData.AEM_Discount_Validate( User_Info, Enrollment_Info);
@@ -174,7 +175,7 @@ public class MC_PI_3{
 	
 	//443446 alliance program page transition - getting rid of old WFCL marketing page
 	//443452 loading dt.html
-	@Test(dataProvider = "dp", description = "482695, 443446, 443452", enabled = false)
+	@Test(dataProvider = "dp", description = "482695, 443446, 443452", enabled = true)
 	public void WFCL_Alliance_Marketing_CodeRequired(String Level, User_Data User_Info, Enrollment_Data Enrollment_Info) {
 		try {
 			String Result[] = WFCL_Functions_UsingData.AEM_Discount_Validate( User_Info, Enrollment_Info);
@@ -184,7 +185,7 @@ public class MC_PI_3{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "482700, 494070", enabled = false)
+	@Test(dataProvider = "dp", description = "482700, 494070", enabled = true)
 	public void WFCL_Alliance_Marketing_Error_Page(String Level, Enrollment_Data Enrollment_Info) {
 		try {
 			String Result = WFCL_Functions_UsingData.AEM_Error_Validation(Enrollment_Info, "");
@@ -195,7 +196,7 @@ public class MC_PI_3{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "482700, 494070", enabled = false)
+	@Test(dataProvider = "dp", description = "482700, 494070", enabled = true)
 	public void WFCL_Alliance_Marketing_Error_Page_Blank(String Level, Enrollment_Data Enrollment_Info) {
 		try {
 			String Result = WFCL_Functions_UsingData.AEM_Error_Validation(Enrollment_Info, " ");
@@ -234,4 +235,42 @@ public class MC_PI_3{
 	}
 	
 	
+	
+	
+	
+	@DataProvider (parallel = true)
+	public static Iterator<Object[]> dp_dt() {
+		List<Object[]> data = new ArrayList<Object[]>();
+		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
+			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
+			int intLevel = Integer.parseInt(Level);
+			Enrollment_Data ED_One[] = Environment.getEnrollmentDetails(intLevel);
+			for (Enrollment_Data Enrollment_Info: ED_One) {
+				if (!Enrollment_Info.AEM_LINK.contentEquals("")) {
+					data.add( new Object[] {Level, Enrollment_Info});
+				}
+			}
+		}
+		return data.iterator();
+	}
+	//quick check on the values in the DT files
+	@Test(dataProvider = "dp_dt", description = "", enabled = false)
+	public void WFCL_DT_Check(String Level, Enrollment_Data Enrollment_Info) {
+		String DTValue = "";
+		try {
+			WebDriver_Functions.ChangeURL("DT_" + Enrollment_Info.ENROLLMENT_ID, Enrollment_Info.COUNTRY_CODE, false);
+			WebDriver_Functions.takeSnapShot(Enrollment_Info.ENROLLMENT_ID + " DT Value.png");
+			
+			//close if there is an alert message. This is specific to L6
+			if (WebDriver_Functions.isPresent(By.cssSelector("body > header > fedex-alert > div > div > span.fxg-alert__close-btn > svg"))) {
+				WebDriver_Functions.Click(By.cssSelector("body > header > fedex-alert > div > div > span.fxg-alert__close-btn > svg"));
+			}
+			DTValue = WebDriver_Functions.GetBodyText();
+			
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+		Helper_Functions.PrintOut(DTValue);
+		
+	}
 }

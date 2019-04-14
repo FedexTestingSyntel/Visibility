@@ -72,7 +72,7 @@ public class Account_Data {
 
 	public static void Print_Account_Address(Account_Data Account_Info) {
 		String Address[] = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2, Account_Info.Billing_City, Account_Info.Billing_State_Code, Account_Info.Billing_Zip, Account_Info.Billing_Country_Code, Account_Info.Billing_Region};
-		Helper_Functions.PrintOut(Arrays.toString(Address));
+		Helper_Functions.PrintOut(Account_Info.Account_Number + "   " + Arrays.toString(Address));
 	}
 	
 	public static Account_Data Set_Account_Nickname(Account_Data Account_Info, String Nickname) {

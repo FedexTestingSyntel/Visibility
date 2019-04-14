@@ -356,6 +356,12 @@ public class Environment {
 				return CD;
 			}
 		}
+		if (CreditCards != null) {
+			Helper_Functions.PrintOut("Credit Card of type " + Type + " not found. Using the below card instead.", false);
+			Helper_Functions.PrintOut("Credit Card: " + Arrays.toString(Credit_Card_Data.CreditCardStringArray(CreditCards[0])), false);
+			return CreditCards[0];
+		}
+		
 		return null;
 	}
 	

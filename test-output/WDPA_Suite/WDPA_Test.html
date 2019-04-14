@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>WDPA_Test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>5/0/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>4/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Mon Apr 01 10:59:12 CDT 2019</td>
+<td>Started on:</td><td>Wed Apr 10 12:50:18 CDT 2019</td>
 </tr>
-<tr><td>Total time:</td><td>192 seconds (192045 ms)</td>
+<tr><td>Total time:</td><td>171 seconds (171113 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -67,6 +67,46 @@ function toggleAllBoxes() {
 </tr>
 </table><p/>
 <small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-failed'>
+<tr><td colspan='4' align='center'><b>FAILED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='WDPA_Application.WDPA_SmokeTest.Pickup_Ground()'><b>Pickup_Ground</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 6, US, L6C1FXFUS630081440, Test1234</td>
+<td><div><pre>java.lang.AssertionError: The system has experienced an unexpected problem and is unable to complete your request. Please contact FedEx Customer Service to schedule your pickup.
+	at WDPA_Application.WDPA_SmokeTest.Pickup_Ground(WDPA_SmokeTest.java:96)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1018525251", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1018525251'><pre>java.lang.AssertionError: The system has experienced an unexpected problem and is unable to complete your request. Please contact FedEx Customer Service to schedule your pickup.
+	at org.testng.Assert.fail(Assert.java:96)
+	at WDPA_Application.WDPA_SmokeTest.Pickup_Ground(WDPA_SmokeTest.java:96)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>168</td>
+<td>WDPA_Application.WDPA_SmokeTest@2bbaf4f0</td></tr>
+</table><p>
 <table width='100%' border='1' class='invocation-passed'>
 <tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
 <tr><td><b>Test method</b></td>
@@ -75,29 +115,24 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='WDPA_Application.WDPA_SmokeTest.Pickup_Express()'><b>Pickup_Express</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 3, US, L3642210300US101118T153422, Test1234</td>
+<td title='WDPA_Application.WDPA_SmokeTest.Pickup_Express()'><b>Pickup_Express</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 6, US, L6NonA613977384, Test1234</td>
 <td></td>
-<td>132</td>
+<td>131</td>
 <td>WDPA_Application.WDPA_SmokeTest@2bbaf4f0</td></tr>
 <tr>
-<td title='WDPA_Application.WDPA_SmokeTest.Pickup_ExpressFreight()'><b>Pickup_ExpressFreight</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 3, US, L3642210300US101118T153422, Test1234</td>
+<td title='WDPA_Application.WDPA_SmokeTest.Pickup_ExpressFreight()'><b>Pickup_ExpressFreight</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 6, US, L6NonA613977384, Test1234</td>
 <td></td>
-<td>120</td>
+<td>135</td>
 <td>WDPA_Application.WDPA_SmokeTest@2bbaf4f0</td></tr>
 <tr>
-<td title='WDPA_Application.WDPA_SmokeTest.Pickup_Ground()'><b>Pickup_Ground</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 3, US, L3FreightUserUS, Test1234</td>
+<td title='WDPA_Application.WDPA_SmokeTest.Pickup_LTLFreight()'><b>Pickup_LTLFreight</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 6, US, L6C1FXFUS630081440, Test1234</td>
 <td></td>
-<td>190</td>
+<td>154</td>
 <td>WDPA_Application.WDPA_SmokeTest@2bbaf4f0</td></tr>
 <tr>
-<td title='WDPA_Application.WDPA_SmokeTest.Pickup_LTLFreight()'><b>Pickup_LTLFreight</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 3, US, L3611852606, Test1234</td>
+<td title='WDPA_Application.WDPA_SmokeTest.Pickup_LTLFreight_Anonymous()'><b>Pickup_LTLFreight_Anonymous</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 6, US</td>
 <td></td>
-<td>164</td>
-<td>WDPA_Application.WDPA_SmokeTest@2bbaf4f0</td></tr>
-<tr>
-<td title='WDPA_Application.WDPA_SmokeTest.Pickup_LTLFreight_Anonymous()'><b>Pickup_LTLFreight_Anonymous</b><br>Test class: WDPA_Application.WDPA_SmokeTest<br>Parameters: 3, US</td>
-<td></td>
-<td>57</td>
+<td>42</td>
 <td>WDPA_Application.WDPA_SmokeTest@2bbaf4f0</td></tr>
 </table><p>
 <table width='100%' border='1' class='invocation-skipped'>
@@ -108,14 +143,14 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='SupportClasses.Environment.SetEvironmentLevel()'><b>SetEvironmentLevel</b><br>Test class: SupportClasses.Environment<br>Parameters: 3</td>
+<td title='SupportClasses.Environment.SetEvironmentLevel()'><b>SetEvironmentLevel</b><br>Test class: SupportClasses.Environment<br>Parameters: 6</td>
 <td><div><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
 	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:67)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1098248031", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace1098248031'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace237769841", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace237769841'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
 	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:67)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)

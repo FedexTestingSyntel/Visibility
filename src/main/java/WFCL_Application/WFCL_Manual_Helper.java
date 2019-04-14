@@ -2,8 +2,6 @@ package WFCL_Application;
 
 import org.testng.annotations.Test;
 import Data_Structures.Account_Data;
-import Data_Structures.Enrollment_Data;
-import Data_Structures.Tax_Data;
 import Data_Structures.User_Data;
 import org.testng.annotations.BeforeClass;
 import org.testng.Assert;
@@ -25,14 +23,7 @@ public class WFCL_Manual_Helper{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("US");
-		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
-		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
-		//CountryList = Environment.getCountryList("BR");
-		//CountryList = Environment.getCountryList("JP");
-		//CountryList = Environment.getCountryList("high");
-		Helper_Functions.MyEmail = "accept@fedex.com";
-		//CountryList = new String[][]{{"AU", ""}, {"JP", ""}};
+		//Helper_Functions.MyEmail = "accept@fedex.com";
 	}
 	 
 	@DataProvider (parallel = true)
@@ -45,19 +36,21 @@ public class WFCL_Manual_Helper{
 			//int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "AccountRegistration_INET_Test":
+		    	case "AccountRegistration_Captcha_Test":
+		    	case "AccountRegistration_Take_Account_Online":
 		    		/*String Accounts[] = {"642454684", "642167308", "642455400", "797691380", "642454749", "642167405", "642455184", "797691500", "642454765", "642167529", "642455206", "797691640", "642454781", "642167626", "642455222", "797691860", "642454803", "642167723", "642455249", "797692280", "642454820", "642167820", "642455281", "797692700", "642454846", "642167928", "642455303", "797391700", "642454862", "642168142", "642455320"};
 		    		for (String A: Accounts) {
 		    			data.add( new Object[] {Level, A});
 		    		}
 		    		*/
 		    		
-		    		data.add( new Object[] {Level, "642304305"});
-		    		data.add( new Object[] {Level, "643112523"});
+		    		data.add( new Object[] {Level, "700262375"});
+		    		//data.add( new Object[] {Level, "762443880"});
 		    		//data.add( new Object[] {Level, "642260243"});
 			    	//data.add( new Object[] {Level, "633504580"});
 		    		break;
 		    	case "AccountRegistration_FDDT":
-		    		String Accounts[] = {"400119775", "400162913", "401143076", "40338185", "404547437", "405245957", "405517965", "405638452"};
+		    		String Accounts[] = {"670218872"};
 		    		for (String A: Accounts) {
 		    			data.add( new Object[] {Level, A});
 		    		}
@@ -71,6 +64,9 @@ public class WFCL_Manual_Helper{
 		    		data.add( new Object[] {Level, User_Info, AccountNumber});
 		    		AccountNumber = "700194795";
 		    		data.add( new Object[] {Level, User_Info, AccountNumber});
+		    		break;	
+		    	case "WFCL_Rewards_Registration":
+		    		data.add( new Object[] {Level, "774045660"});
 		    		break;
 			}
 		}	
@@ -95,15 +91,46 @@ public class WFCL_Manual_Helper{
 		}
 	}
 	
+	@Test(dataProvider = "dp", priority = 1)
+	public void AccountRegistration_Take_Account_Online(String Level, String Account){
+		try {
+			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data.Print_Account_Address(Account_Info);
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
+			//create user id and link to account number.
+			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
+
+			String Result[] = new String[] {Account_Info.UserId, Account_Info.Account_Number, Account_Info.UUID};
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	public void AccountRegistration_Captcha_Test(String Level, String Account){
+		try {
+			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
+			//start the test by entering captcha url and inputting data	
+			WFCL_Functions_UsingData.WFCL_UserRegistration_Captcha(Account_Info);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	 
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_FDDT(String Level, String Account){
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
-			Account_Info.UserId = "L3WFCLUSERID05";
-			//create user id and link to account number.
-		//WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info); 
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "FDDT" + Account + "N");
+			//Account_Info.UserId = "L2WFCLUSERID06";
+			//create user id and link to account number. comment out the below if linking to existing user.
+			WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info); 
 			//register the userid to INET
 			WFCL_Functions_UsingData.Account_Linkage_FDDT(Account_Info);
 			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
@@ -124,5 +151,20 @@ public class WFCL_Manual_Helper{
 		}
 	}
 	
+	@Test(dataProvider = "dp")
+	public void WFCL_Rewards_Registration(String Level, String Account) {
+		try {
+			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "Rewards" + Account + "N");
+			Account_Data.Print_Account_Address(Account_Info);
+			
+			String Result[] = WFCL_Functions_UsingData.WFCL_RewardsRegistration(Account_Info);
+
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
 
 }

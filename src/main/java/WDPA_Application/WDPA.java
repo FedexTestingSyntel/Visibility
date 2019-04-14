@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 
 public class WDPA extends WDPA_Functions{
 	
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -43,7 +43,7 @@ public class WDPA extends WDPA_Functions{
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < UD.length; k++) {
-		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].GROUND_ENABLED.contentEquals("") &&
+		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].GROUND_ENABLED.contentEquals("T") &&
 		    						(UD[k].COUNTRY_CD.contentEquals("US") || UD[k].COUNTRY_CD.contentEquals("CA"))) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					//break;

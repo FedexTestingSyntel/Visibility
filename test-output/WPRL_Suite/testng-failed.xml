@@ -11,8 +11,9 @@
         <methods>
           <include name="beforeClass"/>
           <include name="WPRL_Contact_NonAdmin" invocation-numbers="0"/>
+          <include name="WPRL_FDM" invocation-numbers="0"/>
           <include name="WPRL_Contact_Admin" invocation-numbers="0"/>
-          <include name="WPRL_FDM_Enroll" invocation-numbers="0"/>
+          <include name="WPRL_FDM_Enroll" invocation-numbers="3 4 6 5 1 0 2"/>
         </methods>
       </class> <!-- WPRL_Application.WPRL -->
     </classes>

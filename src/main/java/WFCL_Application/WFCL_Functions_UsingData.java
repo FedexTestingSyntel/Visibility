@@ -43,13 +43,13 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.Type(By.name("city1"), Account_Info.Billing_City);
 		}
 
-		if (Account_Info.Billing_State != ""){
+		if (Account_Info.Billing_State != "" && WebDriver_Functions.isPresent(By.name("state"))){
 			try {
 				//for the legacy registration page such as WDPA the code must be entered as text
 				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_State_Code);
 			}catch (Exception e){}
 		}
-		if (Account_Info.Billing_State_Code != "") {
+		if (Account_Info.Billing_State_Code != "" && WebDriver_Functions.isPresent(By.id("state"))) {
 			try{
 				WebDriver_Functions.Select(By.id("state"), Account_Info.Billing_State_Code,  "v");
 			}catch (Exception e){}
@@ -63,7 +63,7 @@ public class WFCL_Functions_UsingData{
 		WebDriver_Functions.Select(By.id("reminderQuestion"), "SP2Q1", "v"); //"What is your mother's first name?"
 		WebDriver_Functions.Type(By.id("reminderAnswer"), "mom");
 
-		if (WebDriver_Functions.isPresent(By.id("acceptterms")) && DriverFactory.getInstance().getDriver().findElement(By.id("acceptterms")).isSelected() == false) {
+		if (WebDriver_Functions.isPresent(By.id("acceptterms")) && !WebDriver_Functions.isSelected(By.id("acceptterms"))) {
 			WebDriver_Functions.Click(By.id("acceptterms"));
 		}
 
@@ -82,6 +82,7 @@ public class WFCL_Functions_UsingData{
 				Helper_Functions.PrintOut("Captcha is present on page. Waiting for manaual entry.", true);
 				WebDriver_Functions.WaitNotPresent(By.id("nucaptcha-answer"));
 			}
+
 		}
 
 		return true;
@@ -228,9 +229,7 @@ public class WFCL_Functions_UsingData{
 		//Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
 		return Account_Info;
 	}//end Account_Linkage_FDDT
-	
-	
-	
+
 	//will return the updated Account_Data with the uuid added.
 	public static String[] Account_Linkage(User_Data User_Info, Account_Data Account_Info) throws Exception{
 		Helper_Functions.PrintOut("Attempting to link " + User_Info.SSO_LOGIN_DESC + " with " + Account_Info.Account_Number, true);
@@ -255,7 +254,6 @@ public class WFCL_Functions_UsingData{
 
 		return new String[] {User_Info.SSO_LOGIN_DESC, Account_Info.Account_Number};
 	}//end Account_Linkage
-	
 	public static void AddressMismatchPage(Account_Data Account_Info) throws Exception {
 		if (WebDriver_Functions.isPresent(By.name("address1"))) {
 			WebDriver_Functions.WaitPresent(By.name("address1"));
@@ -481,9 +479,27 @@ public class WFCL_Functions_UsingData{
 			
 			WebDriver_Functions.ChangeURL(WebDriver_Functions.GetCurrentURL() + "&captcha=true", CountryCode, false);
 			
-			ContactInfo_Page(Account_Info, true); //enters all of the details
+			ContactInfo_Page(Account_Info, false); //enters all of the details
 			
-			WebDriver_Functions.GetCookieUUID();
+			if (WebDriver_Functions.isPresent(By.id("iacceptbutton"))) {
+				WebDriver_Functions.Click(By.id("iacceptbutton"));
+			}else if (WebDriver_Functions.isPresent(By.id("createUserID"))) {
+				WebDriver_Functions.Click(By.id("createUserID"));
+			}
+			
+			int Lockout = 4; // four attempts
+			for (int i = 1 ; i < Lockout + 1; i++) {
+				if (WebDriver_Functions.isPresent(By.id("nucaptcha-answer"))){
+					Helper_Functions.PrintOut("Captcha is present on page. Waiting for manaual entry.", true);
+					Helper_Functions.Wait(10);
+				}
+				WebDriver_Functions.takeSnapShot("Captcha attempt " + i + " of " + Lockout + ".png");
+			}
+			
+			while (2 > 1 ) {
+				Helper_Functions.Wait(20);  //infinite loop while manaul execution in progress
+			}
+			
 		}catch (Exception e) {}
 	}//end WFCL_UserRegistration
 	
@@ -508,9 +524,8 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.takeSnapShot("WADM CompanyName.png");
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 
-
 			WebDriver_Functions.WaitPresent(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > h3"));
-			Helper_Functions.PrintOut("Registered for Admin. Current URL:" + DriverFactory.getInstance().getDriver().getCurrentUrl(), true);
+			Helper_Functions.PrintOut("Registered for Admin. Current URL:" + WebDriver_Functions.GetCurrentURL(), true);
 			WebDriver_Functions.takeSnapShot("WADM Registration Confirmaiton.png");
 			WebDriver_Functions.Click(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > p:nth-child(6) > a"));//click shipping admin link
 			WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + CompanyName);
@@ -764,21 +779,6 @@ public class WFCL_Functions_UsingData{
     	}
 	}//end ResetPasswordWFCL_Email
     
-	public static String[] TaxIDinformation(String CountryCode, boolean BusinessAccount){
-    	String TaxID = "", StateTaxID = "";
-    	switch (CountryCode) {
-			case "GB":		//worked for account 643527529 from 8/30/18
-				TaxID = "";
-				StateTaxID = "GB2332322322312";
-				break;
-			case "BR":		//check that address matches
-				TaxID = "999.999.999-99";//worked for personal account 615002461 back in 2017
-				StateTaxID = "0962675512";
-				break;
-    	}
-    	return new String[] {TaxID, StateTaxID};
-    }
-    
 	public static String[] WFCL_WADM_Invitaiton(User_Data User_Info, Account_Data Account_Info, String Email) throws Exception{	
 		try {
 			WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
@@ -963,12 +963,13 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.ChangeURL("DT_" + Enrollment_Info.ENROLLMENT_ID, Enrollment_Info.COUNTRY_CODE, false);
 			WebDriver_Functions.takeSnapShot(Enrollment_Info.ENROLLMENT_ID + " DT Value.png");
 			
-			//close if there is an alert message. This is specific to L6
-			if (WebDriver_Functions.isPresent(By.cssSelector("body > header > fedex-alert > div > div > span.fxg-alert__close-btn > svg"))) {
-				WebDriver_Functions.Click(By.cssSelector("body > header > fedex-alert > div > div > span.fxg-alert__close-btn > svg"));
+			String DTValue = WebDriver_Functions.GetText(By.cssSelector("body > div.fxg-main-content > div > div"));
+			//this is specific to as12853311 in L6, need to find cleaner way to update.
+			if (DTValue.contains(" Up to 29% off select FedEx Express U.S. shipping")) {
+				DTValue = DTValue.replace(" Up to 29% off select FedEx Express U.S. shipping", "Up to 29% off select FedEx Express U.S. shipping");
 			}
-			String DTValue = WebDriver_Functions.GetBodyText();
-
+			Helper_Functions.PrintOut("DT Discount: ___" + DTValue + "___");
+			
 			String ApplyNowUrl = "";
 			if (!Enrollment_Info.AEM_LINK.contentEquals("")) {
 				WebDriver_Functions.ChangeURL(Enrollment_Info.AEM_LINK, Enrollment_Info.COUNTRY_CODE, false);
@@ -1003,7 +1004,8 @@ public class WFCL_Functions_UsingData{
 				}
 			
 				String BodyText = WebDriver_Functions.GetBodyText();//for sake of debug
-				if (WebDriver_Functions.CheckBodyText(DTValue)) {
+
+				if (BodyText.contains(DTValue)) {
 					WebDriver_Functions.takeSnapShot(Enrollment_Info.ENROLLMENT_ID + " Discount Matching.png");
 					/*
 					String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
@@ -1014,12 +1016,11 @@ public class WFCL_Functions_UsingData{
 				}else {
 					if (WebDriver_Functions.CheckBodyText("Sorry, we cannot find the web page you are looking for.")) {
 						throw new Exception("Sorry, we cannot find the web page you are looking for. Need to check if the discount is loaded in environment correctly.");
-					}else if (WebDriver_Functions.CheckBodyText("Apply")){
+					}else if (WebDriver_Functions.CheckBodyText("Apply now")){
 						throw new Exception("Error when checking discount. Please check why the old marketing page is present.");
 					}else {
 						throw new Exception("Error when checking discount. Please check to see if discount is migrated.");
 					}
-					
 				}
 				
 				if (CodeRequired.contentEquals("")) {
@@ -1030,7 +1031,6 @@ public class WFCL_Functions_UsingData{
 				
 		}catch (Exception e) {
 			//added enrollment in front to make easier to see from failed responses.
-			
 			throw new Exception(Enrollment_Info.ENROLLMENT_ID + ": " + e.getMessage());
 		}
 	}
@@ -1038,7 +1038,7 @@ public class WFCL_Functions_UsingData{
 	public static String AEM_Error_Validation(Enrollment_Data Enrollment_Info, String Incorrect_Value) throws Exception {
 		String passcode = Enrollment_Info.PASSCODE;
 		String membership = Enrollment_Info.MEMBERSHIP_ID;
-		String ErrorURL = "/en-us/discount-programs/Error.html";
+		String ErrorURL = WebDriver_Functions.LevelUrlReturn() + "/en-us/discount-programs/Error.html";
 		
 		if (!passcode.contentEquals("")) {
 			Enrollment_Info.PASSCODE = Incorrect_Value;
@@ -1056,7 +1056,7 @@ public class WFCL_Functions_UsingData{
 			Enrollment_Info.MEMBERSHIP_ID = membership;
 		}
 
-		return Enrollment_Info.ENROLLMENT_ID + " - Correct Error Page.";
+		return Enrollment_Info.ENROLLMENT_ID + " - Expected Error page is appearing. " + ErrorURL;
 	}
 	
 	public static String[] WFCL_RewardsRegistration(Account_Data Account_Info) throws Exception{
@@ -1068,6 +1068,11 @@ public class WFCL_Functions_UsingData{
  			//click sign up now and begin registration
  			WebDriver_Functions.WaitClickable(By.name("signupnow"));
  			WebDriver_Functions.Click(By.name("signupnow"));
+ 			
+ 			if (WebDriver_Functions.isPresent(By.id("accountType2Radio"))) {
+ 				//select the radio button for the US and Canada region.
+ 				WebDriver_Functions.Click(By.id("accountType2Radio"));
+ 			}
  			
  			ContactInfo_Page(Account_Info, true);
  			Account_Info.UUID = WebDriver_Functions.GetCookieUUID();
@@ -1081,13 +1086,9 @@ public class WFCL_Functions_UsingData{
  			if ("US_CA_us_ca_".contains(Account_Info.Billing_Country_Code)) {
  				
  			}else {
- 				String CurrentUrl = WebDriver_Functions.GetCurrentURL();
- 				String ExpectedConfirmationUrl = WebDriver_Functions.LevelUrlReturn() + "/en-" + Account_Info.Billing_Country_Code.toLowerCase() + "/rewards-cfm.html";
- 				if (CurrentUrl.contains(ExpectedConfirmationUrl)) {
- 					ConfrimationPageCheck = true;
- 				}else {
- 					Helper_Functions.PrintOut(CurrentUrl + " does not match the expected format of " + ExpectedConfirmationUrl);
- 				}
+ 				//This is the AEM button for "Go to My FedEx Rewards"
+ 				WebDriver_Functions.WaitPresent(By.cssSelector("body > div.fxg-main-content > div > div > div.fxg-wrapper > div.link.section > div > a"));
+ 				Helper_Functions.PrintOut("Current URL: " + WebDriver_Functions.GetCurrentURL() + "\n" + WebDriver_Functions.getURLByhref(By.cssSelector("body > div.fxg-main-content > div > div > div.fxg-wrapper > div.link.section > div > a"))); 
  			}
  			
  			

@@ -8,6 +8,8 @@ import java.util.Calendar;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 
+import Data_Structures.Account_Data;
+import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
@@ -896,5 +898,4 @@ public class WPRL_Functions {
 		}
 		return FDMUsers;
 	}
-
 }

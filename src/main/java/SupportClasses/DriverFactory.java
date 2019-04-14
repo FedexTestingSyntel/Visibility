@@ -76,7 +76,9 @@ public class DriverFactory{
 				   //this is used to remove the "Chrome is being controlled by automated test software" banner
 				   options.addArguments("disable-infobars"); 
 				   //options.addArguments("--start-fullscreen");
-				   options.addArguments("start-maximized");   
+				   options.addArguments("start-maximized"); 
+				   //open the dev tools at start
+				   //options.addArguments("--auto-open-devtools-for-tabs");
 			
 				   HashMap<String, Object> chromeOptionsMap = new HashMap<String, Object>();
 				   chromeOptionsMap.put("plugins.plugins_disabled", new String[] {"Chrome PDF Viewer"});

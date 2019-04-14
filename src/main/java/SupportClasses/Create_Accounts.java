@@ -42,31 +42,20 @@ public class Create_Accounts{
 	
 	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
-		CountryList = Environment.getCountryList("US");
-		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
-		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
-		//CountryList = Environment.getCountryList("BR");
-		//CountryList = Environment.getCountryList("FR");
-		//CountryList = Environment.getCountryList("high");
-		//Helper_Functions.MyEmail = "accept@fedex.com";
-		//CountryList = new String[][]{{"US", ""}};
+		Helper_Functions.MyEmail = "accept@fedex.com";
+		String CountriesToCreate = "SA,";//end with a comma after each
 		
 		List<Object[]> data = new ArrayList<Object[]>();
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
 		AddressDetails = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\AddressDetails.xls",  "Countries");//load the relevant information from excel file.
-		String Validation = "US US";
+		
 		for (int i=0; i < LevelsToTest.length(); i++) {
 			String Level = String.valueOf(LevelsToTest.charAt(i));
-			for (int j = 0; j < CountryList.length; j++) {
-				for (String CountryAddress[]: AddressDetails) {
-					/*if (CountryAddress[6].contentEquals(CountryList[j][0])) {
-						data.add( new Object[] {Level, CountryAddress});
-						break;
-					}*/
-					if (Validation.contains(CountryAddress[6])) {
-						data.add( new Object[] {Level, CountryAddress});
-						Validation = Validation.replace(CountryAddress[6], "");
-					}
+			String TempCountriesToCreate = CountriesToCreate;
+			for (String CountryAddress[]: AddressDetails) {
+				while (TempCountriesToCreate.contains(CountryAddress[6])) {
+					data.add( new Object[] {Level, CountryAddress});
+					TempCountriesToCreate = TempCountriesToCreate.replaceFirst(CountryAddress[6] + ",", "");
 				}
 			}
 		}
@@ -96,7 +85,7 @@ public class Create_Accounts{
 			Account_Details.Shipping_Country_Code = CountryDetails[6];
 			Account_Details.Shipping_Region = CountryDetails[7];
 			Account_Details.Shipping_Country = CountryDetails[8];
-			Account_Details.Shipping_Phone_Number = Helper_Functions.myPhone;
+			Account_Details.Shipping_Phone_Number = Helper_Functions.ValidPhoneNumber(CountryCode);
 			Account_Details.Billing_Address_Line_1 = CountryDetails[0];
 			Account_Details.Billing_Address_Line_2 = CountryDetails[1];
 			Account_Details.Billing_City = CountryDetails[2];
@@ -106,7 +95,7 @@ public class Create_Accounts{
 			Account_Details.Billing_Country_Code = CountryDetails[6];
 			Account_Details.Billing_Region = CountryDetails[7];
 			Account_Details.Billing_Country = CountryDetails[8];
-			Account_Details.Billing_Phone_Number = Helper_Functions.myPhone;
+			Account_Details.Billing_Phone_Number = Helper_Functions.ValidPhoneNumber(CountryCode);
 
 			Account_Data[] Accounts = null;
 			Helper_Functions.PrintOut("Attempting to create account number for " + Arrays.toString(CountryDetails), false);
@@ -173,8 +162,8 @@ public class Create_Accounts{
 			WebDriver_Functions.Click(By.id("next_contact"));
 			
 			//Account Contact Information
-			WebDriver_Functions.Type(By.id("first_name"), "John");
-			WebDriver_Functions.Type(By.id("last_name"), "Doe");
+			WebDriver_Functions.Type(By.id("first_name"), "First" + Account_Info.Billing_Country_Code);
+			WebDriver_Functions.Type(By.id("last_name"), "Last" + Account_Type);
 			try {
 				WebDriver_Functions.Select(By.id("contact_language") , "EN","v");//set the language as English
 			}catch (Exception e){}
@@ -270,7 +259,7 @@ public class Create_Accounts{
 				
 				//Example  "Visa", "4005554444444460", "460", "12", "20"
 				WebDriver_Functions.Type(By.id("acct_payment_info_number_details"), CreditCard[1]);
-				WebDriver_Functions.Type(By.id("name_on_card"), "John Doe");
+				WebDriver_Functions.Type(By.id("name_on_card"), "Test Account");
 				WebDriver_Functions.Type(By.id("acct_pay_expiry"), CreditCard[3] + "/20" + CreditCard[4]);
 				WebDriver_Functions.Type(By.id("acct_pay_cvv_code"), CreditCard[2]);
 				WebDriver_Functions.Select(By.id("acct_payment_info_card_type") , CreditCard[0].toUpperCase(),"v");   //Auto populated
@@ -285,7 +274,23 @@ public class Create_Accounts{
 			//Comment/confirmation page
 			WebDriver_Functions.Click(By.id("comments_form_save"));	
 			//*[@id="dialog-confirm"]/center/text()
-			WebDriver_Functions.WaitPresent(By.id("dialog-confirm"));
+			try {
+				WebDriver_Functions.WaitPresent(By.id("dialog-confirm"));
+			}catch (Exception InternalError) {
+				if (WebDriver_Functions.isPresent(By.id("dialog_div")) && WebDriver_Functions.GetText(By.id("dialog_div")).contains("Interal")) {
+					for (int i = 0 ; i < 10; i++) {
+						//some error occurred in ECAM. Try submitting 10 more times to see if just ECAM issue.
+						//close the error dialog and try submitting again
+						WebDriver_Functions.Click(By.cssSelector("body > div:nth-child(3) > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button > span"));
+						WebDriver_Functions.Click(By.id("comments_form_save"));
+						Helper_Functions.Wait(5);
+						if (WebDriver_Functions.isPresent(By.id("dialog-confirm"))) {
+							break;//get out of loop
+						}
+					}
+				}
+			}
+			
 			WebDriver_Functions.WaitForTextPresentIn(By.id("dialog-confirm"), "Account has been created");
 	        String AccountNumbers = DriverFactory.getInstance().getDriver().findElement(By.id("dialog-confirm")).getText();
 	        Helper_Functions.PrintOut("AccountNumberstest:   " + AccountNumbers + "     -- " + Payment, false);
@@ -328,9 +333,16 @@ public class Create_Accounts{
 	public static boolean writeAccountsToExcel(Account_Data Account_Info[]) throws Exception{
 		String fileName = Helper_Functions.DataDirectory + "\\AddressDetails.xls", sheetName = "Account_Numbers"; 
 		
-		writeAccountsToExcel(Account_Info, fileName, sheetName);
-		//write the same accounts to the backup sheet, just for reference later
-		writeAccountsToExcel(Account_Info, fileName, sheetName + "_Backup");
+		try {
+			writeAccountsToExcel(Account_Info, fileName, sheetName);
+			//write the same accounts to the backup sheet, just for reference later
+			writeAccountsToExcel(Account_Info, fileName, sheetName + "_Backup");
+		}catch (Exception e) {
+			//in case file is in use
+			fileName = Helper_Functions.DataDirectory + "\\AddressDetails Backup.xls"; sheetName = "Account_Numbers"; 
+			writeAccountsToExcel(Account_Info, fileName, sheetName + "_Backup");
+		}
+
 		return true;
 	}
 	

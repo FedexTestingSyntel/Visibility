@@ -36,7 +36,7 @@ public class Create_Accounts_New{
 		}
 		
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("PH");
+		CountryList = Environment.getCountryList("US");
 		//CountryList = new String[][]{{"JP", ""}, {"MY", ""}, {"PH", ""}, {"SG", ""}, {"KR", ""}, {"TW", ""}, {"TH", ""}};
 	}
 	

@@ -1,353 +1,414 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="2" total="18" passed="16">
+<testng-results skipped="0" failed="1" ignored="6" total="27" passed="20">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="57141" started-at="2019-04-03T21:36:54Z" finished-at="2019-04-03T21:37:51Z">
+  <suite name="WFCL_Suite" duration-ms="197123" started-at="2019-04-14T03:38:30Z" finished-at="2019-04-14T03:41:47Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="57141" started-at="2019-04-03T21:36:54Z" finished-at="2019-04-03T21:37:51Z">
-      <class name="USRC_Application.USRC_General">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="beforeClass" is-config="true" duration-ms="24" started-at="2019-04-03T21:36:54Z" finished-at="2019-04-03T21:36:54Z">
+    <test name="WFCL_Test" duration-ms="197123" started-at="2019-04-14T03:38:30Z" finished-at="2019-04-14T03:41:47Z">
+      <class name="Mission_Critical.MC_PI_3">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="beforeClass" is-config="true" duration-ms="14" started-at="2019-04-14T03:38:30Z" finished-at="2019-04-14T03:38:30Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="3258" started-at="2019-04-03T21:36:58Z" data-provider="dp" finished-at="2019-04-03T21:37:01Z">
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page" duration-ms="31827" started-at="2019-04-14T03:38:30Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:39:02Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3WIDMUS032019T141106uvgd]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@5c1ec421]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="1655" started-at="2019-04-03T21:37:01Z" data-provider="dp" finished-at="2019-04-03T21:37:03Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="152593" started-at="2019-04-14T03:38:30Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:41:03Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3USCreate032019T160304kdoc]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@3c4b6897]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="1950" started-at="2019-04-03T21:37:03Z" data-provider="dp" finished-at="2019-04-03T21:37:05Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_CodeRequired(java.lang.String, Data_Structures.User_Data, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_CodeRequired" duration-ms="196262" started-at="2019-04-14T03:38:30Z" description="482695, 443446, 443452" data-provider="dp" finished-at="2019-04-14T03:41:47Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3InetUS032019T160552jpyd]]>
+                <![CDATA[Data_Structures.User_Data@61cd1575]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@6881823e]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4539" started-at="2019-04-03T21:37:05Z" data-provider="dp" finished-at="2019-04-03T21:37:10Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_CodeRequired -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page" duration-ms="148144" started-at="2019-04-14T03:38:30Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:40:59Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3700832996US032019T161109vtid]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@49ecc6de]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="2187" started-at="2019-04-03T21:37:10Z" data-provider="dp" finished-at="2019-04-03T21:37:12Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="142514" started-at="2019-04-14T03:38:30Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:40:53Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3WIDMUS032119T152250xcdz]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[]]>
+                <![CDATA[Data_Structures.Enrollment_Data@6afe5d71]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="2078" started-at="2019-04-03T21:37:12Z" data-provider="dp" finished-at="2019-04-03T21:37:14Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_CodeRequired(java.lang.String, Data_Structures.User_Data, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_CodeRequired" duration-ms="184326" started-at="2019-04-14T03:38:30Z" description="482695, 443446, 443452" data-provider="dp" finished-at="2019-04-14T03:41:35Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3WdpaUS040319T163050osxd]]>
+                <![CDATA[Data_Structures.User_Data@61cd1575]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[]]>
+                <![CDATA[Data_Structures.Enrollment_Data@65f28d94]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4630" started-at="2019-04-03T21:37:14Z" data-provider="dp" finished-at="2019-04-03T21:37:18Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_CodeRequired -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="141630" started-at="2019-04-14T03:38:30Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:40:52Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3USss90705920CC040319T162134gplr]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[]]>
+                <![CDATA[Data_Structures.Enrollment_Data@3794d962]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="1896" started-at="2019-04-03T21:37:18Z" data-provider="dp" finished-at="2019-04-03T21:37:20Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page" duration-ms="136497" started-at="2019-04-14T03:38:30Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:40:47Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3USCreate040319T162133hrub]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[]]>
+                <![CDATA[Data_Structures.Enrollment_Data@19ed9fb5]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="2090" started-at="2019-04-03T21:37:20Z" data-provider="dp" finished-at="2019-04-03T21:37:22Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="136602" started-at="2019-04-14T03:38:30Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:40:47Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3WdpaUS040319T162134hpuc]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[]]>
+                <![CDATA[Data_Structures.Enrollment_Data@1ed120d6]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4894" started-at="2019-04-03T21:37:22Z" data-provider="dp" finished-at="2019-04-03T21:37:27Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_CodeRequired(java.lang.String, Data_Structures.User_Data, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_CodeRequired" duration-ms="166143" started-at="2019-04-14T03:38:31Z" description="482695, 443446, 443452" data-provider="dp" finished-at="2019-04-14T03:41:17Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3GBgb03501617CC032119T174207tvwu]]>
+                <![CDATA[Data_Structures.User_Data@61cd1575]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@21c1341f]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4372" started-at="2019-04-03T21:37:27Z" data-provider="dp" finished-at="2019-04-03T21:37:32Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_CodeRequired -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_CodeRequired(java.lang.String, Data_Structures.User_Data, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_CodeRequired" duration-ms="131253" started-at="2019-04-14T03:38:31Z" description="482695, 443446, 443452" data-provider="dp" finished-at="2019-04-14T03:40:42Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3BRcb12265612CC032119T174207iijo]]>
+                <![CDATA[Data_Structures.User_Data@61cd1575]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@5cecd9ad]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4819" started-at="2019-04-03T21:37:32Z" data-provider="dp" finished-at="2019-04-03T21:37:37Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_CodeRequired -->
+        <test-method status="FAIL" signature="WFCL_Alliance_Marketing_CodeRequired(java.lang.String, Data_Structures.User_Data, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_CodeRequired" duration-ms="127790" started-at="2019-04-14T03:38:31Z" description="482695, 443446, 443452" data-provider="dp" finished-at="2019-04-14T03:40:38Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3AUau17787717CC032119T174207jrnw]]>
+                <![CDATA[Data_Structures.User_Data@61cd1575]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@1a65cbd9]]>
+              </value>
+            </param>
+          </params>
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[bh18018917: Error when checking discount. Please check to see if discount is migrated.]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: bh18018917: Error when checking discount. Please check to see if discount is migrated.
+at org.testng.Assert.fail(Assert.java:96)
+at Mission_Critical.MC_PI_3.WFCL_Alliance_Marketing_CodeRequired(MC_PI_3.java:183)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+at java.lang.reflect.Method.invoke(Unknown Source)
+at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+at java.util.concurrent.FutureTask.run(Unknown Source)
+at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+at java.util.concurrent.FutureTask.run(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+at java.lang.Thread.run(Unknown Source)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- WFCL_Alliance_Marketing_CodeRequired -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_CodeRequired(java.lang.String, Data_Structures.User_Data, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_CodeRequired" duration-ms="123423" started-at="2019-04-14T03:38:31Z" description="482695, 443446, 443452" data-provider="dp" finished-at="2019-04-14T03:40:34Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[6]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.User_Data@61cd1575]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Data_Structures.Enrollment_Data@676e6e6d]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="3193" started-at="2019-04-03T21:37:37Z" data-provider="dp" finished-at="2019-04-03T21:37:40Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_CodeRequired -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page" duration-ms="62594" started-at="2019-04-14T03:38:31Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:39:33Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3CAbb11030210CC032119T174207nbzh]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@77bb3a28]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4132" started-at="2019-04-03T21:37:40Z" data-provider="dp" finished-at="2019-04-03T21:37:44Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page" duration-ms="67290" started-at="2019-04-14T03:38:31Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:39:38Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3USss90705920CC032119T174207wsgd]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@445787d9]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="4253" started-at="2019-04-03T21:37:44Z" data-provider="dp" finished-at="2019-04-03T21:37:48Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="69195" started-at="2019-04-14T03:38:31Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:39:40Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3AErv12265612CC032119T174207eylw]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@3954d63]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-        <test-method status="PASS" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_General@1efee8e7]" name="CheckLogin" duration-ms="3266" started-at="2019-04-03T21:37:48Z" data-provider="dp" finished-at="2019-04-03T21:37:51Z">
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page" duration-ms="78125" started-at="2019-04-14T03:38:31Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:39:49Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3Acc642304305N032219T114543siwh]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Enrollment_Data@60d34fc7]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- CheckLogin -->
-      </class> <!-- USRC_Application.USRC_General -->
-    </test> <!-- Default test -->
-  </suite> <!-- Default suite -->
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="71137" started-at="2019-04-14T03:38:31Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:39:42Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[6]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.Enrollment_Data@55f05ddf]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page" duration-ms="55036" started-at="2019-04-14T03:38:31Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:39:26Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[6]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.Enrollment_Data@1158a29f]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="63750" started-at="2019-04-14T03:38:31Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-14T03:39:34Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[6]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.Enrollment_Data@19d8b22a]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
+        <test-method status="PASS" signature="WFCL_Alliance_Marketing_CodeRequired(java.lang.String, Data_Structures.User_Data, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_CodeRequired" duration-ms="78563" started-at="2019-04-14T03:38:31Z" description="482695, 443446, 443452" data-provider="dp" finished-at="2019-04-14T03:39:49Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[6]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.User_Data@61cd1575]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Data_Structures.Enrollment_Data@277d11f3]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- WFCL_Alliance_Marketing_CodeRequired -->
+      </class> <!-- Mission_Critical.MC_PI_3 -->
+    </test> <!-- WFCL_Test -->
+  </suite> <!-- WFCL_Suite -->
 </testng-results>
