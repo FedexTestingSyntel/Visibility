@@ -212,6 +212,10 @@ public class Environment {
 		  			}else {
 		  				Account_Details[pos].Account_Nickname = Row[j] + "_Acc";
 		  			}
+		  			if (Account_Details[pos].Account_Number.contains("641304840")) { //Used for debug
+		  				Helper_Functions.PrintOut(Arrays.toString(Headers));
+		  				Helper_Functions.PrintOut(Arrays.toString(Row));
+		  			}
 		  			break;
 		  		case "Credit_Card_Type":
 		  			Account_Details[pos].Credit_Card_Type = Row[j];

@@ -19,7 +19,7 @@ import SupportClasses.WebDriver_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM_SmokeTest{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -59,12 +59,12 @@ public class WIDM_SmokeTest{
 				case "WIDM_RegistrationEFWS":
 					data.add( new Object[] {Level, CountryList[0][0]});
 					break;
-				case "WIDM_ResetPassword_Email":
 				case "WIDM_Login":
+				case "WIDM_ResetPassword_Email":
 					UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].EMAIL_ADDRESS.contains(Helper_Functions.MyEmail)) {
 		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
 		    					break;
 		    				}
@@ -120,10 +120,19 @@ public class WIDM_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void WIDM_ResetPassword_Email(String Level, String UserId, String Password){
+	public void WIDM_Login(String Level, String UserId, String Password){
 		try {
 			boolean login = WebDriver_Functions.Login(UserId, Password, "WIDM");
 			Assert.assertTrue(login);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp")
+	public void WIDM_ResetPassword_Email(String Level, String UserId, String Password){
+		try {
+			WIDM_Functions.Reset_Password_WIDM_Email(UserId, Password);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

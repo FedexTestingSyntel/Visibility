@@ -23,7 +23,7 @@ public class WFCL_Manual_Helper{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		//Helper_Functions.MyEmail = "accept@fedex.com";
+		Helper_Functions.MyEmail = "accept@fedex.com";
 	}
 	 
 	@DataProvider (parallel = true)
@@ -43,11 +43,15 @@ public class WFCL_Manual_Helper{
 		    			data.add( new Object[] {Level, A});
 		    		}
 		    		*/
+		    		//
 		    		
-		    		data.add( new Object[] {Level, "700262375"});
-		    		//data.add( new Object[] {Level, "762443880"});
-		    		//data.add( new Object[] {Level, "642260243"});
-			    	//data.add( new Object[] {Level, "633504580"});
+		    		
+		    		
+
+		    		//data.add( new Object[] {Level, "942838670"});
+		    		//data.add( new Object[] {Level, "931116231"});
+		    		data.add( new Object[] {Level, "116441438"});
+			    	//data.add( new Object[] {Level, "919928557"});
 		    		break;
 		    	case "AccountRegistration_FDDT":
 		    		String Accounts[] = {"670218872"};
@@ -68,12 +72,18 @@ public class WFCL_Manual_Helper{
 		    	case "WFCL_Rewards_Registration":
 		    		data.add( new Object[] {Level, "774045660"});
 		    		break;
+		    	case "AccountRegistration_MultiAccount_Reg":
+		    		String Accounts_reg[] = {"641015784", "641015806", "641015822", "641015849", "642244400", "642244426", "642244965", "642244981", "641136107", "641136123", "641136140", "641136085", "641410349", "641410403", "641410365", "641410381", "642085344", "642085360", "642085301", "642085328", "641016802", "641016829", "641016845", "641016861", "643321203", "697292624", "697292764", "697293124", "699287180", "699287440", "641449482", "641449504", "643058022", "643058049", "643058081", "643058103", "643140900", "643140926", "643140942", "643140969"};
+		    		for (String A: Accounts_reg) {
+		    			data.add( new Object[] {Level, A});
+		    		}
+		    		break;
 			}
 		}	
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	@Test(dataProvider = "dp", priority = 1, enabled = false)
 	public void AccountRegistration_INET_Test(String Level, String Account){
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
@@ -91,7 +101,7 @@ public class WFCL_Manual_Helper{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 1)
+	@Test(dataProvider = "dp", priority = 1, enabled = false)
 	public void AccountRegistration_Take_Account_Online(String Level, String Account){
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
@@ -109,7 +119,7 @@ public class WFCL_Manual_Helper{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	@Test(dataProvider = "dp", priority = 1, enabled = false)
 	public void AccountRegistration_Captcha_Test(String Level, String Account){
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
@@ -122,7 +132,7 @@ public class WFCL_Manual_Helper{
 		}
 	}
 	 
-	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	@Test(dataProvider = "dp", priority = 1, enabled = false)
 	public void AccountRegistration_FDDT(String Level, String Account){
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
@@ -140,7 +150,7 @@ public class WFCL_Manual_Helper{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	@Test(dataProvider = "dp", priority = 1, enabled = false)
 	public void Link_Account_To_Specific_User(String Level, User_Data User_Info, String Account_Number){
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account_Number, Level, "FX");
@@ -151,7 +161,7 @@ public class WFCL_Manual_Helper{
 		}
 	}
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = false)
 	public void WFCL_Rewards_Registration(String Level, String Account) {
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
@@ -166,5 +176,24 @@ public class WFCL_Manual_Helper{
 			Assert.fail(e.getMessage());
 		}
 	}
-
+	
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
+	public void AccountRegistration_MultiAccount_Reg(String Level, String Account){
+			try {
+				Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+				Account_Data.Set_Dummy_Contact_Name(Account_Info);
+				Account_Data.Set_UserId(Account_Info, "L" + Level + "MAGIC" + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
+				//create user id and link to account number.
+				Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
+				//register the userid to INET, if not from us or CA then already registered.
+				if ("US CA".contains(Account_Info.Billing_Country_Code)) {
+					WFCL_Functions_UsingData.INET_Registration(Account_Info);
+				}
+				
+				String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
+				Helper_Functions.PrintOut(Arrays.toString(Result), false);
+			}catch (Exception e) {
+				Assert.fail(e.getMessage());
+			}
+	}
 }

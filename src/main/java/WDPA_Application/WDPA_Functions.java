@@ -7,6 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import SupportClasses.DriverFactory;
+import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
@@ -315,7 +316,11 @@ public class WDPA_Functions{
 					WebDriver_Functions.Select(By.id("account.freight.accountBox._Dropdown"), "0", "i");
 					WebDriver_Functions.Click(By.xpath("//option"));
 					WebDriver_Functions.Select(By.id("account.freight.accountBox._InputSelect"), "0", "i");
-				}catch (Exception e){}
+				}catch (Exception e){
+					if (WebDriver_Functions.CheckBodyText("You do not have a FedEx Freight account.")) {
+						throw e;
+					}
+				}
 				
 				WDPA_LTL_Pickup_Address("Company", "TestingName", Helper_Functions.myPhone, AddressDetails);
 			}else{//user is not logged in
@@ -646,4 +651,36 @@ public class WDPA_Functions{
 		
 		return ConfirmationNumber;
 	}
+	
+
+	public static void WDPALTLPickup_enabled(String AddressDetails[], String UserID, String Password, String HandelingUnits, String Weight) throws Exception{
+		String CountryCode = AddressDetails[6];
+		
+		try {
+			//check if logged in flow or not, blank user means non logged in flow.
+			if (UserID != ""){
+				WebDriver_Functions.Login(UserID, Password);			
+				// launch the browser and direct it to the Base URL  https://wwwdrt.idev.fedex.com/PickupApp/scheduleFreightPickup.do?method=doInit&locale=en_us
+				WebDriver_Functions.ChangeURL("WDPA_LTL", CountryCode, false);
+				//wait for the WDPA page to load
+				try {
+					WebDriver_Functions.Click(By.id("account.freight.accountBox._LookupButton"));
+					WebDriver_Functions.Select(By.id("account.freight.accountBox._Dropdown"), "0", "i");
+				}catch (Exception e){
+					if (WebDriver_Functions.CheckBodyText("You do not have a FedEx Freight account.")) {
+						throw e;
+					}
+				}
+				String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "T"}};
+				Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+			}else{
+				throw new Exception("user is not logged in");
+			}
+	     } catch (Exception e) {
+	    	 String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "F"}};
+	    	 Helper_Functions.WriteToExcel(Helper_Functions.TestingData, "L" + Environment.getInstance().getLevel(), ArrayResults, 0);
+	    	 throw e;
+		 }
+	}//end WDPALTLPickup_enabled
+
 }

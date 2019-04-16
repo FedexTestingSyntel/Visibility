@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "236"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -70,6 +70,8 @@ public class USRC_TestData_Update {
 			Password = "Test1234";
 			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}
+		//this is the default key position to update the user table. Currently set to 1 for user id value.
+		int keyPosition = 1;
 		
 		String Details[][] = {{"UUID_NBR", ""},//index 0 and set below
 				{"SSO_LOGIN_DESC", UserID},
@@ -104,13 +106,13 @@ public class USRC_TestData_Update {
 			Details = WCRV_Access(Level, Details, Cookies);
 		}else {
 			//will save the current time of the failure.
-			Details = new String[][]{{"SSO_LOGIN_DESC", UserID},
-					{"ERROR", Helper_Functions.CurrentDateTime(true)}};
+			Details = new String[][]{{"SSO_LOGIN_DESC", UserID}, {"ERROR", Helper_Functions.CurrentDateTime(true)}};
+			keyPosition = 0;
 		}
 		
 		String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
-		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, 1);
-		Helper_Functions.PrintOut("Contact Details: " + Arrays.toString(Details), true);
+		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, keyPosition);
+		Helper_Functions.PrintOut("Contact Details: " + Arrays.deepToString(Details), true);
 		if (!updatefile) {
 			Assert.fail("Not able to update file.");
 		}else if (fdx_login_fcl_uuid == null) {

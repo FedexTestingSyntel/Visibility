@@ -163,7 +163,7 @@ public class MC_PI_3{
 
 	//443446 alliance program page transition - getting rid of old WFCL marketing page
 	//443452 loading dt.html
-	@Test(dataProvider = "dp", description = "443496, 443446, 443452", enabled = false) 
+	@Test(dataProvider = "dp", description = "443496, 443446, 443452", enabled = true) 
 	public void WFCL_Alliance_Marketing(String Level, User_Data User_Info, Enrollment_Data Enrollment_Info) {
 		try {
 			String Result[] = WFCL_Functions_UsingData.AEM_Discount_Validate( User_Info, Enrollment_Info);

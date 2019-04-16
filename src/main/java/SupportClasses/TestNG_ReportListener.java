@@ -48,6 +48,8 @@ public class TestNG_ReportListener implements IReporter {
 	@Override
 	public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
 		
+		boolean ReportGenerated = false;
+		
 		try{
 			//Name of the test suit from the XML
 			String Application = xmlSuites.get(0).getName().substring(0, 4);
@@ -97,13 +99,17 @@ public class TestNG_ReportListener implements IReporter {
 				fw = new FileWriter(targetFile);
 				fw.write(customReportTemplateStr);
 				System.out.println("Report Saved: " + outputDirectory);
-				//open the newly created report.
-				WebDriver_Functions.OpenFile(outputDirectory);
+				ReportGenerated = true;
 			} catch (Exception e) {  
 				System.out.println("Warning, Unable to create directory for: " + Folder);
 			}finally {
 				fw.flush();
 				fw.close();
+			}
+			
+			if (ReportGenerated) {
+				//open the newly created report.
+				WebDriver_Functions.OpenFile(outputDirectory);
 			}
 			
 			//CreatePDFReport(outputDirectory, customReportTemplateStr);

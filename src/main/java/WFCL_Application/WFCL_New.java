@@ -29,9 +29,9 @@ public class WFCL_New{
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("JP");
-		CountryList = Environment.getCountryList("SA");
+		//CountryList = Environment.getCountryList("GU");
 		//CountryList = Environment.getCountryList("high");
-		//Helper_Functions.MyEmail = "accept@fedex.com";
+		Helper_Functions.MyEmail = "accept@fedex.com";
 		//CountryList = new String[][]{{"AU", ""}, {"JP", ""}};
 	}
 	 
@@ -179,8 +179,10 @@ public class WFCL_New{
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			//register the user id to INET
+			if ("US CA".contains(Account_Info.Billing_Country_Code)) {
+				WFCL_Functions_UsingData.INET_Registration(Account_Info);
+			}
 			
-			WFCL_Functions_UsingData.INET_Registration(Account_Info);
 			String Result[] = new String[] {Account_Info.UserId, Account_Info.Account_Number, Account_Info.UUID};
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {

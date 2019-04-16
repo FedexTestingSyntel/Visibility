@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 
 public class WDPA extends WDPA_Functions{
 	
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -26,6 +26,7 @@ public class WDPA extends WDPA_Functions{
 		Environment.SetLevelsToTest(LevelsToTest);
 
 		CountryList = Environment.getCountryList("smoke");
+		CountryList = Environment.getCountryList("full");
 		//CountryList = new String[][]{{"US", "United States"}};
 		//CountryList = new String[][]{{"CA", "Canada"}};
 	}
@@ -63,6 +64,16 @@ public class WDPA extends WDPA_Functions{
 		    			}
 					}
 		    	break;
+		    	case "TestPickup_LTLFreightEnabled":
+		    		UD = Environment.Get_UserIds(intLevel);
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 1; k < UD.length; k++) {
+		    				if (UD[k].WDPA_ENABLED.contentEquals("T")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    				}
+		    			}
+					}
+		    		break;
 		    	case "Pickup_LTLFreight":    //update this later to restrict based on country
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
@@ -172,8 +183,18 @@ public class WDPA extends WDPA_Functions{
 			
 			//Helper_Functions.Wait(60);
 		}
-		
 	}
+	
+	@Test(dataProvider = "dp", enabled = true)
+	public static void TestPickup_LTLFreightEnabled(String Level, String CountryCode, String UserID, String Password){
+		Helper_Functions.PrintOut("Schedule a LTL pickup while logged in.", false);
+		try {
+			String Address[] = Helper_Functions.LoadAddress(CountryCode);
+			WDPALTLPickup_enabled(Address, UserID, Password, "10", "400");
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}//end WDPAPickup_ExpressFright
 	
 	
 }

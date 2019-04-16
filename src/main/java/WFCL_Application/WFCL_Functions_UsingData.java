@@ -94,6 +94,9 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.Type(By.id("nickName"), Account_Info.Account_Nickname);
 			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.id("createUserID"));
+
+			//Need to wait for busy message to not be present. Fix with dynamic variable later.
+			Helper_Functions.Wait(5);
 		}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
 			WebDriver_Functions.Type(By.name("newAccountNumber"), Account_Info.Account_Number);
 			WebDriver_Functions.Type(By.name("newNickName"), Account_Info.Account_Nickname);
@@ -189,7 +192,7 @@ public class WFCL_Functions_UsingData{
 		
 		//Step 2 Account information
 		Account_Entry_Screen(Account_Info);
-		
+		InvoiceOrCCValidaiton(Account_Info);
 		Verify_Confirmaiton_Page("WFCL_Link", Account_Info);
 
 		Account_Info.UUID = UUID; 
@@ -290,9 +293,10 @@ public class WFCL_Functions_UsingData{
 		//need to add clicking continue button
 		Verify_Confirmaiton_Page("INET", Account_Info);
 
+		//checking the INET page
 		WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
 		WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
-
+		 
 		//String UUID = WebDriver_Functions.GetCookieUUID();
 		//Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Account_Info.Password + "--" + AccountNumber + "--" + UUID, true);
 		//String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag};
@@ -963,7 +967,9 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.ChangeURL("DT_" + Enrollment_Info.ENROLLMENT_ID, Enrollment_Info.COUNTRY_CODE, false);
 			WebDriver_Functions.takeSnapShot(Enrollment_Info.ENROLLMENT_ID + " DT Value.png");
 			
-			String DTValue = WebDriver_Functions.GetText(By.cssSelector("body > div.fxg-main-content > div > div"));
+			//Helper_Functions.Wait(2);
+			//String DTValue = WebDriver_Functions.GetText(By.cssSelector("body > div.fxg-main-content > div > div"));
+			String DTValue = WebDriver_Functions.GetBodyText();
 			//this is specific to as12853311 in L6, need to find cleaner way to update.
 			if (DTValue.contains(" Up to 29% off select FedEx Express U.S. shipping")) {
 				DTValue = DTValue.replace(" Up to 29% off select FedEx Express U.S. shipping", "Up to 29% off select FedEx Express U.S. shipping");
