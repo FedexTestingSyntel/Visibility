@@ -22,7 +22,7 @@ import ADMC_Application.ADMC_API_Endpoints;
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "367"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -84,7 +84,7 @@ public class USRC_TestData_Update {
 		int keyPosition = 1;
 		
 		String Details[][] = {{"UUID_NBR", ""},//index 0 and set below
-				{"SSO_LOGIN_DESC", UserID},
+				{"SSO_LOGIN_DESC", UserID}, //set as the key position for making updates above. int keyPosition
 				{"USER_PASSWORD_DESC", Password},
 				{"SECRET_QUESTION_DESC", ""}, 
 				{"SECRET_ANSWER_DESC", ""},
@@ -95,7 +95,6 @@ public class USRC_TestData_Update {
 				{"STATE_CD", ""}, 
 				{"POSTAL_CD", ""}, 
 				{"COUNTRY_CD", ""}, 
-				{"FDM_STATUS", "F"}, //index 12 below
 				{"EMAIL_ADDRESS", ""}
 				};
 		
@@ -105,10 +104,7 @@ public class USRC_TestData_Update {
 
 			Details = App_Role_Info_Check(Level, Details, Cookies);
 
-			String Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookies);
-			if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
-				Details[12][1] = Response;//store all of the FDM details
-			}
+			Details = FDM_Access(Level, Details, USRC_Details.GenericUSRCURL, Cookies);
 
 			String ContactDetailsResponse = USRC_API_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, Cookies);
 			Details = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, Details);
@@ -167,6 +163,18 @@ public class USRC_TestData_Update {
 		}else if (fdx_login_fcl_uuid == null) {
 			Assert.fail("Not able to login");
 		}
+	}
+	
+	public String[][] FDM_Access(String Level, String Details[][], String USRCURL, String Cookies) {
+		String Response = USRC_API_Endpoints.RecipientProfile(USRCURL, Cookies);
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		
+		if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
+			Details[Details.length - 1] = new String[] {"FDM_STATUS", Response};//store all of the FDM details
+		}else {
+			Details[Details.length - 1] = new String[] {"FDM_STATUS", "F"};//not yet enrolled for FDM
+		}
+		return Details;
 	}
 	
 	public String[][] WCRV_Access(String Level, String Details[][], String Cookies) {

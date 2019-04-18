@@ -3,6 +3,7 @@ package ADAT_Application;
 import static org.junit.Assert.assertThat;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.hamcrest.CoreMatchers;
@@ -13,6 +14,7 @@ import org.testng.annotations.Test;
 import Data_Structures.ADAT_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
+import WFCL_Application.WFCL_Functions_UsingData;
 
 //listner needed for using overwrites for report generation and 
 @Listeners(SupportClasses.TestNG_TestListener.class)
@@ -33,7 +35,7 @@ public class ADAT {
 		for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			if (Level.contains("6")) {
-				Helper_Functions.PrintOut("Need to make sure to us Tunnel for L6 execution due to firewall", false);
+				Helper_Functions.PrintOut("Need to make sure to use Tunnel for L6 execution due to firewall", false);
 			}
 			ADAT_Data DC = ADAT_Data.LoadVariables(Level);
 			String Organizations[] = new String[] {
@@ -68,6 +70,8 @@ public class ADAT {
         for (String Variable: Response_Variables) {
 			assertThat(Response, CoreMatchers.containsString(Variable));
 		}
+        String Result[] = new String[] {Level, Organization, UserName};
+		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	@Test(dataProvider = "dp", priority = 2)
@@ -82,24 +86,35 @@ public class ADAT {
         for (String Variable: Response_Variables) {
 			assertThat(Response, CoreMatchers.containsString(Variable));
 		}
+        String Result[] = new String[] {Level, Organization, UserName, ADAT_Endpoints.ParsePin(Response)};
+		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	@Test(dataProvider = "dp", priority = 3)
 	public void ADAT_AddressVelocity(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		String UserName = Helper_Functions.LoadUserID("L" + Level + "AddVel");
 		ADAT_Endpoints.VelocityCheck(UserName, Data_Class.CreateUserUrl, Data_Class.VelocityUrl, Organization, Data_Class.OrgAddressVelocity, Data_Class.AddressVelocityThreshold);
+		
+		String Result[] = new String[] {Level, Organization, String.valueOf(Data_Class.AddressVelocityThreshold)};
+		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	@Test(dataProvider = "dp", priority = 3)
 	public void ADAT_PostcardVelocity(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		String UserName = Helper_Functions.LoadUserID("L" + Level + "PostVel");
 		ADAT_Endpoints.VelocityCheck(UserName, Data_Class.CreateUserUrl, Data_Class.VelocityUrl, Organization, Data_Class.OrgPostcardVelocity, Data_Class.PostcardPinVelocityThreshold);
+	
+		String Result[] = new String[] {Level, Organization, String.valueOf(Data_Class.PostcardPinVelocityThreshold)};
+		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	@Test(dataProvider = "dp", priority = 3)
 	public void ADAT_PhoneVelocity(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
 		String UserName = Helper_Functions.LoadUserID("L" + Level + "PhoneVel");
 		ADAT_Endpoints.VelocityCheck(UserName, Data_Class.CreateUserUrl, Data_Class.VelocityUrl, Organization, Data_Class.OrgPhoneVelocity, Data_Class.PhonePinVelocityThreshold);
+	
+		String Result[] = new String[] {Level, Organization, String.valueOf(Data_Class.PhonePinVelocityThreshold)};
+		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	@Test(dataProvider = "dp", priority = 4)
@@ -109,6 +124,7 @@ public class ADAT {
 		ADAT_Endpoints.ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
 
 		String Response = ADAT_Endpoints.ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
+		String Pin = ADAT_Endpoints.ParsePin(Response);
 		
 		Response = ADAT_Endpoints.ADAT_VerifyPin(Data_Class.VerifyPinUrl, Organization, UserName, ADAT_Endpoints.ParsePin(Response));
 
@@ -116,6 +132,9 @@ public class ADAT {
         for (String Variable: Response_Variables) {
 			assertThat(Response, CoreMatchers.containsString(Variable));
 		}
+        
+        String Result[] = new String[] {Level, Organization, UserName, Organization, Pin};
+		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	@Test(dataProvider = "dp", priority = 4)
@@ -128,6 +147,9 @@ public class ADAT {
 		
 		Response = ADAT_Endpoints.ADAT_VerifyPin(Data_Class.VerifyPinUrl, Organization, UserName, ADAT_Endpoints.ParsePin(Response) + "1");
 		assertThat(Response, CoreMatchers.containsString("400Bad"));
+		
+		String Result[] = new String[] {Level, Organization, UserName, "400Bad as expected"};
+		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	
