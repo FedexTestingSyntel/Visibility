@@ -43,7 +43,7 @@ public class Create_Accounts{
 	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		Helper_Functions.MyEmail = "accept@fedex.com";
-		String CountriesToCreate = "SA,";//end with a comma after each
+		String CountriesToCreate = "CA,";//end with a comma after each
 		
 		List<Object[]> data = new ArrayList<Object[]>();
 		ArrayList<String[]> AddressDetails = new ArrayList<String[]>();
@@ -210,6 +210,9 @@ public class Create_Accounts{
 			if(WebDriver_Functions.isVisable(By.id("adrs_val_non_modified"))){
 				WebDriver_Functions.Select(By.id("addr_validation_override_input_info"), "CUSTOMER_PROVIDED_PROOF", "v");
 				WebDriver_Functions.Click(By.id("adrs_val_non_modified"));
+			}else if (WebDriver_Functions.isVisable(By.id("adrs_val_modified"))){
+				WebDriver_Functions.Select(By.id("addr_validation_override_input_info"), "CUSTOMER_PROVIDED_PROOF", "v");
+				WebDriver_Functions.Click(By.id("adrs_val_modified"));
 			}else if (WebDriver_Functions.isVisable(By.id("nomatch"))){
 				WebDriver_Functions.Click(By.id("nomatch"));
 			}

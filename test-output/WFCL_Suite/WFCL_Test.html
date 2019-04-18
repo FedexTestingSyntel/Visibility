@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>WFCL_Test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>21/7/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>5/3/0</td>
 </tr><tr>
-<td>Started on:</td><td>Mon Apr 15 11:19:59 CDT 2019</td>
+<td>Started on:</td><td>Tue Apr 16 16:25:15 CDT 2019</td>
 </tr>
-<tr><td>Total time:</td><td>528 seconds (528391 ms)</td>
+<tr><td>Total time:</td><td>365 seconds (365290 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -75,39 +75,19 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 642244965</td>
-<td><div><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.06 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49817}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir5392_14931}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: b4bf9157f34b2b48a1f3dc574fc3375d
-*** Element info: {Using=id, value=createUserID}
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
+<td title='WFCL_Application.WFCL_SmokeTest.AccountRegistration_Admin()'><b>AccountRegistration_Admin</b><br>Test class: WFCL_Application.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.Account_Data@1bb2ba76</td>
+<td><div><pre>java.lang.AssertionError: Element is not present on page.  By.cssSelector: #confirmation &gt; div &gt; div.fx-col.col-3 &gt; div &gt; h3
+	at WFCL_Application.WFCL_SmokeTest.AccountRegistration_Admin(WFCL_SmokeTest.java:149)
 	at java.util.concurrent.FutureTask.run(Unknown Source)
 	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
 	at java.util.concurrent.FutureTask.run(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace798901045", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace798901045'><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.06 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49817}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir5392_14931}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: b4bf9157f34b2b48a1f3dc574fc3375d
-*** Element info: {Using=id, value=createUserID}
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace2062616670", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace2062616670'><pre>java.lang.AssertionError: Element is not present on page.  By.cssSelector: #confirmation &gt; div &gt; div.fx-col.col-3 &gt; div &gt; h3
 	at org.testng.Assert.fail(Assert.java:96)
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
+	at WFCL_Application.WFCL_SmokeTest.AccountRegistration_Admin(WFCL_SmokeTest.java:149)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -124,42 +104,22 @@ Session ID: b4bf9157f34b2b48a1f3dc574fc3375d
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
 </pre></div></td>
-<td>168</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
+<td>80</td>
+<td>WFCL_Application.WFCL_SmokeTest@11c20519</td></tr>
 <tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 642244400</td>
-<td><div><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.04 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49846}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir9504_6236}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 3908d0b31eeec2b310111fc5495dc285
-*** Element info: {Using=id, value=createUserID}
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
+<td title='WFCL_Application.WFCL_SmokeTest.CreditCardRegistrationEnroll()'><b>CreditCardRegistrationEnroll</b><br>Test class: WFCL_Application.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.Enrollment_Data@68d5780d, Data_Structures.Account_Data@6ceaf1cf, null</td>
+<td><div><pre>java.lang.AssertionError: User is still on the credit card entry page
+	at WFCL_Application.WFCL_SmokeTest.CreditCardRegistrationEnroll(WFCL_SmokeTest.java:117)
 	at java.util.concurrent.FutureTask.run(Unknown Source)
 	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
 	at java.util.concurrent.FutureTask.run(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1937280791", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace1937280791'><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.04 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49846}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir9504_6236}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 3908d0b31eeec2b310111fc5495dc285
-*** Element info: {Using=id, value=createUserID}
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace2062364351", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace2062364351'><pre>java.lang.AssertionError: User is still on the credit card entry page
 	at org.testng.Assert.fail(Assert.java:96)
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
+	at WFCL_Application.WFCL_SmokeTest.CreditCardRegistrationEnroll(WFCL_SmokeTest.java:117)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -176,22 +136,22 @@ Session ID: 3908d0b31eeec2b310111fc5495dc285
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
 </pre></div></td>
-<td>237</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
+<td>254</td>
+<td>WFCL_Application.WFCL_SmokeTest@11c20519</td></tr>
 <tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 642244426</td>
-<td><div><pre>java.lang.AssertionError: Text not present.  By.xpath: //*[@id=&apos;content&apos;]/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b - 642244426_CA - 426
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
+<td title='WFCL_Application.WFCL_SmokeTest.Forgot_User_Email()'><b>Forgot_User_Email</b><br>Test class: WFCL_Application.WFCL_SmokeTest<br>Parameters: 3, US, sean.kauffman.osv@fedex.com</td>
+<td><div><pre>java.lang.AssertionError: Element is not present on page.  By.id: linkaction
+	at WFCL_Application.WFCL_SmokeTest.Forgot_User_Email(WFCL_SmokeTest.java:177)
 	at java.util.concurrent.FutureTask.run(Unknown Source)
 	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
 	at java.util.concurrent.FutureTask.run(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1071722431", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace1071722431'><pre>java.lang.AssertionError: Text not present.  By.xpath: //*[@id=&apos;content&apos;]/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b - 642244426_CA - 426
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace398922038", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace398922038'><pre>java.lang.AssertionError: Element is not present on page.  By.id: linkaction
 	at org.testng.Assert.fail(Assert.java:96)
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
+	at WFCL_Application.WFCL_SmokeTest.Forgot_User_Email(WFCL_SmokeTest.java:177)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -208,212 +168,8 @@ Session ID: 3908d0b31eeec2b310111fc5495dc285
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
 </pre></div></td>
-<td>274</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 642085344</td>
-<td><div><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.05 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49846}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir9504_6236}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 3908d0b31eeec2b310111fc5495dc285
-*** Element info: {Using=id, value=createUserID}
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace27451928", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace27451928'><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.05 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49846}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir9504_6236}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 3908d0b31eeec2b310111fc5495dc285
-*** Element info: {Using=id, value=createUserID}
-	at org.testng.Assert.fail(Assert.java:96)
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-</pre></div></td>
-<td>41</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 642085301</td>
-<td><div><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.08 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49846}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir9504_6236}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 3908d0b31eeec2b310111fc5495dc285
-*** Element info: {Using=id, value=createUserID}
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1700827064", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace1700827064'><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.08 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49846}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir9504_6236}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 3908d0b31eeec2b310111fc5495dc285
-*** Element info: {Using=id, value=createUserID}
-	at org.testng.Assert.fail(Assert.java:96)
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-</pre></div></td>
-<td>182</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 642085360</td>
-<td><div><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.05 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49909}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir8624_27185}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: cebb128ae7697a72b58d86ad5d8d80b2
-*** Element info: {Using=id, value=createUserID}
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace929077254", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace929077254'><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;createUserID&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 1.05 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49909}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir8624_27185}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: cebb128ae7697a72b58d86ad5d8d80b2
-*** Element info: {Using=id, value=createUserID}
-	at org.testng.Assert.fail(Assert.java:96)
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-</pre></div></td>
-<td>218</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 642085328</td>
-<td><div><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;xpath&quot;,&quot;selector&quot;:&quot;//*[@id=&apos;content&apos;]/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 30.04 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49817}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir5392_14931}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: b4bf9157f34b2b48a1f3dc574fc3375d
-*** Element info: {Using=xpath, value=//*[@id=&apos;content&apos;]/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b}
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1647195670", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace1647195670'><pre>java.lang.AssertionError: no such element: Unable to locate element: {&quot;method&quot;:&quot;xpath&quot;,&quot;selector&quot;:&quot;//*[@id=&apos;content&apos;]/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b&quot;}
-  (Session info: chrome=73.0.3683.103)
-  (Driver info: chromedriver=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38),platform=Windows NT 10.0.16299 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 30.04 seconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
-Build info: version: &apos;2.53.0&apos;, revision: &apos;35ae25b1534ae328c771e0856c93e187490ca824&apos;, time: &apos;2016-03-15 10:43:46&apos;
-System info: host: &apos;WTC-5159473-l2&apos;, ip: &apos;172.27.142.145&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_191&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:49817}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=72.0.3626.69 (3c16f8a135abc0d4da2dff33804db79b849a7c38), userDataDir=C:\Users\5159473\AppData\Local\Temp\scoped_dir5392_14931}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, version=73.0.3683.103, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: b4bf9157f34b2b48a1f3dc574fc3375d
-*** Element info: {Using=xpath, value=//*[@id=&apos;content&apos;]/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b}
-	at org.testng.Assert.fail(Assert.java:96)
-	at WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg(WFCL_Manual_Helper.java:196)
-	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
-	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
-	at java.util.concurrent.FutureTask.run(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-	at java.lang.Thread.run(Unknown Source)
-</pre></div></td>
-<td>222</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
+<td>86</td>
+<td>WFCL_Application.WFCL_SmokeTest@11c20519</td></tr>
 </table><p>
 <table width='100%' border='1' class='invocation-passed'>
 <tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
@@ -423,110 +179,30 @@ Session ID: b4bf9157f34b2b48a1f3dc574fc3375d
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641136123</td>
+<td title='WFCL_Application.WFCL_SmokeTest.AccountRegistration_INET()'><b>AccountRegistration_INET</b><br>Test class: WFCL_Application.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.Account_Data@25b98b16</td>
 <td></td>
-<td>96</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
+<td>126</td>
+<td>WFCL_Application.WFCL_SmokeTest@11c20519</td></tr>
 <tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641015784</td>
+<td title='WFCL_Application.WFCL_SmokeTest.AccountRegistration_WDPA()'><b>AccountRegistration_WDPA</b><br>Test class: WFCL_Application.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.Account_Data@16c6ec8</td>
 <td></td>
-<td>113</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
+<td>141</td>
+<td>WFCL_Application.WFCL_SmokeTest@11c20519</td></tr>
 <tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641136107</td>
+<td title='WFCL_Application.WFCL_SmokeTest.Password_Reset_Secret()'><b>Password_Reset_Secret</b><br>Test class: WFCL_Application.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.User_Data@448a0f35, Test1234A</td>
 <td></td>
-<td>118</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
+<td>279</td>
+<td>WFCL_Application.WFCL_SmokeTest@11c20519</td></tr>
 <tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 642244981</td>
+<td title='WFCL_Application.WFCL_SmokeTest.Reset_Password_Email()'><b>Reset_Password_Email</b><br>Test class: WFCL_Application.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.User_Data@2f110b0d</td>
 <td></td>
-<td>189</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
+<td>66</td>
+<td>WFCL_Application.WFCL_SmokeTest@11c20519</td></tr>
 <tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641015849</td>
+<td title='WFCL_Application.WFCL_SmokeTest.UserRegistration_Account_Data()'><b>UserRegistration_Account_Data</b><br>Test class: WFCL_Application.WFCL_SmokeTest<br>Parameters: 3, Data_Structures.Account_Data@71550d35</td>
 <td></td>
-<td>191</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641015822</td>
-<td></td>
-<td>236</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641015806</td>
-<td></td>
-<td>271</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641410381</td>
-<td></td>
-<td>120</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641410403</td>
-<td></td>
-<td>153</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641410365</td>
-<td></td>
-<td>138</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641410349</td>
-<td></td>
-<td>225</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641136085</td>
-<td></td>
-<td>252</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641136140</td>
-<td></td>
-<td>272</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641016861</td>
-<td></td>
-<td>49</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641016845</td>
-<td></td>
-<td>77</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641016829</td>
-<td></td>
-<td>95</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 641016802</td>
-<td></td>
-<td>132</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 697293124</td>
-<td></td>
-<td>110</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 697292764</td>
-<td></td>
-<td>121</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 697292624</td>
-<td></td>
-<td>154</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
-<tr>
-<td title='WFCL_Application.WFCL_Manual_Helper.AccountRegistration_MultiAccount_Reg()'><b>AccountRegistration_MultiAccount_Reg</b><br>Test class: WFCL_Application.WFCL_Manual_Helper<br>Parameters: 3, 643321203</td>
-<td></td>
-<td>183</td>
-<td>WFCL_Application.WFCL_Manual_Helper@11c20519</td></tr>
+<td>171</td>
+<td>WFCL_Application.WFCL_SmokeTest@11c20519</td></tr>
 </table><p>
 <table width='100%' border='1' class='invocation-skipped'>
 <tr><td colspan='4' align='center'><b>SKIPPED TESTS</b></td></tr>
@@ -542,8 +218,8 @@ Session ID: b4bf9157f34b2b48a1f3dc574fc3375d
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at java.lang.Thread.run(Unknown Source)
-... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace785865963", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace785865963'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1013233134", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1013233134'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
 	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:67)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)

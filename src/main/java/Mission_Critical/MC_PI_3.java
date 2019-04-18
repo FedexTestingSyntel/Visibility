@@ -207,7 +207,7 @@ public class MC_PI_3{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "483863", enabled = false)
+	@Test(dataProvider = "dp", description = "483863", enabled = true)
 	public void WFCL_Rewards_Registration_APAC_AND_LAC(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);

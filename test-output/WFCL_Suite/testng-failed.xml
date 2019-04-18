@@ -7,12 +7,14 @@
   <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
     <parameter name="Level" value="3"/>
     <classes>
-      <class name="WFCL_Application.WFCL_Manual_Helper">
+      <class name="WFCL_Application.WFCL_SmokeTest">
         <methods>
+          <include name="CreditCardRegistrationEnroll" invocation-numbers="0"/>
+          <include name="AccountRegistration_Admin" invocation-numbers="0"/>
+          <include name="Forgot_User_Email" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="AccountRegistration_MultiAccount_Reg" invocation-numbers="6 4 5 16 18 17 19"/>
         </methods>
-      </class> <!-- WFCL_Application.WFCL_Manual_Helper -->
+      </class> <!-- WFCL_Application.WFCL_SmokeTest -->
     </classes>
   </test> <!-- WFCL_Test(failed) -->
 </suite> <!-- Failed suite [WFCL_Suite] -->

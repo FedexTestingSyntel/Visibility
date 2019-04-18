@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="1" ignored="0" total="1" passed="0">
+<testng-results skipped="0" failed="1" ignored="1" total="2" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="3409" started-at="2019-04-16T18:20:11Z" finished-at="2019-04-16T18:20:14Z">
+  <suite name="Default suite" duration-ms="4146" started-at="2019-04-18T14:13:09Z" finished-at="2019-04-18T14:13:13Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="3409" started-at="2019-04-16T18:20:11Z" finished-at="2019-04-16T18:20:14Z">
+    <test name="Default test" duration-ms="4146" started-at="2019-04-18T14:13:09Z" finished-at="2019-04-18T14:13:13Z">
       <class name="USRC_Application.USRC_TestData_Update">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:USRC_Application.USRC_TestData_Update@1efee8e7]" name="beforeClass" is-config="true" duration-ms="18" started-at="2019-04-16T18:20:11Z" finished-at="2019-04-16T18:20:11Z">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:USRC_Application.USRC_TestData_Update@6e2c9341]" name="beforeClass" is-config="true" duration-ms="16" started-at="2019-04-18T14:13:09Z" finished-at="2019-04-18T14:13:09Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="FAIL" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_TestData_Update@1efee8e7]" name="CheckLogin" duration-ms="1740" started-at="2019-04-16T18:20:12Z" data-provider="dp" finished-at="2019-04-16T18:20:14Z">
+        <test-method status="FAIL" signature="CheckLogin(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:USRC_Application.USRC_TestData_Update@6e2c9341]" name="CheckLogin" duration-ms="1425" started-at="2019-04-18T14:13:11Z" data-provider="dp" finished-at="2019-04-18T14:13:13Z">
           <params>
             <param index="0">
               <value>
@@ -20,12 +20,12 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[L3FAKEasdfasdf]]>
+                <![CDATA[asdfasdf@fedex.com]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[]]>
+                <![CDATA[Test1234]]>
               </value>
             </param>
           </params>
@@ -36,7 +36,7 @@
             <full-stacktrace>
               <![CDATA[java.lang.AssertionError: Not able to login
 at org.junit.Assert.fail(Assert.java:88)
-at USRC_Application.USRC_TestData_Update.CheckLogin(USRC_TestData_Update.java:119)
+at USRC_Application.USRC_TestData_Update.CheckLogin(USRC_TestData_Update.java:126)
 at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)

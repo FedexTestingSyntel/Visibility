@@ -1,5 +1,6 @@
 package SupportClasses;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -109,7 +110,8 @@ public class TestNG_ReportListener implements IReporter {
 			
 			if (ReportGenerated) {
 				//open the newly created report.
-				WebDriver_Functions.OpenFile(outputDirectory);
+				File htmlFile = new File(outputDirectory);
+				Desktop.getDesktop().browse(htmlFile.toURI());
 			}
 			
 			//CreatePDFReport(outputDirectory, customReportTemplateStr);

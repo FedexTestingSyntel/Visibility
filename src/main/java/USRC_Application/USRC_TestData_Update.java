@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
+
+import Data_Structures.ADMC_Data;
 import Data_Structures.PRDC_Data;
 import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
@@ -16,9 +18,11 @@ import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import org.testng.annotations.Test;
 
+import ADMC_Application.ADMC_API_Endpoints;
+
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "367"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -33,15 +37,21 @@ public class USRC_TestData_Update {
 	    	String strLevel = "" + Environment.LevelsToTest.charAt(i);
 	    	int intLevel = Integer.parseInt(strLevel);
 	    	//loading the OAuth token and having all of the variables set.
-	    	USRC_Data.LoadVariables(strLevel);
+	    	//USRC_Data.LoadVariables(strLevel);
 	    	
+	    	//load user ids since both of the below use that value
+	    	User_Data UD[] = Environment.Get_UserIds(intLevel);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.	
 			case "CheckLogin":
-				//loading the OAuth token and having all of the variables set.
-				PRDC_Data.LoadVariables(strLevel);
-				User_Data UD[] = Environment.Get_UserIds(intLevel);
 				for (int k = 0; k < UD.length; k++) {
-    				if (UD[k].EMAIL_ADDRESS.contentEquals("")) {
+    				if (UD[k].MIGRATION_STATUS.contentEquals("")) {
+    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    				}
+    			}
+				break;
+			case "CheckMigration":
+				for (int k = 0; k < UD.length; k++) {
+    				if (UD[k].MIGRATION_STATUS.contentEquals("")) {
     					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
     				}
     			}
@@ -104,6 +114,45 @@ public class USRC_TestData_Update {
 			Details = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, Details);
 			
 			Details = WCRV_Access(Level, Details, Cookies);
+			
+			Details = Migration_And_Manage_Check(Level, Details, Cookies);
+		}else {
+			//will save the current time of the failure.
+			Details = new String[][]{{"SSO_LOGIN_DESC", UserID}, {"ERROR", Helper_Functions.CurrentDateTime(true)}};
+			keyPosition = 0;
+		}
+		
+		String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
+		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, keyPosition);
+		Helper_Functions.PrintOut("Contact Details: " + Arrays.deepToString(Details), true);
+		if (!updatefile) {
+			Assert.fail("Not able to update file.");
+		}else if (fdx_login_fcl_uuid == null) {
+			Assert.fail("Not able to login");
+		}
+	}
+	
+	@Test (dataProvider = "dp", enabled = false)
+	public void CheckMigration(String Level, String UserID, String Password) {
+		Environment.getInstance().setLevel(Level);
+		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
+		
+		String Cookies = null, fdx_login_fcl_uuid[] = null;
+		//get the cookies and the uuid of the user
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		
+		//this is the default key position to update the user table. Currently set to 1 for user id value.
+		int keyPosition = 1;
+		
+		String Details[][] = {{"UUID_NBR", ""},//index 0 and set below
+				{"SSO_LOGIN_DESC", UserID},
+				{"USER_PASSWORD_DESC", Password}
+				};
+		
+		if (fdx_login_fcl_uuid != null){
+			Cookies = fdx_login_fcl_uuid[0];
+			Details[0][1] = fdx_login_fcl_uuid[1];//save the uuid
+			Details = Migration_And_Manage_Check(Level, Details, Cookies);
 		}else {
 			//will save the current time of the failure.
 			Details = new String[][]{{"SSO_LOGIN_DESC", UserID}, {"ERROR", Helper_Functions.CurrentDateTime(true)}};
@@ -154,10 +203,10 @@ public class USRC_TestData_Update {
 		String AccountRetrievalRequest = USRC_API_Endpoints.AccountRetrievalRequest(USRC_Details.GenericUSRCURL, Cookies);
 		
 		String Parse[][] = {{"GFBO_ENABLED", "appName\":\"fclgfbo\",\"roleCode\":\""},
-				{"WGRT_ENABLED", "appName\":\"fclrates\",\"roleCode\":\""}, 
-				{"WDPA_ENABLED", "appName\":\"fclpickup\",\"roleCode\":\""}, 
-				{"PASSKEY", "appName\":\"fclpasskey\",\"roleCode\":\""}
-				};
+							{"WGRT_ENABLED", "appName\":\"fclrates\",\"roleCode\":\""}, 
+							{"WDPA_ENABLED", "appName\":\"fclpickup\",\"roleCode\":\""}, 
+							{"PASSKEY", "appName\":\"fclpasskey\",\"roleCode\":\""}
+							};
 
 		for (int j = 0; j < Parse.length; j++) {
 			Details = Arrays.copyOf(Details, Details.length + 1);
@@ -170,6 +219,41 @@ public class USRC_TestData_Update {
 		Details = Arrays.copyOf(Details, Details.length + 1);
 		Details[Details.length - 1] = new String[] {"ACCOUNT_NUMBER", USRC_API_Endpoints.Parse_AccountRetrievalRequest_AccountNumber(AccountRetrievalRequest)};
 
+	
+		return Details;
+	}
+	
+	public String[][] Migration_And_Manage_Check(String Level, String Details[][], String Cookies){
+		ADMC_Data ADMC_Details = ADMC_Data.LoadVariables(Level);
+		
+		String AccountRetrievalRequest = ADMC_API_Endpoints.RoleAndStatus(ADMC_Details.RoleAndStatusURL, Cookies);
+		
+		//Example: {"successful": true,"output": {"migrationStatus": true,"userType": "COMPANY_ADMIN"}}
+		//         {"output":{"migrationStatus":false,"userType":"NON_MANAGED"},"successful":true}
+		
+		String Parse[][] = {{"MIGRATION_STATUS", "migrationStatus\":", ","},
+							{"USER_TYPE", "\"userType\":\"", "\""}, 
+							};
+
+		for (int j = 0; j < Parse.length; j++) {
+			Details = Arrays.copyOf(Details, Details.length + 1);
+			if (AccountRetrievalRequest.contains(Parse[j][1])) {
+				//substring staring with the variable in question
+				String temp = AccountRetrievalRequest.substring(AccountRetrievalRequest.indexOf(Parse[j][1]) + Parse[j][1].length(), AccountRetrievalRequest.length());
+				String value_needed = temp.substring(0, temp.indexOf(Parse[j][2]));
+				Details[Details.length - 1] = new String[] {Parse[j][0], value_needed};
+			}else {
+				Details[Details.length - 1] = new String[] {Parse[j][0], "NA"};
+			}
+		}
+		
+		if (Details[Details.length - 1][1].contains("NON_MANAGED") && Details[Details.length - 2][1].contains("false") ) {
+			Details[Details.length - 2][1] = "F";
+		}else if (!Details[Details.length - 1][1].contains("NON_MANAGED") && Details[Details.length - 2][1].contains("true") ) {
+			Details[Details.length - 2][1] = "WADM";
+		}else if (!Details[Details.length - 1][1].contains("NON_MANAGED") && Details[Details.length - 2][1].contains("false") ) {
+			Details[Details.length - 2][1] = "IPAS";
+		}
 	
 		return Details;
 	}

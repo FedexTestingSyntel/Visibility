@@ -26,6 +26,9 @@ public class User_Data {
 	public String FREIGHT_ENABLED;
 	public String PASSKEY;
 	public String FDM_STATUS;
+	public String USER_TYPE;
+	public String MIGRATION_STATUS;
+	
 	
 	public String ERROR;
 	

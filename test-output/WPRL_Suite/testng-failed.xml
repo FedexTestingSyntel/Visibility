@@ -7,15 +7,13 @@
   <test thread-count="8" name="WPRL_Test(failed)" parallel="methods">
     <parameter name="Level" value="3"/>
     <classes>
-      <class name="WPRL_Application.WPRL">
+      <class name="WPRL_Application.WPRL_SmokeTest">
         <methods>
+          <include name="WPRL_ContactInfo_NonAdmin" invocation-numbers="0"/>
+          <include name="WPRL_ContactInfo_Admin" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="WPRL_Contact_NonAdmin" invocation-numbers="0"/>
-          <include name="WPRL_FDM" invocation-numbers="0"/>
-          <include name="WPRL_Contact_Admin" invocation-numbers="0"/>
-          <include name="WPRL_FDM_Enroll" invocation-numbers="3 4 6 5 1 0 2"/>
         </methods>
-      </class> <!-- WPRL_Application.WPRL -->
+      </class> <!-- WPRL_Application.WPRL_SmokeTest -->
     </classes>
   </test> <!-- WPRL_Test(failed) -->
 </suite> <!-- Failed suite [WPRL_Suite] -->

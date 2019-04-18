@@ -25,6 +25,10 @@ public class WDPA_Functions{
 			if (PackageDetails == null) {
 				PackageDetails = new String[] {"1", "22", "L", null, null, null, null};
 			}
+			//high level check if account not valid for pickup
+			if (WebDriver_Functions.CheckBodyText("You cannot schedule a pickup using this account.")) {
+				throw new Exception("You cannot schedule a pickup using this account.");
+			}
 			
 			//enter the contact details
 			WDPAExpressContactInformation(Company, Name, Address, Phone);
@@ -227,33 +231,38 @@ public class WDPA_Functions{
 	}
 	
 	public static void WDPAConfirmationLinks(String AppTested, String Packages, String Weight) throws Exception{
-		if (AppTested.contentEquals("INET") && WebDriver_Functions.isPresent(By.xpath("//input[(@value='Ship')]"))){//test INET
-			WebDriver_Functions.Click(By.xpath("//input[(@value='Ship')]"));
-			WebDriver_Functions.Click(By.id("module.from._header"));
-			//test the from location
-			
-			WebDriver_Functions.ElementMatchesSelect(By.id("psdData.numberOfPackages"), Packages, 0);
+		try {
+			if (AppTested.contentEquals("INET") && WebDriver_Functions.isPresent(By.xpath("//input[(@value='Ship')]"))){//test INET
+				WebDriver_Functions.Click(By.xpath("//input[(@value='Ship')]"));
+				WebDriver_Functions.Click(By.id("module.from._header"));
+				//test the from location
+				
+				WebDriver_Functions.ElementMatchesSelect(By.id("psdData.numberOfPackages"), Packages, 0);
 
-			if (Packages == "1"){
-				String WeightFormated = Weight + ".00";
-				WebDriver_Functions.ElementMatches(By.id("psd.mps.row.weight.0"), WeightFormated, 0);
-				WebDriver_Functions.takeSnapShot("INET page.png");
-			}else if (AppTested.contentEquals("WGRT") && WebDriver_Functions.isPresent(By.xpath("//input[(@value='Get rate quote')]"))){//test wgrt
-				WebDriver_Functions.Click(By.xpath("//input[(@value='Get rate quote')]"));
-				WebDriver_Functions.WaitForText(By.id("pageTitle"), "Get Rates & Transit Times");//changed from "Transit Times" on 4-18-18
-				String weightElement = "totalPackageWeight";
-				if (WebDriver_Functions.isPresent(By.id("NumOfPackages"))){//apac has different rules so this section may not be present  NumOfPackages
-					weightElement = "perPackageWeight";
-					WebDriver_Functions.ElementMatches(By.id("NumOfPackages"), Packages, 0);
-				}
-					
 				if (Packages == "1"){
-					WebDriver_Functions.ElementMatches(By.id(weightElement), Weight, 0);
+					String WeightFormated = Weight + ".00";
+					WebDriver_Functions.ElementMatches(By.id("psd.mps.row.weight.0"), WeightFormated, 0);
+					WebDriver_Functions.takeSnapShot("INET page.png");
+				}else if (AppTested.contentEquals("WGRT") && WebDriver_Functions.isPresent(By.xpath("//input[(@value='Get rate quote')]"))){//test wgrt
+					WebDriver_Functions.Click(By.xpath("//input[(@value='Get rate quote')]"));
+					WebDriver_Functions.WaitForText(By.id("pageTitle"), "Get Rates & Transit Times");//changed from "Transit Times" on 4-18-18
+					String weightElement = "totalPackageWeight";
+					if (WebDriver_Functions.isPresent(By.id("NumOfPackages"))){//apac has different rules so this section may not be present  NumOfPackages
+						weightElement = "perPackageWeight";
+						WebDriver_Functions.ElementMatches(By.id("NumOfPackages"), Packages, 0);
+					}
+						
+					if (Packages == "1"){
+						WebDriver_Functions.ElementMatches(By.id(weightElement), Weight, 0);
+					}
+					WebDriver_Functions.takeSnapShot("WGRT page.png");
 				}
-				WebDriver_Functions.takeSnapShot("WGRT page.png");
+				Helper_Functions.PrintOut(AppTested + " button working as expected", true);
 			}
-			Helper_Functions.PrintOut(AppTested + " button working as expected", true);
+		}catch (Exception e) {
+			Helper_Functions.PrintOut("Error when checking the confirmation page link for. " + AppTested, true);
 		}
+		
 	}
 	
 	public static boolean WDPACancelFromMyPickups(String Service, String ConfirmationNumber, String Address[], String PackageDetails[]){
@@ -347,7 +356,7 @@ public class WDPA_Functions{
 		   // CalenderDate("pickupInfo.freight.pickupDate", getDayOfMonth() + 2 + "");    ///need to test
 		    
 		    
-		    WebDriver_Functions.Select(By.id("freightPickupInfo.readyTime"), "3:00 pm", "t");
+		    WebDriver_Functions.Select(By.id("freightPickupInfo.readyTime"), "1:00 pm", "t");
 		    WebDriver_Functions.Select(By.id("freightPickupInfo.closeTime"), "11:00 pm", "t");
 		    WebDriver_Functions.takeSnapShot("Pickup.png");
 		    WebDriver_Functions.Click(By.id("button.freightpickup.schedulePickup"));

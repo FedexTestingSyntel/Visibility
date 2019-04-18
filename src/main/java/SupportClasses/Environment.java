@@ -212,10 +212,12 @@ public class Environment {
 		  			}else {
 		  				Account_Details[pos].Account_Nickname = Row[j] + "_Acc";
 		  			}
-		  			if (Account_Details[pos].Account_Number.contains("641304840")) { //Used for debug
+		  			/*
+		  			if (Account_Details[pos].Account_Number.contains("641304840")) { //Used for debug specific account lookup
 		  				Helper_Functions.PrintOut(Arrays.toString(Headers));
 		  				Helper_Functions.PrintOut(Arrays.toString(Row));
 		  			}
+		  			*/
 		  			break;
 		  		case "Credit_Card_Type":
 		  			Account_Details[pos].Credit_Card_Type = Row[j];
@@ -593,6 +595,12 @@ public class Environment {
 					break;	
 		  		case "ERROR":
 		  			DataClass[pos].ERROR = Row[j];
+					break;	
+		  		case "MIGRATION_STATUS":
+		  			DataClass[pos].MIGRATION_STATUS = Row[j];
+					break;	
+		  		case "USER_TYPE":
+		  			DataClass[pos].USER_TYPE = Row[j];
 					break;	
 				}//end switch
 			}

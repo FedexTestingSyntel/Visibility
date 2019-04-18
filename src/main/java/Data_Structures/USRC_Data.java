@@ -158,9 +158,9 @@ public class USRC_Data {
 		return DC.OAuth_Token;
 	}
 	
-	public static String LevelUrlReturn(String level2) {
+	public static String LevelUrlReturn(String level) {
   		String LevelURL = null;
-  		switch (level2) {
+  		switch (level) {
       		case "1":
       			LevelURL = "https://wwwbase.idev.fedex.com"; break;
       		case "2":
