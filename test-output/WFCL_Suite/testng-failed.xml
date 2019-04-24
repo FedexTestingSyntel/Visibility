@@ -9,10 +9,14 @@
     <classes>
       <class name="WFCL_Application.WFCL_SmokeTest">
         <methods>
+          <include name="AccountRegistration_INET" invocation-numbers="0"/>
+          <include name="AccountRegistration_WDPA" invocation-numbers="0"/>
           <include name="CreditCardRegistrationEnroll" invocation-numbers="0"/>
           <include name="AccountRegistration_Admin" invocation-numbers="0"/>
           <include name="Forgot_User_Email" invocation-numbers="0"/>
+          <include name="Reset_Password_Email" invocation-numbers="0"/>
           <include name="beforeClass"/>
+          <include name="UserRegistration_Account_Data" invocation-numbers="0"/>
         </methods>
       </class> <!-- WFCL_Application.WFCL_SmokeTest -->
     </classes>

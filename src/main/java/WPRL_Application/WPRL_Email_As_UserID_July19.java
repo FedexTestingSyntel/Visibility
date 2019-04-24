@@ -4,14 +4,20 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
+import SupportClasses.WebDriver_Functions;
+import USRC_Application.USRC_API_Endpoints;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
@@ -54,8 +60,34 @@ public class WPRL_Email_As_UserID_July19 {
 	@Test(dataProvider = "dp")
 	public void WPRL_User_Email_As_UserID(String Level, User_Data User_Info) {
 		try {
-			String EmailAddress = Helper_Functions.CurrentDateTime() + "@WPRLTesting.com";
-			//String Result[] =  WPRL_Functions.WPRL_Contact(UserID, Password, Address, ContactName, ContactDetails, Email);
+			//his will create a unique email address
+			User_Info.EMAIL_ADDRESS = Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(3) + "@WPRLTesting.com";
+			User_Info = WPRL_Functions_Data.WPRL_Contact(User_Info);
+			
+			//get the email address from USRC call
+			String Email_Address = "NA";
+    		try {
+    			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
+    			String[] fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+    			String ContactDetailsResponse = USRC_API_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, fdx_login_fcl_uuid[0]);
+    			String ContactDetailsParsed[][] = new String[][] {{"EMAIL_ADDRESS", ""}};
+    			ContactDetailsParsed = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, ContactDetailsParsed);
+    			Email_Address = ContactDetailsParsed[0][1];
+    		}catch (Exception e1) {
+    			Helper_Functions.PrintOut("Error " + e1.getMessage() + "   " + Email_Address, true);
+    		}
+    		
+    		//click edit to login information
+    		WebDriver_Functions.Click(By.cssSelector("#logininfo > #show-hide > div.fx-toggler > #edit"));
+    		
+    		//UserID radio button
+    		WebDriver_Functions.WaitClickable(By.id("useridradio1"));
+    		WebDriver_Functions.WaitForText(By.id("userId_opt_1"), "Create my own User ID");
+    		//WebDriver_Functions.wai
+    		
+    		
+    		                                    //*[@id="edit"]
+    		
 			//Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

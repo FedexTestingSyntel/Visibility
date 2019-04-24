@@ -9,9 +9,11 @@ public class User_Data {
 	public String SECRET_QUESTION_DESC;
 	public String SECRET_ANSWER_DESC;
 	public String FIRST_NM;
+	public String MIDDLE_NM;
 	public String LAST_NM;
 	public String EMAIL_ADDRESS;
 	public String STREET_DESC;
+	public String STREET_DESC_2;
 	public String CITY_NM;
 	public String STATE_CD;
 	public String POSTAL_CD;
@@ -29,6 +31,9 @@ public class User_Data {
 	public String USER_TYPE;
 	public String MIGRATION_STATUS;
 	
+	public String PHONE;
+	public String MOBILE_PHONE;
+	public String FAX_NUMBER;
 	
 	public String ERROR;
 	

@@ -16,6 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import Data_Structures.User_Data;
 import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
 
@@ -62,6 +63,88 @@ public class USRC_API_Endpoints {
   			return null;
   		}
   	}
+	
+	///////////////////////////////not finished
+	public static String UpdateUserContactInformationWIDM(String URL, User_Data User_Informaiton){
+  		try{
+  			HttpPost httppost = new HttpPost(URL);
+
+  			String StreetLines[] = new String[] {User_Informaiton.STREET_DESC, User_Informaiton.STREET_DESC_2};
+  			JSONObject Address = new JSONObject()
+  				.put("streetLines", StreetLines)
+  				.put("city", User_Informaiton.CITY_NM)
+  				.put("stateOrProvinceCode", User_Informaiton.STATE_CD)
+  				.put("postalCode", User_Informaiton.POSTAL_CD)
+  				.put("countryCode", User_Informaiton.COUNTRY_CD);
+  				
+  			String phoneNumberDetails[][] = new String[][] {{"{\"type\":\"HOME\",\"number\":{\"countryCode\":\"1\",\"localNumber\":\"9011111111\"},\"permissions\":{}}"}, {"{\"type\":\"MOBILE\",\"number\":{\"countryCode\":\"\",\"localNumber\":\"\"},\"permissions\":{}},"}, {"{\"type\":\"MOBILE\",\"number\":{\"countryCode\":\"\",\"localNumber\":\"\"},\"permissions\":{}},"}};
+  			JSONObject contactAncillaryDetail = new JSONObject()
+  				.put("phoneNumberDetails", phoneNumberDetails);
+  			
+  			JSONObject personName = new JSONObject()
+  					.put("firstName", User_Informaiton.FIRST_NM)
+  					.put("middleName", User_Informaiton.MIDDLE_NM)
+  					.put("lastName", User_Informaiton.LAST_NM);
+  	  			
+  			String CompanyName = "Company"; //filler value
+  			JSONObject contact = new JSONObject()
+  					.put("personName", personName)
+  					.put("companyName", CompanyName)
+  					.put("phoneNumber", User_Informaiton.PHONE)
+  					.put("emailAddress", User_Informaiton.EMAIL_ADDRESS)
+  					.put("faxNumber", User_Informaiton.FAX_NUMBER);
+  			/*
+  			 * Need to finish this
+  			 
+{"input":
+	{"deviceID":"
+		{device.....}",
+	"parsedContactAddress":
+		{"contact":
+			{"personName":
+				{"firstName":"wadm","middleName":"","lastName":"wwwww"},
+			"companyName":"","phoneNumber":"9012636723","emailAddress":"Seankbau1ff1@fedex.com","faxNumber":""},
+		"contactAncillaryDetail":
+			{"phoneNumberDetails":
+				[{"type":"HOME","number":{"countryCode":"1","localNumber":"9012636723"},"permissions":{}},
+				{"type":"MOBILE","number":{"countryCode":"","localNumber":""},"permissions":{}},
+				{"type":"FAX","number":{"countryCode":"","localNumber":""},"permissions":{}}]},
+		"address":
+			{"streetLines":
+				["32248 Pacific Coast Hwy","edit"],
+			"city":"MALIBU","stateOrProvinceCode":"CA","postalCode":"90265","countryCode":"US"}
+		}
+	}
+}
+  			 */
+  			
+  			
+  			JSONObject main = new JSONObject()
+  				.put("LogInRequest", contact);
+
+  			String json = main.toString();
+  				
+  			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+  			urlParameters.add(new BasicNameValuePair("action", "LogIn"));
+  			urlParameters.add(new BasicNameValuePair("format", "json"));
+  			urlParameters.add(new BasicNameValuePair("version", "1"));
+  			urlParameters.add(new BasicNameValuePair("locale", "en_US"));
+  			urlParameters.add(new BasicNameValuePair("data", json));
+
+  			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
+  			
+  			String Response = General_API_Calls.HTTPCall(httppost, json);	
+			
+  			return Response;
+  		}catch (Exception e){
+  			e.printStackTrace();
+  			return null;
+  		}
+  	}
+	
+	
 	
 	public static String Logout(String URL){
   		try{

@@ -57,6 +57,11 @@ public class WebDriver_Functions{
 					AppUrl = AppUrl.replaceAll("%2Fship%2", "%2Fshipping_apac%2");
  	 			}
     			break;
+    		case "WFCLForgot":
+    			//https://wwwdrt.idev.fedex.com/fcl/web/jsp/forgotPassword.jsp?appName=fclfsm&locale=us_en&step3URL=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&returnurl=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&programIndicator=0
+    			AppUrl = "";
+				break; 
+    		case "WFCLREWARDS":	AppUrl = LevelURL + "/fcl/?appName=fclfederate&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Ffcl%2FExistingAccountFclStep3.do&returnurl=" + LevelURL + "%2Ffcl%2Fweb%2Fjsp%2Ffederation.jsp&programIndicator=ss90705920&fedId=Epsilon";break;
     		case "FDDT":		AppUrl = LevelURL+ "/EarnedDiscounts/";break;
     		case "HOME":  		AppUrl = LevelURL + "/en-us/home.html";break;
     		case "INET":		AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";break;
@@ -64,12 +69,7 @@ public class WebDriver_Functions{
     		case "JSP":  		AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp"; break;
     		case "JSP_EXPRESS":	AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/express.jsp"; break;
     		case "PREF":  AppUrl = LevelURL + "/preferences";break;	
-    		case "WFCLForgot":
-    			//https://wwwdrt.idev.fedex.com/fcl/web/jsp/forgotPassword.jsp?appName=fclfsm&locale=us_en&step3URL=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&returnurl=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&programIndicator=0
-    			AppUrl = "";
-				break; 
-    		case "WFCLREWARDS":	AppUrl = LevelURL + "/fcl/?appName=fclfederate&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Ffcl%2FExistingAccountFclStep3.do&returnurl=" + LevelURL + "%2Ffcl%2Fweb%2Fjsp%2Ffederation.jsp&programIndicator=ss90705920&fedId=Epsilon";break;
-    		case "WADM":
+       		case "WADM":
     			AppUrl = LevelURL + "/apps/shipadmin/";
 				break;
     		case "WPOR":  	

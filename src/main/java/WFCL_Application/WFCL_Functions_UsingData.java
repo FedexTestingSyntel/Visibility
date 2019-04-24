@@ -94,9 +94,6 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.Type(By.id("nickName"), Account_Info.Account_Nickname);
 			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.id("createUserID"));
-
-			//Need to wait for busy message to not be present. Fix with dynamic variable later.
-			Helper_Functions.Wait(5);
 		}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
 			WebDriver_Functions.Type(By.name("newAccountNumber"), Account_Info.Account_Number);
 			WebDriver_Functions.Type(By.name("newNickName"), Account_Info.Account_Nickname);
@@ -743,7 +740,7 @@ public class WFCL_Functions_UsingData{
 			}
 		}catch (Exception e){
 			Helper_Functions.PrintOut("Secret quesiton " + User_Info.SECRET_ANSWER_DESC + " was not accepted.", true);
-			return e.getMessage();
+			throw e;
 		}
 	}//end ResetPasswordWFCLSecret
 
@@ -1079,11 +1076,14 @@ public class WFCL_Functions_UsingData{
  				//select the radio button for the US and Canada region.
  				WebDriver_Functions.Click(By.id("accountType2Radio"));
  			}
- 			
  			ContactInfo_Page(Account_Info, true);
+ 			
  			Account_Info.UUID = WebDriver_Functions.GetCookieUUID();
  			
- 			Account_Entry_Screen(Account_Info);
+ 			boolean account_entry = Account_Entry_Screen(Account_Info);
+ 			if (!account_entry) {
+ 				throw new Exception("Not able to enter account number.");
+ 			}
  			AddressMismatchPage(Account_Info);
  			InvoiceOrCCValidaiton(Account_Info);
  			

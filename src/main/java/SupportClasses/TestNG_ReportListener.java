@@ -43,7 +43,7 @@ public class TestNG_ReportListener implements IReporter {
 	//need to come back later and make this better
 
 	
-	//This is the customize emailabel report template file path.
+	//This is the customize email report template file path.
 	private static final String emailableReportTemplateFile = System.getProperty("user.dir") + "/src/main/java/XMLExecution/customize-emailable-report-template.html";
 	
 	@Override
@@ -65,6 +65,7 @@ public class TestNG_ReportListener implements IReporter {
 			String customSuiteOverview = this.getTestMehodOverviewCreation(suites);
 			
 			// Create test suite summary data.
+			//This will list the total test cases and eht number of passed and failed scenarios
 			String customSuiteSummary = this.getTestSuiteSummary(suites);
 			
 			// Create test methods summary data.
@@ -79,7 +80,7 @@ public class TestNG_ReportListener implements IReporter {
 			//Replace test 
 			customReportTemplateStr = customReportTemplateStr.replaceAll("\\$Test_Case_Overview\\$", Matcher.quoteReplacement(customSuiteOverview));
 			
-			// Replace test methods place holder with custom test method summary.
+ 			// Replace test methods place holder with custom test method summary.
 			customReportTemplateStr = customReportTemplateStr.replaceAll("\\$Test_Case_Detail\\$", Matcher.quoteReplacement(customTestMethodSummary));
 			
 			// Write replaced test report content to custom-emailable-report.html.
@@ -463,7 +464,8 @@ public class TestNG_ReportListener implements IReporter {
 			Application = Application.substring(Application.lastIndexOf(".") + 1, Application.length());
 				
 			//Get testMethodName
-			testMethodName = Application + " " + testResult.getMethod().getMethodName();
+			//testMethodName = Application + " " + testResult.getMethod().getMethodName();
+			testMethodName = testResult.getMethod().getMethodName();
 			
 			//Get exception message. If there was an exception will be added to the end of the reporterMessage
 			Throwable exception = testResult.getThrowable();

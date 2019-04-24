@@ -24,6 +24,7 @@ public class WFCL_Manual_Helper{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		Helper_Functions.MyEmail = "accept@fedex.com";
+		Helper_Functions.MyEmail = "acceptasdfasdfasdf@fedex.com";
 	}
 	 
 	@DataProvider (parallel = true)
@@ -50,7 +51,7 @@ public class WFCL_Manual_Helper{
 
 		    		//data.add( new Object[] {Level, "942838670"});
 		    		//data.add( new Object[] {Level, "931116231"});
-		    		data.add( new Object[] {Level, "116441438"});
+		    		data.add( new Object[] {Level, "641304883"});
 			    	//data.add( new Object[] {Level, "919928557"});
 		    		break;
 		    	case "AccountRegistration_FDDT":
@@ -119,7 +120,7 @@ public class WFCL_Manual_Helper{
 		}
 	}
 	
-	@Test(dataProvider = "dp", priority = 1, enabled = false)
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_Captcha_Test(String Level, String Account){
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
@@ -127,6 +128,8 @@ public class WFCL_Manual_Helper{
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
 			//start the test by entering captcha url and inputting data	
 			WFCL_Functions_UsingData.WFCL_UserRegistration_Captcha(Account_Info);
+			
+			Helper_Functions.PrintOut("Completed Captcha", false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

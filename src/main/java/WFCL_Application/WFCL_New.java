@@ -19,17 +19,17 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "7";  
 	static String CountryList[][]; 
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		//CountryList = Environment.getCountryList("US");
+		CountryList = Environment.getCountryList("US");
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("JP");
-		CountryList = Environment.getCountryList("JP");
+		//CountryList = Environment.getCountryList("JP");
 		//CountryList = Environment.getCountryList("high");
 		Helper_Functions.MyEmail = "accept@fedex.com";
 		//CountryList = new String[][]{{"AU", ""}, {"JP", ""}};
@@ -49,7 +49,7 @@ public class WFCL_New{
 		    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (Enrollment_Data Enrollment: ED) {
-			    			if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0]) ) {   //&& Enrollment.ENROLLMENT_ID.contentEquals("cc16323414")
+			    			if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0]) && Enrollment.ENROLLMENT_ID.contentEquals("bs13184011")) {   //&& Enrollment.ENROLLMENT_ID.contentEquals("bs13184011")
 			    				Account_Info = Environment.getAddressDetails(Level, CountryList[j][0]);
 			    				Account_Info.Account_Type = "P";//Personal account
 			    				data.add( new Object[] {Level, Enrollment, Account_Info, Environment.getTaxDetails(CountryList[j][0])});
@@ -158,9 +158,7 @@ public class WFCL_New{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
-
 			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
-			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
@@ -212,7 +210,6 @@ public class WFCL_New{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Country_Code + "Create");
-			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			String Result[] = WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {

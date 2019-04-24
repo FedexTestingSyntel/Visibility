@@ -19,6 +19,7 @@ public class USRC_Data {
 	public String GenericUSRCURL = ""; 
 	public String REGCCreateNewUserURL = "";
 	public String ViewUserProfileWIDMURL = "";
+	public String UpdateUserContactInformationWIDMURL ="";
 	
 	public String FDMSMS_PinType = "SMS";
 	public String FDMPostcard_PinType = "POSTAL";
@@ -75,7 +76,8 @@ public class USRC_Data {
   		DC.GenericUSRCURL = GenericLevel + "/userCal/user";	
   		DC.REGCCreateNewUserURL = GenericLevel + "/regcal/registration/newfcluser";
   		DC.ViewUserProfileWIDMURL = GenericLevel + "/userCal/rest/v2/ViewUserProfileWIDM";
-
+  		DC.UpdateUserContactInformationWIDMURL = GenericLevel + "/userCal/rest/v2/UpdateUserContactInformationWIDM";
+  		
 		switch (Level) { //Based on the method that is being called the array list will be populated. This will make the TestNG Pass/Fail results more relevant.
 		case "1":
 			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";

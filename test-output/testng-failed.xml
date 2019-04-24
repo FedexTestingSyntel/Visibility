@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
-  <test thread-count="5" name="Default test(failed)">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WDPA_Suite]">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="WDPA_Test(failed)" parallel="methods">
+    <parameter name="Level" value="3"/>
     <classes>
-      <class name="USRC_Application.USRC_TestData_Update">
+      <class name="WDPA_Application.WDPA_SmokeTest">
         <methods>
-          <include name="CheckLogin" invocation-numbers="9 6 5 0 1 2 10 11 19 20 50 52 58 62 65 67 70 74 84 95 106 108 109 110 111 113 114 120 121 127"/>
+          <include name="Pickup_ExpressFreight" invocation-numbers="0"/>
+          <include name="Pickup_LTLFreight_Anonymous" invocation-numbers="0"/>
+          <include name="Pickup_LTLFreight" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
-      </class> <!-- USRC_Application.USRC_TestData_Update -->
+      </class> <!-- WDPA_Application.WDPA_SmokeTest -->
     </classes>
-  </test> <!-- Default test(failed) -->
-</suite> <!-- Failed suite [Default suite] -->
+  </test> <!-- WDPA_Test(failed) -->
+</suite> <!-- Failed suite [WDPA_Suite] -->

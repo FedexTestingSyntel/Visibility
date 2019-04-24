@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-
 import Data_Structures.ADMC_Data;
 import Data_Structures.PRDC_Data;
 import Data_Structures.USRC_Data;
@@ -37,14 +36,17 @@ public class USRC_TestData_Update {
 	    	String strLevel = "" + Environment.LevelsToTest.charAt(i);
 	    	int intLevel = Integer.parseInt(strLevel);
 	    	//loading the OAuth token and having all of the variables set.
-	    	//USRC_Data.LoadVariables(strLevel);
+	    	USRC_Data.LoadVariables(strLevel);
+	    	PRDC_Data.LoadVariables(strLevel);
 	    	
 	    	//load user ids since both of the below use that value
 	    	User_Data UD[] = Environment.Get_UserIds(intLevel);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.	
 			case "CheckLogin":
 				for (int k = 0; k < UD.length; k++) {
-    				if (UD[k].MIGRATION_STATUS.contentEquals("")) {
+    				if (UD[k].UUID_NBR.contentEquals("")) {
+    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    				}else if (!UD[k].ERROR.contentEquals("")) {
     					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
     				}
     			}
@@ -95,7 +97,8 @@ public class USRC_TestData_Update {
 				{"STATE_CD", ""}, 
 				{"POSTAL_CD", ""}, 
 				{"COUNTRY_CD", ""}, 
-				{"EMAIL_ADDRESS", ""}
+				{"EMAIL_ADDRESS", ""},
+				{"ERROR", ""}//will clear out old error time stamp if failed previously.
 				};
 		
 		if (fdx_login_fcl_uuid != null){
@@ -185,7 +188,7 @@ public class USRC_TestData_Update {
 			WCRV_Access = "T";
 		}else if (!AccountDetails.contains("displayRateSheetFlag")){
 			Helper_Functions.PrintOut("PRDC call did not return premission status.", false);
-			WCRV_Access = "F";
+			WCRV_Access = AccountDetails;
 		}else {
 			if (AccountDetails.contains("displayRateSheetFlag\":false")){
 				//the user does not have the view rate sheet privilege

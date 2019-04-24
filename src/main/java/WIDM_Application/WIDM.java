@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -89,6 +89,7 @@ public class WIDM{
 			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
 			String UserId = Helper_Functions.LoadUserID("L" + Level + "WIDM" + CountryCode);
 			WIDM_Functions.WIDM_Registration(Address, UserName, UserId, Helper_Functions.MyEmail);
+			boolean asdf = true;
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

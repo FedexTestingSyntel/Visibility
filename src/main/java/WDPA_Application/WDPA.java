@@ -26,7 +26,7 @@ public class WDPA extends WDPA_Functions{
 		Environment.SetLevelsToTest(LevelsToTest);
 
 		CountryList = Environment.getCountryList("smoke");
-		CountryList = Environment.getCountryList("full");
+		//CountryList = Environment.getCountryList("full");
 		//CountryList = new String[][]{{"US", "United States"}};
 		//CountryList = new String[][]{{"CA", "Canada"}};
 	}
@@ -47,7 +47,7 @@ public class WDPA extends WDPA_Functions{
 		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].GROUND_ENABLED.contentEquals("") &&
 		    						(UD[k].COUNTRY_CD.contentEquals("US") || UD[k].COUNTRY_CD.contentEquals("CA"))) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					//break;
+		    					break;
 		    				}
 		    			}
 					}
@@ -82,7 +82,7 @@ public class WDPA extends WDPA_Functions{
 		    						 && (UD[k].COUNTRY_CD.contentEquals("US") || UD[k].COUNTRY_CD.contentEquals("CA") || UD[k].COUNTRY_CD.contentEquals("MX"))
 		    						) {
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					//break;
+		    					break;
 		    				}
 		    			}
 					}
@@ -120,7 +120,7 @@ public class WDPA extends WDPA_Functions{
 		Helper_Functions.PrintOut("Schedule an express pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			Address = Helper_Functions.LoadAddress("CN");
+			//Address = Helper_Functions.LoadAddress("CN");
 			String Result = Arrays.toString(WDPAPickupDetailed(CountryCode, UserID, Password, "express", "CompanyNameHere", "John Doe", "9011111111", Address, null, "INET"));
 			Helper_Functions.PrintOut(Result, false);
 			String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"EXPRESS_ENABLED", "T"}};
@@ -132,7 +132,7 @@ public class WDPA extends WDPA_Functions{
 		}
 	}//end WDPA_Pickup_Express
 	
-	@Test(dataProvider = "dp", enabled = false)
+	@Test(dataProvider = "dp", enabled = true)
 	public static void Pickup_ExpressFreight(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule an express freight pickup.", false);
 		try {
@@ -163,7 +163,7 @@ public class WDPA extends WDPA_Functions{
 		}
 	}//end WDPAPickup_ExpressFright
 	
-	@Test(dataProvider = "dp", enabled = false)
+	@Test(dataProvider = "dp", enabled = true)
 	public static void Pickup_LTLFreight_Anonymous(String Level, String CountryCode){
 		Helper_Functions.PrintOut("Schedule a LTL pickup while not logged into FedEx.com", false);
 		try {

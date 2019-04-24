@@ -70,6 +70,7 @@ public class ADAT_Data {
   			break;
   		case "7":
   			LevelIdentifier = "http://adat-satxws-lp.prod.cloud.fedex.com"; 
+  			LevelIdentifier = "http://localhost"; 
   			DC.PostcardPinVelocityThreshold = 3;
 			DC.PhonePinVelocityThreshold = 3;
 			DC.AddressVelocityThreshold = 10;

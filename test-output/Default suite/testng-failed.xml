@@ -5,7 +5,7 @@
     <classes>
       <class name="USRC_Application.USRC_TestData_Update">
         <methods>
-          <include name="CheckLogin" invocation-numbers="9 6 5 0 1 2 10 11 19 20 50 52 58 62 65 67 70 74 84 95 106 108 109 110 111 113 114 120 121 127"/>
+          <include name="CheckLogin" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
       </class> <!-- USRC_Application.USRC_TestData_Update -->

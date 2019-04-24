@@ -19,7 +19,7 @@ import SupportClasses.WebDriver_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM_SmokeTest{
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 	
 	@BeforeClass

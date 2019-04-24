@@ -3,9 +3,13 @@ package WIDM_Application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.openqa.selenium.By;
+
+import Data_Structures.USRC_Data;
 import SupportClasses.DriverFactory;
+import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
+import USRC_Application.USRC_API_Endpoints;
 
 public class WIDM_Functions{
 	
@@ -222,15 +226,17 @@ public class WIDM_Functions{
 			WebDriver_Functions.Login(strUserName, Password);
 
 			
-			String Email = "<<not found>>";
-			try {
-				WebDriver_Functions.ChangeURL("WPRL", "US", false);
-				WebDriver_Functions.WaitPresent(By.id("ci_fullname_val"));
-				String UserDetails = DriverFactory.getInstance().getDriver().findElement(By.id("ci_fullname_val")).getText();
-				Email = UserDetails.substring(UserDetails.lastIndexOf('\n') + 1, UserDetails.length());
-			}catch(Exception e2) {
-				Helper_Functions.PrintOut("Not able to validate the email address for this user.", false);
-			}
+    		String Email = "--Could not retrieve email--";
+    		try {
+    			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
+    			String[] fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, strUserName, Password);
+    			String ContactDetailsResponse = USRC_API_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, fdx_login_fcl_uuid[0]);
+    			String ContactDetailsParsed[][] = new String[][] {{"EMAIL_ADDRESS", ""}};
+    			ContactDetailsParsed = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, ContactDetailsParsed);
+    			Email = ContactDetailsParsed[0][1];
+    		}catch (Exception e) {
+    			Helper_Functions.PrintOut("Error " + e.getMessage() + "   " + Email, true);
+    		}
 			
 			//trigger the password reset email
 			WebDriver_Functions.ChangeURL("WIDM", "US", true);

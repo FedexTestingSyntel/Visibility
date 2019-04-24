@@ -436,13 +436,24 @@ public class Environment {
 	}
 	
 	public static Account_Data getAddressDetails(String Level, String CountryCode) {
+		return getAddressDetails(Level, CountryCode, "");
+	}
+	
+	public static Account_Data getAddressDetails(String Level, String CountryCode, String Type) {
 		Account_Data AllAddresses[] = getAddressDetails();
 		
 		for (Account_Data AD: AllAddresses) {
 			if (AD != null && AD.Billing_Country_Code.contentEquals(CountryCode)) {
-				AD.Level = Level;
-				Account_Data.Set_Dummy_Contact_Name(AD);
-				return AD;
+				if (Level.contentEquals("7") && Type.contentEquals("CreditCard") && AD.Billing_Address_Line_1.contentEquals("10 FEDEX PKWY 2nd FL")){
+					//unique to credit card registration.
+					AD.Level = Level;
+					Account_Data.Set_Dummy_Contact_Name(AD);
+					return AD;
+				}else if (!Level.contentEquals("7") || (!Type.contentEquals("CreditCard") && !AD.Billing_Country_Code.contentEquals("US"))){
+					AD.Level = Level;
+					Account_Data.Set_Dummy_Contact_Name(AD);
+					return AD;
+				}
 			}
 		}
 		System.err.println("Data not loaded for country of " + CountryCode);
