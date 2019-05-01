@@ -18,7 +18,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -27,7 +27,7 @@ public class WIDM{
 		
 		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
-		//Helper_Functions.MyEmail = "InvalidPasswordSet@accept.com";
+		//Helper_Functions.MyEmail = "OtherEmail@accept.com";
 	}
 	
 	@DataProvider (parallel = true)
@@ -55,10 +55,10 @@ public class WIDM{
 				case "WIDM_Registration":
 				case "WIDM_Registration_ErrorMessages":
 					if (Level == "7") {
-						data.add( new Object[] {Level, "US"});
+						data.add( new Object[] {Level, "US", Helper_Functions.MyEmail});
 					}else {
 						for (int j=0; j < CountryList.length; j++) {
-							data.add( new Object[] {Level, CountryList[j][0]});
+							data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.MyEmail});
 						}
 					}
 					break;
@@ -82,14 +82,15 @@ public class WIDM{
 	}
 
 	@Test(dataProvider = "dp")
-	public void WIDM_Registration(String Level, String CountryCode){
+	public void WIDM_Registration(String Level, String CountryCode, String EmailAddress){
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			//Address = Helper_Functions.AccountDetails("761391020");
 			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
 			String UserId = Helper_Functions.LoadUserID("L" + Level + "WIDM" + CountryCode);
-			WIDM_Functions.WIDM_Registration(Address, UserName, UserId, Helper_Functions.MyEmail);
-			boolean asdf = true;
+			//UserId = Helper_Functions.LoadUserID("L" + Level + "UserId" + CountryCode);
+			WIDM_Functions.WIDM_Registration(Address, UserName, UserId, EmailAddress);
+			
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

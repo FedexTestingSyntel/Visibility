@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "7";  
+	static String LevelsToTest = "2";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -38,7 +38,7 @@ public class WFCL_New{
 	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
-
+		
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			Account_Data Account_Info = null;
@@ -49,7 +49,7 @@ public class WFCL_New{
 		    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (Enrollment_Data Enrollment: ED) {
-			    			if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0]) && Enrollment.ENROLLMENT_ID.contentEquals("bs13184011")) {   //&& Enrollment.ENROLLMENT_ID.contentEquals("bs13184011")
+			    			if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0])) {   //&& Enrollment.ENROLLMENT_ID.contentEquals("bs13184011")
 			    				Account_Info = Environment.getAddressDetails(Level, CountryList[j][0]);
 			    				Account_Info.Account_Type = "P";//Personal account
 			    				data.add( new Object[] {Level, Enrollment, Account_Info, Environment.getTaxDetails(CountryList[j][0])});
@@ -297,6 +297,7 @@ public class WFCL_New{
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void Link_Account_To_User(String Level, User_Data User_Info, Account_Data Account_Info){
 		try {
+			WebDriver_Functions.ChangeURL("FCLLINKACCOUNT", "US", true); //clear cookies
 			String Result[] = WFCL_Functions_UsingData.Account_Linkage(User_Info, Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {

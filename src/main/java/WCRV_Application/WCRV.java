@@ -25,8 +25,8 @@ public class WCRV{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		//CountryList = Environment.getCountryList("smoke");
-		CountryList = Environment.getCountryList("full");
+		CountryList = Environment.getCountryList("smoke");
+		//CountryList = Environment.getCountryList("full");
 		//CountryList = Environment.getCountryList("high");
 		//CountryList = new String[][]{{"US", "United States"},{"AU", "Australia"},{"CA", "Canada"},{"GB", "United Kingdom"},{"BR", "Brazil"},{"AE", "United Arab Emirates"}};
 

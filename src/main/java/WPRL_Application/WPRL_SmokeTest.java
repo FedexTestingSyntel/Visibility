@@ -26,6 +26,7 @@ public class WPRL_SmokeTest {
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
+		Helper_Functions.MyEmail = "accept@fedex.com";
 	}
 	
 	@DataProvider (parallel = true)

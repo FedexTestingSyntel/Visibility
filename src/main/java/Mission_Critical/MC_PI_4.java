@@ -19,7 +19,7 @@ import WFCL_Application.WFCL_Functions_UsingData;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class MC_PI_4{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 	final boolean EnableCompleted = false;
 	
@@ -37,14 +37,13 @@ public class MC_PI_4{
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
 			String Rewards_APAC_AND_LAC[] = new String[] {"au", "cn", "hk", "jp", "my", "nz", "ph", "sg", "kr", "tw", "th", "br", "mx"};
-			if ("23".contains(Level)) {
-				Rewards_APAC_AND_LAC = new String[] {"jp"};//only Japan loaded in L2 and L3
-			}
-			
+			Rewards_APAC_AND_LAC = new String[] {"cn"};
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WFCL_Rewards_Registration_APAC_AND_LAC":
 		    		for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
 		    			Account_Data Account_Info = Helper_Functions.getFreshAccount(Level, Rewards_APAC_AND_LAC[j]);
+						//Account_Info = Account_Lookup.Account_DataAccountDetails("700417913", Level, "FX");
+
 		    			if (Account_Info != null) {
 		    				data.add( new Object[] {Level, Account_Info});
 		    			}else {
@@ -69,6 +68,7 @@ public class MC_PI_4{
 		System.out.println("Starting " + m.getName() + " : There are " + data.size() + " scenarios.");
 		return data.iterator();
 	}
+	
 	@Test(dataProvider = "dp", description = "483863", enabled = true)
 	public void WFCL_Rewards_Registration_APAC_AND_LAC(String Level, Account_Data Account_Info) {
 		try {

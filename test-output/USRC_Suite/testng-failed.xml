@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [USRC_Suite]" parallel="methods">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="USRC_Test(failed)" parallel="methods">
+    <parameter name="Level" value="6"/>
+    <classes>
+      <class name="USRC_Application.USRC_General">
+        <methods>
+          <include name="beforeClass"/>
+          <include name="Create_Users_With_Account" invocation-numbers="8 5 1 9 6 4 2 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 41 32 33 34 35 36 37 38 39 40 42 43 44 45 46 47 48 49 50 51 52 53"/>
+        </methods>
+      </class> <!-- USRC_Application.USRC_General -->
+    </classes>
+  </test> <!-- USRC_Test(failed) -->
+</suite> <!-- Failed suite [USRC_Suite] -->

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="8" total="15" passed="7">
+<testng-results skipped="0" failed="0" ignored="12" total="13" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="WFCL_Suite" duration-ms="37627" started-at="2019-04-24T21:02:53Z" finished-at="2019-04-24T21:03:31Z">
+  <suite name="Default suite" duration-ms="145899" started-at="2019-05-01T21:39:10Z" finished-at="2019-05-01T21:41:36Z">
     <groups>
     </groups>
-    <test name="WFCL_Test" duration-ms="37627" started-at="2019-04-24T21:02:53Z" finished-at="2019-04-24T21:03:31Z">
-      <class name="Mission_Critical.MC_PI_3">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="beforeClass" is-config="true" duration-ms="5" started-at="2019-04-24T21:02:54Z" finished-at="2019-04-24T21:02:54Z">
+    <test name="Default test" duration-ms="145899" started-at="2019-05-01T21:39:10Z" finished-at="2019-05-01T21:41:36Z">
+      <class name="WFCL_Application.WFCL_New">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WFCL_Application.WFCL_New@6cc7b4de]" name="beforeClass" is-config="true" duration-ms="31" started-at="2019-05-01T21:39:11Z" finished-at="2019-05-01T21:39:11Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="12451" started-at="2019-04-24T21:02:54Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-24T21:03:06Z">
+        <test-method status="PASS" signature="CreditCardRegistrationEnroll(java.lang.String, Data_Structures.Enrollment_Data, Data_Structures.Account_Data, Data_Structures.Tax_Data)[pri:0, instance:WFCL_Application.WFCL_New@6cc7b4de]" name="CreditCardRegistrationEnroll" duration-ms="145226" started-at="2019-05-01T21:39:11Z" data-provider="dp" finished-at="2019-05-01T21:41:36Z">
           <params>
             <param index="0">
               <value>
@@ -20,110 +20,22 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.Enrollment_Data@404e49e2]]>
+                <![CDATA[Data_Structures.Enrollment_Data@507b880f]]>
               </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Data_Structures.Account_Data@5c53093b]]>
+              </value>
+            </param>
+            <param index="3">
+              <value is-null="true"/>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
-        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="29693" started-at="2019-04-24T21:02:54Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-24T21:03:24Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.Enrollment_Data@447e69df]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
-        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="37111" started-at="2019-04-24T21:02:54Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-24T21:03:31Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.Enrollment_Data@24129010]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
-        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="33826" started-at="2019-04-24T21:02:54Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-24T21:03:28Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.Enrollment_Data@3e57fd78]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
-        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="32659" started-at="2019-04-24T21:02:54Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-24T21:03:27Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.Enrollment_Data@47e84fdc]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
-        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="21957" started-at="2019-04-24T21:02:54Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-24T21:03:16Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.Enrollment_Data@bb9e4be]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
-        <test-method status="PASS" signature="WFCL_Alliance_Marketing_Error_Page_Blank(java.lang.String, Data_Structures.Enrollment_Data)[pri:0, instance:Mission_Critical.MC_PI_3@11c20519]" name="WFCL_Alliance_Marketing_Error_Page_Blank" duration-ms="21212" started-at="2019-04-24T21:02:54Z" description="482700, 494070" data-provider="dp" finished-at="2019-04-24T21:03:15Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.Enrollment_Data@3d026e18]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- WFCL_Alliance_Marketing_Error_Page_Blank -->
-      </class> <!-- Mission_Critical.MC_PI_3 -->
-    </test> <!-- WFCL_Test -->
-  </suite> <!-- WFCL_Suite -->
+        </test-method> <!-- CreditCardRegistrationEnroll -->
+      </class> <!-- WFCL_Application.WFCL_New -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
 </testng-results>

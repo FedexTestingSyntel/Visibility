@@ -17,7 +17,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_Manual_Helper{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "6";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -34,7 +34,7 @@ public class WFCL_Manual_Helper{
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			//Account_Data Account_Info = null;
-			//int intLevel = Integer.parseInt(Level);
+			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "AccountRegistration_INET_Test":
 		    	case "AccountRegistration_Captcha_Test":
@@ -51,16 +51,27 @@ public class WFCL_Manual_Helper{
 
 		    		//data.add( new Object[] {Level, "942838670"});
 		    		//data.add( new Object[] {Level, "931116231"});
-		    		data.add( new Object[] {Level, "641304883"});
+		    		data.add( new Object[] {Level, "608886389"});
 			    	//data.add( new Object[] {Level, "919928557"});
 		    		break;
 		    	case "AccountRegistration_FDDT":
+		    		/*
 		    		String Accounts[] = {"670218872"};
 		    		for (String A: Accounts) {
 		    			data.add( new Object[] {Level, A});
 		    		}
-
 		    		break;
+		    		*/
+		    		
+		    		User_Data[] UD = Environment.Get_UserIds(intLevel);
+		    		for (int k = 0; k < UD.length; k++) {
+		    			if (UD[k].ERROR.contentEquals("12")) {
+		    				String Account = UD[k].SSO_LOGIN_DESC.replace("L6Account", "");
+		    				data.add( new Object[] {Level, Account});
+		    			}
+		    		}
+		    		break;
+
 		    	case "Link_Account_To_Specific_User":
 		    		User_Data User_Info = new User_Data();
 					User_Info.SSO_LOGIN_DESC = "L6Acc700232794N032019T104345twxs";
@@ -84,7 +95,7 @@ public class WFCL_Manual_Helper{
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp", priority = 1, enabled = false)
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_INET_Test(String Level, String Account){
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
@@ -135,16 +146,16 @@ public class WFCL_Manual_Helper{
 		}
 	}
 	 
-	@Test(dataProvider = "dp", priority = 1, enabled = false)
+	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_FDDT(String Level, String Account){
 		try {
 			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "FDDT" + Account + "N");
-			//Account_Info.UserId = "L2WFCLUSERID06";
+			Account_Info.UserId = "L6Account" + Account;
 			//create user id and link to account number. comment out the below if linking to existing user.
-			WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info); 
-			//register the userid to INET
+			//WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info); 
+			
 			WFCL_Functions_UsingData.Account_Linkage_FDDT(Account_Info);
 			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);

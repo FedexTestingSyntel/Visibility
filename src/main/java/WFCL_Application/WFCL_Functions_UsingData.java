@@ -105,7 +105,21 @@ public class WFCL_Functions_UsingData{
 		
 		if ((WebDriver_Functions.isPresent(By.id("accountNumber")) || WebDriver_Functions.isPresent(By.name("newAccountNumber"))) && !Thread.currentThread().getStackTrace()[2].getMethodName().contentEquals("Account_Entry_Screen")) {
 			//will attempt to enter the account number again if still on page. Will only attempt once.
-			return Account_Entry_Screen(Account_Info);
+			try {
+				if (WebDriver_Functions.isPresent(By.id("accountNumber"))){
+					WebDriver_Functions.Type(By.id("accountNumber"), Account_Info.Account_Number);
+					WebDriver_Functions.Type(By.id("nickName"), Account_Info.Account_Nickname);
+					WebDriver_Functions.takeSnapShot("AccountInformation.png");
+					WebDriver_Functions.Click(By.id("createUserID"));
+				}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
+					WebDriver_Functions.Type(By.name("newAccountNumber"), Account_Info.Account_Number);
+					WebDriver_Functions.Type(By.name("newNickName"), Account_Info.Account_Nickname);
+					WebDriver_Functions.takeSnapShot("AccountInformation.png");
+					WebDriver_Functions.Click(By.name("submit"));
+				}
+			}catch (Exception e) {
+				//quick recheck if still on account page
+			}
 		}
 		
 		return true;
@@ -121,6 +135,7 @@ public class WFCL_Functions_UsingData{
 					Helper_Functions.PrintOut("The FedEx Discount Detail Tool is not available for your Account type.");
 				}else {
 					////Add this later to check the confirmation page for valid account.
+					Helper_Functions.PrintOut("need to update later for confirmation page validation, Verify_Confirmaiton_Page, WFCL_Functions_UsingData");
 				}
 				break;
 			case "INET":

@@ -35,7 +35,7 @@ public class WDPA_SmokeTest{
 			int intLevel = Integer.parseInt(Level);
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
-			case "Pickup_Ground":
+			case "WDPA_Ground":
 	    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 1; k < UD.length; k++) {
@@ -46,8 +46,8 @@ public class WDPA_SmokeTest{
 	    			}
 				}
 	    		break;
-	    	case "Pickup_Express":
-	    	case "Pickup_ExpressFreight"://need to fix this later, not for all countries.
+	    	case "WDPA_Express":
+	    	case "WDPA_ExpressFreight"://need to fix this later, not for all countries.
 	    		UD = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 1; k < UD.length; k++) {
@@ -58,7 +58,7 @@ public class WDPA_SmokeTest{
 	    			}
 				}
 	    	break;
-	    	case "Pickup_LTLFreight":
+	    	case "WDPA_LTLFreight":
 	    		UD = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 0; k < UD.length; k++) {
@@ -69,7 +69,7 @@ public class WDPA_SmokeTest{
 	    			}
 				}
 	    	break;
-		    	case "Pickup_LTLFreight_Anonymous":    //update this later to restrict based on country
+		    	case "WDPA_LTLFreight_Anonymous":    //update this later to restrict based on country
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			if (CountryList[j][0].contentEquals("US") || CountryList[j][0].contentEquals("CA") || CountryList[j][0].contentEquals("MX")){
 		    				data.add( new Object[] {Level, CountryList[j][0]});
@@ -86,7 +86,7 @@ public class WDPA_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public static void Pickup_Ground(String Level, String CountryCode, String UserID, String Password){
+	public static void WDPA_Ground(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule a ground pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -98,7 +98,7 @@ public class WDPA_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public static void Pickup_Express(String Level, String CountryCode, String UserID, String Password){
+	public static void WDPA_Express(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule an express pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -110,7 +110,7 @@ public class WDPA_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public static void Pickup_ExpressFreight(String Level, String CountryCode, String UserID, String Password){
+	public static void WDPA_ExpressFreight(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule an express freight pickup.", false);
 		try {
 			String PackageDetails[] = {"1", "444", "L", "1400", "1800", "ExpLTL Attempt", "FedEx 1Day Freight", "ConfFiller", "side of barn", "5", "6", "7"};
@@ -120,10 +120,10 @@ public class WDPA_SmokeTest{
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
-	}//end WDPAPickup_ExpressFright
+	}
 	
 	@Test(dataProvider = "dp")
-	public static void Pickup_LTLFreight(String Level, String CountryCode, String UserID, String Password){
+	public static void WDPA_LTLFreight(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule a LTL pickup while logged in.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -135,7 +135,7 @@ public class WDPA_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public static void Pickup_LTLFreight_Anonymous(String Level, String CountryCode){
+	public static void WDPA_LTLFreight_Anonymous(String Level, String CountryCode){
 		Helper_Functions.PrintOut("Schedule a LTL pickup while not logged into FedEx.com", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
@@ -144,5 +144,5 @@ public class WDPA_SmokeTest{
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
-	}//end WDPAPickup_ExpressFright
+	}
 }

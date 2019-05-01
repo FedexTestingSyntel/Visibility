@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WDPA_Suite]">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WFCL_Suite]">
   <listeners>
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
-  <test thread-count="8" name="WDPA_Test(failed)" parallel="methods">
-    <parameter name="Level" value="3"/>
+  <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
+    <parameter name="Level" value="2"/>
     <classes>
-      <class name="WDPA_Application.WDPA_SmokeTest">
+      <class name="WFCL_Application.WFCL_SmokeTest">
         <methods>
-          <include name="Pickup_ExpressFreight" invocation-numbers="0"/>
-          <include name="Pickup_LTLFreight_Anonymous" invocation-numbers="0"/>
-          <include name="Pickup_LTLFreight" invocation-numbers="0"/>
+          <include name="CreditCardRegistrationEnroll" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
-      </class> <!-- WDPA_Application.WDPA_SmokeTest -->
+      </class> <!-- WFCL_Application.WFCL_SmokeTest -->
     </classes>
-  </test> <!-- WDPA_Test(failed) -->
-</suite> <!-- Failed suite [WDPA_Suite] -->
+  </test> <!-- WFCL_Test(failed) -->
+</suite> <!-- Failed suite [WFCL_Suite] -->

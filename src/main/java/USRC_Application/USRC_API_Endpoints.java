@@ -16,6 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
 import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
@@ -65,27 +66,20 @@ public class USRC_API_Endpoints {
   	}
 	
 	///////////////////////////////not finished
-	public static String UpdateUserContactInformationWIDM(String URL, User_Data User_Informaiton){
+	public static String UpdateUserContactInformationWIDM(String URL, User_Data User_Informaiton, String Cookie){
   		try{
   			HttpPost httppost = new HttpPost(URL);
 
-  			String StreetLines[] = new String[] {User_Informaiton.STREET_DESC, User_Informaiton.STREET_DESC_2};
-  			JSONObject Address = new JSONObject()
-  				.put("streetLines", StreetLines)
-  				.put("city", User_Informaiton.CITY_NM)
-  				.put("stateOrProvinceCode", User_Informaiton.STATE_CD)
-  				.put("postalCode", User_Informaiton.POSTAL_CD)
-  				.put("countryCode", User_Informaiton.COUNTRY_CD);
-  				
-  			String phoneNumberDetails[][] = new String[][] {{"{\"type\":\"HOME\",\"number\":{\"countryCode\":\"1\",\"localNumber\":\"9011111111\"},\"permissions\":{}}"}, {"{\"type\":\"MOBILE\",\"number\":{\"countryCode\":\"\",\"localNumber\":\"\"},\"permissions\":{}},"}, {"{\"type\":\"MOBILE\",\"number\":{\"countryCode\":\"\",\"localNumber\":\"\"},\"permissions\":{}},"}};
+  			String phoneNumberDetails[] = new String[] {"{\"type\":\"HOME\",\"number\":{\"countryCode\":\"1\",\"localNumber\":\"9011111111\"},\"permissions\":{}}, {\"type\":\"MOBILE\",\"number\":{\"countryCode\":\"\",\"localNumber\":\"\"},\"permissions\":{}}, {\"type\":\"MOBILE\",\"number\":{\"countryCode\":\"\",\"localNumber\":\"\"},\"permissions\":{}}"};
   			JSONObject contactAncillaryDetail = new JSONObject()
   				.put("phoneNumberDetails", phoneNumberDetails);
+  			
   			
   			JSONObject personName = new JSONObject()
   					.put("firstName", User_Informaiton.FIRST_NM)
   					.put("middleName", User_Informaiton.MIDDLE_NM)
   					.put("lastName", User_Informaiton.LAST_NM);
-  	  			
+  			
   			String CompanyName = "Company"; //filler value
   			JSONObject contact = new JSONObject()
   					.put("personName", personName)
@@ -93,39 +87,36 @@ public class USRC_API_Endpoints {
   					.put("phoneNumber", User_Informaiton.PHONE)
   					.put("emailAddress", User_Informaiton.EMAIL_ADDRESS)
   					.put("faxNumber", User_Informaiton.FAX_NUMBER);
-  			/*
-  			 * Need to finish this
-  			 
-{"input":
-	{"deviceID":"
-		{device.....}",
-	"parsedContactAddress":
-		{"contact":
-			{"personName":
-				{"firstName":"wadm","middleName":"","lastName":"wwwww"},
-			"companyName":"","phoneNumber":"9012636723","emailAddress":"Seankbau1ff1@fedex.com","faxNumber":""},
-		"contactAncillaryDetail":
-			{"phoneNumberDetails":
-				[{"type":"HOME","number":{"countryCode":"1","localNumber":"9012636723"},"permissions":{}},
-				{"type":"MOBILE","number":{"countryCode":"","localNumber":""},"permissions":{}},
-				{"type":"FAX","number":{"countryCode":"","localNumber":""},"permissions":{}}]},
-		"address":
-			{"streetLines":
-				["32248 Pacific Coast Hwy","edit"],
-			"city":"MALIBU","stateOrProvinceCode":"CA","postalCode":"90265","countryCode":"US"}
-		}
-	}
-}
-  			 */
   			
+  			String StreetLines[] = new String[] {User_Informaiton.STREET_DESC, User_Informaiton.STREET_DESC_2};
+  			JSONObject address = new JSONObject()
+  				.put("streetLines", StreetLines)
+  				.put("city", User_Informaiton.CITY_NM)
+  				.put("stateOrProvinceCode", User_Informaiton.STATE_CD)
+  				.put("postalCode", User_Informaiton.POSTAL_CD)
+  				.put("countryCode", User_Informaiton.COUNTRY_CD);
+  				
+  			JSONObject parsedContactAddress = new JSONObject()
+  				.put("contact", contact)
+  	  			.put("contactAncillaryDetail", contactAncillaryDetail)
+  	  			.put("address", address);
+  			
+  			JSONObject input = new JSONObject()
+  				.put("deviceID", "Filler")
+  	  	  		.put("parsedContactAddress", parsedContactAddress);
   			
   			JSONObject main = new JSONObject()
-  				.put("LogInRequest", contact);
-
+  	  				.put("input", input);
+  			
   			String json = main.toString();
+  			//Need to fix the below
+  			json = json.replaceAll("\\\\", "");
+  			json = json.replace("\":[\"{\"type", "\":[{\"type");
+  			json = json.replace("permissions\":{}}\"]", "permissions\":{}}]");
   				
   			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
-
+  			httppost.addHeader("Cookie", Cookie);
+  			
   			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
   			urlParameters.add(new BasicNameValuePair("action", "LogIn"));
   			urlParameters.add(new BasicNameValuePair("format", "json"));
@@ -279,6 +270,92 @@ public class USRC_API_Endpoints {
 			.put("reenterPassword", Password)
 			.put("secretQuestion", "SP2Q1")
 			.put("secretAnswer", "mom");
+
+		String json = main.toString();
+				
+		httppost.addHeader("Content-Type", "application/json");
+		httppost.addHeader("Accept", "application/json");
+		httppost.addHeader("X-clientid", "WERL");
+		httppost.addHeader("X-locale", "en_US");
+		httppost.addHeader("X-version", "1.0");
+				
+		StringEntity params;
+		String Response;
+		try {
+			params = new StringEntity(json.toString());
+			httppost.setEntity(params);
+			//Note that an email will be triggered after registration
+			Response = General_API_Calls.HTTPCall(httppost, json);	
+		} catch (Exception e) {
+			e.printStackTrace();
+			Response = e.getLocalizedMessage();
+		}
+		return Response;
+	}
+	
+	public static String NewFCLUser(String CreateUserURL, User_Data User_Info){			
+		HttpPost httppost = new HttpPost(CreateUserURL);
+		JSONObject main = new JSONObject()
+			.put("firstName", User_Info.FIRST_NM)
+			.put("middleName", User_Info.MIDDLE_NM)
+			.put("lastName", User_Info.LAST_NM)
+			.put("deviceId", "optional")
+			.put("addressLine1", User_Info.STREET_DESC)
+			.put("addressLine2", User_Info.STREET_DESC_2)
+			.put("city", User_Info.CITY_NM)
+			.put("stateCode", User_Info.STATE_CD)
+			.put("zipCode", User_Info.POSTAL_CD)
+			.put("countryCode", User_Info.COUNTRY_CD)
+			.put("emailAddress", User_Info.EMAIL_ADDRESS)
+			.put("phoneNumber", User_Info.PHONE)
+			.put("userId", User_Info.SSO_LOGIN_DESC)
+			.put("password", User_Info.USER_PASSWORD_DESC)
+			.put("reenterPassword", User_Info.USER_PASSWORD_DESC)
+			.put("secretQuestion", User_Info.SECRET_QUESTION_DESC)
+			.put("secretAnswer", User_Info.SECRET_ANSWER_DESC);
+
+		String json = main.toString();
+				
+		httppost.addHeader("Content-Type", "application/json");
+		httppost.addHeader("Accept", "application/json");
+		httppost.addHeader("X-clientid", "WERL");
+		httppost.addHeader("X-locale", "en_US");
+		httppost.addHeader("X-version", "1.0");
+				
+		StringEntity params;
+		String Response;
+		try {
+			params = new StringEntity(json.toString());
+			httppost.setEntity(params);
+			//Note that an email will be triggered after registration
+			Response = General_API_Calls.HTTPCall(httppost, json);	
+		} catch (Exception e) {
+			e.printStackTrace();
+			Response = e.getLocalizedMessage();
+		}
+		return Response;
+	}
+	
+	public static String NewFCLUser(String CreateUserURL, Account_Data Account_Info){			
+		HttpPost httppost = new HttpPost(CreateUserURL);
+		JSONObject main = new JSONObject()
+			.put("firstName", Account_Info.FirstName)
+			.put("middleName", Account_Info.MiddleName)
+			.put("lastName", Account_Info.LastName)
+			.put("deviceId", "optional")
+			.put("addressLine1", Account_Info.Billing_Address_Line_1)
+			.put("addressLine2", Account_Info.Billing_Address_Line_2)
+			.put("city", Account_Info.Billing_City)
+			.put("stateCode", Account_Info.Billing_State_Code)
+			.put("zipCode", Account_Info.Billing_Zip)           
+			.put("countryCode", Account_Info.Billing_Country_Code)
+			.put("emailAddress", Account_Info.Email)
+			.put("phoneNumber", Account_Info.Billing_Phone_Number)
+			.put("userId", Account_Info.UserId)
+			.put("password", Account_Info.Password)
+			.put("reenterPassword", Account_Info.Password)
+			.put("secretQuestion", Account_Info.Secret_Question)
+			.put("secretAnswer", Account_Info.Secret_Answer);
 
 		String json = main.toString();
 				
@@ -613,6 +690,7 @@ public class USRC_API_Endpoints {
 				String NickName_Start = "{\"accountNickname\":\"", NickName_End = "\",\"accountNumber\":{";
 				Account = ParseRequest(Response, NickName_Start, NickName_End);
 			}
+			Account = Account.replaceAll("\\u005f", "_");
 			if (AccountNumbers.contentEquals("")) {
 				AccountNumbers = Account;
 			}else {

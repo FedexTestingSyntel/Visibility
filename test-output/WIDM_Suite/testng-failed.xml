@@ -9,7 +9,6 @@
     <classes>
       <class name="WIDM_Application.WIDM_SmokeTest">
         <methods>
-          <include name="WIDM_ResetPasswordSecret" invocation-numbers="0"/>
           <include name="WIDM_Registration" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>

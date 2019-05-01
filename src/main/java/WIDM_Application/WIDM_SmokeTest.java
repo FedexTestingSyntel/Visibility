@@ -41,7 +41,7 @@ public class WIDM_SmokeTest{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].SSO_LOGIN_DESC.contains("WIDM")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC + "5", UD[k].SECRET_ANSWER_DESC});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, UD[k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -60,6 +60,23 @@ public class WIDM_SmokeTest{
 					data.add( new Object[] {Level, CountryList[0][0]});
 					break;
 				case "WIDM_Login":
+					//test login for email as user id and legacy user.
+					UD = Environment.Get_UserIds(intLevel);
+					boolean Email_As_UserID = false, Legacy_User = false;
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (Legacy_User == true && Email_As_UserID == true) {
+		    					break;
+		    				}else if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].SSO_LOGIN_DESC.contains("@") && !Email_As_UserID) {
+		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					Email_As_UserID = true;
+		    				}else if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].SSO_LOGIN_DESC.contains("@") && !Legacy_User) {
+		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					Legacy_User = true;
+		    				}
+		    			}
+					}
+					break;
 				case "WIDM_ResetPassword_Email":
 					UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
@@ -75,7 +92,7 @@ public class WIDM_SmokeTest{
 		}	
 		return data.iterator();
 	}
-
+ 
 	@Test(dataProvider = "dp")
 	public void WIDM_Registration(String Level, String CountryCode){
 		try {
@@ -104,7 +121,8 @@ public class WIDM_SmokeTest{
 	@Test(dataProvider = "dp")
 	public void WIDM_ResetPasswordSecret(String Level, String CountryCode, String UserId, String Password, String SecretAnswer){
 		try {
-			WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password + "5", SecretAnswer, false);
+			//WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password + "5", SecretAnswer, false);   //once force password is in affect need to send differnt password
+			WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password, SecretAnswer, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

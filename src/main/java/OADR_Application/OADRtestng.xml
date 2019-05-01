@@ -9,7 +9,7 @@
     	<parameter name="Level" value="2" />
     	<classes>
     		<class name="SupportClasses.Environment"/>
-      		<class name="OADR_Application.OADR"/>
+      		<class name="OADR_Application.OADR_SmokeTest"/>
     	</classes>
   	</test> <!-- OADR_Test -->
 </suite> <!-- OADR_Suite -->

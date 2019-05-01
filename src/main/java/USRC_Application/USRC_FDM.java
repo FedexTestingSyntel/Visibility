@@ -2,6 +2,7 @@ package USRC_Application;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.testng.annotations.BeforeClass;
@@ -21,7 +22,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_FDM {
  
-	static String LevelsToTest = "23"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -41,11 +42,16 @@ public class USRC_FDM {
 			case "EndtoEndEnrollment":
 				//data.add(new Object[] {USRC_D.Level, USRC_D.REGCCreateNewUserURL, USRC_D.LoginUserURL, USRC_D.EnrollmentURL, USRC_D.OAuth_Token, USRC_Data.ContactDetailsList.get(0), MFAC_D.OrgPhone});
 				
-				for (int j = 0; j < 1; j++) {
-					String UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
-					String Password = "Test1234";
-					data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, j});
-				}
+				String UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
+				String Password = "Test1234";
+				data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, 1});
+				
+				UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
+				data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, 1});
+				UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
+				data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, 1});
+				UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
+				data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, 1});
 				break;
 			case "EndtoEndEnrollment_UserID":
 				
@@ -64,9 +70,7 @@ public class USRC_FDM {
 		try {
 			String Response = "";
 			String ContactDetails[] = USRC_Data.ContactDetailsList.get(Contact);
-			String Phone = "9011111111", Email = "YouNeedToUpdateThisLater@fedex.com";
-			ContactDetails = new String[] {"SRAVAN", "", "PINGILI", Phone, Email, "11810 City Park Central Ln", "APT 212", "HOUSTON", "TX", "77009", "US", "5ur1aurli0jy91wrhwncqt7hh"};
-
+			
 			//create the new user
 			Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
 			
@@ -106,7 +110,8 @@ public class USRC_FDM {
 			Helper_Functions.PrintOut("Check recipient profile for new FDM user through USRC", false);
 			Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookie);
 			
-			Helper_Functions.PrintOut(UserID + "/" + Password + "--" + fdx_login_fcl_uuid[1] + "--" + USRC_Org, false);
+			String Results[] = new String[] {UserID, Password, fdx_login_fcl_uuid[1], USRC_Org};
+			Helper_Functions.PrintOut(Arrays.toString(Results), false);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

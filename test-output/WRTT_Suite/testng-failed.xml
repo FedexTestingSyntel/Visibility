@@ -7,13 +7,12 @@
   <test thread-count="3" name="WRTT_Test(failed)" parallel="methods">
     <parameter name="Level" value="2"/>
     <classes>
-      <class name="WRTT_Application.WRTT">
+      <class name="WRTT_Application.WRTT_SmokeTest">
         <methods>
-          <include name="WRTT_SpalshPage_eCRV" invocation-numbers="0"/>
-          <include name="WRTT_Rate_Sheet" invocation-numbers="1 3 0"/>
+          <include name="WRTT_Rate_Sheet" invocation-numbers="0 3 1"/>
           <include name="beforeClass"/>
         </methods>
-      </class> <!-- WRTT_Application.WRTT -->
+      </class> <!-- WRTT_Application.WRTT_SmokeTest -->
     </classes>
   </test> <!-- WRTT_Test(failed) -->
 </suite> <!-- Failed suite [WRTT_Suite] -->

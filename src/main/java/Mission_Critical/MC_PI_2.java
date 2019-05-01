@@ -153,7 +153,6 @@ public class MC_PI_2{
 	    				}else {
 	    					data.add(new Object[] {Level, EnrollmentID, Tax, false});
 	    				}
-	    				
 	    			}
 	    			break;
 		    	case "TH_Welcome_Email_Disabled":

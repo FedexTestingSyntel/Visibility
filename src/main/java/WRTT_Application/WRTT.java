@@ -16,9 +16,9 @@ import TestingFunctions.WRTT_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WRTT{
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
-	static boolean SmokeTest = true;
+	static boolean SmokeTest = false;
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -58,7 +58,7 @@ public class WRTT{
 		    			        if (boolArray[0] == true && boolArray[1] == false) {//all listed as zone chart true
 		    			        	data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
 		    			        }
-			    				//data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
+			    				data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
 		    			    }
 		    			}
 		    		}

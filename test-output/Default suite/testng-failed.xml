@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="USRC_Application.USRC_TestData_Update">
+      <class name="WFCL_Application.WFCL_Manual_Helper">
         <methods>
-          <include name="CheckLogin" invocation-numbers="0"/>
           <include name="beforeClass"/>
+          <include name="AccountRegistration_FDDT" invocation-numbers="29 26 24"/>
         </methods>
-      </class> <!-- USRC_Application.USRC_TestData_Update -->
+      </class> <!-- WFCL_Application.WFCL_Manual_Helper -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

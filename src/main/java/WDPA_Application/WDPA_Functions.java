@@ -396,9 +396,6 @@ public class WDPA_Functions{
 				    WebDriver_Functions.Click(By.id("history.viewPrintPickupDetails"));
 				    
 				    WebDriver_Functions.WaitPresent(By.cssSelector("div.confirmationAlertMessage.pickupAlertMessageText"));
-				    assertEquals(HandelingUnits, WebDriver_Functions.GetText(By.xpath("//div[@id='confirmationRightPanel']/div[5]/div[2]/div/div/label")));
-				    assertEquals(Weight, WebDriver_Functions.GetText(By.xpath("//div[@id='confirmation.weight']/label")));
-				    assertEquals("3:00pm - 11:00pm", WebDriver_Functions.GetText(By.xpath("//div[@id='confirmation.pickuptime']/label")));
 				    assertEquals(AddressDetails[5], WebDriver_Functions.GetText(By.id("confirmation.lineItems.zipPostal")));
 				    WebDriver_Functions.takeSnapShot("LTLDetails.png");
 				    MyPickupsCheck= true;

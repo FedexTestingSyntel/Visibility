@@ -166,7 +166,11 @@ public class WIDM_Functions{
 			}
 			
 			Helper_Functions.PrintOut("Failures: " + Failures, true);
-			return Failures;
+			if (Failures == "") {
+				return "Expected Errors Recieved.";
+			}else {
+				return Failures;
+			}
 		}catch (Exception e) {
 			throw e;
 		}
@@ -207,6 +211,7 @@ public class WIDM_Functions{
 		}
 		
 		WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td"), "Thank you. Your password has been reset");
+		WebDriver_Functions.takeSnapShot("New Password " + NewPassword + "Confirmation.png");
 		boolean loginAttempt = WebDriver_Functions.Login(strUserName, NewPassword);
 		Helper_Functions.PrintOut(strUserName + " has had the password changed to " + NewPassword, true);
 		if (NewPassword.contentEquals(strPassword)){

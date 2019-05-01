@@ -9,7 +9,7 @@
 		<parameter name="Level" value="2" />
 		<classes>
 			<class name="SupportClasses.Environment"/>
-			<class name="WRTT_Application.WRTT"/>
+			<class name="WRTT_Application.WRTT_SmokeTest"/>
 		</classes>
 	</test> <!-- WRTT_Test -->
 </suite> <!-- WRTT_Suite -->

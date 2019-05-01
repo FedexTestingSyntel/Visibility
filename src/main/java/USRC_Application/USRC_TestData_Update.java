@@ -21,7 +21,7 @@ import ADMC_Application.ADMC_API_Endpoints;
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -58,12 +58,36 @@ public class USRC_TestData_Update {
     				}
     			}
 				break;
+			case "UpdateUser":
+				for (int k = 0; k < UD.length; k++) {
+					if (UD[k].COUNTRY_CD.contentEquals("US")) {
+    					data.add(new Object[] {strLevel, UD[k]});
+    					break;
+    				}
+    			}
 			}//end switch MethodName
 		}
 	    System.out.println(data.size() + " scenarios.");
 		return data.iterator();
 	}
 
+	@Test (dataProvider = "dp", enabled = true)
+	public void UpdateUser(String Level, User_Data User_Information) {
+		Environment.getInstance().setLevel(Level);
+		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
+		User_Information.FIRST_NM = "Bob";
+		
+		String fdx_login_fcl_uuid[] = null;
+		//get the cookies and the uuid of the user
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Information.SSO_LOGIN_DESC, User_Information.USER_PASSWORD_DESC);
+		
+		String Test = USRC_API_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Information, fdx_login_fcl_uuid[0]);
+		
+		Helper_Functions.PrintOut(Test);
+	}
+	
+	
+	
 	@Test (dataProvider = "dp", enabled = true)
 	public void CheckLogin(String Level, String UserID, String Password) {
 		Environment.getInstance().setLevel(Level);
@@ -135,7 +159,7 @@ public class USRC_TestData_Update {
 	public void CheckMigration(String Level, String UserID, String Password) {
 		Environment.getInstance().setLevel(Level);
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
-		
+
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
 		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));

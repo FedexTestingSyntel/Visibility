@@ -37,7 +37,7 @@ public class WFCL_SmokeTest{
 			Account_Data AccountDetails = null;
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
-	    	case "CreditCardRegistrationEnroll":
+	    	case "WFCL_CreditCardRegistration":
 	    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (Enrollment_Data Enrollment: ED) {
@@ -50,31 +50,31 @@ public class WFCL_SmokeTest{
 	    			}
 				}
 	    		break;
-	    	case "UserRegistration_Account_Data":
+	    	case "WFCL_CreateUserID":
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			data.add( new Object[] {Level, Helper_Functions.getAddressDetails(Level, CountryList[j][0])});
 				}
 	    		break;
-	    	case "AccountRegistration_Admin":
+	    	case "WFCL_AdminReg":
 	    		if (Level == "7") {break;}//does not run in L7 unless this is changed. to protect prod test data from accidental being consumed.
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			AccountDetails = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
 				}
 	    		data.add( new Object[] {Level, AccountDetails});
 	    		break;
-	    	case "AccountRegistration_INET":
-	    	case "AccountRegistration_WDPA":
+	    	case "WFCL_INETReg":
+	    	case "WFCL_WDPA":
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			AccountDetails = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
 		    		data.add( new Object[] {Level, AccountDetails});
 				}
 	    		break;
-	    	case "Forgot_User_Email":
+	    	case "WFCL_Forgot_User_Email":
 	    		for (int j = 0; j < CountryList.length; j++) {
 		    		data.add( new Object[] {Level, CountryList[j][0], Helper_Functions.MyEmail});
 				}
 	    		break;
-	    	case "Password_Reset_Secret":
+	    	case "WFCL_Reset_Password_Secret":
 	    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 0; k < UD.length; k++) {
@@ -85,7 +85,7 @@ public class WFCL_SmokeTest{
 	    			}
 				}
 	    		break;
-	    	case "Reset_Password_Email":
+	    	case "WFCL_Reset_Password_Email":
 	    		UD = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 0; k < UD.length; k++) {
@@ -103,7 +103,7 @@ public class WFCL_SmokeTest{
 	}
 
 	@Test(dataProvider = "dp")
-	public void CreditCardRegistrationEnroll(String Level, Enrollment_Data Enrollment_Info, Account_Data Account_Info, Tax_Data Tax_Info) {
+	public void WFCL_CreditCardRegistration(String Level, Enrollment_Data Enrollment_Info, Account_Data Account_Info, Tax_Data Tax_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
@@ -119,7 +119,7 @@ public class WFCL_SmokeTest{
 	}
 
 	@Test(dataProvider = "dp")
-	public void UserRegistration_Account_Data(String Level, Account_Data Account_Info) {
+	public void WFCL_CreateUserID(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Country_Code + "Create");
@@ -132,7 +132,7 @@ public class WFCL_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp", priority = 9)//since this method will consume an account number run after others have completed
-	public void AccountRegistration_Admin(String Level, Account_Data Account_Info) {
+	public void WFCL_AdminReg(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
@@ -151,7 +151,7 @@ public class WFCL_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void AccountRegistration_INET(String Level, Account_Data Account_Info){
+	public void WFCL_INETReg(String Level, Account_Data Account_Info){
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
@@ -169,17 +169,18 @@ public class WFCL_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void Forgot_User_Email(String Level, String CountryCode, String Email) {
+	public void WFCL_Forgot_User_Email(String Level, String CountryCode, String Email) {
 		try {
 			String Result = WFCL_Functions_UsingData.Forgot_User_Email(CountryCode, Email);
 			Helper_Functions.PrintOut(Result, false);
+			Helper_Functions.PrintOut("Email Triggered", false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
 	@Test(dataProvider = "dp")
-	public void AccountRegistration_WDPA(String Level, Account_Data Account_Info){
+	public void WFCL_WDPA(String Level, Account_Data Account_Info){
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
@@ -194,7 +195,7 @@ public class WFCL_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void Password_Reset_Secret(String Level, User_Data User_Info, String newPassword){
+	public void WFCL_Reset_Password_Secret(String Level, User_Data User_Info, String newPassword){
 		try {
 			String Result = WFCL_Functions_UsingData.WFCL_Secret_Answer(User_Info, newPassword);
 			Helper_Functions.PrintOut(Result, false);
@@ -204,10 +205,11 @@ public class WFCL_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void Reset_Password_Email(String Level, User_Data User_Info) {
+	public void WFCL_Reset_Password_Email(String Level, User_Data User_Info) {
 		try {
 			String Result = WFCL_Functions_UsingData.ResetPasswordWFCL_Email(User_Info);
 			Helper_Functions.PrintOut(Result, false);
+			Helper_Functions.PrintOut("Email Triggered", false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

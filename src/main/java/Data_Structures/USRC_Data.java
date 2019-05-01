@@ -120,6 +120,8 @@ public class USRC_Data {
 		}else {
 			//ContactList.add(new String[] {"Udaya", "", "Uriti", Phone, Email, "9427 Ruidosa Trl", "", "Irving", "TX", "75063", "US", "5g0d06szxzxyh5diyhyu4lnwi"});
 			//ContactList.add(new String[] {"Resmi", "", "Raveendran", Phone, Email, "387 Main Street", "3760 QNFW", "WACO", "TX", "76712", "US", "38mynlmeqanwftczn0yyg7jlz"});
+			ContactList.add(new String[] {"FIRSTNAME", "", "LASTNAME", Phone, Email, "2519 W ROYAL LN", "", "IRVING", "TX", "75063", "US", "c2cj08lvbmwkv5j1r5k38l1g"});
+			ContactList.add(new String[] {"Udaya", "", "Uriti", Phone, Email, "9427 Ruidosa Trl", "", "IRVING", "TX", "75063", "US", "5g0d06szxzxyh5diyhyu4lnwi"});
 			
 			//These address are working from the WERL page as well         //Please note this data was setup for when using ACXIOM as the validator
 			ContactList.add(new String[] {"TESTER", "", "ZCHUCKZ", Phone, Email, "32 MEADOW CREST DR", "", "SHERWOOD", "AR", "72120", "US", "6xmc5tpjhrtaymw7yfwshqfao"});//L3FDM061418T172631
