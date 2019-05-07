@@ -441,6 +441,7 @@ public class Environment {
 	
 	public static Account_Data getAddressDetails(String Level, String CountryCode, String Type) {
 		Account_Data AllAddresses[] = getAddressDetails();
+		CountryCode = CountryCode.toUpperCase();
 		
 		for (Account_Data AD: AllAddresses) {
 			if (AD != null && AD.Billing_Country_Code.contentEquals(CountryCode)) {

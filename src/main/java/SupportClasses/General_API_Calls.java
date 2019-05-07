@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.net.ssl.HttpsURLConnection;
@@ -16,7 +18,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 public class General_API_Calls {
-	
 	private final static Lock lock = new ReentrantLock();//to make sure the httpclient works with the parallel execution
 	private static HttpClient httpclient = HttpClients.createDefault();//made static to speed up socket execution
 	
@@ -87,5 +88,39 @@ public class General_API_Calls {
 									  MethodName + " Response: " + Response, true); 
 			lock.unlock();
 		} 
+	}
+
+	//This will return only first value that matches
+	public static String Parse_API_For_Value(String MainValue, String Substring) {
+		try {
+			if (MainValue != null && MainValue.contains(Substring)) {
+				//remove everything before the substring that is needed
+				MainValue = MainValue.substring(MainValue.indexOf(Substring) + Substring.length() + 3, MainValue.length());
+				String ReturnValue = MainValue.substring(0, MainValue.indexOf("\""));
+				return ReturnValue;
+			}
+		}catch (Exception e){
+			System.err.println("Error in General_API_Calls.Parse_API_For_Value " + e.getMessage());
+		}
+		return "NOTKNOWN";
+	}
+	
+	//This will return multiple values that match
+	public static String[] Parse_API_For_Values(String MainValue, String Substring) {
+		try {
+			List<String> strList = new ArrayList<String>();
+			while (MainValue != null && MainValue.contains(Substring)){
+				//remove everything before the substring that is needed
+				MainValue = MainValue.substring(MainValue.indexOf(Substring) + Substring.length() + 3, MainValue.length());
+				String ReturnValue = MainValue.substring(0, MainValue.indexOf("\""));
+				strList.add(ReturnValue);
+			}
+			String[] strArr = null;
+			strArr = strList.toArray(new String[strList.size()]);
+			return strArr;
+		}catch (Exception e){
+			System.err.println("Error in General_API_Calls.Parse_API_For_Value " + e.getMessage());
+		}
+		return null;
 	}
 }

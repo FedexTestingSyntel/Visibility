@@ -5,15 +5,14 @@
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   <test thread-count="8" name="ADAT_Test(failed)" parallel="methods">
-    <parameter name="Level" value="7"/>
+    <parameter name="Level" value="6"/>
     <classes>
       <class name="ADAT_Application.ADAT">
         <methods>
-          <include name="ADAT_VerifyPin_Invalid" invocation-numbers="1 0"/>
-          <include name="ADAT_PhoneVelocity" invocation-numbers="1 0"/>
+          <include name="ADAT_PhoneVelocity" invocation-numbers="0 1"/>
           <include name="beforeClass"/>
-          <include name="ADAT_AddressVelocity" invocation-numbers="1 0"/>
-          <include name="ADAT_PostcardVelocity" invocation-numbers="0 1"/>
+          <include name="ADAT_AddressVelocity" invocation-numbers="0 1"/>
+          <include name="ADAT_PostcardVelocity" invocation-numbers="1 0"/>
         </methods>
       </class> <!-- ADAT_Application.ADAT -->
     </classes>

@@ -1,13 +1,18 @@
 package WIDM_Application;
 
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import org.testng.annotations.Test;
 
+import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
+import Data_Structures.WIDM_Data;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
+import org.hamcrest.CoreMatchers;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import java.util.Iterator;
@@ -18,16 +23,16 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "2";
 	static String CountryList[][];
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		
-		CountryList = Environment.getCountryList("smoke");
+		CountryList = Environment.getCountryList("full");
 		//CountryList = new String[][]{{"US", "United States"}};
-		//Helper_Functions.MyEmail = "OtherEmail@accept.com";
+		Helper_Functions.MyEmail = "OtherEmail@accept.com";
 	}
 	
 	@DataProvider (parallel = true)
@@ -76,11 +81,33 @@ public class WIDM{
 		    			}
 					}
 					break;
+				case "AAAUserCreate":
+					WIDM_Data WD = WIDM_Data.LoadVariables(Level);
+					for (int j = 0; j < CountryList.length; j++) {
+						Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
+						data.add( new Object[] {Level, Account_Info, WD});
+					}
+					break;
 			}
 		}	
 		return data.iterator();
 	}
 
+	@Test(dataProvider = "dp")
+	public void AAAUserCreate(String Level, Account_Data Account_Info, WIDM_Data WD){
+		try {
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Country_Code);
+			
+			String Response = WIDM_Endpoints.AAA_User_Create(WD.EndpointUrl, Account_Info, null);
+			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
+			Helper_Functions.PrintOut(Response);
+			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
 	@Test(dataProvider = "dp")
 	public void WIDM_Registration(String Level, String CountryCode, String EmailAddress){
 		try {

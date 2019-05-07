@@ -71,8 +71,17 @@ public class Account_Data {
 	}
 
 	public static void Print_Account_Address(Account_Data Account_Info) {
-		String Address[] = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2, Account_Info.Billing_City, Account_Info.Billing_State_Code, Account_Info.Billing_Zip, Account_Info.Billing_Country_Code, Account_Info.Billing_Region};
-		Helper_Functions.PrintOut(Account_Info.Account_Number + "   " + Arrays.toString(Address));
+		if (Account_Info != null) {
+			String Address[] = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2, Account_Info.Billing_City, Account_Info.Billing_State_Code, Account_Info.Billing_Zip, Account_Info.Billing_Country_Code, Account_Info.Billing_Region};
+			Helper_Functions.PrintOut(Account_Info.Account_Number + "   " + Arrays.toString(Address));
+		}else {
+			Helper_Functions.PrintOut("Print_Account_Address recieved null Account_Data");
+		}
+	}
+	
+	public static void Print_High_Level_Details(Account_Data Account_Info) {
+		String HighLevel[] = new String[] {Account_Info.UserId, Account_Info.UUID, Account_Info.Account_Number, Account_Info.FirstName, Account_Info.MiddleName, Account_Info.LastName, Account_Info.Email};
+		Helper_Functions.PrintOut(Arrays.toString(HighLevel));
 	}
 	
 	public static Account_Data Set_Account_Nickname(Account_Data Account_Info, String Nickname) {
@@ -212,5 +221,28 @@ public class Account_Data {
 		this.Secret_Answer = account_Info.Secret_Answer;
 		this.Secret_Question = account_Info.Secret_Question;
 		this.Password = account_Info.Password;
+	}
+	
+	public void Address_Overwrite(Account_Data account_Info) {
+		this.Shipping_Address_Line_1 = account_Info.Shipping_Address_Line_1;
+		this.Shipping_Address_Line_2 = account_Info.Shipping_Address_Line_2;
+		this.Shipping_City = account_Info.Shipping_City;
+		this.Shipping_State = account_Info.Shipping_State;
+		this.Shipping_State_Code = account_Info.Shipping_State_Code;
+		this.Shipping_Zip = account_Info.Shipping_Zip;
+		this.Shipping_Country_Code = account_Info.Shipping_Country_Code;
+		this.Shipping_Region = account_Info.Shipping_Region;
+		this.Shipping_Country = account_Info.Shipping_Country;
+		this.Shipping_Phone_Number = account_Info.Shipping_Phone_Number;
+		this.Billing_Address_Line_1 = account_Info.Billing_Address_Line_1;
+		this.Billing_Address_Line_2 = account_Info.Billing_Address_Line_2;
+		this.Billing_City = account_Info.Billing_City;
+		this.Billing_State = account_Info.Billing_State;
+		this.Billing_State_Code = account_Info.Billing_State_Code;
+		this.Billing_Zip = account_Info.Billing_Zip;
+		this.Billing_Country_Code = account_Info.Billing_Country_Code;
+		this.Billing_Region = account_Info.Billing_Region;
+		this.Billing_Country = account_Info.Billing_Country;
+		this.Billing_Phone_Number = account_Info.Billing_Phone_Number;
 	}
 }

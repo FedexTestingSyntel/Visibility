@@ -165,10 +165,11 @@ public class WIDM_Functions{
 				}
 			}
 			
-			Helper_Functions.PrintOut("Failures: " + Failures, true);
 			if (Failures == "") {
-				return "Expected Errors Recieved.";
+				Helper_Functions.PrintOut("Expected Errors Received.", true);
+				return "Expected Errors Received.";
 			}else {
+				Helper_Functions.PrintOut("Failures: " + Failures, true);
 				return Failures;
 			}
 		}catch (Exception e) {
@@ -228,9 +229,6 @@ public class WIDM_Functions{
 
 	public static String Reset_Password_WIDM_Email(String strUserName, String Password) throws Exception{
 		try{
-			WebDriver_Functions.Login(strUserName, Password);
-
-			
     		String Email = "--Could not retrieve email--";
     		try {
     			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());

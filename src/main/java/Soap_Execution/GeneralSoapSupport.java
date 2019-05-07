@@ -57,7 +57,7 @@ public class GeneralSoapSupport {
             SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
             // Send SOAP Message to SOAP Server
-            String RequestFormatted = Request.replaceAll("\n", "").replaceAll("\r", "");
+            String RequestFormatted = Request.replaceAll("\n", " <New Line> ").replaceAll("\r", " <tab> ");
             Helper_Functions.PrintOut(MethodName + " soapEndpoint: " + soapEndpointUrl + "\n    " +
             						MethodName + " soapRequest: " + RequestFormatted, true);
             soapResponse = soapConnection.call(soapRequest, soapEndpointUrl);

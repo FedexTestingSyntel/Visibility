@@ -17,7 +17,6 @@ import java.util.TimeZone;
 import org.hamcrest.CoreMatchers;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
-import Data_Structures.*;
 import SupportClasses.Environment;
 import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
@@ -26,7 +25,7 @@ import SupportClasses.Helper_Functions;
 //@Listeners(SupportClasses.TestNG_ReportListener.class)
 
 public class MFAC{
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 	final boolean TestExpiration = false;//flag to determine if the expiration scenarios should be tested. When set to false those tests will not be executed.
 	
 	static MFAC_Data DataClass[] = new MFAC_Data[8];//Stores the data for each individual level, please see the before class function below for more details.
@@ -48,19 +47,6 @@ public class MFAC{
 			
 			EnvironmentInformation[0] = General_API_Calls.getAuthToken(EnvironmentInformation[2], EnvironmentInformation[3], EnvironmentInformation[4]);//add token to front of new array after it is generated
 			Helper_Functions.PrintOut(Arrays.toString(EnvironmentInformation), false);//print out all of the urls and date for the level, this is just a reference point to executer
-		    
-		    DataClass[ExcelRow] = new MFAC_Data();
-		    DataClass[ExcelRow].OAuth_Token = EnvironmentInformation[0];
-		    DataClass[ExcelRow].Level = EnvironmentInformation[1];
-		    DataClass[ExcelRow].AIssueURL = EnvironmentInformation[5];
-		    DataClass[ExcelRow].AVerifyURL = EnvironmentInformation[6];
-		    DataClass[ExcelRow].AVelocityURL = EnvironmentInformation[7];
-		    DataClass[ExcelRow].DIssueURL = EnvironmentInformation[8];
-		    DataClass[ExcelRow].DVerifyURL = EnvironmentInformation[9];
-		    DataClass[ExcelRow].DVelocityURL = EnvironmentInformation[10];
-		    DataClass[ExcelRow].PinVelocityThresholdPostcard = Integer.valueOf(EnvironmentInformation[11]);
-		    DataClass[ExcelRow].PinVelocityThresholdPhone = Integer.valueOf(EnvironmentInformation[12]);
-		    DataClass[ExcelRow].AddressVelocityThreshold = Integer.valueOf(EnvironmentInformation[13]);
 		}
 	}
 	

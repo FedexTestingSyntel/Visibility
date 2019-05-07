@@ -17,7 +17,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WDPA_SmokeTest{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -57,7 +57,7 @@ public class WDPA_SmokeTest{
 	    				}
 	    			}
 				}
-	    	break;
+	    		break;
 	    	case "WDPA_LTLFreight":
 	    		UD = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
@@ -68,14 +68,13 @@ public class WDPA_SmokeTest{
 	    				}
 	    			}
 				}
-	    	break;
-		    	case "WDPA_LTLFreight_Anonymous":    //update this later to restrict based on country
-		    		for (int j = 0; j < CountryList.length; j++) {
-		    			if (CountryList[j][0].contentEquals("US") || CountryList[j][0].contentEquals("CA") || CountryList[j][0].contentEquals("MX")){
-		    				data.add( new Object[] {Level, CountryList[j][0]});
-		    			}
-		    			
-					}
+	    		break;
+		    case "WDPA_LTLFreight_Anonymous":
+		    	for (int j = 0; j < CountryList.length; j++) {
+		    		if (CountryList[j][0].contentEquals("US") || CountryList[j][0].contentEquals("CA") || CountryList[j][0].contentEquals("MX")){
+		    			data.add( new Object[] {Level, CountryList[j][0]});
+		    		}	
+				}
 		    	break;
 			}
 		}
@@ -90,7 +89,8 @@ public class WDPA_SmokeTest{
 		Helper_Functions.PrintOut("Schedule a ground pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = Arrays.toString(WDPA_Functions.WDPAPickupDetailed(CountryCode, UserID, Password, "ground", "CompanyNameHere", "John Doe", "9011111111", Address, null, "INET"));
+			String ContactName = Helper_Functions.getRandomString(14);
+			String Result = Arrays.toString(WDPA_Functions.WDPAPickupDetailed(CountryCode, UserID, Password, "ground", "CompanyNameHere", ContactName, "9011111111", Address, null, "INET"));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -102,7 +102,8 @@ public class WDPA_SmokeTest{
 		Helper_Functions.PrintOut("Schedule an express pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = Arrays.toString(WDPA_Functions.WDPAPickupDetailed(CountryCode, UserID, Password, "express", "CompanyNameHere", "John Doe", "9011111111", Address, null, "INET"));
+			String ContactName = Helper_Functions.getRandomString(14);
+			String Result = Arrays.toString(WDPA_Functions.WDPAPickupDetailed(CountryCode, UserID, Password, "express", "CompanyNameHere", ContactName, "9011111111", Address, null, "INET"));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -113,9 +114,10 @@ public class WDPA_SmokeTest{
 	public static void WDPA_ExpressFreight(String Level, String CountryCode, String UserID, String Password){
 		Helper_Functions.PrintOut("Schedule an express freight pickup.", false);
 		try {
+			String ContactName = Helper_Functions.getRandomString(14);
 			String PackageDetails[] = {"1", "444", "L", "1400", "1800", "ExpLTL Attempt", "FedEx 1Day Freight", "ConfFiller", "side of barn", "5", "6", "7"};
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = Arrays.toString(WDPA_Functions.WDPAPickupDetailed("US", UserID, Password, "expFreight", "ExpressLTL Testing", "ExpressLTL Attempt", "9011111111", Address, PackageDetails, "INET"));
+			String Result = Arrays.toString(WDPA_Functions.WDPAPickupDetailed("US", UserID, Password, "expFreight", "ExpressLTL Testing", ContactName, "9011111111", Address, PackageDetails, "INET"));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -127,7 +129,8 @@ public class WDPA_SmokeTest{
 		Helper_Functions.PrintOut("Schedule a LTL pickup while logged in.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = Arrays.toString(WDPA_Functions.WDPALTLPickup(Address, UserID, Password, "10", "400"));
+			String ContactName = Helper_Functions.getRandomString(14);
+			String Result = Arrays.toString(WDPA_Functions.WDPALTLPickup(Address, UserID, Password, "10", "400", ContactName));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -139,7 +142,8 @@ public class WDPA_SmokeTest{
 		Helper_Functions.PrintOut("Schedule a LTL pickup while not logged into FedEx.com", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = Arrays.toString(WDPA_Functions.WDPALTLPickup(Address, "", "", "10", "400"));
+			String ContactName = Helper_Functions.getRandomString(14);
+			String Result = Arrays.toString(WDPA_Functions.WDPALTLPickup(Address, "", "", "10", "400", ContactName));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

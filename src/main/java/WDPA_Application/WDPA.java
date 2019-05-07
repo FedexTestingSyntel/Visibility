@@ -150,7 +150,8 @@ public class WDPA extends WDPA_Functions{
 		Helper_Functions.PrintOut("Schedule a LTL pickup while logged in.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = Arrays.toString(WDPALTLPickup(Address, UserID, Password, "10", "400"));
+			String ContactName = Helper_Functions.getRandomString(14);
+			String Result = Arrays.toString(WDPALTLPickup(Address, UserID, Password, "10", "400", ContactName));
 			Helper_Functions.PrintOut(Result, false);
 			
 		    String ArrayResults[][] = {{"SSO_LOGIN_DESC", UserID}, {"FREIGHT_ENABLED", "T"}};
@@ -168,7 +169,8 @@ public class WDPA extends WDPA_Functions{
 		Helper_Functions.PrintOut("Schedule a LTL pickup while not logged into FedEx.com", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String Result = Arrays.toString(WDPALTLPickup(Address, "", "", "10", "400"));
+			String ContactName = Helper_Functions.getRandomString(14);
+			String Result = Arrays.toString(WDPALTLPickup(Address, "", "", "10", "400", ContactName));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -182,7 +184,8 @@ public class WDPA extends WDPA_Functions{
 		while  (!breakout) {
 			try {
 				String Address[] = Helper_Functions.LoadAddress("US");
-				String Result = Arrays.toString(WDPALTLPickup(Address, "", "", "10", "400"));
+				String ContactName = Helper_Functions.getRandomString(14);
+				String Result = Arrays.toString(WDPALTLPickup(Address, "", "", "10", "400", ContactName));
 				Helper_Functions.PrintOut(Result, false);
 				
 			}catch (Exception e) {

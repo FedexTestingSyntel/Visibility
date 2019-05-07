@@ -307,13 +307,14 @@ public class WDPA_Functions{
 		return false;
 	}
 	
-	public static String[] WDPALTLPickup(String AddressDetails[], String UserID, String Password, String HandelingUnits, String Weight) throws Exception{
+	public static String[] WDPALTLPickup(String AddressDetails[], String UserID, String Password, String HandelingUnits, String Weight, String ContactName) throws Exception{
 		String CountryCode = AddressDetails[6];
 		//https://wwwdev.idev.fedex.com/PickupApp/login?locale=en_US
 		
 		String strAccountSelected = "", strConfirmationNumber = "";
 		try {
 			//check if logged in flow or not, blank user means non logged in flow.
+			
 			if (UserID != ""){
 				WebDriver_Functions.Login(UserID, Password);			
 				// launch the browser and direct it to the Base URL  https://wwwdrt.idev.fedex.com/PickupApp/scheduleFreightPickup.do?method=doInit&locale=en_us
@@ -331,10 +332,10 @@ public class WDPA_Functions{
 					}
 				}
 				
-				WDPA_LTL_Pickup_Address("Company", "TestingName", Helper_Functions.myPhone, AddressDetails);
+				WDPA_LTL_Pickup_Address("Company", ContactName, Helper_Functions.myPhone, AddressDetails);
 			}else{//user is not logged in
 				WebDriver_Functions.ChangeURL("WDPA_LTL", CountryCode, true);
-				WDPA_LTL_Pickup_Address("Company", "TestingName", Helper_Functions.myPhone, AddressDetails);
+				WDPA_LTL_Pickup_Address("Company", ContactName, Helper_Functions.myPhone, AddressDetails);
 			}
 
 			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='address.accountCountry.display']/div[1]/div/div[2]/label"), "*\nCountry/Territory", 116632); //Added the "* \n" due to dev has setup
@@ -602,7 +603,8 @@ public class WDPA_Functions{
 		}
 	}//end WDPAShipment
   
-	//Format = this is the general format of the calender id. ex: package.express.pickupDate if the total is "package.express.pickupDate._week1day4"
+	//Format = this is the general format of the calendar id. ex: package.express.pickupDate if the field is "package.express.pickupDate._week1day4".
+	//Date = String for the date. Example if date to selected is May 19th then would send "19"
 	public static String CalenderDate(String IdFormat, String Date) throws Exception {
 		boolean AddtionalMonth = false;
 		String LastAvailable = null;
@@ -612,6 +614,7 @@ public class WDPA_Functions{
 				String AttemptDate = IdFormat + "._week" + week + "day" + day;
 				if (WebDriver_Functions.isPresent(By.id(AttemptDate)) && DriverFactory.getInstance().getDriver().findElement(By.id(AttemptDate)).getAttribute("class").contentEquals("enabledDateStyle")) {
 					LastAvailable = AttemptDate;
+					//Helper_Functions.PrintOut(WebDriver_Functions.GetText(By.id(LastAvailable)));//for debug
 					if (WebDriver_Functions.GetText(By.id(LastAvailable)) == Date) {//if a date is provided will return once found as a valid option
 						WebDriver_Functions.Click(By.id(LastAvailable));
 						return LastAvailable;

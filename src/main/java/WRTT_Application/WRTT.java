@@ -11,14 +11,12 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
-import TestingFunctions.WRTT_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WRTT{
 	static String LevelsToTest = "2";
 	static String CountryList[][];
-	static boolean SmokeTest = false;
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -37,32 +35,25 @@ public class WRTT{
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WRTT_Rate_Sheet":
-		    		if (SmokeTest) {
-		    			data.add( new Object[] {Level, 4, true, true, true});
-		    			data.add( new Object[] {Level, 5, true, true, false});
-		    			data.add( new Object[] {Level, 14, true, true, false});
-		    			data.add( new Object[] {Level, 15, true, true, true});
-		    		}else {//loop and do all services and all permutations
-		    			for (int j = 0; j < 18; j++) {
-		    				int n = 3; //three is the numbers of booleans involved
-		    				for (int k = 0; k < Math.pow(2, n); k++) {
-		    			        String bin = Integer.toBinaryString(k);
-		    			        while (bin.length() < n) {
-		    			        	bin = "0" + bin;
-		    			        }
-		    			        char[] chars = bin.toCharArray();
-		    			        boolean[] boolArray = new boolean[n];
-		    			        for (int l = 0; l < chars.length; l++) {
-		    			            boolArray[l] = chars[l] == '0' ? true : false;
-		    			        }
-		    			        if (boolArray[0] == true && boolArray[1] == false) {//all listed as zone chart true
-		    			        	data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
-		    			        }
-			    				data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
-		    			    }
-		    			}
+		    		for (int j = 0; j < 18; j++) {
+		    			int n = 3; //three is the numbers of booleans involved
+		    			for (int k = 0; k < Math.pow(2, n); k++) {
+		    				String bin = Integer.toBinaryString(k);
+		    				while (bin.length() < n) {
+		    					bin = "0" + bin;
+		    				}
+		    				char[] chars = bin.toCharArray();
+		    				boolean[] boolArray = new boolean[n];
+		    				for (int l = 0; l < chars.length; l++) {
+		    					boolArray[l] = chars[l] == '0' ? true : false;
+		    				}
+		    				if (boolArray[0] == true && boolArray[1] == false) {//all listed as zone chart true
+		    					data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
+		    				}
+			    			data.add( new Object[] {Level, j, boolArray[0], boolArray[1], boolArray[2]});
+			    		}
 		    		}
-		    	break;
+		    		break;
 		    	case "WRTT_SpalshPage_eCRV":
 		    	case "WRTT_eCRV_WRTTLink":
 		    		//data.add( new Object[] {Level, "US"});

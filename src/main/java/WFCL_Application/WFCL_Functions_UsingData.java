@@ -414,6 +414,7 @@ public class WFCL_Functions_UsingData{
 			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
 			return ReturnValue;
 		}catch (Exception e) {
+			Account_Data.Print_High_Level_Details(Account_Info);
 			e.printStackTrace();
 			throw e;
 		}
@@ -1149,6 +1150,44 @@ public class WFCL_Functions_UsingData{
  			throw e;
  		}
  	}//end WFCL_RewardsRegistration
+	
+	public static String[] WFCL_Rewards_AEM_Link(String CountryCode, String LanguageCode) throws Exception{
+ 		try {
+ 			WebDriver_Functions.ChangeURL("WFCL_REWARDS_CONFIRMATION", CountryCode, LanguageCode, true);
+ 			
+ 			//Check the "Go to My FedEx Rewards" link
+ 			WebDriver_Functions.WaitPresent(By.xpath("/html/body/div[2]/div/div/div[2]/div[5]/div/a"));
+ 			String RewardsLink = WebDriver_Functions.getURLByhref(By.xpath("/html/body/div[2]/div/div/div[2]/div[5]/div/a"));
+ 			
+ 			String ExpectedURL = WebDriver_Functions.ChangeURL("WFCL_REWARDS_PAGE", CountryCode, true);
+ 			
+ 			assertThat(ExpectedURL, CoreMatchers.containsString(RewardsLink));
+ 			
+		    return new String[] {CountryCode, RewardsLink};
+ 		}catch (Exception e) {
+ 			throw e;
+ 		}
+ 	}
+	
+	public static String[] WFCL_Rewards_Logout(String CountryCode, String LanguageCode, User_Data User_Info) throws Exception{
+ 		try {
+ 			
+ 			WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+ 			WebDriver_Functions.ChangeURL("WFCL_REWARDS_CONFIRMATION", CountryCode, true);
+ 			WebDriver_Functions.ChangeURL("WFCL_REWARDS_PAGE", CountryCode, true);
+ 			String LogoutJsPUrl = WebDriver_Functions.ChangeURL("LOGOUT_JSP", CountryCode, LanguageCode, true);
+ 			
+ 			String CurrentURL = WebDriver_Functions.GetCurrentURL();
+ 			Helper_Functions.PrintOut("Current URL is: " + CurrentURL);
+ 			String ExpectedURL = WebDriver_Functions.ChangeURL("HOME", CountryCode, LanguageCode, true);
+ 			
+ 			assertThat(CurrentURL, CoreMatchers.containsString(ExpectedURL));
+ 			
+		    return new String[] {CountryCode, LanguageCode, LogoutJsPUrl, CurrentURL};
+ 		}catch (Exception e) {
+ 			throw e;
+ 		}
+ 	}
 	
 	
 }//End Class

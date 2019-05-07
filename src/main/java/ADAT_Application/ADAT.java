@@ -21,7 +21,7 @@ import SupportClasses.Helper_Functions;
 public class ADAT {
 
 	//will parse this string and run all the levels listed in the data provider.
-	static String LevelsToTest = "23";	
+	static String LevelsToTest = "236";	
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -145,9 +145,17 @@ public class ADAT {
 		String Response = ADAT_Endpoints.ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
 		
 		Response = ADAT_Endpoints.ADAT_VerifyPin(Data_Class.VerifyPinUrl, Organization, UserName, ADAT_Endpoints.ParsePin(Response) + "1");
-		assertThat(Response, CoreMatchers.containsString("400Bad"));
 		
-		String Result[] = new String[] {Level, Organization, UserName, "400Bad as expected"};
+		String Result[];
+		if (Level.contains("6")) {
+			assertThat(Response, CoreMatchers.containsString("The provided authentication credentials are not correct."));
+			Result = new String[] {Level, Organization, UserName, "The provided authentication credentials are not correct."};
+		}else {
+			assertThat(Response, CoreMatchers.containsString("400Bad"));
+			Result = new String[] {Level, Organization, UserName, "400Bad as expected"};
+		}
+		
+		
 		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	

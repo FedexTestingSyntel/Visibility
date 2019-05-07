@@ -1,4 +1,4 @@
-package TestingFunctions;
+package WRTT_Application;
 
 import org.openqa.selenium.By;
 import SupportClasses.DriverFactory;

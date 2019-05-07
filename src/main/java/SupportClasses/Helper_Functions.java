@@ -915,6 +915,7 @@ public class Helper_Functions{
 	}
 	
 	public static Account_Data getAddressDetails(String Level, String CountryCode){
+		CountryCode = CountryCode.toUpperCase();
 		Account_Data D[] = Environment.getAddressDetails();
 		for (Account_Data Current: D) {
 			if (Current != null && Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {

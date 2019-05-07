@@ -12,7 +12,6 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
@@ -25,19 +24,27 @@ import Data_Structures.Enrollment_Data;
 public class WebDriver_Functions{
 	
 	public static String ChangeURL(String Designation, String CountryCode, boolean ClearCookies) throws Exception {
-		String LevelURL = null, AppUrl = null, CCL = null, CCU = null;
+		//will default to English if language not sent.
+		return ChangeURL(Designation, CountryCode, "en", ClearCookies);
+	}
+	
+	public static String ChangeURL(String Designation, String CountryCode, String LanguageCode, boolean ClearCookies) throws Exception {
+		String LevelURL = null, AppUrl = null, CCL = null, CCU = null, LCL = null;
 		
 		if (CountryCode != null) {
 			CCL = CountryCode.toLowerCase();
 			CCU = CountryCode.toUpperCase();
 			LevelURL = LevelUrlReturn();
 		}
+		if (LanguageCode != null) {
+			LCL = LanguageCode.toLowerCase();
+		}
 		
 		//String caller = Thread.currentThread().getStackTrace()[2].getMethodName();
 		String AppDesignation = Designation.toUpperCase();
 		
 		switch (AppDesignation) { 
-			case "ADMINREG":	AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?appName=fclpasskey&registration=true&countryCode=" + CCL + "&languageCode=en&fclHost=" + LevelURL + "&step3URL=" + LevelURL + "%2Fapps%2Fshipadmin&afterwardsURL=" + LevelURL + "%2Fapps%2Fshipadmin&locale=en_" + CCU + "&programIndicator=1";break;  	
+			case "ADMINREG":	AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?appName=fclpasskey&registration=true&countryCode=" + CCL + "&languageCode=" + LCL + "&fclHost=" + LevelURL + "&step3URL=" + LevelURL + "%2Fapps%2Fshipadmin&afterwardsURL=" + LevelURL + "%2Fapps%2Fshipadmin&locale=" + LCL + "_" + CCU + "&programIndicator=1";break;  	
     		case "ECAM":			
     			if (Environment.getInstance().getLevel().contentEquals("2")) {
     				AppUrl = "https://ecamdev.idev.fedex.com/ecam/index.html";
@@ -47,12 +54,12 @@ public class WebDriver_Functions{
     				AppUrl = "https://ecambit.idev.fedex.com/ecam/index.html";
     			}
     			break;
-    		case "ECRV":		AppUrl = LevelURL + "/ratetools/RateToolsEntry.do?link=2&CountryCode=" + CCU + "&locale=" + CCU + "_en";AppUrl = AppUrl.replace("https", "http");break;
-			case "FCLCREATE":  	AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=oadr&locale=" + CCL + "_en&step3URL=https%3A%2F%2F.fedex.com%3A443%2Ffcl%2Fweb%2Fjsp%2FfclValidateAndCreate.jsp&afterwardsURL=" + LevelURL + "%3A443%2Ffcl%2Fweb%2Fjsp%2Foadr.jsp&programIndicator=p314t9n1ey&accountOption=link";break;
-    		case "FCLLINK":		AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=oadr&locale=" + CCL + "_en&step3URL=https%3A%2F%2F.fedex.com%3A443%2Ffcl%2Fweb%2Fjsp%2FfclValidateAndCreate.jsp&afterwardsURL=" + LevelURL + "%3A443%2Ffcl%2Fweb%2Fjsp%2Foadr.jsp&programIndicator=p314t9n1ey&accountOption=link";break; 	
-    		case "FCLLINKACCOUNT":AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?step3URL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3Dus%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3Dus%26sType%3DF%26programIndicator%3D0&appName=fclfsm&countryCode=" + CCL + "&languageCode=en&programIndicator=1&rp=fclmyprofile";break;
+    		case "ECRV":		AppUrl = LevelURL + "/ratetools/RateToolsEntry.do?link=2&CountryCode=" + CCU + "&locale=" + CCU + "_" + LCL + "";AppUrl = AppUrl.replace("https", "http");break;
+			case "FCLCREATE":  	AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=oadr&locale=" + CCL + "_" + LCL + "&step3URL=https%3A%2F%2F.fedex.com%3A443%2Ffcl%2Fweb%2Fjsp%2FfclValidateAndCreate.jsp&afterwardsURL=" + LevelURL + "%3A443%2Ffcl%2Fweb%2Fjsp%2Foadr.jsp&programIndicator=p314t9n1ey&accountOption=link";break;
+    		case "FCLLINK":		AppUrl = LevelURL + "/fcl/web/jsp/contactInfo1.jsp?appName=oadr&locale=" + CCL + "_" + LCL + "&step3URL=https%3A%2F%2F.fedex.com%3A443%2Ffcl%2Fweb%2Fjsp%2FfclValidateAndCreate.jsp&afterwardsURL=" + LevelURL + "%3A443%2Ffcl%2Fweb%2Fjsp%2Foadr.jsp&programIndicator=p314t9n1ey&accountOption=link";break; 	
+    		case "FCLLINKACCOUNT":AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?step3URL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3D" + LCL + "_" + CCU + "%26urlparams%3Dus%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3D" + LCL + "_" + CCU + "%26urlparams%3Dus%26sType%3DF%26programIndicator%3D0&appName=fclfsm&countryCode=" + CCL + "&languageCode=" + LCL + "&programIndicator=1&rp=fclmyprofile";break;
     		case "FCLLINKINTER": 
-    			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo.jsp?appName=fclfsm&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Fship%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fship%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&programIndicator=0";
+    			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo.jsp?appName=fclfsm&locale=" + CCL + "_" + LCL + "&step3URL=" + LevelURL + "%2Fship%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3D" + LCL + "_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fship%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3D" + LCL + "_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&programIndicator=0";
     			if(Helper_Functions.Check_Country_Region(CountryCode).contains("APAC")){//APAC Country
 					AppUrl = AppUrl.replaceAll("%2Fship%2", "%2Fshipping_apac%2");
  	 			}
@@ -61,13 +68,22 @@ public class WebDriver_Functions{
     			//https://wwwdrt.idev.fedex.com/fcl/web/jsp/forgotPassword.jsp?appName=fclfsm&locale=us_en&step3URL=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&returnurl=https%3A%2F%2Fwwwdrt.idev.fedex.com%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_US%26urlparams%3Dus%26sType%3DF&programIndicator=0
     			AppUrl = "";
 				break; 
-    		case "WFCLREWARDS":	AppUrl = LevelURL + "/fcl/?appName=fclfederate&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Ffcl%2FExistingAccountFclStep3.do&returnurl=" + LevelURL + "%2Ffcl%2Fweb%2Fjsp%2Ffederation.jsp&programIndicator=ss90705920&fedId=Epsilon";break;
+    		case "WFCLREWARDS":	AppUrl = LevelURL + "/fcl/?appName=fclfederate&locale=" + CCL + "_" + LCL + "&step3URL=" + LevelURL + "%2Ffcl%2FExistingAccountFclStep3.do&returnurl=" + LevelURL + "%2Ffcl%2Fweb%2Fjsp%2Ffederation.jsp&programIndicator=ss90705920&fedId=Epsilon";break;
+    		case "WFCL_REWARDS_CONFIRMATION": AppUrl = LevelURL + "/" + LCL + "-" + CCL + "/online/rewards-cfm.html"; break;
+    		case "WFCL_REWARDS_PAGE":	AppUrl = LevelURL + "/fcl/web/jsp/federation.jsp"; break;
+    		
     		case "FDDT":		AppUrl = LevelURL+ "/EarnedDiscounts/";break;
-    		case "HOME":  		AppUrl = LevelURL + "/en-us/home.html";break;
-    		case "INET":		AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=en";break;
-    		case "INET_ADD_ACCOUNT":		AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?step3URL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3Den_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF%26programIndicator%3D0&appName=fclfsm&countryCode=" + CCL + "&languageCode=en&programIndicator=1&rp=fclmyprofile";break;
+    		
+    		case "HOME":  		AppUrl = LevelURL + "/" + LCL + "-" + CCL + "/home.html";break;
+    		
+    		case "INET":		AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=" + LCL + "";break;
+    		case "INET_ADD_ACCOUNT":		AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?step3URL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3D" + LCL + "_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3D" + LCL + "_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF%26programIndicator%3D0&appName=fclfsm&countryCode=" + CCL + "&languageCode=" + LCL + "&programIndicator=1&rp=fclmyprofile";break;
+    		
     		case "JSP":  		AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp"; break;
     		case "JSP_EXPRESS":	AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/express.jsp"; break;
+    		
+    		case "LOGOUT_JSP": AppUrl = LevelURL + "/fcl/web/jsp/logout.jsp?locale=" + CCL + "_" + LCL; break;
+    		
     		case "PREF":  AppUrl = LevelURL + "/preferences";break;	
        		case "WADM":
     			AppUrl = LevelURL + "/apps/shipadmin/";
@@ -86,30 +102,30 @@ public class WebDriver_Functions{
 				break;
     		case "WGTM_FID":
     			//WGTM page if the find internationl documents link is selected.
-    			AppUrl = LevelURL + "FID?clienttype=dotcom&clickedPrint=false&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&lang_code=en&initialrequest=y&option=fid";
+    			AppUrl = LevelURL + "FID?clienttype=dotcom&clickedPrint=false&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&lang_code=" + LCL + "&initialrequest=y&option=fid";
 				break;						
     		case "WIDM":// this is the Find International documents link from GTM page
     			//AppUrl = LevelURL + "/FID?clienttype=dotcom&clickedPrint=false&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&lang_code=en&option=fid";
-    			AppUrl = LevelURL + "/FID?clienttype=dotcomreg&clickedPrint=false&locale=" + CCL + "_en&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&language=english&lang_code=en&initialrequest=y&option=fid&ccln=true";
+    			AppUrl = LevelURL + "/FID?clienttype=dotcomreg&clickedPrint=false&locale=" + CCL + "_" + LCL + "&action=entry&hazmatFilter=All&cntry_code=" + CCL + "&language=" + LCL + "glish&lang_code=" + LCL + "&initialrequest=y&option=fid&ccln=true";
        			break;
 
     		case "WDPA":  	
-    			AppUrl = LevelURL + "/PickupApp/login?locale=en_" + CCL;
+    			AppUrl = LevelURL + "/PickupApp/login?locale=" + LCL + "_" + CCL;
 				break;
     		case "WDPA_PICKUPS":
     			AppUrl = LevelURL + "/PickupApp/pickuphistory.do?method=doInit";
 				break;
     		case "WDPA_LTL":  	
-    			AppUrl = LevelURL + "/PickupApp/scheduleFreightPickup.do?method=doInit&locale=en_" + CCL;
+    			AppUrl = LevelURL + "/PickupApp/scheduleFreightPickup.do?method=doInit&locale=" + LCL + "_" + CCL;
 				break;	
     		case "WPRL":  	
-    			AppUrl = LevelURL + "/apps/myprofile/loginandcontact/?locale=en_" + CCU + "&cntry_code=" + CCL;
+    			AppUrl = LevelURL + "/apps/myprofile/loginandcontact/?locale=" + LCL + "_" + CCU + "&cntry_code=" + CCL;
 				break;
     		case "WPRL_FDM":  	
-    			AppUrl = LevelURL + "/apps/myprofile/deliverymanager/?locale=en_" + CCU + "&cntry_code=" + CCU;
+    			AppUrl = LevelURL + "/apps/myprofile/deliverymanager/?locale=" + LCL + "_" + CCU + "&cntry_code=" + CCU;
 				break;
     		case "WPRL_ACC":  	
-    			AppUrl = LevelURL + "/apps/myprofile/accountmanagement/?locale=en_" + CCU + "&cntry_code=" + CCU;
+    			AppUrl = LevelURL + "/apps/myprofile/accountmanagement/?locale=" + LCL + "_" + CCU + "&cntry_code=" + CCU;
 				break;	
     		case "WCRV":  	
     			AppUrl = LevelURL + "/apps/ratevisibility/";
@@ -119,13 +135,13 @@ public class WebDriver_Functions{
     			AppUrl = AppUrl.replace("https", "http");
 				break;
     		case "WGRT":  	
-    			AppUrl = LevelURL + "/ratefinder/home?cc=" + CCU + "&language=en&locId=express";
+    			AppUrl = LevelURL + "/ratefinder/home?cc=" + CCU + "&language=" + LCL + "&locId=express";
 				break;
     		case "WERL":  	
     			AppUrl = LevelURL + "/apps/fdmenrollment/";
 				break;
     		case "GFBO":  	
-    			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo.jsp?appName=fclgfbo&locale=" + CCL + "_en&step3URL=" + LevelURL + "%2Ffedexbillingonline%2Fregistration.jsp%3FuserRegistration%3DY%26locale%3Den_" + CCU + "&afterwardsURL=" + LevelURL + "%2Ffedexbillingonline%3F%26locale%3Den_" + CCU + "&programIndicator";
+    			AppUrl = LevelURL + "/fcl/web/jsp/contactInfo.jsp?appName=fclgfbo&locale=" + CCL + "_" + LCL + "&step3URL=" + LevelURL + "%2Ffedexbillingonline%2Fregistration.jsp%3FuserRegistration%3DY%26locale%3D" + LCL + "_" + CCU + "&afterwardsURL=" + LevelURL + "%2Ffedexbillingonline%3F%26locale%3D" + LCL + "_" + CCU + "&programIndicator";
 				break;
     		case "GFBO_LOGIN":
     			//https://wwwtest.fedex.com
@@ -139,10 +155,10 @@ public class WebDriver_Functions{
     		default: //as a fall back append the correct level to the AppDesignation that is sent.
     			if (Designation.contains("Enrollment_")){//https://wwwdrt.idev.fedex.com/fcl/ALL?enrollmentid=ml18024117&language=en&country=us 
     				Designation = Designation.replace("Enrollment_", "");
-    				AppUrl = LevelURL + "/fcl/ALL?enrollmentid=" + Designation + "&language=en&country=" + CCL;
+    				AppUrl = LevelURL + "/fcl/ALL?enrollmentid=" + Designation + "&language=" + LCL + "&country=" + CCL;
     			}else if (Designation.contains("DT_")){   //https://wwwdev.idev.fedex.com/en-us/discount-programs/DT/cc16323414.html
     				Designation = Designation.replace("DT_", "");
-    				AppUrl = LevelURL + "/en-" + CCL + "/discount-programs/DT/" + Designation + ".html";
+    				AppUrl = LevelURL + "/" + LCL + "-" + CCL + "/discount-programs/DT/" + Designation + ".html";
     			}else if (CountryCode == null || Designation.contains(LevelURL)){
     				//try and navigate to the url that was passed.
     				AppUrl = Designation;
@@ -152,7 +168,6 @@ public class WebDriver_Functions{
 		}//end switch AppDesignation
 		
 		if (ClearCookies) {
-			//DriverFactory.getInstance().getDriver().get(LevelURL + "/en-us/home.html");
 			DriverFactory.getInstance().getDriver().manage().deleteAllCookies();
 			Helper_Functions.PrintOut("Cookies Deleted", true);
 		}
@@ -201,11 +216,13 @@ public class WebDriver_Functions{
 			//get the instance of the webdriver and then find the element by the element passed to this function
 			WebElement Element = DriverFactory.getInstance().getDriver().findElement(Ele);
 			//clear out any existing text.
-			Element.clear();
+			JavascriptExecutor myExecutor = ((JavascriptExecutor) DriverFactory.getInstance().getDriver());
+			myExecutor.executeScript("arguments[0].value='';", Element);
+			
 			if (i < 3) {
 				Element.sendKeys(text);//try entering character by character
 			}else {
-				JavascriptExecutor myExecutor = ((JavascriptExecutor) DriverFactory.getInstance().getDriver());
+				myExecutor = ((JavascriptExecutor) DriverFactory.getInstance().getDriver());
 				myExecutor.executeScript("arguments[0].value='" + text + "';", Element); //enter all at once, fastest method
 			}
 			try {Thread.sleep(100);} catch (InterruptedException e) {}//wait for a moment the check to make sure text was entered as expected

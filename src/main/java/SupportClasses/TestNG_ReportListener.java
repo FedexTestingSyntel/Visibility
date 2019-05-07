@@ -369,6 +369,7 @@ public class TestNG_ReportListener implements IReporter {
 				
 				reporterMessage += "\n\n" + sw.toString();
 			}
+			reporterMessage = reporterMessage.replaceAll("<br />", "\n\n");
 			
 			sortingStrBuf.append("<tr bgcolor=" + color + ">");
 			
@@ -382,8 +383,8 @@ public class TestNG_ReportListener implements IReporter {
 			sortingStrBuf.append("<td>" + executeTimeStr + "</td>");
 			/* Add parameter. */
 			sortingStrBuf.append("<td>" + paramStr + "</td>");
-			/* Add reporter message. */
-			sortingStrBuf.append("<td>" + reporterMessage + "</td>");
+			/* Add reporter message. Added table to make reading the values easier as well as display is XML is embedded*/
+			sortingStrBuf.append("<td><textarea rows=\"10\" cols=\"60\" style=\"border:none;\">" + reporterMessage + "</textarea></td>");
 			
 			sortingStrBuf.append("</tr>");
 			
@@ -491,8 +492,9 @@ public class TestNG_ReportListener implements IReporter {
 			sortingStrBuf.append("<td>" + testMethodName + "</td>");
 			/* Add status of the test. */
 			sortingStrBuf.append("<td>" + status + "</td>");
-			/* Add comments of the test. */
+			/* Add comments of the test.*/ 
 			sortingStrBuf.append("<td>" + ResponseMessage + "</td>");
+
 			
 			sortingStrBuf.append("</tr>");
 			

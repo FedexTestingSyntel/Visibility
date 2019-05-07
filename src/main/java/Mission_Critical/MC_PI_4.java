@@ -29,7 +29,7 @@ public class MC_PI_4{
 		CountryList = Environment.getCountryList("smoke");
 	}
 	
-	@DataProvider// (parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -37,14 +37,29 @@ public class MC_PI_4{
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
 			String Rewards_APAC_AND_LAC[] = new String[] {"au", "cn", "hk", "jp", "my", "nz", "ph", "sg", "kr", "tw", "th", "br", "mx"};
-			Rewards_APAC_AND_LAC = new String[] {"cn"};
+			String Rewards_APAC_AND_LAC_Lang[][] = new String[][] {{"au", "en"}, {"cn", "en"}, {"cn", "zh"}, {"hk", "en"}, {"hk", "zh"}, {"jp", "en"}, {"jp", "ja"}, {"my", "en"}, {"nz", "en"}, {"ph", "en"}, {"sg", "en"}, {"kr", "en"}, {"kr", "ko"}, {"tw", "en"}, {"tw", "zh"}, {"th", "en"}, {"th", "th"}, {"mx", "en"}, {"br", "en"}, {"mx", "es"}, {"br", "pt"}};
+			
+			Rewards_APAC_AND_LAC = new String[] {"au"};
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WFCL_Rewards_Registration_APAC_AND_LAC":
 		    		for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
 		    			Account_Data Account_Info = Helper_Functions.getFreshAccount(Level, Rewards_APAC_AND_LAC[j]);
-						//Account_Info = Account_Lookup.Account_DataAccountDetails("700417913", Level, "FX");
-
 		    			if (Account_Info != null) {
+		    				data.add( new Object[] {Level, Account_Info});
+		    			}else {
+		    				Helper_Functions.PrintOut("Account is not available for country. " + Rewards_APAC_AND_LAC[j]);
+		    			}
+					}
+					break;
+				case "WFCL_Rewards_Registration_APAC_AND_LAC_Mismatch":
+		    		for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
+		    			Account_Data Account_Info = Helper_Functions.getFreshAccount(Level, Rewards_APAC_AND_LAC[j]);
+		    			Account_Data.Print_Account_Address(Account_Info);
+		    			Account_Data Wrong_Account_Info = Environment.getAddressDetails(Level, "jp");
+		    			Account_Data.Print_Account_Address(Wrong_Account_Info);
+		    			if (Account_Info != null && Wrong_Account_Info != null) {
+		    				//need to add more validation here, possible for the address to be same.
+		    				Account_Info.Address_Overwrite(Wrong_Account_Info);
 		    				data.add( new Object[] {Level, Account_Info});
 		    			}else {
 		    				Helper_Functions.PrintOut("Account is not available for country. " + Rewards_APAC_AND_LAC[j]);
@@ -62,6 +77,23 @@ public class MC_PI_4{
 		    			}
 					}
 					break;
+				case "WFCL_Rewards_AEM_Link":
+					for (String Instance[]: Rewards_APAC_AND_LAC_Lang) {
+		    			data.add( new Object[] {Level, Instance[0], Instance[1]});
+					}
+					break;
+				case "WFCL_Rewards_Logout":
+					UD = Environment.Get_UserIds(intLevel);
+					for (String Instance[]: Rewards_APAC_AND_LAC_Lang) {
+						for (int k = 0; k < UD.length; k++) {
+							if (UD[k].PASSKEY.contentEquals("T")) {
+				    			data.add( new Object[] {Level, Instance[0], Instance[1], UD[k]});
+				    			UD[k].PASSKEY = "";//so user will not be used a second time
+				    			break;
+							}
+		    			}
+					}
+					break;
 			}
 		}
 
@@ -69,8 +101,24 @@ public class MC_PI_4{
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", description = "483863", enabled = true)
+	@Test(dataProvider = "dp", description = "518325", enabled = true) ///483863
 	public void WFCL_Rewards_Registration_APAC_AND_LAC(String Level, Account_Data Account_Info) {
+		try {
+			Account_Data.Print_Account_Address(Account_Info);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + "Rewards");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			
+			String Result[] = WFCL_Functions_UsingData.WFCL_RewardsRegistration(Account_Info);
+
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	//from the data provider incorrect address details provided
+	@Test(dataProvider = "dp", description = "518325", enabled = true)
+	public void WFCL_Rewards_Registration_APAC_AND_LAC_Mismatch(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + "Rewards");
@@ -89,6 +137,29 @@ public class MC_PI_4{
 		try {
 
 			String Result[] = WFCL_Functions_UsingData.WFCL_RewardsLogin(CountryCode, User_Info);
+
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", description = "518318", enabled = false)
+	public void WFCL_Rewards_AEM_Link(String Level, String CountryCode, String LanguageCode) {
+		try {
+
+			String Result[] = WFCL_Functions_UsingData.WFCL_Rewards_AEM_Link(CountryCode, LanguageCode);
+
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", description = "518584", enabled = true)
+	public void WFCL_Rewards_Logout(String Level, String CountryCode, String LanguageCode, User_Data User_Info) {
+		try {
+			String Result[] = WFCL_Functions_UsingData.WFCL_Rewards_Logout(CountryCode, LanguageCode, User_Info);
 
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {

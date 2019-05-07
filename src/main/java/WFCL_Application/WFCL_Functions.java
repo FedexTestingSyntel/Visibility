@@ -225,10 +225,10 @@ public class WFCL_Functions{
 			WebDriver_Functions.WaitPresent(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > h3"));
 			Helper_Functions.PrintOut("Registered for Admin. Current URL:" + DriverFactory.getInstance().getDriver().getCurrentUrl(), true);
 			WebDriver_Functions.takeSnapShot("WADM Registration Confirmaiton.png");
-			WebDriver_Functions.Click(By.cssSelector("#confirmation > div > div.fx-col.col-3 > div > p:nth-child(6) > a"));//click shipping admin link
-			WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: " + CompanyName);
+			
+			WebDriver_Functions.ChangeURL("WADM", CountryCode, false);
+			WebDriver_Functions.WaitForText(By.cssSelector("#main > h1"), "Admin Home: ");
 			//remove the account number from local storage as it is now locked to the company that was just created.
-			//Helper_Functions.RemoveAccountFromExcel(AccountNumber);
 			Helper_Functions.RemoveAccountFromAccount_Numbers(Environment.getInstance().getLevel(), AccountNumber);
 		}catch (Exception e){
 			Helper_Functions.PrintOut("Failure with admin registriaton.", true);

@@ -97,7 +97,6 @@ public class WIDM_SmokeTest{
 	public void WIDM_Registration(String Level, String CountryCode){
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			//Address = Helper_Functions.AccountDetails("761391020");
 			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
 			String UserId = Helper_Functions.LoadUserID("L" + Level + "WIDM" + CountryCode);
 			WIDM_Functions.WIDM_Registration(Address, UserName, UserId, Helper_Functions.MyEmail);
@@ -121,7 +120,7 @@ public class WIDM_SmokeTest{
 	@Test(dataProvider = "dp")
 	public void WIDM_ResetPasswordSecret(String Level, String CountryCode, String UserId, String Password, String SecretAnswer){
 		try {
-			//WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password + "5", SecretAnswer, false);   //once force password is in affect need to send differnt password
+			//WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password + "5", SecretAnswer, false);   //once force password is in affect need to send different password
 			WIDM_Functions.ResetPasswordWIDM_Secret(CountryCode, UserId, Password, SecretAnswer, false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

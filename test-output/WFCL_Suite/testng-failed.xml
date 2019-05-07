@@ -9,8 +9,11 @@
     <classes>
       <class name="WFCL_Application.WFCL_SmokeTest">
         <methods>
-          <include name="CreditCardRegistrationEnroll" invocation-numbers="0"/>
+          <include name="WFCL_WDPA" invocation-numbers="0"/>
+          <include name="WFCL_Reset_Password_Secret" invocation-numbers="0"/>
+          <include name="WFCL_CreditCardRegistration" invocation-numbers="0"/>
           <include name="beforeClass"/>
+          <include name="WFCL_AdminReg" invocation-numbers="0"/>
         </methods>
       </class> <!-- WFCL_Application.WFCL_SmokeTest -->
     </classes>

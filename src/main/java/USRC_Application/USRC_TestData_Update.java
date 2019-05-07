@@ -15,13 +15,14 @@ import Data_Structures.User_Data;
 import PRDC_Application.PRDC_API_Endpoints;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
+import SupportClasses.General_API_Calls;
 import org.testng.annotations.Test;
-
 import ADMC_Application.ADMC_API_Endpoints;
+
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -49,6 +50,9 @@ public class USRC_TestData_Update {
     				}else if (!UD[k].ERROR.contentEquals("")) {
     					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
     				}
+    				//uncomment if need to run all
+    				//else{data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});}
+
     			}
 				break;
 			case "CheckMigration":
@@ -71,7 +75,7 @@ public class USRC_TestData_Update {
 		return data.iterator();
 	}
 
-	@Test (dataProvider = "dp", enabled = true)
+	@Test (dataProvider = "dp", enabled = false)
 	public void UpdateUser(String Level, User_Data User_Information) {
 		Environment.getInstance().setLevel(Level);
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
@@ -97,15 +101,15 @@ public class USRC_TestData_Update {
 		//get the cookies and the uuid of the user
 		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		
-		//in case cannot login will check two of the generic other passwords
-		if (fdx_login_fcl_uuid == null){
-			Password = "Test12345";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		//in case cannot login will check with the generic other passwords
+		String GenericPasswords[] = new String[] {"Test1234", "Test12345", "Test123456", "Password1", "Inet2010"};
+		for (String TestPassword: GenericPasswords) {
+			if (fdx_login_fcl_uuid == null){
+				Password = TestPassword;
+				fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password);
+			}
 		}
-		if(fdx_login_fcl_uuid == null){
-			Password = "Test1234";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		}
+
 		//this is the default key position to update the user table. Currently set to 1 for user id value.
 		int keyPosition = 1;
 		
@@ -254,6 +258,24 @@ public class USRC_TestData_Update {
 		Details = Arrays.copyOf(Details, Details.length + 1);
 		Details[Details.length - 1] = new String[] {"ACCOUNT_NUMBER", USRC_API_Endpoints.Parse_AccountRetrievalRequest_AccountNumber(AccountRetrievalRequest)};
 
+		//This will check if the user is the owner of the account
+		String Account_Value = General_API_Calls.Parse_API_For_Value(AccountRetrievalRequest, "value");
+		String Account_Key = General_API_Calls.Parse_API_For_Value(AccountRetrievalRequest, "key");
+		//Attempt in case the user was created with account nickname in the <Account>_<Details> format
+		if (Account_Value != null && Account_Value.contentEquals("")) {
+			String Account_Nickname = General_API_Calls.Parse_API_For_Value(AccountRetrievalRequest, "accountNickname");
+			if (Account_Nickname.contains("\\u005f")) {
+				Account_Nickname = Account_Nickname.substring(0, Account_Nickname.indexOf("\\u005f"));
+			}
+			Account_Value = Account_Nickname;
+		}
+		String Linage_Indicator = "NOTKNOWN";
+		if (Account_Key != null && !Account_Key.contentEquals("") && Account_Value != null && !Account_Value.contentEquals("") ) {
+			String EnterpriseCustomerRequest = USRC_API_Endpoints.EnterpriseCustomerRequest(USRC_Details.GenericUSRCURL, Cookies, Account_Value, Account_Key);
+			Linage_Indicator = General_API_Calls.Parse_API_For_Value(EnterpriseCustomerRequest, "linkageIndicator");
+		}
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		Details[Details.length - 1] = new String[] {"LINKAGE_INDICATOR", Linage_Indicator};
 	
 		return Details;
 	}
@@ -293,4 +315,15 @@ public class USRC_TestData_Update {
 		return Details;
 	}
 	
+	public String[][] Linkage_Indicator(String Level, String Details[][], String USRCURL, String Cookies, String AccountNumber, String AccountKey) {
+		String Response = USRC_API_Endpoints.RecipientProfile(USRCURL, Cookies);
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		
+		if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
+			Details[Details.length - 1] = new String[] {"FDM_STATUS", Response};//store all of the FDM details
+		}else {
+			Details[Details.length - 1] = new String[] {"FDM_STATUS", "F"};//not yet enrolled for FDM
+		}
+		return Details;
+	}
 }
