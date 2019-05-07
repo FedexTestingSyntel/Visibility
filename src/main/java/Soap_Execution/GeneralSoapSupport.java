@@ -14,7 +14,7 @@ import javax.xml.soap.SOAPPart;
 import SupportClasses.Helper_Functions;
 
 public class GeneralSoapSupport {
-
+	
 	public static SOAPMessage Soap_Message_Creation(String MainNs, String Preferred_Prefix) throws Exception {
     	//needed to customize the default namespace
 	    SOAPMessage message = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL).createMessage();
@@ -39,12 +39,12 @@ public class GeneralSoapSupport {
         return message;
     }
 
-	//will execute the soap call and return the response as a string. In event of error will retrun error message as string.
+	//will execute the soap call and return the response as a string. In event of error will return error message as string.
 	public static String callSoapWebService(String soapEndpointUrl, SOAPMessage soapRequest) throws Exception {
         
 		SOAPMessage soapResponse = null;
 		String MethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
-		
+
 		try {
     		// Save the SOAP Request
     		ByteArrayOutputStream out = new ByteArrayOutputStream();

@@ -20,7 +20,7 @@ public class WIDM_Endpoints {
 	//will return the soap message as a string
 	public static String AAA_User_Create(String soapCreateUserUrl, Account_Data Accont_Info, String email_UserID) throws Exception {
 		try {
-			String FillerCompany = "Company" + Helper_Functions.CurrentDateTime(), lnge_Cd = "en", email_Flag = "false", device_ID = "", ip_address = "192.168.33.26", fdxcbid_BAR = "12345678901234", email_opt_flag = "false";
+			String FillerCompany = "Company" + Helper_Functions.CurrentDateTime(), lnge_Cd = "en", email_Flag = "false", device_ID = "12345", ip_address = "192.168.33.26", fdxcbid_BAR = "12345678901234", email_opt_flag = "false";
 			
 			SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
 			SOAPPart soapPart = request.getSOAPPart();

@@ -30,7 +30,7 @@ public class WIDM{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		
-		CountryList = Environment.getCountryList("full");
+		CountryList = Environment.getCountryList("smoke");
 		//CountryList = new String[][]{{"US", "United States"}};
 		Helper_Functions.MyEmail = "OtherEmail@accept.com";
 	}
@@ -84,8 +84,13 @@ public class WIDM{
 				case "AAAUserCreate":
 					WIDM_Data WD = WIDM_Data.LoadVariables(Level);
 					for (int j = 0; j < CountryList.length; j++) {
-						Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
-						data.add( new Object[] {Level, Account_Info, WD});
+						for (int k = 0 ; k < 1; k++) {
+							Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
+							Account_Info.UserId = "L" + Level + "Email" + Helper_Functions.getRandomString(10) + "@" + Helper_Functions.getRandomString(10) + ".com";
+							Account_Info.Email = Account_Info.UserId;
+							String EmailUserIdFlag = "true";
+							data.add( new Object[] {Level, Account_Info, WD, EmailUserIdFlag});
+						}
 					}
 					break;
 			}
@@ -94,12 +99,12 @@ public class WIDM{
 	}
 
 	@Test(dataProvider = "dp")
-	public void AAAUserCreate(String Level, Account_Data Account_Info, WIDM_Data WD){
+	public void AAAUserCreate(String Level, Account_Data Account_Info, WIDM_Data WD, String EmailUserIdFlag){
 		try {
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Country_Code);
+			//Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Country_Code);
 			
-			String Response = WIDM_Endpoints.AAA_User_Create(WD.EndpointUrl, Account_Info, null);
+			String Response = WIDM_Endpoints.AAA_User_Create(WD.EndpointUrl, Account_Info, EmailUserIdFlag);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 			Helper_Functions.PrintOut(Response);
 			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
