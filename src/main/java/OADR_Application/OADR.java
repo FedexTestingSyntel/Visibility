@@ -48,7 +48,7 @@ public class OADR{
 		    				if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0])) {
 					    		for (int k = 0; k < UD.length; k++) {
 				    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contentEquals("T")) {
-				    					data.add( new Object[] {Level, Enrollment, UD[j].SSO_LOGIN_DESC, UD[j].USER_PASSWORD_DESC});
+				    					data.add( new Object[] {Level, Enrollment, UD[j].USER_ID, UD[j].PASSWORD});
 				    					UD[k].COUNTRY_CD = "";//so the same user will not be used again for same scenario
 				    					Enrollments++;
 					    				break;

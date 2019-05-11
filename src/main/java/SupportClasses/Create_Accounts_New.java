@@ -21,7 +21,7 @@ public class Create_Accounts_New{
 	private static String ECAMuserid;
 	private static String ECAMpassword;
 	
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	static String CountryList[][]; 
 	
 	@BeforeClass
@@ -36,7 +36,7 @@ public class Create_Accounts_New{
 		}
 		
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("US");
+		CountryList = Environment.getCountryList("KR");
 		//CountryList = new String[][]{{"JP", ""}, {"MY", ""}, {"PH", ""}, {"SG", ""}, {"KR", ""}, {"TW", ""}, {"TH", ""}};
 	}
 	

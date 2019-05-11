@@ -43,7 +43,7 @@ public class WPRL_SmokeTest {
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].PASSKEY.contentEquals("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, UD[k].COUNTRY_CD, Helper_Functions.MyEmail});
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, UD[k].COUNTRY_CD, Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
@@ -54,7 +54,7 @@ public class WPRL_SmokeTest {
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].PASSKEY.contentEquals("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].ACCOUNT_NUMBER.contentEquals("")) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, UD[k].COUNTRY_CD, Helper_Functions.MyEmail});
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, UD[k].COUNTRY_CD, Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
@@ -65,7 +65,7 @@ public class WPRL_SmokeTest {
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (!UD[k].FDM_STATUS.contentEquals("F") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyFakeEmail});
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyFakeEmail});
 		    					break;
 		    				}
 		    			}
@@ -76,7 +76,7 @@ public class WPRL_SmokeTest {
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].PASSKEY.contentEquals("F") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].ACCOUNT_NUMBER.contentEquals("")) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, UD[k].COUNTRY_CD, Helper_Functions.MyEmail});
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, UD[k].COUNTRY_CD, Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
@@ -87,7 +87,7 @@ public class WPRL_SmokeTest {
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].PASSKEY.contentEquals("F") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}

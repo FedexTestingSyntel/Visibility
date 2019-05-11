@@ -89,9 +89,9 @@ public class MC_PI_2{
 					User_Data UD[] =  Environment.Get_UserIds(intLevel);
 					for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if ((m.getName().contains("WIDM") && UD[k].SSO_LOGIN_DESC.contains("WIDM")) || (m.getName().contains("WFCL") && UD[k].SSO_LOGIN_DESC.contains("Create"))) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, UD[k].SECRET_ANSWER_DESC});
-		    					UD[k].SSO_LOGIN_DESC = "";
+		    				if ((m.getName().contains("WIDM") && UD[k].USER_ID.contains("WIDM")) || (m.getName().contains("WFCL") && UD[k].USER_ID.contains("Create"))) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, UD[k].SECRET_ANSWER_DESC});
+		    					UD[k].USER_ID = "";
 		    					break;
 		    				}
 		    			}

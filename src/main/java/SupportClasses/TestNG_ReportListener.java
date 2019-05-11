@@ -500,10 +500,20 @@ public class TestNG_ReportListener implements IReporter {
 			
 			ResultList.add(new String[] {Application, sortingStrBuf.toString()});
 		}
+		//the sorting is done based on the Application
+		Collections.sort(ResultList,new Comparator<String[]>() {
+			public int compare(String[] strings, String[] otherStrings) {
+				return strings[0].compareTo(otherStrings[0]);
+			}
+		});
 		//the sorting is done based on the Scenarios
 		Collections.sort(ResultList,new Comparator<String[]>() {
 			public int compare(String[] strings, String[] otherStrings) {
-				return strings[1].compareTo(otherStrings[1]);
+				if (strings[0].contentEquals(otherStrings[0])) {
+					return strings[1].compareTo(otherStrings[1]);
+				}else {
+					return strings[0].compareTo(otherStrings[0]);
+				}
 			}
 		});
 		

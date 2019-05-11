@@ -356,8 +356,8 @@ public class WDPA_Functions{
 		    ///need to check here as the time is not loading as default.
 		   // CalenderDate("pickupInfo.freight.pickupDate", getDayOfMonth() + 2 + "");    ///need to test
 		    
-		    
-		    WebDriver_Functions.Select(By.id("freightPickupInfo.readyTime"), "1:00 pm", "t");
+		    //WebDriver_Functions.Select(By.id("freightPickupInfo.readyTime"), "1:00 pm", "t");
+		    WebDriver_Functions.Select(By.id("freightPickupInfo.readyTime"), "1", "i"); // attempting ot select by first index
 		    WebDriver_Functions.Select(By.id("freightPickupInfo.closeTime"), "11:00 pm", "t");
 		    WebDriver_Functions.takeSnapShot("Pickup.png");
 		    WebDriver_Functions.Click(By.id("button.freightpickup.schedulePickup"));

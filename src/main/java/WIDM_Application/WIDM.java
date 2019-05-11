@@ -47,8 +47,8 @@ public class WIDM{
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].SSO_LOGIN_DESC.contains("WIDM")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC + "5", UD[k].SECRET_ANSWER_DESC});
+		    				if (UD[k].USER_ID.contains("WIDM")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD + "5", UD[k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -75,7 +75,7 @@ public class WIDM{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
 		    					break;
 		    				}
 		    			}

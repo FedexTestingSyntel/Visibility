@@ -44,8 +44,8 @@ public class WPRL {
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].SSO_LOGIN_DESC.contains("WADM")) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    				if (UD[k].USER_ID.contains("WADM")) {
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
@@ -55,8 +55,8 @@ public class WPRL {
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].SSO_LOGIN_DESC.contains("FDM")) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    				if (UD[k].USER_ID.contains("FDM")) {
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
@@ -66,8 +66,8 @@ public class WPRL {
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].SSO_LOGIN_DESC.contains("INET")) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    				if (UD[k].USER_ID.contains("INET")) {
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
@@ -77,8 +77,8 @@ public class WPRL {
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].SSO_LOGIN_DESC.contains("Create")) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, CountryList[j][0], Helper_Functions.MyEmail});
+		    				if (UD[k].USER_ID.contains("Create")) {
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}

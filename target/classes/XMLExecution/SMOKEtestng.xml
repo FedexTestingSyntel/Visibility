@@ -10,12 +10,12 @@
     	<classes>
 			<class name="SupportClasses.Environment"/>
 			<class name="WRTT_Application.WRTT_SmokeTest"/>
-			<class name="WFCL_Application.WFCL_SmokeTest"/>
+			<!--<class name="WFCL_Application.WFCL_SmokeTest"/>
 			<class name="WPRL_Application.WPRL_SmokeTest"/>
 			<class name="WIDM_Application.WIDM_SmokeTest"/>
 			<class name="WDPA_Application.WDPA_SmokeTest"/>
 			<class name="WCRV_Application.WCRV_SmokeTest"/>
-			<class name="OADR_Application.OADR_SmokeTest"/>
+			<class name="OADR_Application.OADR_SmokeTest"/>-->
       		<class name="ADAT_Application.ADAT_SmokeTest"/>
     	</classes>
   	</test> <!-- WDPA_Test -->

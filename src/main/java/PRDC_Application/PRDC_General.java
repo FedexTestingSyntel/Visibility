@@ -39,7 +39,7 @@ public class PRDC_General {
 				case "Check_WCRV_Access":
 					User_Data UD[] =  Environment.Get_UserIds(intLevel);
 					for (int k = 0; k < UD.length; k++) {
-						data.add(new Object[] {strLevel, USRC_D, PRDC_D, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+						data.add(new Object[] {strLevel, USRC_D, PRDC_D, UD[k].USER_ID, UD[k].PASSWORD});
 					}
 					break;
 			}//end switch MethodName

@@ -540,10 +540,10 @@ public class Environment {
 					DataClass[pos].UUID_NBR = Row[j];
 					break;
 		  		case "SSO_LOGIN_DESC":
-		  			DataClass[pos].SSO_LOGIN_DESC = Row[j];
+		  			DataClass[pos].USER_ID = Row[j];
 					break;
 		  		case "USER_PASSWORD_DESC":
-		  			DataClass[pos].USER_PASSWORD_DESC = Row[j];
+		  			DataClass[pos].PASSWORD = Row[j];
 					break;
 		  		case "SECRET_QUESTION_DESC":
 		  			DataClass[pos].SECRET_QUESTION_DESC = Row[j];
@@ -617,8 +617,8 @@ public class Environment {
 				}//end switch
 			}
 			
-			if (DataClass[i - 1].SSO_LOGIN_DESC == null || DataClass[i - 1].SSO_LOGIN_DESC.contentEquals("")) {
-				DataClass[i - 1].ERROR = "asdfasdf";
+			if (DataClass[i - 1].USER_ID == null || DataClass[i - 1].USER_ID.contentEquals("")) {
+				DataClass[i - 1].ERROR = "ERROR";
 			}
 		}
 		return DataClass;

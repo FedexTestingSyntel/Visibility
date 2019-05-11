@@ -17,7 +17,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WDPA_SmokeTest{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -40,7 +40,7 @@ public class WDPA_SmokeTest{
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 1; k < UD.length; k++) {
 	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].GROUND_ENABLED.contentEquals("T")) {
-	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
 	    					break;
 	    				}
 	    			}
@@ -52,7 +52,7 @@ public class WDPA_SmokeTest{
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 1; k < UD.length; k++) {
 	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].EXPRESS_ENABLED.contentEquals("T")) {
-	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
 	    					break;
 	    				}
 	    			}
@@ -63,7 +63,7 @@ public class WDPA_SmokeTest{
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 0; k < UD.length; k++) {
 	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].FREIGHT_ENABLED.contentEquals("T")) {
-	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
 	    					break;
 	    				}
 	    			}
@@ -77,9 +77,6 @@ public class WDPA_SmokeTest{
 				}
 		    	break;
 			}
-		}
-		while(data.size() > 30) {
-			data.remove(data.size() - 1);
 		}
 		return data.iterator();
 	}

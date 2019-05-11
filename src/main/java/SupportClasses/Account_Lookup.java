@@ -7,6 +7,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.junit.AfterClass;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -19,11 +29,18 @@ import Data_Structures.Account_Data;
 
 public class Account_Lookup extends Helper_Functions{
 	static String LevelToTest = "6";
+	static Account_Data AllAddresses[] = Environment.getAddressDetails();
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelToTest);
 	}
+	
+	@AfterClass
+	public void afterClass() {
+		AllAddresses = null;
+	}
+	
 	
 	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp() {
@@ -128,7 +145,11 @@ public class Account_Lookup extends Helper_Functions{
 		}
 	}
 	
-	//String[] {Streetline1 - 0, Streetline2 - 1, City - 2, State - 3, StateCode - 4, postalCode - 5, countryCode - 6};
+	//def
+	public static Account_Data Account_DataAccountDetails(String AccountNumber, String Level){
+		return Account_DataAccountDetails(AccountNumber, Level, "FX");
+	}
+	
 	public static Account_Data Account_DataAccountDetails(String AccountNumber, String Level, String AccountType){
 		Account_Data Account_Details = new Account_Data();
 		String Streetline1 = "", Streetline2 = "", City ="", State ="", StateCode = "", postalCode = "", countryCode = "", areaCode = "", phoneNumber = "";
@@ -251,6 +272,15 @@ public class Account_Lookup extends Helper_Functions{
 					return null;
 				}
 				
+				String region = "", countryName = "";
+				for (Account_Data Address: AllAddresses) {
+					if (Address != null && Address.Billing_Country_Code.contentEquals(countryCode)) {
+						region = Address.Billing_Region;
+						countryName = Address.Billing_Country;
+						break;
+					}
+				}
+				
 				if (k == 0) {
 					Account_Details.Shipping_Address_Line_1 = Streetline1;
 					Account_Details.Shipping_Address_Line_2 = Streetline2;
@@ -260,8 +290,8 @@ public class Account_Lookup extends Helper_Functions{
 					Account_Details.Shipping_Phone_Number = areaCode + phoneNumber;
 					Account_Details.Shipping_Zip = postalCode;
 					Account_Details.Shipping_Country_Code = countryCode;
-					Account_Details.Shipping_Region = "";
-					Account_Details.Shipping_Country = "";
+					Account_Details.Shipping_Region = region;
+					Account_Details.Shipping_Country = countryName;
 				}else if (k == 1) {
 					Account_Details.Billing_Address_Line_1 = Streetline1;
 					Account_Details.Billing_Address_Line_2 = Streetline2;
@@ -271,8 +301,8 @@ public class Account_Lookup extends Helper_Functions{
 					Account_Details.Billing_Phone_Number = areaCode + phoneNumber;
 					Account_Details.Billing_Zip = postalCode;
 					Account_Details.Billing_Country_Code = countryCode;
-					Account_Details.Billing_Region = "";
-					Account_Details.Billing_Country = "";
+					Account_Details.Billing_Region = region;
+					Account_Details.Billing_Country = countryName;
 				}
 				
 			}
@@ -320,7 +350,7 @@ public class Account_Lookup extends Helper_Functions{
 			Account_Details.Tax_ID_One = "";
 			Account_Details.Tax_ID_Two = "";
 			String BillingAddress[] = {Account_Details.Billing_Address_Line_1, Account_Details.Billing_Address_Line_2, Account_Details.Billing_City, Account_Details.Billing_State_Code, Account_Details.Billing_Zip, Account_Details.Billing_Country_Code}; 
-			PrintOut("Address Returned: " + Arrays.toString(BillingAddress), true);
+			PrintOut("Address Returned: " + Account_Details.Account_Number + Arrays.toString(BillingAddress), true);
 			//will load dummy values
 			Account_Details.Email = Helper_Functions.MyEmail;
 			Account_Details.Password = Helper_Functions.myPassword;
@@ -344,4 +374,227 @@ public class Account_Lookup extends Helper_Functions{
 		String[] stringArray = list.toArray(new String[0]);
 		return stringArray;
 	}
+	
+	@Test
+	public void ASDFASDF() {
+		Account_Data Account_Info = new Account_Data();
+		Account_Info.Account_Number = "92053064";
+		Account_Info.Level = "L3";
+		Account_Info = Account_Data_Address_Lookup(Account_Info);
+		Account_Info = Account_Data_CreditDetail_Lookup(Account_Info);
+		Account_Data.Print_Account_Address(Account_Info);
+	}
+	
+	public static Account_Data Account_Data_Address_Lookup(Account_Data Account_Info){
+  		try{
+  			HttpClient httpclient = HttpClients.createDefault();
+  			HttpPost httppost = new HttpPost("http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp");
+
+  			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  			httppost.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+
+  			String OpCo[] = new String[] {"FX", "FDFR"};
+  			String Level = Account_Info.Level;
+  			if (Account_Info.Level.contains("L6")){
+  				PrintOut("Cannot see account numbers directly in L6, attempting in L3.", true);
+  				Level = "L3";
+  			}else if (Account_Info.Level.contains("L7")){
+  				PrintOut("Cannot see account numbers directly in LP, attempting in L4.", true);
+  				Level = "L4";
+  			}
+  			
+  			String SourceText = "";
+  			for (int i = 0 ; i < 2; i++) {
+  	  			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+  	  			urlParameters.add(new BasicNameValuePair("contact", "accountContact"));
+  	  			urlParameters.add(new BasicNameValuePair("contactAccountNumber", Account_Info.Account_Number));
+  	  			urlParameters.add(new BasicNameValuePair("contactAccountOpCo", OpCo[i]));
+  	  			urlParameters.add(new BasicNameValuePair("contactAccountContactType", ""));
+  	  			urlParameters.add(new BasicNameValuePair("contactAccountSubmit", "submit"));
+  	  			urlParameters.add(new BasicNameValuePair("contactLevel", Level));
+
+  	  			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
+  	  			HttpResponse Response = httpclient.execute(httppost);
+  	  			
+  	  			HttpEntity entity = Response.getEntity();
+  	  			SourceText = EntityUtils.toString(entity, "UTF-8");
+  	  			
+  	  			//if details not found try next OpCo
+  	  			if (SourceText.contains("streetLine")) {
+  	  				//Helper_Functions.PrintOut(SourceText); //for debug
+  	  				break;
+  	  			}
+  			}
+  			
+  			String start = "name = \"", end  = "\" value=\"";
+			String AccountDetails[][] = {{"streetline1", "streetLine>\">", ""}, 
+					{"streetline2", "additionalLine1>\">", ""}, 
+					{"city", "geoPoliticalSubdivision2>\">", ""}, 
+					{"statecode", "geoPoliticalSubdivision3>\">", ""}, 
+					{"postalcode", "postalCode>\">", ""}, 
+					{"countrycode", "countryCode>\">", ""}, 
+					{"areacode", "areaCode>\">", ""},
+					{"phoneNumber", "phoneNumber>\">", ""}, 
+					{"language", "<language>\">", ""}, 
+					{"firstName", "<firstName>\">", ""}, 
+					{"lastName", "<lastName>\">", ""}, 
+					};
+			
+
+			for (int j = 0; j < 2; j++) {
+	  			for (int k = 0 ; k < AccountDetails.length; k++) {
+	  				String StartingPoint = AccountDetails[k][1];
+	  				int intStartingPoint = SourceText.indexOf(StartingPoint) + StartingPoint.length();
+	  				SourceText = SourceText.substring(intStartingPoint, SourceText.length());
+	  				//make sure something was found.
+	  				if (intStartingPoint > StartingPoint.length()){
+	  					int s = SourceText.indexOf(start) + start.length(), e = SourceText.indexOf(end);
+	  					AccountDetails[k][2] = SourceText.substring(s, e);
+	  				}
+	  			}
+
+	  			//remove special characters
+  				for (int i = 0; i < AccountDetails.length; i++){
+  					String nfdNormalizedString = Normalizer.normalize(AccountDetails[i][2], Normalizer.Form.NFD); 
+  					Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+  					AccountDetails[i][2] = pattern.matcher(nfdNormalizedString).replaceAll("");
+  				}
+  				
+  				//If the zip is greater then 5 and this is for US address then only return first 5 characters
+  				if (AccountDetails[4][2].length() > 5 && AccountDetails[5][2].contentEquals("US")){
+  					AccountDetails[4][2] = AccountDetails[4][2].substring(0, 5);
+				}
+  				
+  	  			if (j == 0) {//shipping address
+  					Account_Info.Shipping_Address_Line_1 = AccountDetails[0][2];
+  					Account_Info.Shipping_Address_Line_2 = AccountDetails[1][2];
+  					Account_Info.Shipping_City = AccountDetails[2][2];
+  					Account_Info.Shipping_State_Code = AccountDetails[3][2];
+  					Account_Info.Shipping_Zip = AccountDetails[4][2];
+  					Account_Info.Shipping_Country_Code = AccountDetails[5][2];
+  					Account_Info.Shipping_Phone_Number = AccountDetails[6][2] + AccountDetails[7][2];
+  				}else {//billing address
+  					Account_Info.Billing_Address_Line_1 = AccountDetails[0][2];
+  					Account_Info.Billing_Address_Line_2 = AccountDetails[1][2];
+  					Account_Info.Billing_City = AccountDetails[2][2];
+  					Account_Info.Billing_State_Code = AccountDetails[3][2];
+  					Account_Info.Billing_Zip = AccountDetails[4][2];
+  					Account_Info.Billing_Country_Code = AccountDetails[5][2];
+  					Account_Info.Billing_Phone_Number = AccountDetails[6][2] + AccountDetails[7][2];
+  				}
+  	  			
+  	  			if (!AccountDetails[8][2].contentEquals("")) {
+  	  				Account_Info.LanguageCode = AccountDetails[8][2];
+  	  			}
+  	  			if (!AccountDetails[9][2].contentEquals("")) {
+	  				Account_Info.FirstName = AccountDetails[9][2];
+	  			}
+  	  			if (!AccountDetails[10][2].contentEquals("")) {
+  	  				Account_Info.LastName = AccountDetails[10][2];
+  	  			}
+			}
+
+  			//make sure country is valid
+  			if (Account_Info.Billing_Country_Code.length() > 5 || Account_Info.Billing_Country_Code.length() == 0){
+				return null;
+			}else {
+  				//check and add the region and country name
+				for (Account_Data Address: AllAddresses) {
+					boolean Billing = false, Shipping = false;
+					if (!Billing && Address != null && Address.Billing_Country_Code.contentEquals(AccountDetails[5][2])) {
+						Account_Info.Billing_Region = Address.Billing_Region;
+	  					Account_Info.Billing_Country = Address.Billing_Country;
+	  					Billing = true;
+					}
+					if (!Shipping && Address != null && Address.Shipping_Country_Code.contentEquals(AccountDetails[5][2])) {
+						Account_Info.Shipping_Region = Address.Shipping_Region;
+	  					Account_Info.Shipping_Country = Address.Shipping_Country;
+	  					Shipping = true;
+					}
+					if (Billing && Shipping) {
+						break;
+					}
+				}
+			}
+  			
+  			Account_Info.Account_Nickname = Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code;
+  			Account_Info.Masked_Account_Number = Account_Info.Account_Nickname + " - " + Account_Info.Account_Number.substring(Account_Info.Account_Number.length() - 3, Account_Info.Account_Number.length());
+			
+  			return Account_Info;
+  		}catch (Exception e){
+  			e.printStackTrace();
+  			return null;
+  		}
+  	}
+
+	public static Account_Data Account_Data_CreditDetail_Lookup(Account_Data Account_Info){
+  		try{
+  			HttpClient httpclient = HttpClients.createDefault();
+  			HttpPost httppost = new HttpPost("http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/express.jsp");
+
+  			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  			httppost.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+
+  			String Level = Account_Info.Level;
+  			if (Account_Info.Level.contains("L6")){
+  				PrintOut("Cannot see account numbers directly in L6, attempting in L3.", true);
+  				Level = "L3";
+  			}else if (Account_Info.Level.contains("L7")){
+  				PrintOut("Cannot see account numbers directly in LP, attempting in L4.", true);
+  				Level = "L4";
+  			}
+  			
+  			String SourceText = "";
+  	  		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+  	  		urlParameters.add(new BasicNameValuePair("express", "expressCreditCard"));
+  	  		urlParameters.add(new BasicNameValuePair("expressAccountNumber", Account_Info.Account_Number));
+  	  		urlParameters.add(new BasicNameValuePair("expressSubmit", "submit"));
+  	  		urlParameters.add(new BasicNameValuePair("expressLevel", Level));
+  	  			
+  	  		httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
+  	  		HttpResponse Response = httpclient.execute(httppost);
+  	  			
+  	  		HttpEntity entity = Response.getEntity();
+  	  		SourceText = EntityUtils.toString(entity, "UTF-8");
+  			
+  			String start = "name = \"", end  = "\" value=\"";
+			String AccountDetails[][] = {{"CreditCardType", "<type>", ""}, 
+					{"creditCardId", "<creditCardId>", ""}, 
+					{"expDateMonth", "<expDateMonth>", ""}, 
+					{"expDateYear", "<expDateYear>", ""},  
+					};
+			
+
+	  		for (int k = 0 ; k < AccountDetails.length; k++) {
+	  			String StartingPoint = AccountDetails[k][1];
+	  			int intStartingPoint = SourceText.indexOf(StartingPoint) + StartingPoint.length();
+	  			SourceText = SourceText.substring(intStartingPoint, SourceText.length());
+	  			if (intStartingPoint > StartingPoint.length()){
+	  				int s = SourceText.indexOf(start) + start.length(), e = SourceText.indexOf(end);
+	  				AccountDetails[k][2] = SourceText.substring(s, e);
+	  			}
+	  		}
+	  			
+	  		if (!AccountDetails[0][2].contentEquals("")) {
+	  			String Last_Four_Digits = AccountDetails[1][2].substring(AccountDetails[1][2].length() - 4, AccountDetails[1][2].length());
+				String Credit_Lookup[] = Helper_Functions.LoadCreditCard(Last_Four_Digits);
+				Account_Info.Credit_Card_Type = Credit_Lookup[0];
+				Account_Info.Credit_Card_Number = Credit_Lookup[1];
+				Account_Info.Credit_Card_CVV = Credit_Lookup[2];
+				Account_Info.Credit_Card_Expiration_Month = AccountDetails[2][2];
+				//last 2 digits of the year.
+				Account_Info.Credit_Card_Expiration_Year = AccountDetails[3][2].substring(AccountDetails[3][2].length() - 2, AccountDetails[3][2].length());
+	  		}else {
+				//load dummy invoice numbers
+	  			Account_Info.Invoice_Number_A = "750000000";
+	  			Account_Info.Invoice_Number_B = "750000001";
+			}
+			
+  			return Account_Info;
+  		}catch (Exception e){
+  			e.printStackTrace();
+  			return null;
+  		}
+  	}
+	
 }

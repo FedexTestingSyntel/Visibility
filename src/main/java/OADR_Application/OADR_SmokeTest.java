@@ -34,28 +34,27 @@ public class OADR_SmokeTest{
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
-		for (int i=0; i < LevelsToTest.length(); i++) {
-			String Level = String.valueOf(LevelsToTest.charAt(i));
+		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
+			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
-
+			User_Data User_Info_Array[];
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "OADR_Apply_Discount_To_Account":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
-		    		int Enrollments = 0;
+		    		User_Info_Array = Environment.Get_UserIds(intLevel);
 		    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (Enrollment_Data Enrollment: ED) {
 		    				if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0])) {
-					    		for (int k = 0; k < UD.length; k++) {
-				    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contentEquals("T")) {
-				    					data.add( new Object[] {Level, Enrollment, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-				    					UD[k].COUNTRY_CD = "";//so the same user will not be used again for same scenario
-				    					Enrollments++;
+					    		for (int k = 0; k < User_Info_Array.length; k++) {
+					    			//user from correct coutry that is an admin with an account number.
+				    				if (User_Info_Array[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && User_Info_Array[k].PASSKEY.contentEquals("T") && !User_Info_Array[k].ACCOUNT_NUMBER.contentEquals("")) {
+				    					data.add( new Object[] {Level, Enrollment, User_Info_Array[k].USER_ID, User_Info_Array[k].PASSWORD});
+				    					User_Info_Array[k].COUNTRY_CD = "";//so the same user will not be used again for same scenario
 					    				break;
 				    				}
 				    			}
 		    				}
-		    				if (Enrollments > 4) {
+		    				if (data.size() > 4) { //stop after adding 5 enrollments
 		    					break;
 		    				}
 		    			}	
@@ -67,12 +66,12 @@ public class OADR_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public static void OADR_Apply_Discount_To_Account(String Level, Enrollment_Data ED, String UserId, String Password){
+	public static void OADR_Apply_Discount_To_Account(String Level, Enrollment_Data Enrollment_Info, String UserId, String Password){
 		try {
-			String Result = Arrays.toString(OADR_ApplyDiscount(Level, UserId, Password, ED));
+			String Result = Arrays.toString(OADR_ApplyDiscount(Level, UserId, Password, Enrollment_Info));
 			Helper_Functions.PrintOut(Result, false);
 		}catch (Exception e) {
-			Assert.fail(e.getMessage());
+			Assert.fail(Enrollment_Info.ENROLLMENT_ID + ": " + e.getMessage());
 		}
 	}//end OADR_ApplyDiscount
 

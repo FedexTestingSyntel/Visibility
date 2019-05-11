@@ -40,8 +40,8 @@ public class WIDM_SmokeTest{
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].SSO_LOGIN_DESC.contains("WIDM")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, UD[k].SECRET_ANSWER_DESC});
+		    				if (UD[k].USER_ID.contains("WIDM")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, UD[k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -67,11 +67,11 @@ public class WIDM_SmokeTest{
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (Legacy_User == true && Email_As_UserID == true) {
 		    					break;
-		    				}else if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].SSO_LOGIN_DESC.contains("@") && !Email_As_UserID) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    				}else if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].USER_ID.contains("@") && !Email_As_UserID) {
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
 		    					Email_As_UserID = true;
-		    				}else if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].SSO_LOGIN_DESC.contains("@") && !Legacy_User) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    				}else if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].USER_ID.contains("@") && !Legacy_User) {
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
 		    					Legacy_User = true;
 		    				}
 		    			}
@@ -82,7 +82,7 @@ public class WIDM_SmokeTest{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].EMAIL_ADDRESS.contains(Helper_Functions.MyEmail)) {
-		    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
 		    					break;
 		    				}
 		    			}

@@ -18,7 +18,7 @@ public class WIDM_Endpoints {
 	private static String MainNaimspace = "http://schemas.xmlsoap.org/soap/envelope/", MainPrefix = "soapenv";
 	
 	//will return the soap message as a string
-	public static String AAA_User_Create(String soapCreateUserUrl, Account_Data Accont_Info, String email_UserID) throws Exception {
+	public static String AAA_User_Create(String soapCreateUserUrl, Account_Data Accont_Info, String Email_As_UserId) throws Exception {
 		try {
 			String FillerCompany = "Company" + Helper_Functions.CurrentDateTime(), lnge_Cd = "en", email_Flag = "false", device_ID = "12345", ip_address = "192.168.33.26", fdxcbid_BAR = "12345678901234", email_opt_flag = "false";
 			
@@ -95,9 +95,9 @@ public class WIDM_Endpoints {
 		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Phone_Number);                  ////currently sending the phone number
 
 		 	//populate the field if receive a value, if no value then will not add
-		 	if(email_UserID != null && !email_UserID.isEmpty()){
+		 	if(Email_As_UserId != null && !Email_As_UserId.isEmpty()){
 		 		soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_EMAIL_AS_USERID_FLG");
-		 		soapBodyElem2.addTextNode(email_UserID);	
+		 		soapBodyElem2.addTextNode(Email_As_UserId);	
 		 	}
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_USER_ID_PCT_");
@@ -142,7 +142,7 @@ public class WIDM_Endpoints {
 	}
 
 	//will return the soap message as a string
-	public static String AAA_User_Update(String soapUpdateUserUrl, User_Data User_Info, String email_UserID) throws Exception {
+	public static String AAA_User_Update(String soapUpdateUserUrl, User_Data User_Info, String Email_As_UserId) throws Exception {
 		try {
 			String FillerCompany = "Company" + Helper_Functions.CurrentDateTime();
 			
@@ -187,17 +187,13 @@ public class WIDM_Endpoints {
 
 			soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_FIRST_NAME_PCT_");
 			soapBodyElem2.addTextNode(User_Info.FIRST_NM);
-
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_INITIALS_NM");
 			soapBodyElem2.addTextNode(User_Info.MIDDLE_NM);
-
 			soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_LAST_NAME_PCT_");
 			soapBodyElem2.addTextNode(User_Info.LAST_NM);
 
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_COMPANY_NM");
 			soapBodyElem2.addTextNode(FillerCompany);
-			soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_EMAIL_PCT_");
-			soapBodyElem2.addTextNode(User_Info.EMAIL_ADDRESS);
 
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_STREET_DESC");
 			soapBodyElem2.addTextNode(User_Info.STREET_DESC);
@@ -216,17 +212,19 @@ public class WIDM_Endpoints {
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_FAX_NBR");
 			soapBodyElem2.addTextNode(User_Info.FAX_NUMBER);
 			
-			if(email_UserID != null && !email_UserID.isEmpty()){
+			if(Email_As_UserId != null && !Email_As_UserId.isEmpty()){
 				soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_EMAIL_AS_USERID_FLG");
-				soapBodyElem2.addTextNode(email_UserID);
+				soapBodyElem2.addTextNode(Email_As_UserId);
 			}
-			
+
+			soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_EMAIL_PCT_");
+			soapBodyElem2.addTextNode(User_Info.EMAIL_ADDRESS);
 			soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_USER_ID_PCT_");
-			soapBodyElem2.addTextNode(User_Info.SSO_LOGIN_DESC);
+			soapBodyElem2.addTextNode(User_Info.USER_ID);
 			soapBodyElem2 = soapBodyElem1.addChildElement("_BAR_fedexOldPassword_BAR_");
-			soapBodyElem2.addTextNode(User_Info.USER_PASSWORD_DESC);
+			soapBodyElem2.addTextNode(User_Info.PASSWORD);
 			soapBodyElem2 = soapBodyElem1.addChildElement("_BAR_fedexConfirmPassword_BAR_");
-			soapBodyElem2.addTextNode(User_Info.USER_PASSWORD_DESC);
+			soapBodyElem2.addTextNode(User_Info.PASSWORD);
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_SECRET_QUESTION_DESC");
 			soapBodyElem2.addTextNode(User_Info.SECRET_QUESTION_DESC);
 			soapBodyElem2 = soapBodyElem1.addChildElement("_BAR_LOGIN_DOT_CRYPT_ANSWER_DESC1_BAR_");

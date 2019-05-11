@@ -446,7 +446,6 @@ public class Helper_Functions{
 		return DummyName;
 	}
 	
-	
 	public static ArrayList<String[]> getTaxInfo(String CountryCode){
 		if (TaxInfoList.isEmpty()) {
 			TaxInfoList = getExcelData(DataDirectory + "\\TaxData.xls", "TaxIds"); 
@@ -920,6 +919,11 @@ public class Helper_Functions{
 		for (Account_Data Current: D) {
 			if (Current != null && Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
 				Current.Level = Level;
+				//Will load the dummy values for the name associated with address.
+				final String[] numNames = {"", "one","two","three","four","five","six","seven"};
+				Current.FirstName = "F" + numNames[Integer.valueOf(Level)] + getRandomString(7);
+				Current.MiddleName = "M";
+				Current.LastName = "L" + getRandomString(7);
 				return new Account_Data(Current);
 			}
 		}

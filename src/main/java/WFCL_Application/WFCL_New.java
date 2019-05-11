@@ -25,7 +25,7 @@ public class WFCL_New{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("SG");
+		CountryList = Environment.getCountryList("US");
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("JP");
@@ -94,7 +94,7 @@ public class WFCL_New{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].SECRET_ANSWER_DESC.contentEquals("")) {
-		    					data.add( new Object[] {Level, UD[k], UD[k].USER_PASSWORD_DESC + "A"});
+		    					data.add( new Object[] {Level, UD[k], UD[k].PASSWORD + "A"});
 		    					break;
 		    				}
 		    			}
@@ -224,7 +224,7 @@ public class WFCL_New{
 			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Country_Code + "Create");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Info.Email = Helper_Functions.getRandomString(12) + "@fedex.com";
-			WFCL_Functions_UsingData.WFCL_UserRegistration_Captcha(Account_Info);
+			WFCL_Functions_UsingData.WFCL_UserRegistration_Captcha(Account_Info, 4);
 			Thread.sleep(10000);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

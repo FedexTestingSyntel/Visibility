@@ -8,12 +8,14 @@ import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
+import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import java.util.Iterator;
 import java.util.List;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
+import SupportClasses.WebDriver_Functions;
 import WFCL_Application.WFCL_Functions_UsingData;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
@@ -21,7 +23,7 @@ import WFCL_Application.WFCL_Functions_UsingData;
 public class MC_PI_4{
 	static String LevelsToTest = "6";
 	static String CountryList[][];
-	final boolean EnableCompleted = false;
+	final boolean EnableCompleted = true;
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -29,7 +31,7 @@ public class MC_PI_4{
 		CountryList = Environment.getCountryList("smoke");
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -39,7 +41,7 @@ public class MC_PI_4{
 			String Rewards_APAC_AND_LAC[] = new String[] {"au", "cn", "hk", "jp", "my", "nz", "ph", "sg", "kr", "tw", "th", "br", "mx"};
 			String Rewards_APAC_AND_LAC_Lang[][] = new String[][] {{"au", "en"}, {"cn", "en"}, {"cn", "zh"}, {"hk", "en"}, {"hk", "zh"}, {"jp", "en"}, {"jp", "ja"}, {"my", "en"}, {"nz", "en"}, {"ph", "en"}, {"sg", "en"}, {"kr", "en"}, {"kr", "ko"}, {"tw", "en"}, {"tw", "zh"}, {"th", "en"}, {"th", "th"}, {"mx", "en"}, {"br", "en"}, {"mx", "es"}, {"br", "pt"}};
 			
-			Rewards_APAC_AND_LAC = new String[] {"au"};
+			//Rewards_APAC_AND_LAC = new String[] {"us"};
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WFCL_Rewards_Registration_APAC_AND_LAC":
 		    		for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
@@ -55,7 +57,11 @@ public class MC_PI_4{
 		    		for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
 		    			Account_Data Account_Info = Helper_Functions.getFreshAccount(Level, Rewards_APAC_AND_LAC[j]);
 		    			Account_Data.Print_Account_Address(Account_Info);
-		    			Account_Data Wrong_Account_Info = Environment.getAddressDetails(Level, "jp");
+		    			String DifferentCountry = "JP";
+		    			if (DifferentCountry.contentEquals(Rewards_APAC_AND_LAC[j].toUpperCase())) {
+		    				DifferentCountry = "AU";
+		    			}
+		    			Account_Data Wrong_Account_Info = Environment.getAddressDetails(Level, DifferentCountry);
 		    			Account_Data.Print_Account_Address(Wrong_Account_Info);
 		    			if (Account_Info != null && Wrong_Account_Info != null) {
 		    				//need to add more validation here, possible for the address to be same.
@@ -78,6 +84,7 @@ public class MC_PI_4{
 					}
 					break;
 				case "WFCL_Rewards_AEM_Link":
+				case "WFCL_Rewards_APAC_AND_LAC_Country_Field":	
 					for (String Instance[]: Rewards_APAC_AND_LAC_Lang) {
 		    			data.add( new Object[] {Level, Instance[0], Instance[1]});
 					}
@@ -101,7 +108,7 @@ public class MC_PI_4{
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", description = "518325", enabled = true) ///483863
+	@Test(dataProvider = "dp", description = "518325", enabled = false) ///483863
 	public void WFCL_Rewards_Registration_APAC_AND_LAC(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
@@ -117,7 +124,7 @@ public class MC_PI_4{
 	}
 	
 	//from the data provider incorrect address details provided
-	@Test(dataProvider = "dp", description = "518325", enabled = true)
+	@Test(dataProvider = "dp", description = "518325", enabled = false)
 	public void WFCL_Rewards_Registration_APAC_AND_LAC_Mismatch(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
@@ -132,7 +139,7 @@ public class MC_PI_4{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "483861", enabled = false)
+	@Test(dataProvider = "dp", description = "483861", enabled = EnableCompleted)
 	public void WFCL_Rewards_Login_APAC_AND_LAC(String Level, String CountryCode, User_Data User_Info) {
 		try {
 
@@ -144,7 +151,7 @@ public class MC_PI_4{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "518318", enabled = false)
+	@Test(dataProvider = "dp", description = "518318", enabled = EnableCompleted)
 	public void WFCL_Rewards_AEM_Link(String Level, String CountryCode, String LanguageCode) {
 		try {
 
@@ -156,12 +163,33 @@ public class MC_PI_4{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "518584", enabled = true)
+	@Test(dataProvider = "dp", description = "518584", enabled = EnableCompleted)
 	public void WFCL_Rewards_Logout(String Level, String CountryCode, String LanguageCode, User_Data User_Info) {
 		try {
 			String Result[] = WFCL_Functions_UsingData.WFCL_Rewards_Logout(CountryCode, LanguageCode, User_Info);
 
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", description = "535433", enabled = EnableCompleted)
+	public void WFCL_Rewards_APAC_AND_LAC_Country_Field(String Level, String CountryCode, String LanguageCode) {
+		try {
+			WebDriver_Functions.ChangeURL("WFCLREWARDS", CountryCode, LanguageCode, true);
+ 			
+ 			//click sign up now and begin registration
+ 			WebDriver_Functions.WaitPresent(By.name("signupnow"));
+ 			WebDriver_Functions.Click(By.name("signupnow"));
+
+ 			WebDriver_Functions.WaitPresent(By.id("country"));
+ 			String Value = WebDriver_Functions.GetValue(By.id("country"));
+ 			Assert.assertEquals(Value.toLowerCase(), CountryCode.toLowerCase(), "Country " + CountryCode);
+ 			boolean disabled = WebDriver_Functions.isEnabled(By.id("country"));
+ 			Assert.assertFalse(disabled);
+ 			WebDriver_Functions.takeSnapShot(CountryCode + "_" + LanguageCode + "_CountryList.png");
+			Helper_Functions.PrintOut(CountryCode + "_" + LanguageCode + ": Country is selected and not editible.", false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

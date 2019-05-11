@@ -91,7 +91,7 @@ public class USRC_General {
 				UD = Environment.Get_UserIds(intLevel);
 				for (int k = 0; k < UD.length; k++) {
     				if (UD[k].EMAIL_ADDRESS.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
     				}
     			}
 				break;
@@ -100,7 +100,7 @@ public class USRC_General {
 				UD = Environment.Get_UserIds(intLevel);
 				for (int k = 0; k < UD.length; k++) {
 					if(UD[k].FDM_STATUS.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
     				}
     			}
 				break;
@@ -117,7 +117,7 @@ public class USRC_General {
 				UD = Environment.Get_UserIds(intLevel);
 				for (int k = 0; k < UD.length; k++) {
 					if(UD[k].WCRV_ENABLED.contentEquals("Enabled")) {
-    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
     				}
     			}
 				break;
@@ -125,7 +125,7 @@ public class USRC_General {
 				UD = Environment.Get_UserIds(intLevel);
 				for (int k = 0; k < UD.length; k++) {
     				if (UD[k].FIRST_NM.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
     				}
     			}
 				break;
@@ -133,7 +133,7 @@ public class USRC_General {
 			case "UpdateUserContactInformation":
 				UD = Environment.Get_UserIds(intLevel);
 				for (int k = 0; k < UD.length; k++) {
-    				if (UD[k] != null && UD[k].SSO_LOGIN_DESC.contentEquals("L3FCLUse081616")) {
+    				if (UD[k] != null && UD[k].USER_ID.contentEquals("L3FCLUse081616")) {
     					data.add(new Object[] {strLevel, UD[k]});
     					break;
     				}
@@ -154,7 +154,7 @@ public class USRC_General {
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		String UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		//1 - Login, get cookies and uuid
-		User_Information.SSO_LOGIN_DESC = Helper_Functions.LoadUserID("L" + Level + User_Information.COUNTRY_CD);
+		User_Information.USER_ID = Helper_Functions.LoadUserID("L" + Level + User_Information.COUNTRY_CD);
 		User_Information.EMAIL_ADDRESS = Helper_Functions.getRandomString(10) + "@accept.com";
 		User_Data.Set_Dummy_Contact_Name(User_Information, User_Information.COUNTRY_CD, Level);
 		//create the new user
@@ -164,11 +164,11 @@ public class USRC_General {
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Information.SSO_LOGIN_DESC, User_Information.USER_PASSWORD_DESC);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Information.USER_ID, User_Information.PASSWORD);
 		UUID = fdx_login_fcl_uuid[1];
-		String Results[] = new String[] {User_Information.SSO_LOGIN_DESC,  User_Information.USER_PASSWORD_DESC, UUID};
+		String Results[] = new String[] {User_Information.USER_ID,  User_Information.PASSWORD, UUID};
 		Helper_Functions.PrintOut(Arrays.toString(Results), false);
-		Helper_Functions.WriteUserToExcel(User_Information.SSO_LOGIN_DESC,  User_Information.USER_PASSWORD_DESC);
+		Helper_Functions.WriteUserToExcel(User_Information.USER_ID,  User_Information.PASSWORD);
 	}
 	
 	@Test (dataProvider = "dp", enabled = false)
@@ -241,7 +241,7 @@ public class USRC_General {
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		String fdx_login_fcl_uuid[] = {"","", ""};
 		//1 - Login, get cookies and uuid
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
 		
 		User_Info.FIRST_NM = User_Info.FIRST_NM + "Edit";
 		String Response = USRC_API_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Info, fdx_login_fcl_uuid[0]);

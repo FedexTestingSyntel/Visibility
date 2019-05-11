@@ -58,6 +58,7 @@ public class Account_Data {
 	public String FirstName = "";
 	public String MiddleName = "";
 	public String LastName = "";
+	public String LanguageCode = "";
 	public String Email = "accept@testing.com";
 	
 	public String UserId = "";

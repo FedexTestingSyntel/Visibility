@@ -79,7 +79,7 @@ public class WFCL_SmokeTest{
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 0; k < UD.length; k++) {
 	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].SECRET_ANSWER_DESC.contentEquals("")) {
-	    					data.add( new Object[] {Level, UD[k], UD[k].USER_PASSWORD_DESC + "A"});
+	    					data.add( new Object[] {Level, UD[k], UD[k].PASSWORD + "A"});
 	    					break;
 	    				}
 	    			}

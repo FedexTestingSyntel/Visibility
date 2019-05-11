@@ -45,7 +45,7 @@ public class WPRL_Email_As_UserID_July19 {
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].SSO_LOGIN_DESC.contains("@")) {
+		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].USER_ID.contains("@")) {
 		    					data.add( new Object[] {Level, UD[k]});
 		    					break;
 		    				}
@@ -68,7 +68,7 @@ public class WPRL_Email_As_UserID_July19 {
 			String Email_Address = "NA";
     		try {
     			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
-    			String[] fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+    			String[] fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
     			String ContactDetailsResponse = USRC_API_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, fdx_login_fcl_uuid[0]);
     			String ContactDetailsParsed[][] = new String[][] {{"EMAIL_ADDRESS", ""}};
     			ContactDetailsParsed = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, ContactDetailsParsed);

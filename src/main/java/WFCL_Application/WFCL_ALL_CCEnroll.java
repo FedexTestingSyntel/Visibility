@@ -53,8 +53,8 @@ public class WFCL_ALL_CCEnroll{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < UD.length; k++) {
 		    				//user must have an account number and be checking below to see if pass key user.
-		    				if (!UD[k].ACCOUNT_NUMBER.contentEquals("") && UD[k].PASSKEY.contentEquals("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].SSO_LOGIN_DESC.contains("CC")){
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    				if (!UD[k].ACCOUNT_NUMBER.contentEquals("") && UD[k].PASSKEY.contentEquals("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].USER_ID.contains("CC")){
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
 		    					break;
 		    				}
 		    			}

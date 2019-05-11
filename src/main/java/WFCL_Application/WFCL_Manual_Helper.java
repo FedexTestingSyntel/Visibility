@@ -24,7 +24,6 @@ public class WFCL_Manual_Helper{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		Helper_Functions.MyEmail = "accept@fedex.com";
-		Helper_Functions.MyEmail = "acceptasdfasdfasdf@fedex.com";
 	}
 	 
 	@DataProvider (parallel = true)
@@ -46,13 +45,8 @@ public class WFCL_Manual_Helper{
 		    		*/
 		    		//
 		    		
-		    		
-		    		
 
-		    		//data.add( new Object[] {Level, "942838670"});
-		    		//data.add( new Object[] {Level, "931116231"});
-		    		data.add( new Object[] {Level, "698316187"});
-			    	//data.add( new Object[] {Level, "919928557"});
+		    		data.add( new Object[] {Level, "700233448"}); 
 		    		break;
 		    	case "AccountRegistration_FDDT":
 		    		/*
@@ -66,7 +60,7 @@ public class WFCL_Manual_Helper{
 		    		User_Data[] UD = Environment.Get_UserIds(intLevel);
 		    		for (int k = 0; k < UD.length; k++) {
 		    			if (UD[k].ERROR.contentEquals("12")) {
-		    				String Account = UD[k].SSO_LOGIN_DESC.replace("L6Account", "");
+		    				String Account = UD[k].USER_ID.replace("L6Account", "");
 		    				data.add( new Object[] {Level, Account});
 		    			}
 		    		}
@@ -74,8 +68,8 @@ public class WFCL_Manual_Helper{
 
 		    	case "Link_Account_To_Specific_User":
 		    		User_Data User_Info = new User_Data();
-					User_Info.SSO_LOGIN_DESC = "L6Acc700232794N032019T104345twxs";
-					User_Info.USER_PASSWORD_DESC = "Test1234";
+					User_Info.USER_ID = "L6Acc700232794N032019T104345twxs";
+					User_Info.PASSWORD = "Test1234";
 					String AccountNumber = "700195279";
 		    		data.add( new Object[] {Level, User_Info, AccountNumber});
 		    		AccountNumber = "700194795";
@@ -138,7 +132,8 @@ public class WFCL_Manual_Helper{
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
 			//start the test by entering captcha url and inputting data	
-			WFCL_Functions_UsingData.WFCL_UserRegistration_Captcha(Account_Info);
+			int NumberOfAttempts = 3;
+			WFCL_Functions_UsingData.WFCL_UserRegistration_Captcha(Account_Info, NumberOfAttempts);
 			
 			Helper_Functions.PrintOut("Completed Captcha", false);
 		}catch (Exception e) {

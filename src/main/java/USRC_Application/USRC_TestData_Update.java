@@ -46,19 +46,19 @@ public class USRC_TestData_Update {
 			case "CheckLogin":
 				for (int k = 0; k < UD.length; k++) {
     				if (UD[k].UUID_NBR.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
     				}else if (!UD[k].ERROR.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
     				}
     				//uncomment if need to run all
-    				//else{data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});}
+    				//else{data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});}
 
     			}
 				break;
 			case "CheckMigration":
 				for (int k = 0; k < UD.length; k++) {
     				if (UD[k].MIGRATION_STATUS.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
     				}
     			}
 				break;
@@ -83,7 +83,7 @@ public class USRC_TestData_Update {
 		
 		String fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Information.SSO_LOGIN_DESC, User_Information.USER_PASSWORD_DESC);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Information.USER_ID, User_Information.PASSWORD);
 		
 		String Test = USRC_API_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Information, fdx_login_fcl_uuid[0]);
 		

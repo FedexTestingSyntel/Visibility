@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 import java.util.Arrays;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import Data_Structures.Account_Data;
 import Data_Structures.Enrollment_Data;
@@ -31,7 +32,11 @@ public class WFCL_Functions_UsingData{
 		WebDriver_Functions.Type(By.id("retypeEmail"), Account_Info.Email);
 		
 		if (WebDriver_Functions.isPresent(By.id("country"))) {
-			WebDriver_Functions.Select(By.id("country"), Account_Info.Billing_Country_Code.toUpperCase(), "v");
+			try { // added on 5/9/19 due to MFXR pages have not editable country codes.
+				WebDriver_Functions.Select(By.id("country"), Account_Info.Billing_Country_Code.toUpperCase(), "v");
+			}catch (Exception e){
+				System.err.println("Not able to select country from dropdown.");
+			}
 		}
 		
 		WebDriver_Functions.Type(By.id("address1"), Account_Info.Billing_Address_Line_1);
@@ -80,6 +85,7 @@ public class WFCL_Functions_UsingData{
 			
 			if (WebDriver_Functions.isPresent(By.id("nucaptcha-answer"))){
 				Helper_Functions.PrintOut("Captcha is present on page. Waiting for manaual entry.", true);
+				WebDriver_Functions.takeSnapShot("ContactInformation Captcha.png");
 				WebDriver_Functions.WaitNotPresent(By.id("nucaptcha-answer"));
 			}
 
@@ -94,6 +100,8 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.Type(By.id("nickName"), Account_Info.Account_Nickname);
 			WebDriver_Functions.takeSnapShot("AccountInformation.png");
 			WebDriver_Functions.Click(By.id("createUserID"));
+			
+			WebDriver_Functions.WaitNotVisable(By.className("busyDiv"));
 		}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
 			WebDriver_Functions.Type(By.name("newAccountNumber"), Account_Info.Account_Number);
 			WebDriver_Functions.Type(By.name("newNickName"), Account_Info.Account_Nickname);
@@ -109,12 +117,10 @@ public class WFCL_Functions_UsingData{
 				if (WebDriver_Functions.isPresent(By.id("accountNumber"))){
 					WebDriver_Functions.Type(By.id("accountNumber"), Account_Info.Account_Number);
 					WebDriver_Functions.Type(By.id("nickName"), Account_Info.Account_Nickname);
-					WebDriver_Functions.takeSnapShot("AccountInformation.png");
 					WebDriver_Functions.Click(By.id("createUserID"));
 				}else if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){
 					WebDriver_Functions.Type(By.name("newAccountNumber"), Account_Info.Account_Number);
 					WebDriver_Functions.Type(By.name("newNickName"), Account_Info.Account_Nickname);
-					WebDriver_Functions.takeSnapShot("AccountInformation.png");
 					WebDriver_Functions.Click(By.name("submit"));
 				}
 			}catch (Exception e) {
@@ -247,12 +253,12 @@ public class WFCL_Functions_UsingData{
 
 	//will return the updated Account_Data with the uuid added.
 	public static String[] Account_Linkage(User_Data User_Info, Account_Data Account_Info) throws Exception{
-		Helper_Functions.PrintOut("Attempting to link " + User_Info.SSO_LOGIN_DESC + " with " + Account_Info.Account_Number, true);
+		Helper_Functions.PrintOut("Attempting to link " + User_Info.USER_ID + " with " + Account_Info.Account_Number, true);
 		String CountryCode = Account_Info.Billing_Country_Code.toUpperCase();
 		String UUID = WebDriver_Functions.GetCookieUUID();
 		if (UUID == null) {
 			//if user is not logged in then do so.
-			 WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+			 WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
 			 UUID = WebDriver_Functions.GetCookieUUID();
 		}
 
@@ -262,12 +268,12 @@ public class WFCL_Functions_UsingData{
 		Account_Entry_Screen(Account_Info);
 		
 		if (WebDriver_Functions.CheckBodyText("This Account Number is already registered for this application")) {
-			throw new Exception("Account " + Account_Info.Account_Number + " is already linked to user " + User_Info.SSO_LOGIN_DESC);
+			throw new Exception("Account " + Account_Info.Account_Number + " is already linked to user " + User_Info.USER_ID);
 		}
 
 		Verify_Confirmaiton_Page("INET", Account_Info);
 
-		return new String[] {User_Info.SSO_LOGIN_DESC, Account_Info.Account_Number};
+		return new String[] {User_Info.USER_ID, Account_Info.Account_Number};
 	}//end Account_Linkage
 	public static void AddressMismatchPage(Account_Data Account_Info) throws Exception {
 		if (WebDriver_Functions.isPresent(By.name("address1"))) {
@@ -487,7 +493,7 @@ public class WFCL_Functions_UsingData{
 	}//end WFCL_UserRegistration
 	
 	//will return a string array with 0 as the user id and 1 as the password, 2 is the uuid
-	public static void WFCL_UserRegistration_Captcha(Account_Data Account_Info) throws Exception{
+	public static void WFCL_UserRegistration_Captcha(Account_Data Account_Info, int Attempts) throws Exception{
 		String CountryCode = Account_Info.Billing_Country_Code;
 		try {
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
@@ -497,7 +503,7 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.ChangeURL(WebDriver_Functions.GetCurrentURL() + "&captcha=true", CountryCode, false);
 			
 			ContactInfo_Page(Account_Info, false); //enters all of the details
-			
+
 			if (WebDriver_Functions.isPresent(By.id("iacceptbutton"))) {
 				WebDriver_Functions.Click(By.id("iacceptbutton"));
 			}else if (WebDriver_Functions.isPresent(By.id("createUserID"))) {
@@ -505,16 +511,36 @@ public class WFCL_Functions_UsingData{
 			}
 			
 			int Lockout = 4; // four attempts
+			if (Attempts > Lockout) {
+				Helper_Functions.PrintOut("Warning, user should be locked out after " + Lockout + " attempts. Recieved " + Attempts);
+			}
 			for (int i = 1 ; i < Lockout + 1; i++) {
-				if (WebDriver_Functions.isPresent(By.id("nucaptcha-answer"))){
-					Helper_Functions.PrintOut("Captcha is present on page. Waiting for manaual entry.", true);
-					Helper_Functions.Wait(10);
-				}
+				//if (WebDriver_Functions.isPresent(By.id("nucaptcha-answer"))){
+				//	Helper_Functions.PrintOut("Captcha is present on page. Waiting for manaual entry.", true);
+				//	Helper_Functions.Wait(15);
+				//}
+				WebDriver_Functions.WaitPresent(By.id("nucaptcha-answer"));
+				WebDriver_Functions.Type(By.id("nucaptcha-answer"), "Att" + i);
 				WebDriver_Functions.takeSnapShot("Captcha attempt " + i + " of " + Lockout + ".png");
+				
+				if (WebDriver_Functions.isPresent(By.id("iacceptbutton"))) {
+					WebDriver_Functions.Click(By.id("iacceptbutton"));
+				}else if (WebDriver_Functions.isPresent(By.id("createUserID"))) {
+					WebDriver_Functions.Click(By.id("createUserID"));
+				}
+				
 			}
 			
-			while (2 > 1 ) {
-				Helper_Functions.Wait(20);  //infinite loop while manaul execution in progress
+			if (Attempts == Lockout) {
+				WebDriver_Functions.CheckBodyText("FedEx cannot process your request with the information entered. Please call 1.800.GoFedEx 1.800.463.3339 to open an account.");
+				WebDriver_Functions.takeSnapShot("Captcha LockedOut.png");
+			}else {
+				Helper_Functions.PrintOut("Captcha is present on page. Waiting for manaual entry.", true);
+				//infinite loop while element on page.
+				while (WebDriver_Functions.isPresent(By.id("nucaptcha-answer"))) {
+					Helper_Functions.Wait(15);
+				}
+				
 			}
 			
 		}catch (Exception e) {}
@@ -724,7 +750,7 @@ public class WFCL_Functions_UsingData{
     	try{
     		//click the forgot password link
     		WebDriver_Functions.Click(By.name("forgotUidPwd"));
-    		WebDriver_Functions.Type(By.name("userID"), User_Info.SSO_LOGIN_DESC);
+    		WebDriver_Functions.Type(By.name("userID"), User_Info.USER_ID);
     		
     		WebDriver_Functions.takeSnapShot("Password Reset.png");
             //click the option 1 button and try to answer with secret question
@@ -743,14 +769,14 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.takeSnapShot("New Password.png");
 			WebDriver_Functions.Click(By.name("confirm"));
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td/h1"), "Thank you.");
-			boolean loginAttempt = WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, NewPassword);
-			Helper_Functions.PrintOut(User_Info.SSO_LOGIN_DESC + " has had the password changed to " + NewPassword, true);
+			boolean loginAttempt = WebDriver_Functions.Login(User_Info.USER_ID, NewPassword);
+			Helper_Functions.PrintOut(User_Info.USER_ID + " has had the password changed to " + NewPassword, true);
 			
 			//if recursive the password already changed once
 			if (Thread.currentThread().getStackTrace()[2].getMethodName().contentEquals("WFCL_Secret_Answer")){
-		    	return User_Info.SSO_LOGIN_DESC + " " + NewPassword;
+		    	return User_Info.USER_ID + " " + NewPassword;
 			}else if (loginAttempt){
-				return WFCL_Secret_Answer(User_Info,  User_Info.USER_PASSWORD_DESC);//change the password back
+				return WFCL_Secret_Answer(User_Info,  User_Info.PASSWORD);//change the password back
 			}else{
 				throw new Exception("Error.");
 			}
@@ -762,13 +788,13 @@ public class WFCL_Functions_UsingData{
 
 	public static String ResetPasswordWFCL_Email(User_Data User_Info) throws Exception{
     	try{
-    		//WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+    		//WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
 
     		String Email = "--Could not retrieve email--";
     		
     		try {
     			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
-    			String[] fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+    			String[] fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
     			String ContactDetailsResponse = USRC_API_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, fdx_login_fcl_uuid[0]);
     			String ContactDetailsParsed[][] = new String[][] {{"EMAIL_ADDRESS", ""}};
     			ContactDetailsParsed = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, ContactDetailsParsed);
@@ -780,14 +806,14 @@ public class WFCL_Functions_UsingData{
     		//trigger the password reset email
     		WebDriver_Functions.ChangeURL("INET", User_Info.COUNTRY_CD, true);
     		WebDriver_Functions.Click(By.name("forgotUidPwd"));
-    		WebDriver_Functions.Type(By.name("userID"), User_Info.SSO_LOGIN_DESC);
+    		WebDriver_Functions.Type(By.name("userID"), User_Info.USER_ID);
     		
     		WebDriver_Functions.Click(By.id("ada_forgotpwdcontinue"));
     		//*[@id="ada_forgotpwdcontinue"]
     		//click the option 1 button and try to answer with secret question
     		WebDriver_Functions.Click(By.name("action2"));
     		WebDriver_Functions.takeSnapShot("Password Reset Email.png");
-    		Helper_Functions.PrintOut("Completed ResetPasswordWFCL using " + User_Info.SSO_LOGIN_DESC + ". An email has been triggered and that test must be completed manually by " + Email, true);
+    		Helper_Functions.PrintOut("Completed ResetPasswordWFCL using " + User_Info.USER_ID + ". An email has been triggered and that test must be completed manually by " + Email, true);
     					
     		return Email;
     	}catch(Exception e){
@@ -798,7 +824,7 @@ public class WFCL_Functions_UsingData{
     
 	public static String[] WFCL_WADM_Invitaiton(User_Data User_Info, Account_Data Account_Info, String Email) throws Exception{	
 		try {
-			WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
 			WebDriver_Functions.ChangeURL("WADM", "US", false);
 			WebDriver_Functions.takeSnapShot("UserTable before invite.png");
 			
@@ -947,7 +973,7 @@ public class WFCL_Functions_UsingData{
  		try {
  			//if not logged in the do so
  			if (WebDriver_Functions.GetCookieUUID() == null) {
- 				WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+ 				WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
  			}
  			
 			WebDriver_Functions.ChangeURL("GFBO_Login", User_Info.COUNTRY_CD, false);
@@ -965,7 +991,7 @@ public class WFCL_Functions_UsingData{
 			AddressMismatchPage(Account_Info);
 			InvoiceOrCCValidaiton(Account_Info);
 			
-			return new String[] {User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC, Account_Info.Account_Number, "GFBO: "};
+			return new String[] {User_Info.USER_ID, User_Info.PASSWORD, Account_Info.Account_Number, "GFBO: "};
  		}catch (Exception e){
  			throw e;
  		}
@@ -975,7 +1001,7 @@ public class WFCL_Functions_UsingData{
 	public static String[] AEM_Discount_Validate(User_Data User_Info, Enrollment_Data Enrollment_Info) throws Exception {
 		
 		try {
-			WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
 
 			WebDriver_Functions.ChangeURL("DT_" + Enrollment_Info.ENROLLMENT_ID, Enrollment_Info.COUNTRY_CODE, false);
 			WebDriver_Functions.takeSnapShot(Enrollment_Info.ENROLLMENT_ID + " DT Value.png");
@@ -1111,10 +1137,10 @@ public class WFCL_Functions_UsingData{
  				//This is the AEM button for "Go to My FedEx Rewards"
  				WebDriver_Functions.WaitPresent(By.cssSelector("body > div.fxg-main-content > div > div > div.fxg-wrapper > div.link.section > div > a"));
  				Helper_Functions.PrintOut("Current URL: " + WebDriver_Functions.GetCurrentURL() + "\n" + WebDriver_Functions.getURLByhref(By.cssSelector("body > div.fxg-main-content > div > div > div.fxg-wrapper > div.link.section > div > a"))); 
+ 				ConfrimationPageCheck = true;
  			}
  			
- 			
-		    return new String[] {Account_Info.UserId, Account_Info.UUID, Account_Info.Account_Number, Account_Info.Billing_Country_Code, "ConfirmaitonPage: " + ConfrimationPageCheck};
+		    return new String[] {Account_Info.UserId, Account_Info.UUID, Account_Info.Account_Number, Account_Info.Billing_Country_Code, "Confirmation: " + ConfrimationPageCheck};
  		}catch (Exception e) {
  			throw e;
  		}
@@ -1127,29 +1153,28 @@ public class WFCL_Functions_UsingData{
  			
  			//login as the user
  			WebDriver_Functions.WaitPresent(By.name("username"));
- 			WebDriver_Functions.Type(By.name("username"), User_Info.SSO_LOGIN_DESC);
- 			WebDriver_Functions.Type(By.name("password"), User_Info.USER_PASSWORD_DESC);
+ 			WebDriver_Functions.Type(By.name("username"), User_Info.USER_ID);
+ 			WebDriver_Functions.Type(By.name("password"), User_Info.PASSWORD);
  			WebDriver_Functions.Click(By.name("login"));
  			
  			//wait until logged in
- 			WebDriver_Functions.WaitForBodyText("My FedEx");
- 			WebDriver_Functions.WaitForBodyText("REWARDS");
+ 			//WebDriver_Functions.WaitForBodyText("My FedEx");
+ 			//WebDriver_Functions.WaitForBodyText("REWARDS");
  			
  			//check the cookie values         //////////////////////////////////////need to work on this, cookies are not being returned
- 			String SMIDENTITY = WebDriver_Functions.GetCookieValue("SMIDENTITY");
- 			String SMSESSION = WebDriver_Functions.GetCookieValue("SMSESSION");
- 			String fdx_locale = WebDriver_Functions.GetCookieValue("fdx_locale");
+ 			//String SMIDENTITY = WebDriver_Functions.GetCookieValue("SMIDENTITY");
+ 			//String SMSESSION = WebDriver_Functions.GetCookieValue("SMSESSION");
+ 			//String fdx_locale = WebDriver_Functions.GetCookieValue("fdx_locale");
+ 			String UUID = WebDriver_Functions.GetCookieUUID();
  			
- 			if (fdx_locale == null || !fdx_locale.contains("_" + CountryCode.toUpperCase())) {
- 				throw new Exception("Local is not reflecting correctly. Expecting " + CountryCode.toUpperCase() + " and instead " + fdx_locale);
- 			}else if (SMSESSION == null || SMIDENTITY == null) {
- 				throw new Exception("Session cookie not present. SMSESSION: " + SMSESSION + "   SMIDENTITY: " + SMIDENTITY);
+ 			if (UUID == null) {
+ 				throw new Exception("User id not logged out. " + UUID);
  			}
-		    return new String[] {User_Info.SSO_LOGIN_DESC, SMIDENTITY, SMSESSION, fdx_locale};
+		    return new String[] {User_Info.USER_ID, CountryCode, UUID};
  		}catch (Exception e) {
  			throw e;
  		}
- 	}//end WFCL_RewardsRegistration
+ 	}
 	
 	public static String[] WFCL_Rewards_AEM_Link(String CountryCode, String LanguageCode) throws Exception{
  		try {
@@ -1172,7 +1197,7 @@ public class WFCL_Functions_UsingData{
 	public static String[] WFCL_Rewards_Logout(String CountryCode, String LanguageCode, User_Data User_Info) throws Exception{
  		try {
  			
- 			WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+ 			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
  			WebDriver_Functions.ChangeURL("WFCL_REWARDS_CONFIRMATION", CountryCode, true);
  			WebDriver_Functions.ChangeURL("WFCL_REWARDS_PAGE", CountryCode, true);
  			String LogoutJsPUrl = WebDriver_Functions.ChangeURL("LOGOUT_JSP", CountryCode, LanguageCode, true);
@@ -1182,7 +1207,8 @@ public class WFCL_Functions_UsingData{
  			String ExpectedURL = WebDriver_Functions.ChangeURL("HOME", CountryCode, LanguageCode, true);
  			
  			assertThat(CurrentURL, CoreMatchers.containsString(ExpectedURL));
- 			
+ 			String UUID = WebDriver_Functions.GetCookieUUID();
+ 			Assert.assertNull(UUID);
 		    return new String[] {CountryCode, LanguageCode, LogoutJsPUrl, CurrentURL};
  		}catch (Exception e) {
  			throw e;

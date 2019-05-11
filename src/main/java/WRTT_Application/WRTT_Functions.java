@@ -59,25 +59,29 @@ public class WRTT_Functions {
 			WebDriver_Functions.Click(By.xpath(ServicesCheckbox[Service][1]));
 				
 			//select the file format
+			String Format;
 			if (PDF){
 				WebDriver_Functions.Click(By.cssSelector("input[name=\"ratesByServiceFormat\"]"));
-				Title = Title + "PDF";
+				Format = "PDF";
 			}else{
 				WebDriver_Functions.Click(By.xpath("(//input[@name='ratesByServiceFormat'])[2]"));
-				Title = Title + "XLS";
+				Format = "XLS";
 			}
-
+			Title = Title + Format;
 			//select the rate type, only available for domestic
+			String RateType = "";
 			if (Service < 11){
 				if (List){
 					WebDriver_Functions.Click(By.name("ratesByServiceType"));
-					Title = Title + "List";
+					RateType = "List";
 				}else{
 					WebDriver_Functions.Click(By.xpath("(//input[@name='ratesByServiceType'])[2]"));
-					Title = Title + "Retail";
+					RateType = "Retail";
 				}
+				Title = Title + RateType;
 			}else if (!List && Service > 10){
-				return "international do not have retail rates";
+				//ServicesCheckbox[Service][0]
+				return "International do not have retail rates. ";
 			}
 			//WebDriver_Functions.takeSnapShot(Title + ".png");
 			WebDriver_Functions.Click(By.id("requestsheetbtn"));
@@ -132,6 +136,7 @@ public class WRTT_Functions {
 			}
 
 			Helper_Functions.PrintOut("WRTT " + Title + " Completed successfully", true);
+			String Result[] = new String[] {"ZoneChart: " + ZoneChart, "Service: " + ServicesCheckbox[Service][0], "Format: " + Format, "RateType: " + RateType};
 			return Title;
 		}catch (Exception e) {
 			throw e;

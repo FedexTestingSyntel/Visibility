@@ -18,15 +18,15 @@ import SupportClasses.Helper_Functions;
 
 public class WDPA extends WDPA_Functions{
 	
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 
-		//CountryList = Environment.getCountryList("smoke");
-		CountryList = Environment.getCountryList("full");
+		CountryList = Environment.getCountryList("smoke");
+		//CountryList = Environment.getCountryList("full");
 		//CountryList = new String[][]{{"US", "United States"}};
 		//CountryList = new String[][]{{"CA", "Canada"}};
 	}
@@ -46,7 +46,7 @@ public class WDPA extends WDPA_Functions{
 		    			for (int k = 1; k < UD.length; k++) {
 		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].GROUND_ENABLED.contentEquals("") &&
 		    						(UD[k].COUNTRY_CD.contentEquals("US") || UD[k].COUNTRY_CD.contentEquals("CA"))) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
 		    					break;
 		    				}
 		    			}
@@ -57,9 +57,9 @@ public class WDPA extends WDPA_Functions{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < UD.length; k++) {
-		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].EXPRESS_ENABLED.contentEquals("F") && UD[k].COUNTRY_CD.contains(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
-		    					break;
+		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].EXPRESS_ENABLED.contentEquals("") && UD[k].COUNTRY_CD.contains(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
+		    					//break;
 		    				}
 		    			}
 					}
@@ -69,7 +69,7 @@ public class WDPA extends WDPA_Functions{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < UD.length; k++) {
 		    				if (UD[k].WDPA_ENABLED.contentEquals("T")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
 		    				}
 		    			}
 					}
@@ -81,7 +81,7 @@ public class WDPA extends WDPA_Functions{
 		    				if (UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].FREIGHT_ENABLED.contentEquals("T") 
 		    						 && (UD[k].COUNTRY_CD.contentEquals("US") || UD[k].COUNTRY_CD.contentEquals("CA") || UD[k].COUNTRY_CD.contentEquals("MX"))
 		    						) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
 		    					break;
 		    				}
 		    			}

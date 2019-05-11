@@ -16,7 +16,7 @@ public class WPRL_Functions_Data {
 	public static User_Data WPRL_Contact(User_Data User_Info) throws Exception{
 	 	String CountryCode = User_Info.COUNTRY_CD;
 		try {
-			WebDriver_Functions.Login(User_Info.SSO_LOGIN_DESC, User_Info.USER_PASSWORD_DESC);
+			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
 			WebDriver_Functions.ChangeURL("WPRL", CountryCode, false);
 			//edit the contact information
 			String Phone[][] = Helper_Functions.LoadPhone_Mobile_Fax_Email(CountryCode);

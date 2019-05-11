@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WFCL_Suite]">
+<suite thread-count="3" guice-stage="DEVELOPMENT" name="Failed suite [WFCL_Suite]">
   <listeners>
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
-  <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
-    <parameter name="Level" value="2"/>
+  <test thread-count="3" name="WFCL_Test(failed)" parallel="methods">
+    <parameter name="Level" value="6"/>
     <classes>
-      <class name="WFCL_Application.WFCL_SmokeTest">
+      <class name="Mission_Critical.MC_PI_4">
         <methods>
-          <include name="WFCL_WDPA" invocation-numbers="0"/>
-          <include name="WFCL_Reset_Password_Secret" invocation-numbers="0"/>
-          <include name="WFCL_CreditCardRegistration" invocation-numbers="0"/>
+          <include name="WFCL_Rewards_APAC_AND_LAC_Country_Field" invocation-numbers="11 10"/>
           <include name="beforeClass"/>
-          <include name="WFCL_AdminReg" invocation-numbers="0"/>
         </methods>
-      </class> <!-- WFCL_Application.WFCL_SmokeTest -->
+      </class> <!-- Mission_Critical.MC_PI_4 -->
     </classes>
   </test> <!-- WFCL_Test(failed) -->
 </suite> <!-- Failed suite [WFCL_Suite] -->

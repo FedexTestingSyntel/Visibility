@@ -77,8 +77,8 @@ public class WFCL{
 		    	case "WADM_Invitaiton":
 		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
 		    		for (int k = 0; k < UD.length; k++) {
-	    				if (UD[k].SSO_LOGIN_DESC.contains("CC")) {
-	    					data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, Helper_Functions.MyEmail});
+	    				if (UD[k].USER_ID.contains("CC")) {
+	    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, Helper_Functions.MyEmail});
 	    					break;
 	    				}
 	    			}

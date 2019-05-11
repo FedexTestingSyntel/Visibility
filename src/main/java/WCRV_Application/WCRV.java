@@ -47,7 +47,7 @@ public class WCRV{
 					for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].WCRV_ENABLED.contains("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
 		    				}
 		    			}
 		    		}
@@ -57,11 +57,11 @@ public class WCRV{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < UD.length; k++) {
 		    				if (UD[k].WCRV_ENABLED.contains("T") && UD[k].COUNTRY_CD.contains(CountryList[j][0]) && !UD[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "INTRA_COUNTRY", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "EXPORT", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "IMPORT", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "THIRD_PARTY", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC, "ANY", 4});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "INTRA_COUNTRY", 1});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "EXPORT", 1});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "IMPORT", 1});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "THIRD_PARTY", 1});
+		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "ANY", 4});
 		    					break;
 		    				}
 		    			}
@@ -71,7 +71,7 @@ public class WCRV{
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int k = 0; k < UD.length; k++) {
 		    			if (UD[k].WCRV_ENABLED.contains("T")) {
-		    				data.add( new Object[] {Level, UD[k].SSO_LOGIN_DESC, UD[k].USER_PASSWORD_DESC});
+		    				data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
 		    				break;
 		    			}
 		    		}

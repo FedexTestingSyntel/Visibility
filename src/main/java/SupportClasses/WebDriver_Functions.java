@@ -381,6 +381,21 @@ public class WebDriver_Functions{
 	    return result;
 	}
 	
+	public static boolean isEnabled(By Ele){
+		boolean result = false;
+	    try {
+	    	DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.MICROSECONDS); //sets the timeout for short to make reduce delay
+	    	DriverFactory.getInstance().getDriver().findElement(Ele);
+	    	result = DriverFactory.getInstance().getDriver().findElement(Ele).isEnabled();
+	    }catch (Exception e) {
+	    	Helper_Functions.PrintOut(Ele.toString() + " not able to verify if disabled.");
+	    }finally {
+	    	DriverFactory.getInstance().getDriver().manage().timeouts().implicitlyWait(DriverFactory.WaitTimeOut, TimeUnit.SECONDS);
+	    }
+	
+	    return result;
+	}
+	
 	public static String getClass(By Ele){
 		String result = "";
 	    try {

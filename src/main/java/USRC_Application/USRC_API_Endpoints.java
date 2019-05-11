@@ -308,9 +308,9 @@ public class USRC_API_Endpoints {
 			.put("countryCode", User_Info.COUNTRY_CD)
 			.put("emailAddress", User_Info.EMAIL_ADDRESS)
 			.put("phoneNumber", User_Info.PHONE)
-			.put("userId", User_Info.SSO_LOGIN_DESC)
-			.put("password", User_Info.USER_PASSWORD_DESC)
-			.put("reenterPassword", User_Info.USER_PASSWORD_DESC)
+			.put("userId", User_Info.USER_ID)
+			.put("password", User_Info.PASSWORD)
+			.put("reenterPassword", User_Info.PASSWORD)
 			.put("secretQuestion", User_Info.SECRET_QUESTION_DESC)
 			.put("secretAnswer", User_Info.SECRET_ANSWER_DESC);
 
