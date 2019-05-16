@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [OADR_Suite]" parallel="methods">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WDPA_Suite]">
   <listeners>
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
-  <test thread-count="8" name="OADR_Test(failed)" parallel="methods">
+  <test thread-count="8" name="WDPA_Test(failed)" parallel="methods">
     <parameter name="Level" value="3"/>
     <classes>
-      <class name="OADR_Application.OADR_SmokeTest">
+      <class name="WDPA_Application.WDPA_SmokeTest">
         <methods>
-          <include name="OADR_Apply_Discount_To_Account" invocation-numbers="4 0 3 1 2"/>
+          <include name="WDPA_ExpressFreight" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
-      </class> <!-- OADR_Application.OADR_SmokeTest -->
+      </class> <!-- WDPA_Application.WDPA_SmokeTest -->
     </classes>
-  </test> <!-- OADR_Test(failed) -->
-</suite> <!-- Failed suite [OADR_Suite] -->
+  </test> <!-- WDPA_Test(failed) -->
+</suite> <!-- Failed suite [WDPA_Suite] -->

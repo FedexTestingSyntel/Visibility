@@ -68,6 +68,10 @@ public class DriverFactory{
 		   //SEVERE: org.apache.commons.exec.ExecuteException: Process exited with an error: 1 (Exit value: 1)
 		   try {
 			   if (DriverType == 0) {//Chrome
+					try {
+						Runtime.getRuntime().exec("taskkill /F /IM ChromeDriver.exe");//close out the old processes if still present.
+					} catch (Exception e) {}
+				   
 				  //make sure driver in the project folder         https://sites.google.com/a/chromium.org/chromedriver/
 				   String Location = System.getProperty("user.dir") + "\\chromedriver.exe";
 				   System.setProperty("webdriver.chrome.driver", Location);

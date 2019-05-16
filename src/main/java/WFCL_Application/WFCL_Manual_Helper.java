@@ -17,7 +17,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_Manual_Helper{
-	static String LevelsToTest = "6";  
+	static String LevelsToTest = "3";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -29,7 +29,7 @@ public class WFCL_Manual_Helper{
 	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
-
+		
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			//Account_Data Account_Info = null;
@@ -46,7 +46,7 @@ public class WFCL_Manual_Helper{
 		    		//
 		    		
 
-		    		data.add( new Object[] {Level, "642893688"}); 
+		    		data.add( new Object[] {Level, "643112507"}); 
 		    		break;
 		    	case "AccountRegistration_FDDT":
 		    		/*

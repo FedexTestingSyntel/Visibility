@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_General {
 
-	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -138,7 +138,10 @@ public class USRC_General {
     					break;
     				}
     			}
-				
+				break;
+			case "Testing_API_Login":
+				UD = Environment.Get_UserIds(intLevel);
+				data.add(new Object[] {strLevel, UD[0]});
 			}//end switch MethodName
 		}
 	    
@@ -147,6 +150,12 @@ public class USRC_General {
 	  //  }
 	    System.out.println(data.size() + " scenarios.");
 		return data.iterator();
+	}
+	
+	@Test (dataProvider = "dp", enabled = true)
+	public void Testing_API_Login(String Level, User_Data User_Information) {
+		String Response = USRC_API_Endpoints.Login_API_Load_Cookies(User_Information.USER_ID, User_Information.PASSWORD);
+		Helper_Functions.PrintOut(Response);
 	}
 	
 	@Test (dataProvider = "dp", enabled = false)

@@ -25,7 +25,7 @@ public class Create_Accounts_New{
 	private static String ECAMuserid;
 	private static String ECAMpassword;
 	
-	static String LevelsToTest = "5";
+	static String LevelsToTest = "2";
 	static String CountryList[][]; 
 	
 	@BeforeClass
@@ -58,7 +58,7 @@ public class Create_Accounts_New{
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp", enabled = true)
+	@Test(dataProvider = "dp", enabled = false)
 	public void Account_Creation(String Level, Account_Data Account_Info) {
 		try {
 			String Operating_Companies = "E";
@@ -73,7 +73,7 @@ public class Create_Accounts_New{
 			Account_Info.Email = Helper_Functions.MyFakeEmail;
 			Account_Info.Level = Level;
 			Account_Info.Company_Name = Helper_Functions.CurrentDateTime();
-			Accounts = CreateAccountNumbers(Account_Info, Operating_Companies, 10);
+			Accounts = CreateAccountNumbers(Account_Info, Operating_Companies, 1);
 			writeAccountsToExcel(Accounts, Operating_Companies);
 
 		}catch (Exception e) {
@@ -249,6 +249,7 @@ public class Create_Accounts_New{
 	        String AccountNumbers = DriverFactory.getInstance().getDriver().findElement(By.id("dialog-confirm")).getText();
 	        Helper_Functions.PrintOut("AccountNumbers:   " + AccountNumbers + "     -- " + Payment, false);
 			AccountNumbers = AccountNumbers.replace("Account has been created successfully and Account Numbers are ", "");
+			AccountNumbers = AccountNumbers.replace("Account has been created successfully and Account Number is ", "");
 			AccountNumbers = AccountNumbers.replaceAll(" ", "");
 			
 			Account_Data Account_Details[] = new Account_Data[NumAccounts];
@@ -335,19 +336,58 @@ public class Create_Accounts_New{
 	}
 
 	
-	@Test (enabled = false)
+	@Test (enabled = true)
 	public void Debug_Account_Creation() {
 		Account_Data Account_Info = Environment.getAddressDetails("2", "US");
 		Account_Info.Company_Name = "Company" + Helper_Functions.CurrentDateTime();
 		Credit_Card_Data CC_Info = Environment.getCreditCardDetails(Account_Info.Level, "V");
 		Account_Data.Set_Credit_Card(Account_Info, CC_Info);
-		if (Account_Info.Billing_Address_Line_2.contentEquals("")) {
-			Account_Info.Billing_Address_Line_2 = null;
-		}
-		Create_Account_Numbers(Account_Info, 1);
+		
+		//for sake of debug
+		Account_Info.Company_Name = "051619T112500";
+		Account_Info.FirstName = "FtwoUSnxkijoo";
+		Account_Info.LastName = "Lavfnesc";
+		//
+		Loggin();
+		Create_Account_Numbers(Account_Info, "1");
+		Account_Data.Print_Account_Address(Account_Info);
 	}
 	
-	public static Account_Data[] Create_Account_Numbers(Account_Data Account_Info, int NumAccounts) {
+	public static String Loggin() {
+		HttpPost httppost = new HttpPost("https://devoam.secure.fedex.com/oam/server/auth_cred_submit");
+		
+		JSONObject main = new JSONObject()
+				.put("username", ECAMuserid)
+				.put("password", ECAMpassword)
+				.put("lang", "en_US")
+				.put("request_id", "5255617725010824253");
+		
+		String json = main.toString();
+		
+		httppost.addHeader("Accept", "application/json, text/javascript, */*; q=0.01");
+		httppost.addHeader("Content-Type", "application/json; charset=UTF-8");
+		httppost.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36");
+		httppost.addHeader("X-clientid", "ECAM");
+		httppost.addHeader("X-locale", "en_US");
+		//httppost.addHeader("X-loggedin", "LOGGEDIN");
+		httppost.addHeader("X-Requested-With", "XMLHttpRequest");
+		httppost.addHeader("X-version", "1.0");
+
+		StringEntity params;
+		String Response = null;
+		try {
+			params = new StringEntity(json.toString());
+			httppost.setEntity(params);
+			Response = General_API_Calls.HTTPCall(httppost, json);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+					
+		return null;
+	}
+	
+	public static Account_Data[] Create_Account_Numbers(Account_Data Account_Info, String NumAccounts) {
 		String AppUrl = "";
 		if (Account_Info.Level.contentEquals("2")) {
 			AppUrl = "https://devedcsso.secure.fedex.com/account/v1/newEnterpriseAccount";
@@ -369,7 +409,7 @@ public class Create_Accounts_New{
 		JSONObject freight_comments_elements = new JSONObject()
 			.put("createdBy", createdBy )
 			.put("type", "GENERAL_INFORMATION")
-			.put("commentDescription", "New account requested for testing.")
+			.put("commentDescription", "New account requested by " + Account_Info.FirstName + " " + Account_Info.LastName)
 			.put("operatingCompany", "FEDEX_FREIGHT");
 		JSONObject freight_comments_array[] = new JSONObject[] {freight_comments_elements};
 		
@@ -387,7 +427,12 @@ public class Create_Accounts_New{
 			.put("marketingCorrespondenceTypes", marketingCorrespondenceTypes)
 			.put("localization", localization);
 	
-		String streetLines[] = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2};
+		String streetLines[];
+		if (Account_Info.Billing_Address_Line_2 == null || Account_Info.Billing_Address_Line_2.contentEquals("")) {
+			streetLines = new String[] {Account_Info.Billing_Address_Line_1};
+		}else {
+			streetLines = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2};
+		}
 		JSONObject address = new JSONObject()
 			.put("shareId", Account_Info.Billing_Share_Id)
 			.put("addressClassification", "UNKNOWN")
@@ -436,18 +481,26 @@ public class Create_Accounts_New{
 			.put("contactAncillaryDetail", contactAncillaryDetail)
 			.put("address", address);
 		
+		JSONObject contact_no_person = new JSONObject()
+			.put("companyName", Account_Info.Company_Name);
+		
+		JSONObject contactAndAddress_no_person = new JSONObject()
+			.put("contact", contact_no_person)
+			.put("contactAncillaryDetail", contactAncillaryDetail)
+			.put("address", address);
+		
 		JSONObject PRIMARY_ACCOUNT_contact_element = new JSONObject()
 			.put("type", "PRIMARY_ACCOUNT")
-			.put("contactAndAddress", contactAndAddress)
+			.put("contactAndAddress", contactAndAddress_no_person)
 			.put("communicationDetail", communicationDetail);
 		
 		JSONObject PRIMARY_SHIPPER_CONTACT_contact_element = new JSONObject()
-			.put("type", "PRIMARY_SHIPPER_CONTACT")
+			.put("type", "PRIMARY_SHIPPER_CONTACT") ///////////////////////asdf
 			.put("contactAndAddress", contactAndAddress)
 			.put("communicationDetail", communicationDetail);
 		
 		JSONObject PRIMARY_BILLING_ACCOUNT_contact_element = new JSONObject()
-			.put("type", "PRIMARY_BILLING_ACCOUNT")
+			.put("type", "PRIMARY_BILLING_ACCOUNT")                //////////////asdf
 			.put("contactAndAddress", contactAndAddress)
 			.put("communicationDetail", communicationDetail);
 		
@@ -463,6 +516,7 @@ public class Create_Accounts_New{
 		JSONObject freightProfileSpecification = new JSONObject()
 			.put("contacts", contacts_array)
 			.put("accountGroups", accountGroups_array)
+			.put("accountType", "SHIPPER")
 			.put("attributes", attributes_array)
 			.put("creditStatusDetail", creditStatusDetail)
 			.put("comments", freight_comments_array);
@@ -475,16 +529,27 @@ public class Create_Accounts_New{
 		JSONObject express_comments_elements = new JSONObject()
 			.put("createdBy", createdBy )
 			.put("type", "GENERAL_INFORMATION")
-			.put("commentDescription", "New account requested for testing.")
+			.put("commentDescription", "New account requested by " + Account_Info.FirstName + " " + Account_Info.LastName)
 			.put("operatingCompany", "EXPRESS");
 		JSONObject express_comments_array[] = new JSONObject[] {express_comments_elements};
 		
-		JSONObject address_array[] = new JSONObject[] {address};
+		JSONObject address_Element = new JSONObject()
+				.put("address", address);
+		
+		JSONObject address_array[] = new JSONObject[] {address_Element};
+		
+		JSONObject address_credit_card = new JSONObject()
+				.put("streetLines", streetLines)
+				.put("city", Account_Info.Billing_City)
+				.put("stateOrProvinceCode", Account_Info.Billing_State_Code)
+				.put("postalCode", Account_Info.Billing_Zip)
+				.put("countryCode", Account_Info.Billing_Country_Code)
+				.put("residential", false); //default to false currently
 		
 		JSONObject holder = new JSONObject()
 			.put("contact", contact)
 			.put("contactAncillaryDetail", contactAncillaryDetail)
-			.put("address", address);
+			.put("address", address_credit_card);
 		
 		JSONObject creditCard = new JSONObject()
 			.put("number", Account_Info.Credit_Card_Number)
@@ -509,9 +574,9 @@ public class Create_Accounts_New{
 		JSONObject enterprise_comments_elements = new JSONObject()
 			.put("createdBy", createdBy )
 			.put("type", "GENERAL_INFORMATION")
-			.put("commentDescription", "New account requested for testing.")
+			.put("commentDescription", "New account requested by " + Account_Info.FirstName + " " + Account_Info.LastName)
 			.put("operatingCompany", "FEDEX_EXPRESS");
-		JSONObject enterprise_comments_array[] = new JSONObject[] {enterprise_comments_elements, enterprise_comments_elements};
+		JSONObject enterprise_comments_array[] = new JSONObject[] {enterprise_comments_elements, freight_comments_elements};
 		
 		JSONObject CONTACT_contact_element = new JSONObject()
 			.put("type", "CONTACT")
@@ -523,7 +588,7 @@ public class Create_Accounts_New{
 		JSONObject enterpriseProfileSpecification = new JSONObject()
 			.put("contacts", enterprise_contacts_array)
 			.put("accountType", "BUSINESS")
-			.put("attributes", attributes_array)
+			.put("attributes", express_attributes_array)
 			.put("comments", enterprise_comments_array);
 //end of enterprise section
 		
@@ -563,10 +628,10 @@ public class Create_Accounts_New{
 		httppost.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36");
 		httppost.addHeader("X-clientid", "ECAM");
 		httppost.addHeader("X-locale", "en_US");
-		httppost.addHeader("X-version", "1.0");
+		httppost.addHeader("X-loggedin", "NOTLOGGEDIN");
 		httppost.addHeader("X-Requested-With", "XMLHttpRequest");
-		httppost.addHeader("X-loggedin", "LOGGEDIN");
-		
+		httppost.addHeader("X-version", "1.0");
+
 		StringEntity params;
 		String Response = null;
 		try {

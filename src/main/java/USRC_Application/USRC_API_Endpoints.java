@@ -15,17 +15,20 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
-
 import Data_Structures.Account_Data;
+import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
+import SupportClasses.Environment;
 import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
+import SupportClasses.WebDriver_Functions;
 
 public class USRC_API_Endpoints {
 	
-	public static String LoginFullResponse(String URL, String UserID, String Password){
+	public static String Login_API_Load_Cookies(String UserID, String Password){
   		try{
-  			HttpPost httppost = new HttpPost(URL);
+  			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
+  			HttpPost httppost = new HttpPost(USRC_Details.GenericUSRCURL);
 
   			JSONObject processingParameters = new JSONObject()
   				.put("anonymousTransaction", true)
@@ -56,11 +59,28 @@ public class USRC_API_Endpoints {
   			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
   			Helper_Functions.PrintOut("Get cookie from USRC for " + UserID + "/" + Password, true);
   			
-  			String Response = General_API_Calls.HTTPCall(httppost, json);	
+  			//String Response = General_API_Calls.HTTPCall(httppost, json);	
 			
-  			return Response;
+  			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
+  			HttpClient httpclient = HttpClients.createDefault();
+  			HttpResponse Response = httpclient.execute(httppost);
+  			Header[] Headers = Response.getAllHeaders();
+  			//takes apart the headers of the response and returns the fdx_login cookie if present
+  			String full_cookies = "";
+  			for (Header Header : Headers) {
+  				if (Header.getName().contentEquals("Set-Cookie") && " SMIDENTITY fcl_contactname fdx_login fcl_fname fcl_uuid ".contains(Header.getValue())) {
+  					String Header_String = Header.toString();
+  					String CookieName = Header_String.substring(Header_String.indexOf(" ") + 1, Header_String.indexOf("="));
+  					String CookieValue = Header_String.substring(Header_String.indexOf("=") + 1, Header_String.indexOf(";"));
+  					full_cookies += Header.toString();
+  					//Helper_Functions.PrintOut(CookieName + "  " + CookieValue, false);   //for debug
+  					WebDriver_Functions.SetCookieValue(CookieName, CookieValue);
+  				}
+  			}
+  			
+  			return full_cookies;
   		}catch (Exception e){
-  			e.printStackTrace();
+  			//e.printStackTrace();
   			return null;
   		}
   	}

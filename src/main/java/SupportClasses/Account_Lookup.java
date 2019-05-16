@@ -28,12 +28,11 @@ import Data_Structures.Account_Data;
 
 public class Account_Lookup extends Helper_Functions{
 	static String LevelToTest = "236";
-	static Account_Data AllAddresses[];
+	static Account_Data AllAddresses[] = Environment.getAddressDetails();
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelToTest);
-		AllAddresses = Environment.getAddressDetails();
 	}
 	
 	@AfterClass
@@ -463,6 +462,9 @@ public class Account_Lookup extends Helper_Functions{
 				return null;
 			}else {
   				//check and add the region and country name
+				if (AllAddresses == null) {
+					AllAddresses = Environment.getAddressDetails();
+				}
 				for (Account_Data Address: AllAddresses) {
 					boolean Billing = false, Shipping = false;
 					if (!Billing && Address != null && Address.Billing_Country_Code.contentEquals(AccountDetails[countrycode][2])) {

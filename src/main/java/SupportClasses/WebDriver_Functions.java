@@ -18,8 +18,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-
 import Data_Structures.Enrollment_Data;
+import USRC_Application.USRC_API_Endpoints;
 
 public class WebDriver_Functions{
 	
@@ -604,6 +604,12 @@ public class WebDriver_Functions{
 		return null;
 	}
 	
+	public static void SetCookieValue(String Name, String Value){
+		org.openqa.selenium.Cookie cookie;
+		cookie = new org.openqa.selenium.Cookie(Name , Value);
+		DriverFactory.getInstance().getDriver().manage().addCookie(cookie);
+	}
+	
 	public static String GetCurrentURL() {
 		return DriverFactory.getInstance().getDriver().getCurrentUrl();
 	}
@@ -665,7 +671,7 @@ public class WebDriver_Functions{
 	}
 
 	public static boolean Login(String UserName, String Password) throws Exception {
-		return Login(UserName, Password, "WFCLWIDMAEM");
+		return Login(UserName, Password, "WFCLWIDMAEMUSRC");
 	}
 	
     public static boolean Login(String UserName, String Password, String Application) throws Exception {
@@ -680,6 +686,20 @@ public class WebDriver_Functions{
     	
     	//navigate to US home page and clear cookies.
     	ChangeURL("HOME", "US", true);
+    	
+    	if (Application.contains("USRC")) {
+    		try{
+    			//try to login from the USRC API call
+    			USRC_API_Endpoints.Login_API_Load_Cookies(UserName, Password);
+    			if (GetCookieValue("fcl_uuid") == null) {
+        			throw new Exception("Not able to login through USRC call");
+        		}
+    			Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
+    	    	return true;
+    		}catch(Exception e){
+    			Helper_Functions.PrintOut(e.getMessage(), true);
+    		}
+    	}
     	
     	if (Application.contains("WFCL")) {
     		try{
