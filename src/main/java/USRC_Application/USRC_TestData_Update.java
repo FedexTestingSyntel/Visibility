@@ -22,7 +22,7 @@ import ADMC_Application.ADMC_API_Endpoints;
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "236"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -89,9 +89,7 @@ public class USRC_TestData_Update {
 		
 		Helper_Functions.PrintOut(Test);
 	}
-	
-	
-	
+
 	@Test (dataProvider = "dp", enabled = true)
 	public void CheckLogin(String Level, String UserID, String Password) {
 		Environment.getInstance().setLevel(Level);

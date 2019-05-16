@@ -56,7 +56,6 @@ public class WCRV_SmokeTest{
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "EXPORT", 1});
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "IMPORT", 1});
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "THIRD_PARTY", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "ANY", 4});
 		    					break;
 		    				}
 		    			}
@@ -71,7 +70,6 @@ public class WCRV_SmokeTest{
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "EXPORT", 1});
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "IMPORT", 1});
 		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "THIRD_PARTY", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, "ANY", 4});
 		    					break;
 		    				}
 		    			}
@@ -79,10 +77,12 @@ public class WCRV_SmokeTest{
 		    	break;
 		    	case "WCRV_Help_Link":
 		    		UD = Environment.Get_UserIds(intLevel);
-		    		for (int k = 0; k < UD.length; k++) {
-		    			if (UD[k].WCRV_ENABLED.contains("T")) {
-		    				data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
-		    				break;
+		    		for (int j = 0; j < CountryList.length; j++) {
+		    			for (int k = 0; k < UD.length; k++) {
+		    				if (UD[k].WCRV_ENABLED.contains("T")) {
+		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0]});
+		    					break;
+		    				}
 		    			}
 		    		}
 		    	break;
@@ -113,36 +113,17 @@ public class WCRV_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void WCRV_Help_Link(String Level, String UserId, String Password) {
+	public void WCRV_Help_Link(String Level, String UserId, String Password, String CountryCode) {
 		try {
-			String Working = "", NotWorking = "", NotEnabled = "";
 			WebDriver_Functions.Login(UserId, Password);
-			
-    		for (int j = 0; j < CountryList.length; j++) {
-    	 		//updated on March 2019 after apac being added
-    	 		String ECRV_ENABLED_COUNTRIES_LOCALE= "es_AR,en_AR,en_AW,de_AT,en_AT,en_BS,en_BB,en_BM,en_BQ,pt_BR,en_BR,en_VG,en_KY,es_CL,en_CL,es_CO,en_CO,en_CW,da_DK,en_DK,es_DO,en_DO,en_EE,en_FI,fi_FI,de_DE,en_DE,en_GD,fr_GP,en_GP,it_IT,en_IT,en_JM,en_LV,en_LT,fr_MQ,en_MQ,en_NO,no_NO,en_PL,pl_PL,es_ES,en_ES,en_KN,en_LC,en_SX,en_VC,sv_SE,en_SE,en_TT,en_TC,es_UY,en_UY,en_VI,es_VE,en_VE,en_BE,fr_BE,nl_BE,es_CR,en_CR,cs_CZ,en_CZ,fr_FR,en_FR,es_GT,en_GT,en_HU,hu_HU,en_LU,nl_NL,en_NL,es_PA,en_PA,sl_SI,en_SI,en_CH,de_CH,fr_CH,it_CH,fr_CA,en_CA,en_IE,en_GB,en_MX,es_MX,en_BH,en_IN,en_KW,en_AE,ar_AE,en_BW,en_MW,en_MZ,en_NA,en_ZA,en_SZ,en_ZM,en_US,es_US,en_PR,es_PR,en_AU,zh_CN,en_CN,en_GU,tc_HK,en_HK,zh_HK,ja_JP,en_JP,en_MO,en_MY,en_NZ,en_PH,en_SG,ko_KR,en_KR,tc_TW,en_TW,zh_TW,en_TH,th_TH,en_VN,en_ID,";
-    	 		if (ECRV_ENABLED_COUNTRIES_LOCALE.contains(CountryList[j][0] + ",")) {
-        			boolean Help_Present = WCRV_Functions.WCRV_Check_Help_Links(CountryList[j][0], UserId, Password);
-        			if (Help_Present) {
-        				Working += CountryList[j][0] + ", ";
-        				Helper_Functions.PrintOut(CountryList[j][0] + " Working", false);
-        			}else {
-        				NotWorking += CountryList[j][0] + ", ";
-        				Helper_Functions.PrintOut(CountryList[j][0] + " help page not loading correctly", false);
-        			}
-    	 		}else {
-    	 			NotEnabled+= CountryList[j][0] + ", ";
-    	 		}
 
-    		}
-			
-    		Helper_Functions.PrintOut("   Countries with working help pages: " + Working, false);
-    		Helper_Functions.PrintOut("   Countries with incorrect help pages: " + NotWorking, false);
-    		Helper_Functions.PrintOut("   Countries skipped as not enabled for WCRV: " + NotEnabled, false);
-    		if (NotWorking != "") {
-    			Assert.fail("Countries with incorrect help pages: " + NotWorking);
-    		}
-    		
+        	boolean Help_Present = WCRV_Functions.WCRV_Check_Help_Links(CountryCode, UserId, Password);
+        	if (Help_Present) {
+        		Helper_Functions.PrintOut(CountryCode + " Working", false);
+        	}else {
+        		Helper_Functions.PrintOut(CountryCode + " help page not loading correctly", false);
+        		throw new Exception (CountryCode + " help page not loading correctly");
+        	}
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

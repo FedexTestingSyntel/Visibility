@@ -48,7 +48,7 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.Type(By.name("city1"), Account_Info.Billing_City);
 		}
 
-		if (Account_Info.Billing_State != "" && WebDriver_Functions.isPresent(By.name("state"))){
+		if (Account_Info.Billing_State_Code != "" && WebDriver_Functions.isPresent(By.name("state"))){
 			try {
 				//for the legacy registration page such as WDPA the code must be entered as text
 				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_State_Code);
@@ -1178,17 +1178,17 @@ public class WFCL_Functions_UsingData{
 	
 	public static String[] WFCL_Rewards_AEM_Link(String CountryCode, String LanguageCode) throws Exception{
  		try {
- 			WebDriver_Functions.ChangeURL("WFCL_REWARDS_CONFIRMATION", CountryCode, LanguageCode, true);
+ 			String ConfirmationLink = WebDriver_Functions.ChangeURL("WFCL_REWARDS_CONFIRMATION", CountryCode, LanguageCode, true);
  			
  			//Check the "Go to My FedEx Rewards" link
  			WebDriver_Functions.WaitPresent(By.xpath("/html/body/div[2]/div/div/div[2]/div[5]/div/a"));
  			String RewardsLink = WebDriver_Functions.getURLByhref(By.xpath("/html/body/div[2]/div/div/div[2]/div[5]/div/a"));
  			
- 			String ExpectedURL = WebDriver_Functions.ChangeURL("WFCL_REWARDS_PAGE", CountryCode, true);
+ 			String ExpectedURL = WebDriver_Functions.ChangeURL("WFCL_REWARDS_PAGE", CountryCode, false);
  			
  			assertThat(ExpectedURL, CoreMatchers.containsString(RewardsLink));
  			
-		    return new String[] {CountryCode, RewardsLink};
+		    return new String[] {CountryCode, LanguageCode, ConfirmationLink};
  		}catch (Exception e) {
  			throw e;
  		}
@@ -1196,15 +1196,15 @@ public class WFCL_Functions_UsingData{
 	
 	public static String[] WFCL_Rewards_Logout(String CountryCode, String LanguageCode, User_Data User_Info) throws Exception{
  		try {
- 			
- 			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
  			WebDriver_Functions.ChangeURL("WFCL_REWARDS_CONFIRMATION", CountryCode, true);
- 			WebDriver_Functions.ChangeURL("WFCL_REWARDS_PAGE", CountryCode, true);
- 			String LogoutJsPUrl = WebDriver_Functions.ChangeURL("LOGOUT_JSP", CountryCode, LanguageCode, true);
+ 			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
+ 			WebDriver_Functions.ChangeURL("WFCL_REWARDS_CONFIRMATION", CountryCode, false);
+ 			WebDriver_Functions.ChangeURL("WFCL_REWARDS_PAGE", CountryCode, false);
+ 			String LogoutJsPUrl = WebDriver_Functions.ChangeURL("LOGOUT_JSP", CountryCode, LanguageCode, false);
  			
  			String CurrentURL = WebDriver_Functions.GetCurrentURL();
  			Helper_Functions.PrintOut("Current URL is: " + CurrentURL);
- 			String ExpectedURL = WebDriver_Functions.ChangeURL("HOME", CountryCode, LanguageCode, true);
+ 			String ExpectedURL = WebDriver_Functions.ChangeURL("HOME", CountryCode, LanguageCode, false);
  			
  			assertThat(CurrentURL, CoreMatchers.containsString(ExpectedURL));
  			String UUID = WebDriver_Functions.GetCookieUUID();

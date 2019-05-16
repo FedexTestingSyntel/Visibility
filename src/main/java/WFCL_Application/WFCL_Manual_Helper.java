@@ -17,7 +17,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_Manual_Helper{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "6";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -46,7 +46,7 @@ public class WFCL_Manual_Helper{
 		    		//
 		    		
 
-		    		data.add( new Object[] {Level, "700233448"}); 
+		    		data.add( new Object[] {Level, "642893688"}); 
 		    		break;
 		    	case "AccountRegistration_FDDT":
 		    		/*
@@ -92,7 +92,7 @@ public class WFCL_Manual_Helper{
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_INET_Test(String Level, String Account){
 		try {
-			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
 			//Account_Info.UserId = "L3WFCLUSERID01";
@@ -110,7 +110,7 @@ public class WFCL_Manual_Helper{
 	@Test(dataProvider = "dp", priority = 1, enabled = false)
 	public void AccountRegistration_Take_Account_Online(String Level, String Account){
 		try {
-			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
@@ -128,7 +128,7 @@ public class WFCL_Manual_Helper{
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_Captcha_Test(String Level, String Account){
 		try {
-			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
 			//start the test by entering captcha url and inputting data	
@@ -144,7 +144,7 @@ public class WFCL_Manual_Helper{
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_FDDT(String Level, String Account){
 		try {
-			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "FDDT" + Account + "N");
 			Account_Info.UserId = "L6Account" + Account;
@@ -162,7 +162,7 @@ public class WFCL_Manual_Helper{
 	@Test(dataProvider = "dp", priority = 1, enabled = false)
 	public void Link_Account_To_Specific_User(String Level, User_Data User_Info, String Account_Number){
 		try {
-			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account_Number, Level, "FX");
+			Account_Data Account_Info = Account_Lookup.Account_Details(Account_Number, Level);
 			String Result[] = WFCL_Functions_UsingData.Account_Linkage(User_Info, Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
@@ -173,7 +173,7 @@ public class WFCL_Manual_Helper{
 	@Test(dataProvider = "dp", enabled = false)
 	public void WFCL_Rewards_Registration(String Level, String Account) {
 		try {
-			Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+			Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "Rewards" + Account + "N");
 			Account_Data.Print_Account_Address(Account_Info);
@@ -189,7 +189,7 @@ public class WFCL_Manual_Helper{
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void AccountRegistration_MultiAccount_Reg(String Level, String Account){
 			try {
-				Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails(Account, Level, "FX");
+				Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 				Account_Data.Set_Dummy_Contact_Name(Account_Info);
 				Account_Data.Set_UserId(Account_Info, "L" + Level + "MAGIC" + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
 				//create user id and link to account number.

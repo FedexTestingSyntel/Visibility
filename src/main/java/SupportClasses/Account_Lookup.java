@@ -1,8 +1,8 @@
 package SupportClasses;
 
+import java.lang.reflect.Method;
 import java.text.Normalizer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -17,23 +17,23 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.junit.AfterClass;
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import Data_Structures.Account_Data;
 
-@Listeners(SupportClasses.TestNG_TestListener.class)
+//import org.testng.annotations.Listeners;
+//@Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Account_Lookup extends Helper_Functions{
-	static String LevelToTest = "6";
-	static Account_Data AllAddresses[] = Environment.getAddressDetails();
+	static String LevelToTest = "236";
+	static Account_Data AllAddresses[];
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelToTest);
+		AllAddresses = Environment.getAddressDetails();
 	}
 	
 	@AfterClass
@@ -41,47 +41,51 @@ public class Account_Lookup extends Helper_Functions{
 		AllAddresses = null;
 	}
 	
-	
-	@DataProvider //(parallel = true)
-	public static Iterator<Object[]> dp() {
+	@DataProvider (parallel = true)
+	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		
-		//String AccountsNumbers[] = new String[] {"761391380", "761391500", "761391640", "761391720", "761391780", "761391860"};
-		//String AccountsNumbers[] = new String[] {"642531069", "642141724", "642141740", "642531565", "642531581", "642531603", "642531620", "642569147", "642569163", "642141783", "642141805", "642141821", "642142240", "642142267", "642142283", "642569309", "642569325", "642569341", "642569368", "642569384", "642569406", "642304305", "642304321", "642304348", "642142364", "642142380", "642142402", "642304542", "642304569", "642304585", "642304623", "642304640", "642304666", "642570048", "642570064", "642570080", "642143000", "642143026", "642143042", "642570102", "642570129", "642570145", "642009567", "642009583", "642009605", "642304682", "642304704", "642304720", "642304747", "642304763", "642304780", "642009508", "642009524", "642009540", "642304801", "642304828", "642304844", "642304887", "642304909", "642304925", "642304941", "642304968", "642304984", "642305000", "642305026", "642305042", "642305069", "642305085", "642305107", "642211544", "642211560", "642211587", "642211641", "642211668", "642211684", "642211706", "642211722", "642211749", "642211781", "642211803", "642211820", "642211846", "642211862", "642211889", "642211900", "642211927", "642211943", "642211960", "642211986", "642212001", "642212109", "642212125", "642212141", "642212044", "642212060", "642212087", "642212206", "642212222", "642212249", "642212265", "642212281", "642212303", "642212362", "642212389", "642212400", "642212427", "642212443", "642212460", "642212486", "642212508", "642212524", "642212567", "642212583", "642212605", "642212621", "642212648", "642212664", "642212702", "642212729", "642212745", "642212761", "642212788", "642212800", "642212826", "642212842", "642212869", "642455621", "642455648", "642455664", "642455680", "642455702", "642455729", "642455745", "642455761", "642455788", "642455826", "642455842", "642455869", "642455966", "642455982", "642456008", "642456024", "642456040", "642456067", "642456083", "642456105", "642456121", "642456148", "642456164", "642456180", "642456229", "642456245", "642456261", "642456300", "642456326", "642456288", "642456342", "642456369", "642456385", "642456440", "642456466", "642456482", "642456504", "642456520", "642456547", "642456563", "642494104", "642494120", "642494163", "642494180", "642494201", "642494228", "642494244", "642494260", "642494309", "642494325", "642494341", "642494384", "642494406", "642494422", "642494449", "642494465", "642494481", "642494503", "642494520", "642494546", "642494562", "642494589", "642494600", "642494627", "642494643", "642494660", "642494686", "642494708", "642494724", "642537407", "642537423", "642537440", "642537482", "642537504", "642537520", "642537547", "642537563", "642537580", "642537601", "642537628", "642537644", "642097903", "642097920", "642097946", "642097962", "642097989", "642098004", "642098020", "642098047", "642098063", "642098080", "642098101", "642098128", "642098144", "642098160", "642098187", "642098209", "642098225", "642098241", "642098268", "642098284", "642098306", "642098322", "642098349", "642098365", "642305140", "642305166", "642305182", "642098381", "642098403", "642098420", "642098446", "642098462", "642098489", "642098500", "642098527", "642098543", "642098560", "642098586", "642098608", "642098624", "642098640", "642098667", "642098683", "642098705", "642098721", "642098748", "642098764", "642098780", "642098802", "642136380", "642136402", "642136429", "642136445", "642136461", "642136488", "642136500", "642136526", "642136542", "642136569", "642136585", "642136607", "642136623", "642136640", "642136666", "642136682", "642136704", "642136720", "642136747", "642136763", "642136780", "642136801", "642136828", "642136844", "642136860", "642136887", "642136909", "642136925", "642136941", "642136968", "642136984", "642137000", "642137026", "642137042", "642137069", "642137085", "642137107", "642137123", "642137140", "642137166", "642137182", "642137204", "642137220", "642137247", "642137263", "642137280", "642137301", "642137328", "642137344", "642137360", "642137387", "642137409", "642137425", "642305204", "642305220", "642305247", "642137565", "642137581", "642137603", "642137620", "642137646", "642137662", "642137689", "642137700", "642137727", "642137743", "642137760", "642137786", "642137824", "642137840", "642137867", "642137883", "642137905", "642137921", "642137948", "642137964", "642137980", "642138006", "642138022", "642138049", "642138065", "642138081", "642138103", "642305263", "642305280", "642305301", "642138464", "642138480", "642138502", "642138529", "642138545", "642138561", "642138588", "642138600", "642138626", "642138642", "642138669", "642138685", "642138707", "642138723", "642138740", "642138766", "642138782", "642138804", "642138820", "642138847", "642138863", "642138880", "642176404", "642176420", "642305328", "642305344", "642305360", "642176447", "642176463", "642176480", "642176501", "642176528", "642176544", "642176560", "642176587", "642176609", "642176625", "642176641", "642176668", "642142941", "642142968", "642142984", "642142887", "642142909", "642142925", "642176684", "642176706", "642176722", "642176749", "642176765", "642176781", "642176803", "642176820", "642176846", "642176862", "642176889", "642176900", "642176927", "642176943", "642176960", "642176986", "642177001", "642177028", "642177044", "642177060", "642177087", "642177109", "642177125", "642177141", "642305387", "642305409", "642305425", "642143069", "642143085", "642143107", "642143166", "642143182", "642143204", "642305441", "642305468", "642305484", "642177400", "642177427", "642177443", "642305506", "642305522", "642305549", "642177460", "642177486", "642177508", "642177524", "642177540", "642177567", "642177583", "642177605", "642177621", "642177648", "642177664", "642177680", "642177702", "642177729", "642177745", "642305565", "642305581", "642305603", "642305646", "642305662", "642305689", "642177761", "642177788", "642177800", "642177826", "642177842", "642177869", "642177885", "642177907", "642177923", "642177940", "642177966", "642177982", "642178008", "642178024", "642178040", "642306065", "642306081", "642306103", "642178067", "642178083", "642178105", "642178121", "642178148", "642178164", "642178180", "642178202", "642178229", "642178245", "642178261", "642178288", "642306120", "642306146", "642306162", "642178300", "642178326", "642178342", "642306308", "642306324", "642306340", "642142763", "642142780", "642142801", "642142682", "642142704", "642142720", "642142623", "642142640", "642142666", "642142569", "642142585", "642142607", "642178369", "642178385", "642178407", "642142500", "642142526", "642142542", "642178423", "642178440", "642178466", "642142445", "642142461", "642142488", "642178547", "642178563", "642178580", "642306367", "642306383", "642306405", "642178601", "642178628", "642178644", "642178660", "642178687", "642178709", "642142305", "642142321", "642142348", "642306421", "642306448", "642306464", "642177346", "642177362", "642177389", "642306480", "642344005", "642344021", "642177281", "642177303", "642177320", "642177222", "642177249", "642177265", "642177168", "642177184", "642177206"};
+		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
+			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
+			//int intLevel = Integer.parseInt(Level);
+			Account_Data Existing_Account_Numbers[] = Environment.getAccountDetails(Level);
+			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
+    			case "AccountCheck":
+    				String AccountsNumbers[] = ParsedAcconts("768459240, 768459320, 768459380, 768459460, 768459720, 768459800, 768459860, 768459940, 768460000, 768460060");
 
-		String AccountsNumbers[] = new String[] {"00106606", "00107100", "00117014", "00121122", "00122636", "00125171", "00127433", "00127886", "00139333", "00146834", "100707810", "10107016", "101229645", "101240002", "101371271", "102005058", "102887905", "103186692", "104212000", "10435585", "20147363", "20180228", "204838895", "208686070", "213243020", "21340653", "216137620", "217772257", "219301260", "226274545", "300444946", "300592252", "30102833", "301197713", "301666837", "302216878", "303041427", "304836210", "307071550", "311314394", "400119775", "400162913", "401063200", "401143076", "40338185", "404547437", "40522311", "405245957", "405517965", "405638452" };
-
-		AccountsNumbers = ParsedAcconts("700378055, 700378071, 700378098, 700378438, 700378454, 700378470,  700378950, 700378977, 700378993, 700416275, 700416291, 700416313, 700416690, 700416739, 700416755, 700417212, 700417239, 700417255, 700417972, 700417999, 700418006, 700418332, 700418359, 700418375, 700456196, 700456218, 700456234, 700456617, 700456633, 700456650, 700456994, 700457010, 700457036, 700457494, 700457516, 700457532,, 700457877, 700457893, 700457915, 700458296, 700458318, 700458334, 700495710, 700495736, 700495752, 700496139, 700496155, 700496171, 700496511, 700496538, 700496554, 700496953, 700496970, 700496996, 700497330, 700497356, 700497372, 700497798, 700497810, 700497836, 700535738, 700535770, 700535835, 700536955, 700536971, 700536998, 700536670, 700536696, 700536718, 700537412, 700537439, 700537455, 700537099, 700537110, 700537137, ");
-		//AccountsNumbers = new String[] {"202857388", "393725842", "267425043", "463704660", "519906368", "303577319", "189628862", "283034747", "270073077", "265071074", "267751013", "248337451", "231965173", "178358723", "909557208", "610957803", "913640888", "830294309", "982677955", "324112693", "548354447", "762570629", "317649355", "521680121", "812591428", "573649028", "357255031", "128889256", "749668369", "436790481", "268712437", "891834594", "338982488", "267599939", "594800168", "775292741", "813401029", "693230241", "717176065", "266652470", "358970001", "181517042", "591381482", "635878703", "690186683", "997557638", "809853527", "661201126", "127136181", "163373963", "358013244", "341091594", "815116704", "217082390", "266934599", "312225719", "233986259", "448593347", "274965274", "658435566", "269682272", "398819284", "324822356", "119943639", "641445983", "642335928", "192943710", "261849313", "309207378", "303048871", "331621587", "283024237", "389939609", "540823367", "150514908", "439624663", "262951499", "480794761", "585001902", "136357930", "168228147", "326152552", "124699797", "122253120", "339854777", "482492924", "204897077", "471923060", "239421296", "471161578", "239808115", "465438061", "168022824", "296815594", "459252762", "191500563", "133636110", "448452743", "193217290", "243047935", "500118563", "367897406", "279135113", "143892433", "294661077", "490956387", "327260901", "166529131", "355446263", "366377743", "308205274", "231521232", "995917912", "204180474", "149891722", "338008643", "265945627", "119726441", "368322830", "215894215", "343914865", "640361069", "194242689", "252289259", "334452913", "246824118", "542241101", "320404886", "222105811", "259846196", "349054205", "468316749", "262670333", "246765219", "296993565", "126653476", "223557953", "460812887", "343577494", "162816403", "163277123", "299209458", "233336513", "120664328", "497272866", "453455645", "359087608", "261289474", "349058219", "863135583", "158939304", "175428445", "198132543", "748728961", "345033157", "869391344", "762065622", "539495704", "181083565", "269480602", "607773505", "880692976", "224101910", "213403788", "741364522", "645686624", "508757263", "477468608", "273456678", "252963669", "884867959", "131009666", "137146703", "649590486", "168477929", "123593766", "348844725", "261485095", "451906305", "355251322", "226613323", "619908422", "520132503", "198983608", "332083767", "641181129", "164136604", "269054255", "599084584", "372821205", "541185941", "262700453", "296436062", "367100060", "429446481", "154630287", "269965932", "320257220", "362756332", "325665360", "271719779", "128420924", "265681735", "783711966", "272699771", "448049523", "196943390", "345087427", "207924644", "128656510", "221572629", "192332605", "263294408", "189988346", "429963761", "232716525", "698000481", "726801363", "228789623", "302518645", "338945477", "307088690", "556073864", "536900403", "237244265", "111146730", "752044627", "193195946", "577961905", "123589327", "145459109", "388414014", "339272735", "337812899", "316071775", "227735325"};
-		
-		Account_Data Data[] = Environment.getAccountDetails(LevelToTest);
-		String AccountsAlreadyPresent = "", PendingAdd = "{\"";
-		for (int i = 0; i < Data.length - 1; i++) {
-			AccountsAlreadyPresent+= Data[i].Account_Number + " ";
-		}
-		for (String S: AccountsNumbers) {
-			if (!AccountsAlreadyPresent.contains(S)) {
-				data.add( new Object[] {LevelToTest, S});
-				PendingAdd+= S + "\", \"";
+    				String AccountsAlreadyPresent = "", PendingAdd = "{\"";
+    				for (int j = 0; j < Existing_Account_Numbers.length - 1; j++) {
+    					AccountsAlreadyPresent+= Existing_Account_Numbers[j].Account_Number + " ";
+    				}
+    				for (String S: AccountsNumbers) {
+    					if (!AccountsAlreadyPresent.contains(S)) {
+    						data.add( new Object[] {LevelToTest, S});
+    						PendingAdd+= S + "\", \"";
+    					}
+    				}	
+    				PrintOut(data.size() + "\n" + PendingAdd, false);
+    				break;
+    			case "Update_Account_Details":	
+    				for (int j = 0; j < Existing_Account_Numbers.length - 1; j++) {
+    					if (Existing_Account_Numbers[j].FirstName.contentEquals("")) {
+    						data.add( new Object[] {Existing_Account_Numbers[j].Level, Existing_Account_Numbers[j].Account_Number});
+    					}
+    				}
+    				break;
 			}
-		}	
-		PrintOut(data.size() + "\n" + PendingAdd, false);
-
+		}
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", enabled = true)
+	@Test(dataProvider = "dp", enabled = false)
 	public static void AccountCheck(String Level, String Account_Number){
-		
-		//Helper_Functions.PrintOut("breakpoint", false);
 		try {
-			String AccountType = "FX"; //FDFR for freight, FX for express
-			Account_Data Account_Info[] = new Account_Data[] {Account_DataAccountDetails(Account_Number, Level, AccountType)};
-			Create_Accounts.writeAccountsToExcel(Account_Info);
+			Account_Data Account_Info[] = new Account_Data[] {Account_Details(Account_Number, Level)};
+			Account_Data.Write_Accounts_To_Excel(Account_Info, true);
 			
 			if (Account_Info[0].Level == "6") {
 				Account_Info[0].Level = "3";
-				Create_Accounts.writeAccountsToExcel(Account_Info);
+				Account_Data.Write_Accounts_To_Excel(Account_Info, true);
 			}
 			
 		} catch (Exception e) {
@@ -89,67 +93,28 @@ public class Account_Lookup extends Helper_Functions{
 		}
 	}
 	
-	@DataProvider (parallel = true)
-	public static Iterator<Object[]> dp_account() {
-		List<Object[]> data = new ArrayList<Object[]>();
-		String All_Levels = "1234567";
-		for (int i=0; i < All_Levels.length(); i++) {
-			String Level = String.valueOf(All_Levels.charAt(i));
-			Account_Data Data[] = Environment.getAccountDetails(Level);
-			Account_Data Address[] = Environment.getAddressDetails();
-			for (int j = 0; j < Data.length - 1; j++) {
-				if (Data[j].Billing_Region.contentEquals("")) {
-					data.add( new Object[] {Level, Data[j], Address});
-					break;
-				}
-			}	
-		}
-		return data.iterator();
-	}
-	
-	//will go through the account_numbers tab and add country name and country region where applicable.
-	//@Test(dataProvider = "dp_account", invocationCount = 100, enabled = false)
-	public static void Update_Account_Details(String Level, Account_Data Account_Info, Account_Data Address[]){
+	//this is a cleanup function. The goal is to go through all the account numbers from the test data sheet and make sure still present as well as update the values.
+	@Test(dataProvider = "dp", enabled = true)
+	public static void Update_Account_Details(String Level, String Account_Number){
 		try {
-			boolean BillingDone = false, ShippingDone = false;
-			for (Account_Data A: Address) {
-				if (Account_Info.Billing_Country_Code.contentEquals(A.Billing_Country_Code)) {
-					Account_Info.Billing_Country = A.Billing_Country;
-					Account_Info.Billing_Region = A.Billing_Region;
-					BillingDone = true;
-				}
-				if (Account_Info.Shipping_Country_Code.contentEquals(A.Shipping_Country_Code)) {
-					Account_Info.Shipping_Country = A.Shipping_Country;
-					Account_Info.Shipping_Region = A.Shipping_Region;
-					ShippingDone = true;
-				}
-				if (BillingDone && ShippingDone) {
-					break;
-				}
-			}
-
-			String AccountUpdate[][] = {{"Billing_Country_Code", Account_Info.Billing_Country_Code},//index 0 and set below
-					{"Billing_Region", Account_Info.Billing_Region},
-					{"Billing_Country", Account_Info.Billing_Country},
-					{"Shipping_Region", Account_Info.Shipping_Region}, 
-					{"Shipping_Country", Account_Info.Shipping_Country}};
-
-			String FileName = Helper_Functions.DataDirectory + "\\AddressDetails.xls";
-			boolean updatefile = Helper_Functions.WriteToExcel(FileName, "Account_Numbers", AccountUpdate, 0);
-			Helper_Functions.PrintOut("Account Details: " + Account_Info.Account_Number + " " + Account_Info.Billing_Country_Code + " " + Account_Info.Billing_Region, true);
-			if (!updatefile) {
-				Assert.fail("Not able to update file.");
-			}
+			Account_Data Account_Info[] = new Account_Data[] {Account_Details(Account_Number, Level)};
+			boolean updated = Account_Data.Write_Accounts_To_Excel(Account_Info, false);
+			Assert.assertTrue(updated);
 		} catch (Exception e) {
-			Assert.fail(e.getMessage());
+			Assert.fail("Cannot retrieve details");
 		}
 	}
 	
-	//def
-	public static Account_Data Account_DataAccountDetails(String AccountNumber, String Level){
-		return Account_DataAccountDetails(AccountNumber, Level, "FX");
+	public static Account_Data Account_Details(String AccountNumber, String Level){
+		Account_Data Account_Info = new Account_Data();
+		Account_Info.Account_Number = AccountNumber;
+		Account_Info.Level = Level;
+		Account_Info = Account_Data_Address_Lookup(Account_Info);
+		Account_Info = Account_Data_CreditDetail_Lookup(Account_Info);
+		Account_Data.Print_Account_Address(Account_Info);
+		return Account_Info;
 	}
-	
+	/*
 	public static Account_Data Account_DataAccountDetails(String AccountNumber, String Level, String AccountType){
 		Account_Data Account_Details = new Account_Data();
 		String Streetline1 = "", Streetline2 = "", City ="", State ="", StateCode = "", postalCode = "", countryCode = "", areaCode = "", phoneNumber = "";
@@ -362,6 +327,8 @@ public class Account_Lookup extends Helper_Functions{
  		}
  	}
 	
+	*/
+	
 	public static String[] ParsedAcconts(String AccountNumbers) {
 		AccountNumbers = AccountNumbers.replaceAll(",", "");
 		AccountNumbers = AccountNumbers + " ";
@@ -375,33 +342,24 @@ public class Account_Lookup extends Helper_Functions{
 		return stringArray;
 	}
 	
-	@Test
-	public void ASDFASDF() {
-		Account_Data Account_Info = new Account_Data();
-		Account_Info.Account_Number = "92053064";
-		Account_Info.Level = "L3";
-		Account_Info = Account_Data_Address_Lookup(Account_Info);
-		Account_Info = Account_Data_CreditDetail_Lookup(Account_Info);
-		Account_Data.Print_Account_Address(Account_Info);
-	}
-	
 	public static Account_Data Account_Data_Address_Lookup(Account_Data Account_Info){
   		try{
-  			HttpClient httpclient = HttpClients.createDefault();
   			HttpPost httppost = new HttpPost("http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp");
 
   			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
   			httppost.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
 
   			String OpCo[] = new String[] {"FX", "FDFR"};
-  			String Level = Account_Info.Level;
-  			if (Account_Info.Level.contains("L6")){
+  			String Level = "L" + Account_Info.Level;
+  			
+  			if (Level.contains("L6")){
   				PrintOut("Cannot see account numbers directly in L6, attempting in L3.", true);
   				Level = "L3";
-  			}else if (Account_Info.Level.contains("L7")){
+  			}else if (Level.contains("L7")){
   				PrintOut("Cannot see account numbers directly in LP, attempting in L4.", true);
   				Level = "L4";
   			}
+  			
   			
   			String SourceText = "";
   			for (int i = 0 ; i < 2; i++) {
@@ -414,20 +372,24 @@ public class Account_Lookup extends Helper_Functions{
   	  			urlParameters.add(new BasicNameValuePair("contactLevel", Level));
 
   	  			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
-  	  			HttpResponse Response = httpclient.execute(httppost);
   	  			
-  	  			HttpEntity entity = Response.getEntity();
-  	  			SourceText = EntityUtils.toString(entity, "UTF-8");
+  	  			HttpEntity entity = httppost.getEntity();
+  	  			String Request = EntityUtils.toString(entity, "UTF-8");
+  	  			String Response = General_API_Calls.HTTPCall(httppost, Request);	
+  	  			SourceText = Response;
   	  			
   	  			//if details not found try next OpCo
   	  			if (SourceText.contains("streetLine")) {
-  	  				//Helper_Functions.PrintOut(SourceText); //for debug
   	  				break;
+  	  			}else if (i == OpCo.length - 1) {
+  	  				Helper_Functions.PrintOut("Unable to find address details.");
   	  			}
   			}
   			
   			String start = "name = \"", end  = "\" value=\"";
-			String AccountDetails[][] = {{"streetline1", "streetLine>\">", ""}, 
+  			int shareId = 0, streetline1 = 1, streetline2 = 2, city = 3, statecode = 4, postalcode = 5, countrycode = 6, areacode = 7, phoneNumber = 8, language = 9, firstName = 10, lastName = 11; 
+			String AccountDetails[][] = {{"shareId", "shareId>\">", ""},
+					{"streetline1", "streetLine>\">", ""}, 
 					{"streetline2", "additionalLine1>\">", ""}, 
 					{"city", "geoPoliticalSubdivision2>\">", ""}, 
 					{"statecode", "geoPoliticalSubdivision3>\">", ""}, 
@@ -461,36 +423,38 @@ public class Account_Lookup extends Helper_Functions{
   				}
   				
   				//If the zip is greater then 5 and this is for US address then only return first 5 characters
-  				if (AccountDetails[4][2].length() > 5 && AccountDetails[5][2].contentEquals("US")){
-  					AccountDetails[4][2] = AccountDetails[4][2].substring(0, 5);
+  				if (AccountDetails[postalcode][2].length() > 5 && AccountDetails[countrycode][2].contentEquals("US")){
+  					AccountDetails[postalcode][2] = AccountDetails[postalcode][2].substring(0, 5);
 				}
   				
   	  			if (j == 0) {//shipping address
-  					Account_Info.Shipping_Address_Line_1 = AccountDetails[0][2];
-  					Account_Info.Shipping_Address_Line_2 = AccountDetails[1][2];
-  					Account_Info.Shipping_City = AccountDetails[2][2];
-  					Account_Info.Shipping_State_Code = AccountDetails[3][2];
-  					Account_Info.Shipping_Zip = AccountDetails[4][2];
-  					Account_Info.Shipping_Country_Code = AccountDetails[5][2];
-  					Account_Info.Shipping_Phone_Number = AccountDetails[6][2] + AccountDetails[7][2];
+  	  				Account_Info.Shipping_Share_Id = AccountDetails[shareId][2];
+  					Account_Info.Shipping_Address_Line_1 = AccountDetails[streetline1][2];
+  					Account_Info.Shipping_Address_Line_2 = AccountDetails[streetline2][2];
+  					Account_Info.Shipping_City = AccountDetails[city][2];
+  					Account_Info.Shipping_State_Code = AccountDetails[statecode][2];
+  					Account_Info.Shipping_Zip = AccountDetails[postalcode][2];
+  					Account_Info.Shipping_Country_Code = AccountDetails[countrycode][2];
+  					Account_Info.Shipping_Phone_Number = AccountDetails[areacode][2] + AccountDetails[phoneNumber][2];		
   				}else {//billing address
-  					Account_Info.Billing_Address_Line_1 = AccountDetails[0][2];
-  					Account_Info.Billing_Address_Line_2 = AccountDetails[1][2];
-  					Account_Info.Billing_City = AccountDetails[2][2];
-  					Account_Info.Billing_State_Code = AccountDetails[3][2];
-  					Account_Info.Billing_Zip = AccountDetails[4][2];
-  					Account_Info.Billing_Country_Code = AccountDetails[5][2];
-  					Account_Info.Billing_Phone_Number = AccountDetails[6][2] + AccountDetails[7][2];
+  					Account_Info.Billing_Share_Id = AccountDetails[shareId][2];
+  					Account_Info.Billing_Address_Line_1 = AccountDetails[streetline1][2];
+  					Account_Info.Billing_Address_Line_2 = AccountDetails[streetline2][2];
+  					Account_Info.Billing_City = AccountDetails[city][2];
+  					Account_Info.Billing_State_Code = AccountDetails[statecode][2];
+  					Account_Info.Billing_Zip = AccountDetails[postalcode][2];
+  					Account_Info.Billing_Country_Code = AccountDetails[countrycode][2];
+  					Account_Info.Billing_Phone_Number = AccountDetails[areacode][2] + AccountDetails[phoneNumber][2];
   				}
-  	  			
-  	  			if (!AccountDetails[8][2].contentEquals("")) {
-  	  				Account_Info.LanguageCode = AccountDetails[8][2];
+
+  	  			if (!AccountDetails[language][2].contentEquals("")) {
+  	  				Account_Info.LanguageCode = AccountDetails[language][2];
   	  			}
-  	  			if (!AccountDetails[9][2].contentEquals("")) {
-	  				Account_Info.FirstName = AccountDetails[9][2];
+  	  			if (!AccountDetails[firstName][2].contentEquals("")) {
+	  				Account_Info.FirstName = AccountDetails[firstName][2];
 	  			}
-  	  			if (!AccountDetails[10][2].contentEquals("")) {
-  	  				Account_Info.LastName = AccountDetails[10][2];
+  	  			if (!AccountDetails[lastName][2].contentEquals("")) {
+  	  				Account_Info.LastName = AccountDetails[lastName][2];
   	  			}
 			}
 
@@ -501,12 +465,12 @@ public class Account_Lookup extends Helper_Functions{
   				//check and add the region and country name
 				for (Account_Data Address: AllAddresses) {
 					boolean Billing = false, Shipping = false;
-					if (!Billing && Address != null && Address.Billing_Country_Code.contentEquals(AccountDetails[5][2])) {
+					if (!Billing && Address != null && Address.Billing_Country_Code.contentEquals(AccountDetails[countrycode][2])) {
 						Account_Info.Billing_Region = Address.Billing_Region;
 	  					Account_Info.Billing_Country = Address.Billing_Country;
 	  					Billing = true;
 					}
-					if (!Shipping && Address != null && Address.Shipping_Country_Code.contentEquals(AccountDetails[5][2])) {
+					if (!Shipping && Address != null && Address.Shipping_Country_Code.contentEquals(AccountDetails[countrycode][2])) {
 						Account_Info.Shipping_Region = Address.Shipping_Region;
 	  					Account_Info.Shipping_Country = Address.Shipping_Country;
 	  					Shipping = true;

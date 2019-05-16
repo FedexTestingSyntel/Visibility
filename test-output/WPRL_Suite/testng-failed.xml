@@ -5,12 +5,11 @@
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   <test thread-count="8" name="WPRL_Test(failed)" parallel="methods">
-    <parameter name="Level" value="2"/>
+    <parameter name="Level" value="3"/>
     <classes>
       <class name="WPRL_Application.WPRL_SmokeTest">
         <methods>
           <include name="WPRL_AccountManagement_Passkey" invocation-numbers="0"/>
-          <include name="WPRL_ContactInfo_NonAdmin" invocation-numbers="0"/>
           <include name="WPRL_ContactInfo_Admin" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>

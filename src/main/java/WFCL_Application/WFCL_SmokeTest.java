@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "6";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -109,7 +109,6 @@ public class WFCL_SmokeTest{
 			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
 			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Info.Email = "accept@fedex.com";//to reduce spam emails.
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 			
@@ -138,7 +137,6 @@ public class WFCL_SmokeTest{
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
 			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
-			Account_Info.Email = "accept@fedex.com";//to reduce spam emails.
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			boolean InetFlag = WFCL_Functions_UsingData.INET_Registration(Account_Info);
@@ -158,7 +156,6 @@ public class WFCL_SmokeTest{
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "Inet" + Account_Info.Billing_Country_Code);
-			Account_Info.Email = "accept@fedex.com";//to reduce spam emails.
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			//register the user id to INET
@@ -188,7 +185,6 @@ public class WFCL_SmokeTest{
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "Wdpa" + Account_Info.Billing_Country_Code);
-			Account_Info.Email = "accept@fedex.com";//to reduce spam emails.
 			
 			String Result[] = WFCL_Functions_UsingData.WDPA_Registration(Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);

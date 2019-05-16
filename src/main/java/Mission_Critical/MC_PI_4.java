@@ -23,7 +23,7 @@ import WFCL_Application.WFCL_Functions_UsingData;
 public class MC_PI_4{
 	static String LevelsToTest = "6";
 	static String CountryList[][];
-	final boolean EnableCompleted = true;
+	final boolean EnableCompleted = false;
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -31,7 +31,7 @@ public class MC_PI_4{
 		CountryList = Environment.getCountryList("smoke");
 	}
 	
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -41,7 +41,7 @@ public class MC_PI_4{
 			String Rewards_APAC_AND_LAC[] = new String[] {"au", "cn", "hk", "jp", "my", "nz", "ph", "sg", "kr", "tw", "th", "br", "mx"};
 			String Rewards_APAC_AND_LAC_Lang[][] = new String[][] {{"au", "en"}, {"cn", "en"}, {"cn", "zh"}, {"hk", "en"}, {"hk", "zh"}, {"jp", "en"}, {"jp", "ja"}, {"my", "en"}, {"nz", "en"}, {"ph", "en"}, {"sg", "en"}, {"kr", "en"}, {"kr", "ko"}, {"tw", "en"}, {"tw", "zh"}, {"th", "en"}, {"th", "th"}, {"mx", "en"}, {"br", "en"}, {"mx", "es"}, {"br", "pt"}};
 			
-			//Rewards_APAC_AND_LAC = new String[] {"us"};
+			Rewards_APAC_AND_LAC = new String[] {"us"};
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WFCL_Rewards_Registration_APAC_AND_LAC":
 		    		for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
@@ -108,7 +108,7 @@ public class MC_PI_4{
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", description = "518325", enabled = false) ///483863
+	@Test(dataProvider = "dp", description = "518325", enabled = true) ///483863
 	public void WFCL_Rewards_Registration_APAC_AND_LAC(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
@@ -151,7 +151,7 @@ public class MC_PI_4{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "518318", enabled = EnableCompleted)
+	@Test(dataProvider = "dp", description = "518318", enabled = true)
 	public void WFCL_Rewards_AEM_Link(String Level, String CountryCode, String LanguageCode) {
 		try {
 

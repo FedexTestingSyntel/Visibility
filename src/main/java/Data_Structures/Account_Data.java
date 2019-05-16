@@ -21,6 +21,7 @@ public class Account_Data {
 	public String Shipping_Country_Code = "";
 	public String Shipping_Region = "";
 	public String Shipping_Country = "";
+	public String Shipping_Share_Id = "";
 	
 	//Billing Address
 	public String Billing_Address_Line_1 = "";
@@ -33,6 +34,7 @@ public class Account_Data {
 	public String Billing_Country_Code = "";
 	public String Billing_Region = "";
 	public String Billing_Country = "";
+	public String Billing_Share_Id = "";
 	
 	//Account Number
 	public String Account_Number = "";
@@ -58,7 +60,7 @@ public class Account_Data {
 	public String FirstName = "";
 	public String MiddleName = "";
 	public String LastName = "";
-	public String LanguageCode = "";
+	public String LanguageCode = "EN";
 	public String Email = "accept@testing.com";
 	
 	public String UserId = "";
@@ -222,6 +224,7 @@ public class Account_Data {
 		this.Secret_Answer = account_Info.Secret_Answer;
 		this.Secret_Question = account_Info.Secret_Question;
 		this.Password = account_Info.Password;
+		this.LanguageCode = account_Info.LanguageCode;
 	}
 	
 	public void Address_Overwrite(Account_Data account_Info) {
@@ -245,5 +248,66 @@ public class Account_Data {
 		this.Billing_Region = account_Info.Billing_Region;
 		this.Billing_Country = account_Info.Billing_Country;
 		this.Billing_Phone_Number = account_Info.Billing_Phone_Number;
+	}
+	
+	public static boolean Write_Accounts_To_Excel(Account_Data Account_Info[], boolean NewAccount) throws Exception{
+		String fileName = Helper_Functions.DataDirectory + "\\AddressDetails.xls", sheetName = "Account_Numbers"; 
+		
+		for(int i = 0; i < Account_Info.length; i++) {
+			String Details[][] = new String[][]{{"Level", Account_Info[i].Level},  ///this is hard coded and used below as position 0
+				{"Account_Number", Account_Info[i].Account_Number} ,   ///this is hard coded and used below as position 1
+				{"First_Name", Account_Info[i].FirstName}, 
+				{"Last_Name", Account_Info[i].LastName} ,
+				{"Shipping_Address_Line_1", Account_Info[i].Shipping_Address_Line_1} ,
+				{"Shipping_Address_Line_2", Account_Info[i].Shipping_Address_Line_2} ,
+				{"Shipping_City", Account_Info[i].Shipping_City} ,
+				{"Shipping_State", Account_Info[i].Shipping_State} ,
+				{"Shipping_State_Code", Account_Info[i].Shipping_State_Code} ,
+				{"Shipping_Phone_Number", Account_Info[i].Shipping_Phone_Number} ,
+				{"Shipping_Zip", Account_Info[i].Shipping_Zip} ,
+				{"Shipping_Country_Code", Account_Info[i].Shipping_Country_Code} ,
+				{"Shipping_Region", Account_Info[i].Shipping_Region} ,
+				{"Shipping_Country", Account_Info[i].Shipping_Country} ,
+				{"Shipping_Share_Id", Account_Info[i].Shipping_Share_Id} ,
+				{"Billing_Address_Line_1", Account_Info[i].Billing_Address_Line_1} ,
+				{"Billing_Address_Line_2", Account_Info[i].Billing_Address_Line_2} ,
+				{"Billing_City", Account_Info[i].Billing_City} ,
+				{"Billing_State", Account_Info[i].Billing_State} ,
+				{"Billing_State_Code", Account_Info[i].Billing_State_Code} ,
+				{"Billing_Phone_Number", Account_Info[i].Billing_Phone_Number} ,
+				{"Billing_Zip", Account_Info[i].Billing_Zip} ,
+				{"Billing_Country_Code", Account_Info[i].Billing_Country_Code} ,
+				{"Billing_Region", Account_Info[i].Billing_Region} ,
+				{"Billing_Country", Account_Info[i].Billing_Country} ,
+				{"Billing_Share_Id", Account_Info[i].Billing_Share_Id} ,
+				{"Credit_Card_Type", Account_Info[i].Credit_Card_Type} ,
+				{"Credit_Card_Number", Account_Info[i].Credit_Card_Number} ,
+				{"Credit_Card_CVV", Account_Info[i].Credit_Card_CVV} ,
+				{"Credit_Card_Expiration_Month", Account_Info[i].Credit_Card_Expiration_Month} ,
+				{"Credit_Card_Expiration_Year", Account_Info[i].Credit_Card_Expiration_Year} ,
+				{"Invoice_Number_A", Account_Info[i].Invoice_Number_A} ,
+				{"Invoice_Number_B", Account_Info[i].Invoice_Number_B} ,
+				{"Account_Type", Account_Info[i].Account_Type} ,
+				{"Tax_ID_One", Account_Info[i].Tax_ID_One} ,
+				{"Tax_ID_Two", Account_Info[i].Tax_ID_Two},
+				{"Operating_Companies", Account_Info[i].Account_Type}};
+			
+			int keyPosition[] = new int[] {-1};
+			if (!NewAccount) {
+				keyPosition = new int[] {0, 1};//will check based on level and account number
+			}
+				
+			try {
+				Helper_Functions.WriteToExcel(fileName, sheetName, Details, keyPosition);
+				//write the same accounts to the backup sheet, just for reference later
+				Helper_Functions.WriteToExcel(fileName, sheetName+ "_Backup", Details, keyPosition);
+			}catch (Exception e) {
+				//in case file is in use
+				fileName = Helper_Functions.DataDirectory + "\\AddressDetails Backup.xls"; sheetName = "Account_Numbers"; 
+				Helper_Functions.WriteToExcel(fileName, sheetName, Details, keyPosition);
+			}
+		}
+
+		return true;
 	}
 }

@@ -30,6 +30,7 @@ public class WFCL_New{
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("JP");
 		//CountryList = Environment.getCountryList("JP");
+		//CountryList = new String[][]{{"US", ""}, {"CA", ""}};
 		//CountryList = Environment.getCountryList("high");
 		Helper_Functions.MyEmail = "accept@fedex.com";
 		//CountryList = new String[][]{{"AU", ""}, {"JP", ""}};
@@ -319,7 +320,6 @@ public class WFCL_New{
 	@Test(dataProvider = "dp", priority = 1, enabled = true)
 	public void WFCL_GFBO_Registration(String Level, User_Data User_Info, Account_Data Account_Info) {
 		try {
-			Account_Info = Account_Lookup.Account_DataAccountDetails("700335631", Level, "FX");
 			String Result[] = WFCL_Functions_UsingData.WFCL_GFBO_Registration(User_Info, Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {

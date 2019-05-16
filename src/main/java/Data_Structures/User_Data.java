@@ -7,9 +7,11 @@ import SupportClasses.Helper_Functions;
 public class User_Data {
 	public String UUID_NBR = "";
 	public String USER_ID = "";
+	
 	public String PASSWORD = "";
 	public String SECRET_QUESTION_DESC = "";
 	public String SECRET_ANSWER_DESC = "";
+	
 	public String FIRST_NM = "";
 	public String MIDDLE_NM = "";
 	public String LAST_NM = "";
@@ -64,6 +66,21 @@ public class User_Data {
 		String Details[] = new String[] {User_Info.USER_ID, User_Info.PASSWORD, User_Info.UUID_NBR, User_Info.FIRST_NM, User_Info.MIDDLE_NM, User_Info.LAST_NM};
 		Helper_Functions.PrintOut(Arrays.toString(Details));
 		return User_Info;
+	}
+	
+	public static User_Data Set_Same_Account_Data(User_Data User_Info, Account_Data Account_Info) {
+		User_Info.CITY_NM = Account_Info.Billing_City;
+		User_Info.COUNTRY_CD = Account_Info.Billing_Country_Code;
+		User_Info.POSTAL_CD = Account_Info.Billing_Zip ;
+		User_Info.STATE_CD = Account_Info.Billing_State_Code ;
+		User_Info.STREET_DESC = Account_Info.Billing_Address_Line_1 ;
+		User_Info.STREET_DESC_2 = Account_Info.Billing_Address_Line_2 ;	
+		return User_Info;
+	}
+	
+	public static User_Data Set_User_Id(User_Data User_Info, String Base) {
+		User_Info.USER_ID = Helper_Functions.LoadUserID(Base);
+		return User_Info;	
 	}
 	
 }

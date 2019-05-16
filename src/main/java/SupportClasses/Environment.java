@@ -175,6 +175,9 @@ public class Environment {
 		  		case "Shipping_Country":
 		  			Account_Details[pos].Shipping_Country = Row[j];
 		  			break;
+		  		case "Shipping_Share_Id":
+		  			Account_Details[pos].Shipping_Share_Id = Row[j];
+		  			break;
 		  		case "Billing_Address_Line_1":
 		  			Account_Details[pos].Billing_Address_Line_1 = Row[j];
 		  			break;
@@ -204,6 +207,9 @@ public class Environment {
 		  			break;
 		  		case "Billing_Country":
 		  			Account_Details[pos].Billing_Country = Row[j];
+		  			break;
+		  		case "Billing_Share_Id":
+		  			Account_Details[pos].Billing_Share_Id = Row[j];
 		  			break;
 		  		case "Account_Number":
 		  			Account_Details[pos].Account_Number = Row[j];
@@ -248,6 +254,12 @@ public class Environment {
 		  			break;
 		  		case "Tax_ID_Two":
 		  			Account_Details[pos].Tax_ID_Two = Row[j];
+		  			break;
+		  		case "First_Name":
+		  			Account_Details[pos].FirstName = Row[j];
+		  			break;
+		  		case "Last_Name":
+		  			Account_Details[pos].LastName = Row[j];
 		  			break;
 				}//end switch
 			}
@@ -512,6 +524,10 @@ public class Environment {
 		  			Address_Data[pos].Shipping_Country = Row[j];
 		  			Address_Data[pos].Billing_Country = Row[j];
 		  			break;
+		  		case "Share_Id":
+		  			Address_Data[pos].Shipping_Share_Id = Row[j];
+		  			Address_Data[pos].Billing_Share_Id = Row[j];
+		  			break;
 				}//end switch
 			}
 			//will load the dummy email address and phone number by default.
@@ -621,6 +637,7 @@ public class Environment {
 				DataClass[i - 1].ERROR = "ERROR";
 			}
 		}
+		
 		return DataClass;
 	}
 }

@@ -54,11 +54,13 @@ public class OADR_SmokeTest{
 				    				}
 				    			}
 		    				}
-		    				if (data.size() > 4) { //stop after adding 5 enrollments
-		    					break;
-		    				}
+		    				
 		    			}	
 		    		}
+		    		while(data.size() > 5) {
+		    			data.remove(0);
+		    		}
+		    		
 		    	break;
 			}
 		}
@@ -78,10 +80,7 @@ public class OADR_SmokeTest{
 	public static String[] OADR_ApplyDiscount(String Level, String UserId, String Password, Enrollment_Data ED) throws Exception{
 		try {
 			WebDriver_Functions.Login(UserId, Password);
-			String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
-			USRC_Data UD = USRC_Data.LoadVariables(Level);
-			String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(UD.GenericUSRCURL, "fdx_login=" + Login_Cookie);
-			
+
 			WebDriver_Functions.ChangeURL_EnrollmentID(ED, false, false);
 
 			if (WebDriver_Functions.isPresent(By.id("apply discounts"))) {
@@ -105,8 +104,8 @@ public class OADR_SmokeTest{
 	 		if (WebDriver_Functions.isPresent(By.xpath("//input[(@name='discountConflictResolution') and (@value = 'applyNewDiscount')]"))){
 	 			WebDriver_Functions.Click(By.xpath("//input[(@name='discountConflictResolution') and (@value = 'applyNewDiscount')]"));
 	 			WebDriver_Functions.takeSnapShot("Discount Conflict.png");
-	 			
-	 			InvoiceOrCCValidaiton(Credit_Card);
+
+	 			InvoiceOrCCValidaiton();
 	 			
 	 			if (WebDriver_Functions.isPresent(By.name("submit"))){
 	 				WebDriver_Functions.Click(By.name("submit"));
@@ -162,8 +161,13 @@ public class OADR_SmokeTest{
 	 	WebDriver_Functions.takeSnapShot(EN.ENROLLMENT_ID + " Confirmation.png");
 	}
 	
-	private static void InvoiceOrCCValidaiton(String CCNumber) throws Exception{
-		InvoiceOrCCValidaiton(CCNumber, Environment.DummyInvoiceOne, Environment.DummyInvoiceTwo);
+
+	private static void InvoiceOrCCValidaiton() throws Exception{
+		InvoiceOrCCValidaiton(null, Environment.DummyInvoiceTwo, Environment.DummyInvoiceOne);
+	}
+	
+	private static void InvoiceOrCCValidaiton(String Credit_Card) throws Exception{
+		InvoiceOrCCValidaiton(Credit_Card, Environment.DummyInvoiceTwo, Environment.DummyInvoiceOne);
 	}
 
 	private static void InvoiceOrCCValidaiton(String CCNumber, String Invoice1, String Invoice2) throws Exception{
@@ -173,20 +177,19 @@ public class OADR_SmokeTest{
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("invoiceNumberB"));
 		}else if (WebDriver_Functions.isPresent(By.name("lastFourDigits"))) {
+			if (CCNumber == null) {
+				String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
+				USRC_Data UD = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
+				CCNumber = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(UD.GenericUSRCURL, "fdx_login=" + Login_Cookie);
+				if (CCNumber.contentEquals("")) {
+					Helper_Functions.PrintOut("WARNING, not able to retrive Credit Card linked to this account. Attmpeting with 4460");
+					CCNumber = "4460";
+				}
+			}
 			WebDriver_Functions.Type(By.name("lastFourDigits"), CCNumber);//this is just a guess as the number most commonly used. 
 			WebDriver_Functions.Click(By.name("submit"));
 			WebDriver_Functions.WaitNotPresent(By.name("lastFourDigits"));
 		}
 	}
-	
-	/*
-	private static void Marketing_Code_Entry(Enrollment_Data ED) throws Exception {
-		if (WebDriver_Functions.isPresent(By.id("field_Passcode"))) {
-			WebDriver_Functions.Type(By.id("field_Passcode"), ED.PASSCODE);
-		}else if (WebDriver_Functions.isPresent(By.id(""))) {
-			
-		}
-	}
-	*/
 	
 }

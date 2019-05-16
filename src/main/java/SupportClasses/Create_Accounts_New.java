@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -21,7 +25,7 @@ public class Create_Accounts_New{
 	private static String ECAMuserid;
 	private static String ECAMpassword;
 	
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "5";
 	static String CountryList[][]; 
 	
 	@BeforeClass
@@ -36,7 +40,7 @@ public class Create_Accounts_New{
 		}
 		
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("KR");
+		CountryList = Environment.getCountryList("US");
 		//CountryList = new String[][]{{"JP", ""}, {"MY", ""}, {"PH", ""}, {"SG", ""}, {"KR", ""}, {"TW", ""}, {"TH", ""}};
 	}
 	
@@ -54,7 +58,7 @@ public class Create_Accounts_New{
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = true)
 	public void Account_Creation(String Level, Account_Data Account_Info) {
 		try {
 			String Operating_Companies = "E";
@@ -79,11 +83,6 @@ public class Create_Accounts_New{
 	
 	public static Account_Data[] CreateAccountNumbers(Account_Data Account_Info, String OperatingCompanies, int NumAccounts) throws Exception{
 		try {
-			// AccountDetails Example = 
-			//ShippingCountryCode, BillingCountryCode, OperatingCompanies (E = Express, G = Ground, F = Freight so "EDF" is all three), NumberOfAccounts
-			// AddressDetails Example =  {"10 FEDEX PKWY 2nd FL", "", "COLLIERVILLE", "Tennessee", "TN", "38017", "US"});
-			//Address line 1, address line 2, City, StateName, StateCode, ZipCode, CountryCode
-
 			WebDriver_Functions.ChangeURL("ECAM", "", false);
 			if (WebDriver_Functions.isPresent(By.id("username"))) {
 				WebDriver_Functions.Type(By.id("username"), ECAMuserid);
@@ -242,7 +241,7 @@ public class Create_Accounts_New{
 				WebDriver_Functions.Click(By.id("next_comments"));
 			}
 			
-			//Comment/confirmation page
+			//confirmation page final submission step
 			WebDriver_Functions.Click(By.id("comments_form_save"));	
 			//*[@id="dialog-confirm"]/center/text()
 			WebDriver_Functions.WaitPresent(By.id("dialog-confirm"));
@@ -261,7 +260,7 @@ public class Create_Accounts_New{
 				Account_Details[i] = new Account_Data(Account_Info);
 				String token = tok.nextToken();
 				if (ModifiedAddress) {
-					Account_Info = Account_Lookup.Account_DataAccountDetails(token, Account_Info.Level, "FX");
+					Account_Info = Account_Lookup.Account_Details(token, Account_Info.Level);
 					Account_Details[i] = new Account_Data(Account_Info);
 					ModifiedAddress = false;
 				}
@@ -334,185 +333,250 @@ public class Create_Accounts_New{
 		}
 		return true;
 	}
-}
-	/*
-	
-	public static void main(String[] args) {
-		ArrayList<String[]> Addresses = new ArrayList<String[]>();
-		Addresses = Helper_Functions.getExcelData(".\\Data\\AddressDetails.xls", "Accounts");//load the relevant information from excel file.
-		String Level = "2";
-		String AddressDetailsFormat[] = Addresses.get(0);
-		Helper_Functions.PrintOut(Arrays.toString(AddressDetailsFormat), false);
-		// AccountDetails Example = 
-		//ShippingCountryCode, BillingCountryCode, OperatingCompanies (E = Express, G = Ground, F = Freight so "EDF" is all three), NumberOfAccounts
-		// AddressDetails Example =  {"10 FEDEX PKWY 2nd FL", "", "COLLIERVILLE", "Tennessee", "TN", "38017", "US"});
-		//Address line 1, address line 2, City, StateName, StateCode, ZipCode, CountryCode
-		
-		for(int i = 1; i < Addresses.size(); i++) {
-			String CountryDetails[] = Addresses.get(i);
-			for (int Format = 0; Format < 8; Format++) {
-				boolean update = false;
-				String initial = CountryDetails[Format];
-				if (CountryDetails[Format].contains("\n") || CountryDetails[Format].contains("  ")) {
-					CountryDetails[Format] = CountryDetails[Format].replaceAll("\n", "");
-					CountryDetails[Format] = CountryDetails[Format].replaceAll("  ", " ");
-				}
-				if (Format == 6 && CountryDetails[Format] != CountryDetails[Format].toUpperCase()) {
-					CountryDetails[Format] = CountryDetails[Format].toUpperCase();
-				}
-				if (CountryDetails[Format].length() > 30) {
-					CountryDetails[Format] = CountryDetails[Format].substring(0, 29);
-				}
-				if (!CountryDetails[Format].matches("[^A-Za-z0-9 ]")) {
-					CountryDetails[Format] = unAccent(CountryDetails[Format]);
-				}
-				if (update) {
-					PrintOut("Updated: _" + initial + "_ -> _" + CountryDetails[Format], false);
-					Helper_Functions.writeExcelData(".\\Data\\AddressDetails.xls", "Accounts", CountryDetails[Format], i, Format);
-				}
-			}
-			
-			
-			String CountryCode = CountryDetails[6];
-			//if (CountryCode.contentEquals("US")) {
-				String AccountNumber = Helper_Functions.getExcelFreshAccount(Level, CountryCode, false);
-				if (AccountNumber == null || !AccountNumber.contains(",")) {
-					String OperatingCompanies = "E";
-					if (CountryDetails[7].contentEquals("us")) {
-						OperatingCompanies += "F";
-					}
-				
-					String AccountDetails[] = new String[] {CountryCode, CountryCode, OperatingCompanies, "10"};
-					String AddressDetails[] = new String[] {CountryDetails[0], CountryDetails[1], CountryDetails[2], CountryDetails[3], CountryDetails[4], CountryDetails[5], CountryCode};
-				
-					String Accounts = null;
-					try {
-						Accounts = Helper_Functions.CreateAccountNumbers(Level, AccountDetails, AddressDetails);
-						Helper_Functions.PrintOut(Accounts, false);
-						writeExcelData(".\\Data\\AddressDetails.xls", "Accounts", Accounts, i, 8 + Integer.valueOf(Level));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			//}
-			
-		}
 
-		DriverFactory.getInstance().removeDriver();
+	
+	@Test (enabled = false)
+	public void Debug_Account_Creation() {
+		Account_Data Account_Info = Environment.getAddressDetails("2", "US");
+		Account_Info.Company_Name = "Company" + Helper_Functions.CurrentDateTime();
+		Credit_Card_Data CC_Info = Environment.getCreditCardDetails(Account_Info.Level, "V");
+		Account_Data.Set_Credit_Card(Account_Info, CC_Info);
+		if (Account_Info.Billing_Address_Line_2.contentEquals("")) {
+			Account_Info.Billing_Address_Line_2 = null;
+		}
+		Create_Account_Numbers(Account_Info, 1);
 	}
 	
-	public static String unAccent(String s) {
-	    //
-	    // JDK1.5
-	    //   use sun.text.Normalizer.normalize(s, Normalizer.DECOMP, 0);
-	    //
-	    String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
-	    Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-	    return pattern.matcher(temp).replaceAll("");
-	  }
-
-}
-
-/*
-need to add the below to the address excel sheet.
-
-
-			ContactList.add(new String[] {"3614 DELVERNE RD", "", "BALTIMORE", "Maryland", "MD", "21218", "US", "7i4ksltmhnqlxhzbs9j6356ix"});
-			ContactList.add(new String[] {"891 Federal Ridge road", "Apt 202", "COLLIERVILLE", "Tennessee", "TN", "38017", "US", "44k0o0ipf25thfcyl8svm65zz"});
-			ContactList.add(new String[] {"910 S MADISON ROW CT", "", "COLLIERVILLE", "Tennessee", "TN",  "38017", "US", "16nsluqsf6tdh736wjaito6"});
-			ContactList.add(new String[] {"10 FEDEX PKWY 2nd FL", "", "COLLIERVILLE", "Tennessee", "TN", "38017", "US"});
-			ContactList.add(new String[] {"10 FedEx Parkway", "", "COLLIERVILLE", "Tennessee", "TN", "38017", "US"});
-			ContactList.add(new String[] {"3400, N Charles St", "Apt #103", "Baltimore", "Maryland", "MD", "21218", "US"});
-			ContactList.add(new String[] {"10 FedEx Parkway", "", "COLLIERVILLE", "Tennessee", "TN", "38017", "US"});
-			ContactList.add(new String[] {"7939 Silver Lake Lane", "Apt 303", "Memphis", "Tennessee", "TN", "38119", "US"});
-			ContactList.add(new String[] {"4900 Alton Court", "", "Irondale", "Alabama", "AL", "35210", "US"});
-			ContactList.add(new String[] {"240 Turner Rd", "", "Forrest City", "Arkansas", "AR", "72335", "US"});
-			ContactList.add(new String[] {"9015 E VIA LINDA STE 999", "", "SCOTTSDALE", "Arizona", "AZ", "85258", "US"});
-			ContactList.add(new String[] {"3901 INGLEWOOD AVE", "", "REDONDO BEACH", "California", "CA", "90278", "US", "3dfkio9dacatwofvg2ydhwahs"});
-			ContactList.add(new String[] {"350 spectrum loop", "", "colorado springs", "Colorado", "CO", "80921", "US"});
-			ContactList.add(new String[] {"4 MEADOW ST", "", "NORWALK", "Connecticut", "CT", "06854", "US"});
-			ContactList.add(new String[] {"1900 SUMMIT TOWER BLVD STE 300", "", "ORLANDO", "Florida", "FL", "32810", "US"});
-			ContactList.add(new String[] {"1070 BERTRAM RD", "", "AUGUSTA", "Georgia", "GA", "30909", "US"});
-			ContactList.add(new String[] {"1154 FORT STREET MALL", "", "HONOLULU", "Hawaii", "HI", "96813", "US"});
-			ContactList.add(new String[] {"8527 UNIVERSITY BLVD STE 99", "", "DES MOINES", "Iowa", "IA", "50325", "US"});
-			ContactList.add(new String[] {"1430 E 17TH ST", "", "IDAHO FALLS", "Idaho", "ID", "83404", "US"});
-			ContactList.add(new String[] {"1315 W 22ND ST", "", "OAK BROOK", "Illinois", "IL", "60523", "US"});
-			ContactList.add(new String[] {"6648 S PERIMETER RD", "", "INDIANAPOLIS", " Indiana", "IN", "46241", "US"});
-			ContactList.add(new String[] {"1530 S HOOVER", "", "WICHITA", "Kansas", "KS", "67209", "US"});
-			ContactList.add(new String[] {"6330 STRAWBERRY LN", "", "LOUISVILLE", "Kentucky", "KY", "40214", "US"});
-			ContactList.add(new String[] {"2122 GREENWOOD RD", "", "SHREVEPORT", "Louisiana", "LA", "71103", "US"});
-			ContactList.add(new String[] {"25 Sycamore Ave", "", "Medford", "Massachusetts", "MA", "02155", "US"});
-			ContactList.add(new String[] {"95 HUTCHINS DR", "", "PORTLAND", "Maine", "ME", "04102", "US"});
-			ContactList.add(new String[] {"2386 TRAVERSEFIELD", "", "TRAVERSE CITY", "Michigan", "MI", "49686", "US"});
-			ContactList.add(new String[] {"261 CHESTER ST", "", "SAINT PAUL", "Minnesota", "MN", "55107", "US"});
-			ContactList.add(new String[] {"9133 Superior Dr", "", "OLIVE BRANCH", "Mississippi", "MS", "38654", "US"});
-			ContactList.add(new String[] {"1203 Beartooth Drive", "", "Laurel", "Montana", "MT", "59044", "US"});
-			ContactList.add(new String[] {"3801 BEAM RD STE F", "", "CHARLOTTE", "North Carolina", "NC", "28217", "US"});
-			ContactList.add(new String[] {"7130 Q ST", "", "OMAHA", "Nebraska", "NE", "68117", "US"});
-			ContactList.add(new String[] {"190 JONY DR", "", "CARLSTADT", "New Jersey", "NJ", "07072", "US"});
-			ContactList.add(new String[] {"98 WESTGATE ST", "", "LAS CRUCES", "New Mexico", "NM", "88005", "US"});
-			ContactList.add(new String[] {"1025 WESTCHESTER AVE STE", "", "WEST HARRISON", "New York", "NY", "10604", "US"});
-			ContactList.add(new String[] {"1330 ELM ST", "", "CINCINNATI", "Ohio", "OH", "45202", "US"});
-			ContactList.add(new String[] {"7181 S Mingo Rd", "", "Tulsa", "Oklahoma", "OK", "74133", "US"});
-			ContactList.add(new String[] {"1800 NW 169TH PL STE B200", "", "BEAVERTON", "Oregon", "OR", "97006", "US"});
-			ContactList.add(new String[] {"6350 HEDGEWOOD DR", "", "ALLENTOWN", "Pennsylvania", "PA", "18106", "US"});
-			ContactList.add(new String[] {"255 METRO CENTER BLVD", "", "WARWICK", "Rhode Island", "RI", "02886", "US"});
-			ContactList.add(new String[] {"345 W STEAMBOAT DR", "", "NORTH SIOUX CITY", "South Dakota", "SD", "57049", "US"});
-			ContactList.add(new String[] {"4200 Regent Blvd", "", "Irving", "Texas", "TX", "75063", "US"});
-			ContactList.add(new String[] {"200 S MARQUETTE RD", "", "PRAIRIE DU CHIEN", "Wisconsin", "WI", "53821", "US"});
-			ContactList.add(new String[] {"1206 GREENBRIER ST", "", "CHARLESTON", "West Virginia", "WV", "25311", "US"});
-			ContactList.add(new String[] {"1249 Tongass Avenue", "", "KETCHIKAN","Alaska", "AK",  "99901", "US"});
-			ContactList.add(new String[] {"1555 E University Dr #1", "", "Mesa","Arizona", "AZ",  "85203", "US"});
-			ContactList.add(new String[] {"32 Meadow Crest Dr", "", "Sherwood", "Arkansas", "AR", "72120", "US"});
-			ContactList.add(new String[] {"329 Madison Street", "", "Denver", "Colorado", "CO", "80206", "US"});
-			ContactList.add(new String[] {"58 Cabot St", "", "Hartford", "Connecticut", "CT", "06112", "US"});
-			ContactList.add(new String[] {"310 Haines St", "", "Newark", "Delaware", "DE", "19717", "US"});
-			ContactList.add(new String[] {"1405 Rhode Island Ave NW", "", "Washington", "District of Columbia", "DC", "20005", "US"});
-			ContactList.add(new String[] {"2950 N 28th Terrace", "", "Hollywood", "Florida", "FL", "33020", "US"});
-			ContactList.add(new String[] {"901 Hitt St", "", "Columbia", "Missouri", "MO", "65212", "US"});
-			ContactList.add(new String[] {"75-681 Lalii Pl", "", "Kailua Kona", "Hawaii", "HI", "96740", "US"});
-			ContactList.add(new String[] {"410 W Washington St", "", "Caseyville", "Illinois", "IL", "62232", "US"});
-			ContactList.add(new String[] {"1131 Shelby St", "", "Indianapolis", "Indiana", "IN", "46203", "US"});
-			ContactList.add(new String[] {"11110 W Greenspoint St", "", "Wichita", "Kansas", "KS", "67205", "US"});
-			ContactList.add(new String[] {"5613 Fern Valley Rd", "", "Louisville", "Kentucky", "KY", "40228", "US"});
-			ContactList.add(new String[] {"2206 Urbandale St", "", "Shreveport", "Louisiana", "LA", "71118", "US"});
-			ContactList.add(new String[] {"89 Turnpike Rd", "", "Ipswich", "Massachusetts", "MA", "01938", "US"});
-			ContactList.add(new String[] {"500 S State St # 2005", "", "Ann Arbor", "Michigan", "MI", "48109", "US"});
-			ContactList.add(new String[] {"210 Delaware St SE", "", "Minneapolis", "Minnesota", "MN", "55455", "US"});
+	public static Account_Data[] Create_Account_Numbers(Account_Data Account_Info, int NumAccounts) {
+		String AppUrl = "";
+		if (Account_Info.Level.contentEquals("2")) {
+			AppUrl = "https://devedcsso.secure.fedex.com/account/v1/newEnterpriseAccount";
+		}else if (Account_Info.Level.contentEquals("3")) {
+			AppUrl = "";
+		}else if (Account_Info.Level.contentEquals("5")) {
+			AppUrl = "";
+		}
 			
-			ContactList.add(new String[] {"310 ROUTE 70", "", "ABU DHABI", "", "", "", "AE"});
-			ContactList.add(new String[] {"Ciudad Evita", "", "DUA Buenos Aires", "", "", "B1778", "AR"});
-			ContactList.add(new String[] {"Regina Bianchi Peruzzo", "", "Rio Grande do Sul", "Rio Grande do Sul", "RS", "99965", "BR"});
-			ContactList.add(new String[] {"2 MARINE PARADE", "", "BELIZE CITY", "", "", "480", "BZ"});
-			ContactList.add(new String[] {"1100 BOUL RENE-LEVESQUE E", "", "QUEBEC", "QUEBEC", "PQ", "G1R 5V2", "CA"});
-			ContactList.add(new String[] {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "CL"});
-			ContactList.add(new String[] {"BROADWAY LAYOUT", "", "BEIJING ODA", "", "", "102200", "CN"});
-			ContactList.add(new String[] {"791 MILL STREET", "", "WITTEN", "", "", "58448", "DE"});
-			ContactList.add(new String[] {"120 MARINE DRIVE", "", "LAUTOKA", "", "", "", "FJ"});
-			ContactList.add(new String[] {"4 Boulevard Berthier", "", "Paris", "", "", "75017", "FR"});
-			ContactList.add(new String[] {"333 SHERWOOD DRIVE", "", "NEWPORT", "", "", "TF10 7BX", "GB"});
-			ContactList.add(new String[] {"10 AVENUE PARK", "", "BARRIGADA", "", "", "96913", "GU"});
-			ContactList.add(new String[] {"BROADWAY LAYOUT", "", "BEIJING ODA", "", "", "102200", "HK"});
-			ContactList.add(new String[] {"150 Kennedy Road", "", "HONG KONG", "", "", "", "HK"});
-			ContactList.add(new String[] {"Aghapura", "", "", "Telangana", "TS", "500001", "IN"});
-			ContactList.add(new String[] {"Via di Acqua Bullicante", "", "Roma", "", "", "00176", "IT"});
-			ContactList.add(new String[] {"1-5-2 Higashi-Shimbashi", "", "Minato-ku", "", "", "1057123", "JP"});
-			ContactList.add(new String[] {"Calle San Juan de Dios 68", "", "MEXICO", "Distrito Federal", "DF", "14370", "MX"});
-			ContactList.add(new String[] {"10, Lorong P Ramlee, Kuala Lumpur", "", "KUALA LUMPUR", "", "", "50250", "MY"});
-			ContactList.add(new String[] {"15 Stevens Cl", "", "Singapore", "", "", "25795", "SG"});
+		HttpPost httppost = new HttpPost(AppUrl);
 
+		JSONObject Empty_element = new JSONObject();
+		
+//start of freight section
+		JSONObject createdBy = new JSONObject()
+			.put("employeeId", ECAMuserid)
+			.put("operatingCompany", "FEDEX_SERVICES");
+		
+		JSONObject freight_comments_elements = new JSONObject()
+			.put("createdBy", createdBy )
+			.put("type", "GENERAL_INFORMATION")
+			.put("commentDescription", "New account requested for testing.")
+			.put("operatingCompany", "FEDEX_FREIGHT");
+		JSONObject freight_comments_array[] = new JSONObject[] {freight_comments_elements};
+		
+		JSONObject creditStatusDetail = new JSONObject()
+			.put("status", "NO_CREDIT")
+			.put("creditReasonCode", "CAS09")
+			.put("cashReasonCode", "Customer Request");
+		
+		JSONObject localization = new JSONObject()
+			.put("languageCode", Account_Info.LanguageCode)
+			.put("localeCode", Account_Info.Billing_Country_Code);  //assumed country code
+				
+		String marketingCorrespondenceTypes[] = new String[] {};//not sure what this is atm
+		JSONObject communicationDetail = new JSONObject()
+			.put("marketingCorrespondenceTypes", marketingCorrespondenceTypes)
+			.put("localization", localization);
+	
+		String streetLines[] = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2};
+		JSONObject address = new JSONObject()
+			.put("shareId", Account_Info.Billing_Share_Id)
+			.put("addressClassification", "UNKNOWN")
+			.put("streetLines", streetLines)
+			.put("city", Account_Info.Billing_City)
+			.put("stateOrProvinceCode", Account_Info.Billing_State_Code)
+			.put("postalCode", Account_Info.Billing_Zip)
+			.put("countryCode", Account_Info.Billing_Country_Code)
+			.put("residential", false); //default to false currently
+		
+		JSONObject companyName = new JSONObject()
+			.put("name", Account_Info.Company_Name);
 
+		JSONObject permissions = new JSONObject()
+			.put("CALL", "GRANT")
+			.put("TEXT", "DENY");
+		
+		String area_code = Account_Info.Billing_Phone_Number.substring(0, 3);//assumption that first 3 digits are the area code.
+		String localNumber = Account_Info.Billing_Phone_Number.substring(3, Account_Info.Billing_Phone_Number.length());
+		String countryCode = "1";
+		JSONObject number = new JSONObject()
+			.put("areaCode", area_code)
+			.put("localNumber", localNumber)
+			.put("countryCode", countryCode);
+		
+		JSONObject phoneNumberDetails_elements = new JSONObject()
+			.put("number", number)
+			.put("usage", "PRIMARY")
+			.put("permissions", permissions);
+		JSONObject phoneNumberDetails_array[] = new JSONObject[] {phoneNumberDetails_elements};
+		
+		JSONObject contactAncillaryDetail = new JSONObject()
+			.put("phoneNumberDetails", phoneNumberDetails_array)
+			.put("companyName", companyName);
+		
+		JSONObject personName = new JSONObject()
+			.put("firstName", Account_Info.FirstName)
+			.put("lastName", Account_Info.LastName);
+		
+		JSONObject contact = new JSONObject()
+			.put("personName", personName)
+			.put("companyName", Account_Info.Company_Name);
+		
+		JSONObject contactAndAddress = new JSONObject()
+			.put("contact", contact)
+			.put("contactAncillaryDetail", contactAncillaryDetail)
+			.put("address", address);
+		
+		JSONObject PRIMARY_ACCOUNT_contact_element = new JSONObject()
+			.put("type", "PRIMARY_ACCOUNT")
+			.put("contactAndAddress", contactAndAddress)
+			.put("communicationDetail", communicationDetail);
+		
+		JSONObject PRIMARY_SHIPPER_CONTACT_contact_element = new JSONObject()
+			.put("type", "PRIMARY_SHIPPER_CONTACT")
+			.put("contactAndAddress", contactAndAddress)
+			.put("communicationDetail", communicationDetail);
+		
+		JSONObject PRIMARY_BILLING_ACCOUNT_contact_element = new JSONObject()
+			.put("type", "PRIMARY_BILLING_ACCOUNT")
+			.put("contactAndAddress", contactAndAddress)
+			.put("communicationDetail", communicationDetail);
+		
+		JSONObject PRIMARY_BILLING_CONTACT_contact_element = new JSONObject()
+			.put("type", "PRIMARY_BILLING_CONTACT")
+			.put("contactAndAddress", contactAndAddress)
+			.put("communicationDetail", communicationDetail);
+		
+		JSONObject contacts_array[] = new JSONObject[] {PRIMARY_ACCOUNT_contact_element, PRIMARY_SHIPPER_CONTACT_contact_element, PRIMARY_BILLING_ACCOUNT_contact_element, PRIMARY_BILLING_CONTACT_contact_element};
+		JSONObject accountGroups_array[] = new JSONObject[] {Empty_element, Empty_element, Empty_element}; //come back later and figure out what this does
+		String attributes_array[] = new String[] {"DOCK"};
+		
+		JSONObject freightProfileSpecification = new JSONObject()
+			.put("contacts", contacts_array)
+			.put("accountGroups", accountGroups_array)
+			.put("attributes", attributes_array)
+			.put("creditStatusDetail", creditStatusDetail)
+			.put("comments", freight_comments_array);
+//end of freight section
+		
+//start of express section
+		JSONObject revenueDetail = new JSONObject()
+			.put("preferredCurrencyType", "USD");
+		
+		JSONObject express_comments_elements = new JSONObject()
+			.put("createdBy", createdBy )
+			.put("type", "GENERAL_INFORMATION")
+			.put("commentDescription", "New account requested for testing.")
+			.put("operatingCompany", "EXPRESS");
+		JSONObject express_comments_array[] = new JSONObject[] {express_comments_elements};
+		
+		JSONObject address_array[] = new JSONObject[] {address};
+		
+		JSONObject holder = new JSONObject()
+			.put("contact", contact)
+			.put("contactAncillaryDetail", contactAncillaryDetail)
+			.put("address", address);
+		
+		JSONObject creditCard = new JSONObject()
+			.put("number", Account_Info.Credit_Card_Number)
+			.put("creditCardType", Account_Info.Credit_Card_Type.toUpperCase())
+			.put("expirationDate", Account_Info.Credit_Card_Expiration_Month + "/20" + Account_Info.Credit_Card_Expiration_Year)  //y2K 2?
+			.put("verificationCode", Account_Info.Credit_Card_CVV)
+			.put("holder", holder);
+		
+		String express_attributes_array[] = new String[] {"FEDEX_CAN_CALL_FOR_MARKETING"};
+		
+		JSONObject expressProfileSpecification = new JSONObject()
+			.put("contacts", contacts_array)
+			.put("accountType", "BUSINESS")
+			.put("attributes", express_attributes_array)
+			.put("creditCard", creditCard)
+			.put("bankDetails", address_array)
+			.put("comments", express_comments_array)
+			.put("revenueDetail", revenueDetail);
+//end of express section
+		
+//start of enterprise section
+		JSONObject enterprise_comments_elements = new JSONObject()
+			.put("createdBy", createdBy )
+			.put("type", "GENERAL_INFORMATION")
+			.put("commentDescription", "New account requested for testing.")
+			.put("operatingCompany", "FEDEX_EXPRESS");
+		JSONObject enterprise_comments_array[] = new JSONObject[] {enterprise_comments_elements, enterprise_comments_elements};
+		
+		JSONObject CONTACT_contact_element = new JSONObject()
+			.put("type", "CONTACT")
+			.put("contactAndAddress", contactAndAddress)
+			.put("communicationDetail", communicationDetail);
+			
+		JSONObject enterprise_contacts_array[] = new JSONObject[] {PRIMARY_ACCOUNT_contact_element, CONTACT_contact_element};
 
-
-
-//to get declaired variables from a class, look into this later on how it works.
-//https://stackoverflow.com/questions/2466038/how-do-i-iterate-over-class-members
-public int getObject(Object obj) {
-    for (Field field : obj.getClass().getDeclaredFields()) {
-        //field.setAccessible(true); // if you want to modify private fields
-        System.out.println(field.getName()
-                 + " - " + field.getType()
-                 + " - " + field.get(obj));
-    }
+		JSONObject enterpriseProfileSpecification = new JSONObject()
+			.put("contacts", enterprise_contacts_array)
+			.put("accountType", "BUSINESS")
+			.put("attributes", attributes_array)
+			.put("comments", enterprise_comments_array);
+//end of enterprise section
+		
+		Object token = null; //not happy with the below but getting error when trying to insert null
+		JSONObject accountCreationDetail = new JSONObject()
+			.put("creationUserGroup", "ALLIANCES")
+			.put("numberOfAccounts", NumAccounts)
+			.put("entityType", "BUSINESS")
+			.put("comments", token  == null ? JSONObject.NULL : token);;
+		
+		String requestedProfiles_array[] = new String[] {"ENTERPRISE", "EXPRESS", "FREIGHT", "GROUND"};   //will need to changes this based on the region.
+		
+		JSONObject enterpriseCustomerSpecification = new JSONObject()
+			.put("processingOption", "IGNORE_DUPLICATE_ACCOUNT_ADDRESSES")
+			.put("requestedProfiles", requestedProfiles_array)
+			.put("accountCreationDetail", accountCreationDetail)
+			.put("enterpriseProfileSpecification", enterpriseProfileSpecification)
+			.put("expressProfileSpecification", expressProfileSpecification)
+			.put("freightProfileSpecification", freightProfileSpecification);
+		
+		JSONObject processingParameters = new JSONObject()
+			.put("returnDetailedErrors", false)
+			.put("anonymousTransaction", false)
+			.put("returnLocalizedDateTime", false);
+		
+		JSONObject main = new JSONObject()
+			.put("enterpriseCustomerSpecification", enterpriseCustomerSpecification)
+			.put("processingParameters", processingParameters);
+					
+		String json = main.toString();
+		
+		String Domain = AppUrl.substring(0, AppUrl.indexOf("fedex.com") + "fedex.com".length());
+		httppost.addHeader("Accept", "application/json, text/javascript, */*; q=0.01");
+		httppost.addHeader("Content-Type", "application/json; charset=UTF-8");
+		httppost.addHeader("Origin", Domain);
+		httppost.addHeader("Referer", Domain + "/ecam/");
+		httppost.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36");
+		httppost.addHeader("X-clientid", "ECAM");
+		httppost.addHeader("X-locale", "en_US");
+		httppost.addHeader("X-version", "1.0");
+		httppost.addHeader("X-Requested-With", "XMLHttpRequest");
+		httppost.addHeader("X-loggedin", "LOGGEDIN");
+		
+		StringEntity params;
+		String Response = null;
+		try {
+			params = new StringEntity(json.toString());
+			httppost.setEntity(params);
+			Response = General_API_Calls.HTTPCall(httppost, json);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+					
+		return null;
+	}
 }
- */

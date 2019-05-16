@@ -135,8 +135,6 @@ public class USRC_API_Endpoints {
   		}
   	}
 	
-	
-	
 	public static String Logout(String URL){
   		try{
   			HttpPost httppost = new HttpPost(URL);
@@ -761,6 +759,7 @@ public class USRC_API_Endpoints {
   		}
   	}
 
+	//will return the last 4 characters of the credit card linked to an account number.
 	public static String AccountRetrieval_Then_EnterpriseCustomer(String URL, String Cookie) {
 		 String AccountRetrievalResponse = AccountRetrievalRequest(URL, Cookie);
 		 ///{"key":"9a4457a79152d55132661972048cfe9b","value":"<<Account number here>>"},"displayName"

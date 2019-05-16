@@ -113,7 +113,7 @@ public class TestNG_TestListener implements ITestListener{
     }
     
     private void TestResults(ITestResult arg0) {
-    	int SpaceSaver = 200;//added due to this taking up an infinite amount memory.
+    	int SpaceSaver = 150;//added due to this taking up an infinite amount memory.
     	try {
     		String AttemptLogs = ThreadLogger.getInstance().ReturnLogString();
         	//save the results of given test locally

@@ -25,8 +25,8 @@ public class WFCL_ALL_CCEnroll{
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("US");
-		//Helper_Functions.MyEmail = "accept@fedex.com";
+		CountryList = Environment.getCountryList("full");
+		Helper_Functions.MyEmail = "accept@fedex.com";
 	}
 	
 	@DataProvider (parallel = true)
@@ -41,9 +41,10 @@ public class WFCL_ALL_CCEnroll{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			String EnrollmentID[][] = Helper_Functions.LoadAllEnrollmentIDs(CountryList[j][0]);
 		    			for(String Enrollment[]: EnrollmentID) {
-		    				if (Enrollment[2] != null && Enrollment[2].contains("Feb19") && Enrollment[7].contains("L" + Level)  ) {
+		    				if (Enrollment[1].contains(CountryList[j][0])) {
 		    					String UserId = Helper_Functions.LoadUserID("L" + Level + Enrollment[0] + "CC");
 		    					data.add( new Object[] {Level, UserId, Enrollment});
+		    					break;
 		    				}
 		    			}
 					}
@@ -65,7 +66,7 @@ public class WFCL_ALL_CCEnroll{
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp", enabled = false)
+	@Test(dataProvider = "dp", enabled = true)
 	public void CreditCardRegistrationEnroll_All(String Level, String UserId, String EnrollmentID[]) {
 		try {
 			Helper_Functions.PrintOut("Erollment with " + EnrollmentID[0], false);
@@ -85,7 +86,7 @@ public class WFCL_ALL_CCEnroll{
 		}
 	}
 	
-	@Test(dataProvider = "dp", enabled = true)
+	@Test(dataProvider = "dp", enabled = false)
 	public void DiscountValidate(String Level, String CountryCode, String UserId, String Password) {
 		
 		String DT_Status[][] = new String[][] {{"DiscountAppearingCorrectly", ""}, 
@@ -202,7 +203,7 @@ public class WFCL_ALL_CCEnroll{
 	
 
 	
-	@Test
+	@Test (enabled = false)
 	public void TesitngRollingBounce(){
 		try {
 			String Level = "7";

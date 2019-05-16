@@ -81,11 +81,12 @@ public class General_API_Calls {
 			Response = e.getMessage() + e.getCause();
 			return e.getMessage() + e.getCause();
 		}finally {
+			String Response_to_Print = Response.replaceAll("\n", "").replaceAll("\r", "");
 			//print out the URL that was used
 			Helper_Functions.PrintOut(MethodName + " URL: " + Request.toString() + "\n    " + 
 									  MethodName + " Headers: " + RequestHeaders + "\n    " +
 									  MethodName + " Request: " + Request_Body + "\n    " + 
-									  MethodName + " Response: " + Response, true); 
+									  MethodName + " Response: " + Response_to_Print, true); 
 			lock.unlock();
 		} 
 	}

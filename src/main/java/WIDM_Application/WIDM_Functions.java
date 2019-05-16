@@ -166,7 +166,7 @@ public class WIDM_Functions{
 			}
 			
 			if (Failures == "") {
-				Helper_Functions.PrintOut("Expected Errors Received.", true);
+				Helper_Functions.PrintOut("Expected Errors Received.", false);
 				return "Expected Errors Received.";
 			}else {
 				Helper_Functions.PrintOut("Failures: " + Failures, true);

@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="1" total="2" passed="1">
+<testng-results skipped="0" failed="0" ignored="6" total="6" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="50518" started-at="2019-05-11T23:28:41Z" finished-at="2019-05-11T23:29:31Z">
+  <suite name="Default suite" duration-ms="773" started-at="2019-05-16T15:30:46Z" finished-at="2019-05-16T15:30:47Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="50518" started-at="2019-05-11T23:28:41Z" finished-at="2019-05-11T23:29:31Z">
-      <class name="SupportClasses.Account_Lookup">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:SupportClasses.Account_Lookup@4ee203eb]" name="beforeClass" is-config="true" duration-ms="31" started-at="2019-05-11T23:28:41Z" finished-at="2019-05-11T23:28:41Z">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="ASDFASDF()[pri:0, instance:SupportClasses.Account_Lookup@4ee203eb]" name="ASDFASDF" duration-ms="50321" started-at="2019-05-11T23:28:41Z" finished-at="2019-05-11T23:29:31Z">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ASDFASDF -->
-      </class> <!-- SupportClasses.Account_Lookup -->
+    <test name="Default test" duration-ms="773" started-at="2019-05-16T15:30:46Z" finished-at="2019-05-16T15:30:47Z">
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
