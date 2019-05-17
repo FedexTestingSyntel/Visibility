@@ -4,12 +4,19 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -342,13 +349,34 @@ public class Create_Accounts_New{
 		Account_Info.Company_Name = "Company" + Helper_Functions.CurrentDateTime();
 		Credit_Card_Data CC_Info = Environment.getCreditCardDetails(Account_Info.Level, "V");
 		Account_Data.Set_Credit_Card(Account_Info, CC_Info);
+		/*
+		try {
+			Environment.getInstance().setLevel("2");
+			WebDriver_Functions.ChangeURL("ECAM", "", false);
+			if (WebDriver_Functions.isPresent(By.id("username"))) {
+				WebDriver_Functions.Type(By.id("username"), ECAMuserid);
+				WebDriver_Functions.Type(By.id("password"), ECAMpassword);
+				WebDriver_Functions.Click(By.id("submit"));
+			}
+
+			Set<Cookie> cookies = DriverFactory.getInstance().getDriver().manage().getCookies();
+	        Iterator<Cookie> itr = cookies.iterator();
+	        String Name = "OAMAuth";
+	        while (itr.hasNext()) {
+	            Cookie cookie = itr.next();
+	            if (cookie.getName().contains(Name)){
+	            	Helper_Functions.PrintOut(cookie.getName() + " value is " + cookie.getValue(), true);
+	            }
+	        }
+	        Helper_Functions.PrintOut("Here", true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 		
-		//for sake of debug
-		Account_Info.Company_Name = "051619T112500";
-		Account_Info.FirstName = "FtwoUSnxkijoo";
-		Account_Info.LastName = "Lavfnesc";
-		//
-		Loggin();
+		
+		//String Cookie = Loggin();
 		Create_Account_Numbers(Account_Info, "1");
 		Account_Data.Print_Account_Address(Account_Info);
 	}
@@ -374,16 +402,25 @@ public class Create_Accounts_New{
 		httppost.addHeader("X-version", "1.0");
 
 		StringEntity params;
-		String Response = null;
 		try {
 			params = new StringEntity(json.toString());
 			httppost.setEntity(params);
-			Response = General_API_Calls.HTTPCall(httppost, json);
+			HttpClient httpclient = HttpClients.createDefault();
+			HttpResponse Response = httpclient.execute(httppost);
+			Header[] Headers = Response.getAllHeaders();
+			//takes apart the headers of the response and returns the fdx_login cookie if present
+			
+			for (Header Header : Headers) {
+				if (Header.getName().contentEquals("Set-Cookie") && Header.getValue().contains("OAMAuth")) {
+					String Header_String = Header.toString();
+					String Cookie = Header_String.substring(Header_String.indexOf(" ") + 1, Header_String.indexOf(";"));
+					Helper_Functions.PrintOut(Cookie, false);
+					return Cookie;
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-					
 		return null;
 	}
 	
@@ -628,9 +665,10 @@ public class Create_Accounts_New{
 		httppost.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36");
 		httppost.addHeader("X-clientid", "ECAM");
 		httppost.addHeader("X-locale", "en_US");
-		httppost.addHeader("X-loggedin", "NOTLOGGEDIN");
+		httppost.addHeader("X-loggedin", "NLOGGEDIN");
 		httppost.addHeader("X-Requested-With", "XMLHttpRequest");
 		httppost.addHeader("X-version", "1.0");
+		httppost.addHeader("Cookie", "OAMAuthnHintCookie=0@1558043872");
 
 		StringEntity params;
 		String Response = null;

@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -67,12 +68,8 @@ public class DriverFactory{
 		   //Nov 19, 2018 11:56:30 AM org.openqa.selenium.os.UnixProcess checkForError
 		   //SEVERE: org.apache.commons.exec.ExecuteException: Process exited with an error: 1 (Exit value: 1)
 		   try {
-			   if (DriverType == 0) {//Chrome
-					try {
-						Runtime.getRuntime().exec("taskkill /F /IM ChromeDriver.exe");//close out the old processes if still present.
-					} catch (Exception e) {}
-				   
-				  //make sure driver in the project folder         https://sites.google.com/a/chromium.org/chromedriver/
+			   if (DriverType == 0) {//Chrome				   
+				   //make sure driver in the project folder         https://sites.google.com/a/chromium.org/chromedriver/
 				   String Location = System.getProperty("user.dir") + "\\chromedriver.exe";
 				   System.setProperty("webdriver.chrome.driver", Location);
 		   
@@ -94,7 +91,7 @@ public class DriverFactory{
 				   cap.setCapability(ChromeOptions.CAPABILITY, chromeOptionsMap);
 				   cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 				   cap.setCapability(ChromeOptions.CAPABILITY, options);
-			   
+				   
 				   Locdriver = new ChromeDriver(options);  
 				   Locdriver.manage().timeouts().implicitlyWait(WaitTimeOut, TimeUnit.SECONDS);   
 			   }else if (DriverType == 1) {//IE
@@ -105,6 +102,7 @@ public class DriverFactory{
 			   		
 			   BrowserCurrent++;
 		   }catch (Exception e) {
+			   e.printStackTrace();
 			   System.err.println("ERROR CREATING DRIVER, Attempt " + i);
 		   }
 		   

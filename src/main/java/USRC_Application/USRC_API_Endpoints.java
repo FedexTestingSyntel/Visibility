@@ -68,16 +68,19 @@ public class USRC_API_Endpoints {
   			//takes apart the headers of the response and returns the fdx_login cookie if present
   			String full_cookies = "";
   			for (Header Header : Headers) {
-  				if (Header.getName().contentEquals("Set-Cookie") && " SMIDENTITY fcl_contactname fdx_login fcl_fname fcl_uuid ".contains(Header.getValue())) {
+  				if (Header.getName().contentEquals("Set-Cookie")) {
+  					full_cookies += Header.toString();
   					String Header_String = Header.toString();
   					String CookieName = Header_String.substring(Header_String.indexOf(" ") + 1, Header_String.indexOf("="));
-  					String CookieValue = Header_String.substring(Header_String.indexOf("=") + 1, Header_String.indexOf(";"));
-  					full_cookies += Header.toString();
-  					//Helper_Functions.PrintOut(CookieName + "  " + CookieValue, false);   //for debug
-  					WebDriver_Functions.SetCookieValue(CookieName, CookieValue);
+  					if (" SMIDENTITY fcl_contactname fdx_login fcl_fname fcl_uuid ".contains(CookieName)) {
+  						String CookieValue = Header_String.substring(Header_String.indexOf("=") + 1, Header_String.indexOf(";"));
+  						//Helper_Functions.PrintOut(CookieName + "  " + CookieValue, false);   //for debug
+  						WebDriver_Functions.SetCookieValue(CookieName, CookieValue);
+  					}
   				}
   			}
-  			
+  			Helper_Functions.PrintOut(full_cookies, false);   //for debug
+
   			return full_cookies;
   		}catch (Exception e){
   			//e.printStackTrace();

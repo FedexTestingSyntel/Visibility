@@ -333,8 +333,6 @@ public class Create_Accounts{
 		}
 	}
 	
-	
-	
 	public static boolean writeAccountsToExcel(Account_Data Account_Info[], String fileName, String sheetName) throws Exception{
 		try {
 			Helper_Functions.Excellock.lock();

@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WDPA_Suite]">
+<suite thread-count="1" configfailurepolicy="continue" guice-stage="DEVELOPMENT" name="Failed suite [SMOKE_Test_Suit]">
   <listeners>
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
-  <test thread-count="8" name="WDPA_Test(failed)" parallel="methods">
+  <test thread-count="1" name="SMOKE_Test(failed)" parallel="methods">
     <parameter name="Level" value="3"/>
     <classes>
+      <class name="WRTT_Application.WRTT_SmokeTest">
+        <methods>
+          <include name="WRTT_SpalshPage_eCRV" invocation-numbers="0"/>
+          <include name="beforeClass"/>
+        </methods>
+      </class> <!-- WRTT_Application.WRTT_SmokeTest -->
+      <class name="WPRL_Application.WPRL_SmokeTest">
+        <methods>
+          <include name="WPRL_AccountManagement_Passkey" invocation-numbers="0"/>
+          <include name="beforeClass"/>
+        </methods>
+      </class> <!-- WPRL_Application.WPRL_SmokeTest -->
+      <class name="OADR_Application.OADR_SmokeTest">
+        <methods>
+          <include name="OADR_Apply_Discount_To_Account" invocation-numbers="2 0 1 3 4"/>
+          <include name="beforeClass"/>
+        </methods>
+      </class> <!-- OADR_Application.OADR_SmokeTest -->
+      <class name="WCRV_Application.WCRV_SmokeTest">
+        <methods>
+          <include name="WCRV_Generate_RateSheet" invocation-numbers="1 0 3 2"/>
+          <include name="beforeClass"/>
+          <include name="WCRV_Generate_RateSheet_Passkey" invocation-numbers="0 3 1 2"/>
+          <include name="WCRV_Help_Link" invocation-numbers="0"/>
+        </methods>
+      </class> <!-- WCRV_Application.WCRV_SmokeTest -->
       <class name="WDPA_Application.WDPA_SmokeTest">
         <methods>
           <include name="WDPA_ExpressFreight" invocation-numbers="0"/>
@@ -14,5 +40,5 @@
         </methods>
       </class> <!-- WDPA_Application.WDPA_SmokeTest -->
     </classes>
-  </test> <!-- WDPA_Test(failed) -->
-</suite> <!-- Failed suite [WDPA_Suite] -->
+  </test> <!-- SMOKE_Test(failed) -->
+</suite> <!-- Failed suite [SMOKE_Test_Suit] -->
