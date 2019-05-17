@@ -1,7 +1,9 @@
 package WFCL_Application;
 
 import java.util.Arrays;
+
 import org.openqa.selenium.By;
+
 import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;

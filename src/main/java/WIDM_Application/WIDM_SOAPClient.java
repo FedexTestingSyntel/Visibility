@@ -1,11 +1,11 @@
 package WIDM_Application;
 
 import static org.junit.Assert.assertThat;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.lang.reflect.Method;
 import org.hamcrest.CoreMatchers;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -45,7 +45,7 @@ public class WIDM_SOAPClient {
 			
 			User_Data User_Info[];
 			
-			String EmailUserIdFlag = "true", NotEmailUserIdFlag = "false", IgnoreEmailUserIdFlag = null;
+			String EmailUserIdFlag = "true"; //NotEmailUserIdFlag = "false", IgnoreEmailUserIdFlag = null;
 			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "AAAUserCreate":

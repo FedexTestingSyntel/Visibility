@@ -1,10 +1,13 @@
 package WPRL_Application;
 
 import static org.testng.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import org.openqa.selenium.By;
 import org.testng.Assert;
+
 import Data_Structures.Credit_Card_Data;
 import Data_Structures.User_Data;
 import SupportClasses.Environment;

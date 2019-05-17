@@ -1,21 +1,17 @@
 package SupportClasses;
 
-import org.testng.annotations.Test;
-import Data_Structures.Account_Data;
-import Data_Structures.Enrollment_Data;
-import Data_Structures.Tax_Data;
-import Data_Structures.User_Data;
-import org.testng.annotations.BeforeClass;
-import org.openqa.selenium.By;
-import org.testng.Assert;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import SupportClasses.*;
+
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+import Data_Structures.User_Data;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
