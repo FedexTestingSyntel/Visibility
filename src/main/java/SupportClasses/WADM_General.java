@@ -44,19 +44,19 @@ public class WADM_General{
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
-		    	case "WADM_Add_Users":
-		    		User_Data User_Info_Array[] = Environment.Get_UserIds(intLevel);
-		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < User_Info_Array.length; k++) {
-		    				if (User_Info_Array[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info_Array[k].PASSKEY.contentEquals("T")) {
-		    					data.add( new Object[] {Level, User_Info_Array[k]});
-		    					break;
-		    				}
+		    case "WADM_Add_Users":
+		    	User_Data User_Info_Array[] = Environment.Get_UserIds(intLevel);
+		    	for (int j = 0; j < CountryList.length; j++) {
+		    		for (int k = 0; k < User_Info_Array.length; k++) {
+		    			if (User_Info_Array[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info_Array[k].PASSKEY.contentEquals("T")) {
+		    				data.add( new Object[] {Level, User_Info_Array[k]});
+		    				break;
 		    			}
-					}
-		    		break;
+		    		}
+				}
+		    	break;
 			}
-		}	
+		}
 		return data.iterator();
 	}
 

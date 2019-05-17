@@ -101,16 +101,16 @@ public class WIDM_Endpoints {
 		 	}
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_USER_ID_PCT_");
-		 	soapBodyElem2.addTextNode(Accont_Info.UserId);
+		 	soapBodyElem2.addTextNode(Accont_Info.User_Info.USER_ID);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("_BAR_fedexConfirmPassword_BAR_");
-		 	soapBodyElem2.addTextNode(Accont_Info.Password);
+		 	soapBodyElem2.addTextNode(Accont_Info.User_Info.PASSWORD);
 
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_SECRET_QUESTION_DESC");
-		 	soapBodyElem2.addTextNode(Accont_Info.Secret_Question);
+		 	soapBodyElem2.addTextNode(Accont_Info.User_Info.SECRET_QUESTION_DESC);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("_BAR_LOGIN_DOT_CRYPT_ANSWER_DESC1_BAR_");
-		 	soapBodyElem2.addTextNode(Accont_Info.Secret_Answer);
+		 	soapBodyElem2.addTextNode(Accont_Info.User_Info.SECRET_ANSWER_DESC);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_LANGUAGE_PCT_");
 		 	soapBodyElem2.addTextNode(lnge_Cd);

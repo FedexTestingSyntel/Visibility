@@ -86,8 +86,8 @@ public class WIDM{
 					for (int j = 0; j < CountryList.length; j++) {
 						for (int k = 0 ; k < 1; k++) {
 							Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
-							Account_Info.UserId = "L" + Level + "Email" + Helper_Functions.getRandomString(10) + "@" + Helper_Functions.getRandomString(10) + ".com";
-							Account_Info.Email = Account_Info.UserId;
+							Account_Info.User_Info.USER_ID = "L" + Level + "Email" + Helper_Functions.getRandomString(10) + "@" + Helper_Functions.getRandomString(10) + ".com";
+							Account_Info.Email = Account_Info.User_Info.USER_ID;
 							String EmailUserIdFlag = "true";
 							data.add( new Object[] {Level, Account_Info, WD, EmailUserIdFlag});
 						}
@@ -107,7 +107,7 @@ public class WIDM{
 			String Response = WIDM_Endpoints.AAA_User_Create(WD.EndpointUrl, Account_Info, EmailUserIdFlag);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 			Helper_Functions.PrintOut(Response);
-			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

@@ -67,8 +67,8 @@ public class WFCL_API_Functions {
   			String Response = "";
   			Account_Data.Set_Dummy_Contact_Name(Account_Info);
   			
-  			//Account_Info.UserId = "L2A784800580US051319T101455zhiz";
-  			if (Account_Info.UserId.contentEquals("")) {
+  			//Account_Info.User_Info.USER_ID = "L2A784800580US051319T101455zhiz";
+  			if (Account_Info.User_Info.USER_ID.contentEquals("")) {
   				// Create the user id
   	  			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
   	  			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
@@ -76,14 +76,14 @@ public class WFCL_API_Functions {
   	  			Account_Data.Print_High_Level_Details(Account_Info);
   	  			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
   	  			Helper_Functions.PrintOut(Response);
-  	  			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+  	  			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
   			}
   			
   			//login with the user id created above.
   			USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
   			String fdx_login_fcl_uuid[] = null;
   			//get the cookies and the uuid of the user
-  			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, Account_Info.UserId, Account_Info.Password);
+  			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
   			Assert.assertNotNull(fdx_login_fcl_uuid);
   			
   			//try and link the account number
@@ -152,8 +152,8 @@ public class WFCL_API_Functions {
   			String Response = "";
   			Account_Data.Set_Dummy_Contact_Name(Account_Info);
   			
-  			//Account_Info.UserId = "L2A784800580US051319T101455zhiz";
-  			if (Account_Info.UserId.contentEquals("")) {
+  			//Account_Info.User_Info.USER_ID = "L2A784800580US051319T101455zhiz";
+  			if (Account_Info.User_Info.USER_ID.contentEquals("")) {
   				// Create the user id
   	  			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
   	  			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
@@ -161,14 +161,14 @@ public class WFCL_API_Functions {
   	  			Account_Data.Print_High_Level_Details(Account_Info);
   	  			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
   	  			Helper_Functions.PrintOut(Response);
-  	  			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+  	  			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
   			}
   			
   			//login with the user id created above.
   			USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
   			String fdx_login_fcl_uuid[] = null;
   			//get the cookies and the uuid of the user
-  			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, Account_Info.UserId, Account_Info.Password);
+  			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
   			Assert.assertNotNull(fdx_login_fcl_uuid);
   			
   			//try and link the account number

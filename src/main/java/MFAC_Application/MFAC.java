@@ -425,12 +425,12 @@ public class MFAC{
 			for(int i = 0; i < 3; i++) { //incase the address is maxed out will try the next addresses in the contact list.
 				try {
 					Contact = USRC.ContactList.get(contact);
-					tempUser = USRC.CreateNewUser(Contact, Level, USRC.Password);
+					tempUser = USRC.CreateNewUser(Contact, Level, USRC.User_Info.PASSWORD);
 					//tempUser = "L3FDM100218T150103";    //in case need to register a specific user
-					fdx_login_fcl_uuid = USRCLogin(tempUser, USRC.Password, Level);
+					fdx_login_fcl_uuid = USRCLogin(tempUser, USRC.User_Info.PASSWORD, Level);
 					Cookie = fdx_login_fcl_uuid[0];
 					USRC.Cookie = Cookie;
-					USRC.UUID = fdx_login_fcl_uuid[1];
+					USRC.User_Info.UUID_NBR = fdx_login_fcl_uuid[1];
 					PrintOut("UUID is " + fdx_login_fcl_uuid[1]);
 					i = 4;
 				}catch (Exception e) {
@@ -447,7 +447,7 @@ public class MFAC{
 
 			//3 - request a pin
 			PrintOut("Request pin through USRC");
-			String UserName = USRC.UUID + "-" + Contact[11];
+			String UserName = USRC.User_Info.UUID_NBR + "-" + Contact[11];
 			response = USRC.CreatePin(Contact[11], Org);
 			Assert.assertTrue(response.contains("true") && response.contains("successful"));
 		
@@ -466,7 +466,7 @@ public class MFAC{
 			PrintOut("Check recipient profile for new FDM user through USRC");
 			response = USRC.RecipientProfile(Cookie, Integer.parseInt(Level));
 			
-			PrintOut(tempUser + "/" + USRC.Password + "--" + fdx_login_fcl_uuid[1] + "--" + Org);
+			PrintOut(tempUser + "/" + USRC.User_Info.PASSWORD + "--" + fdx_login_fcl_uuid[1] + "--" + Org);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

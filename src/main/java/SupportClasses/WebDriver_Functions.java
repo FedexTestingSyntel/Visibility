@@ -19,6 +19,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import Data_Structures.Enrollment_Data;
+import Data_Structures.User_Data;
 import USRC_Application.USRC_API_Endpoints;
 
 public class WebDriver_Functions{
@@ -86,6 +87,7 @@ public class WebDriver_Functions{
     		
     		case "PREF":  AppUrl = LevelURL + "/preferences";break;	
        		case "WADM":
+       		case "IPAS":
     			AppUrl = LevelURL + "/apps/shipadmin/";
 				break;
     		case "WPOR":  	
@@ -253,6 +255,7 @@ public class WebDriver_Functions{
 	
 	public static void Click(By Ele) throws Exception{
 		//String CurrentURL = WebDriver_Functions.GetCurrentURL();
+		//WebDriver_Functions.Click(By.xpath("//input[(@name='accountType') and (@value = 'linkAccount')]")); //example of multiple checks with xpath
 		JavascriptExecutor js = ((JavascriptExecutor) DriverFactory.getInstance().getDriver());
 		Actions a = new Actions(DriverFactory.getInstance().getDriver());
 		Helper_Functions.PrintOut("    E--Element Clicked " + Ele.toString(), true);
@@ -670,6 +673,10 @@ public class WebDriver_Functions{
 		return GetText(By.tagName("body"));
 	}
 
+	public static boolean Login(User_Data User_Info) throws Exception {
+		return Login(User_Info.USER_ID, User_Info.PASSWORD);
+	}
+	
 	public static boolean Login(String UserName, String Password) throws Exception {
 		return Login(UserName, Password, "WFCLWIDMAEMUSRC");
 	}

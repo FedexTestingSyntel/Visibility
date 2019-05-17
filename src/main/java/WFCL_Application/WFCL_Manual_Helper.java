@@ -95,12 +95,12 @@ public class WFCL_Manual_Helper{
 			Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "Acc" + Account + "N");
-			//Account_Info.UserId = "L3WFCLUSERID01";
+			//Account_Info.User_Info.USER_ID = "L3WFCLUSERID01";
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			//register the userid to INET
 			WFCL_Functions_UsingData.INET_Registration(Account_Info);
-			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
+			String Result[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR};
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -118,7 +118,7 @@ public class WFCL_Manual_Helper{
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 
-			String Result[] = new String[] {Account_Info.UserId, Account_Info.Account_Number, Account_Info.UUID};
+			String Result[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR};
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -147,12 +147,12 @@ public class WFCL_Manual_Helper{
 			Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + "FDDT" + Account + "N");
-			Account_Info.UserId = "L6Account" + Account;
+			Account_Info.User_Info.USER_ID = "L6Account" + Account;
 			//create user id and link to account number. comment out the below if linking to existing user.
 			//WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info); 
 			
 			WFCL_Functions_UsingData.Account_Linkage_FDDT(Account_Info);
-			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
+			String Result[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR};
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -199,7 +199,7 @@ public class WFCL_Manual_Helper{
 					WFCL_Functions_UsingData.INET_Registration(Account_Info);
 				}
 				
-				String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
+				String Result[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR};
 				Helper_Functions.PrintOut(Arrays.toString(Result), false);
 			}catch (Exception e) {
 				Assert.fail(e.getMessage());

@@ -151,7 +151,7 @@ public class MC_PI_1{
 			
 			Account_Info = Account_Data.Set_Account_Nickname(Account_Info, Nickname);
 			
-			Account_Info.UserId = Helper_Functions.LoadUserID("L" + Level + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Info.User_Info.USER_ID = Helper_Functions.LoadUserID("L" + Level + Account_Info.Billing_Address_Info.Country_Code);
 			
 			Account_Data Account_Info_Mismatch = new Account_Data(Account_Info);
 			//update the address with different data, currently only configured for US account

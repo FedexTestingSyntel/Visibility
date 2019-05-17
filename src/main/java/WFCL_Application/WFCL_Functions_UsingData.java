@@ -62,9 +62,9 @@ public class WFCL_Functions_UsingData{
 
 		WebDriver_Functions.Type(By.id("zip"), Account_Info.Billing_Address_Info.Zip);
 		WebDriver_Functions.Type(By.id("phone"), Account_Info.Billing_Address_Info.Phone_Number);
-		WebDriver_Functions.Type(By.id("uid"), Account_Info.UserId);
-		WebDriver_Functions.Type(By.id("password"), Account_Info.Password);
-		WebDriver_Functions.Type(By.id("retypePassword"), Account_Info.Password);
+		WebDriver_Functions.Type(By.id("uid"), Account_Info.User_Info.USER_ID);
+		WebDriver_Functions.Type(By.id("password"), Account_Info.User_Info.PASSWORD);
+		WebDriver_Functions.Type(By.id("retypePassword"), Account_Info.User_Info.PASSWORD);
 		WebDriver_Functions.Select(By.id("reminderQuestion"), "SP2Q1", "v"); //"What is your mother's first name?"
 		WebDriver_Functions.Type(By.id("reminderAnswer"), "mom");
 
@@ -72,7 +72,7 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.Click(By.id("acceptterms"));
 		}
 
-		Helper_Functions.PrintOut("Name: " + Account_Info.FirstName + " " + Account_Info.MiddleName + " " + Account_Info.LastName + "    UserID:" + Account_Info.UserId, true);
+		Helper_Functions.PrintOut("Name: " + Account_Info.FirstName + " " + Account_Info.MiddleName + " " + Account_Info.LastName + "    UserID:" + Account_Info.User_Info.USER_ID, true);
 
 		WebDriver_Functions.takeSnapShot("ContactInformation.png");
 		//if the submit flag is sent as true will submit the page.
@@ -146,7 +146,7 @@ public class WFCL_Functions_UsingData{
 				break;
 			case "INET":
 			case "GFBO":
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.UserId);
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.User_Info.USER_ID);
 				if (!Account_Info.Masked_Account_Number.contentEquals("")) {
 					WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td/b"), Account_Info.Masked_Account_Number);
 				}else {
@@ -161,23 +161,23 @@ public class WFCL_Functions_UsingData{
 				//WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table/tbody/tr[3]/td[4]/table/tbody/tr[2]/td/table/tbody/tr/td[2]/b"), AddressDetails[0] + "\n" + AddressDetails[2] + ", " + AddressDetails[4] + " " + AddressDetails[5] + "\n" + AddressDetails[6].toLowerCase());
 				break;
 			case "WDPA":
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b"), Account_Info.UserId);
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b"), Account_Info.User_Info.USER_ID);
 				break;
 			case "WFCL_Link"://WFCL linkage page
 				if (CC.contains("US")){
-					WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), Account_Info.UserId);
+					WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), Account_Info.User_Info.USER_ID);
 					if (!Account_Info.Masked_Account_Number.contentEquals("")) {
 						WebDriver_Functions.WaitForText(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[2]/td[2]"), Account_Info.Masked_Account_Number);    //will need to update due to account masking
 					}
 				}else {
-					WebDriver_Functions.WaitForBodyText(Account_Info.UserId);
+					WebDriver_Functions.WaitForBodyText(Account_Info.User_Info.USER_ID);
 				}
 				break;
 			case "WFCL_CC":
-				WebDriver_Functions.WaitOr_TextToBe(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), Account_Info.UserId, By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr[1]/td[2]"),  Account_Info.UserId);
+				WebDriver_Functions.WaitOr_TextToBe(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div[1]/div[2]/table/tbody/tr[1]/td[2]"), Account_Info.User_Info.USER_ID, By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr[1]/td[2]"),  Account_Info.User_Info.USER_ID);
 				break;
 			case "WFCL_CREATE":
-				WebDriver_Functions.WaitForTextPresentIn(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr/td[2]"), Account_Info.UserId);
+				WebDriver_Functions.WaitForTextPresentIn(By.xpath("//*[@id='rightColumn']/table/tbody/tr/td[1]/div/div/div[2]/table/tbody/tr/td[2]"), Account_Info.User_Info.USER_ID);
 				break;
 			}
 		}catch (Exception e){
@@ -213,8 +213,8 @@ public class WFCL_Functions_UsingData{
 		InvoiceOrCCValidaiton(Account_Info);
 		Verify_Confirmaiton_Page("WFCL_Link", Account_Info);
 
-		Account_Info.UUID = UUID; 
-		Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+		Account_Info.User_Info.UUID_NBR = UUID; 
+		Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		return Account_Info;
 	}//end WFCL_AccountLinkage
 	
@@ -232,8 +232,8 @@ public class WFCL_Functions_UsingData{
 		//sign in if needed
 		WebDriver_Functions.WaitPresent(By.id("userId")); //added for now as always need to login
 		if (WebDriver_Functions.isPresent(By.id("userId"))) {
-			WebDriver_Functions.Type(By.id("userId"), Account_Info.UserId);
-			WebDriver_Functions.Type(By.id("password"), Account_Info.Password);
+			WebDriver_Functions.Type(By.id("userId"), Account_Info.User_Info.USER_ID);
+			WebDriver_Functions.Type(By.id("password"), Account_Info.User_Info.PASSWORD);
 			WebDriver_Functions.Click(By.id("login-button"));
 		}
 
@@ -246,8 +246,8 @@ public class WFCL_Functions_UsingData{
 		Verify_Confirmaiton_Page("FDDT", Account_Info);
 		
 		String UUID = WebDriver_Functions.GetCookieUUID();
-		Account_Info.UUID = UUID; 
-		//Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+		Account_Info.User_Info.UUID_NBR = UUID; 
+		//Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		return Account_Info;
 	}//end Account_Linkage_FDDT
 
@@ -316,9 +316,9 @@ public class WFCL_Functions_UsingData{
 		WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
 		 
 		//String UUID = WebDriver_Functions.GetCookieUUID();
-		//Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Account_Info.Password + "--" + AccountNumber + "--" + UUID, true);
+		//Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + UserId + "/" + Account_Info.User_Info.PASSWORD + "--" + AccountNumber + "--" + UUID, true);
 		//String ReturnValue[] = new String[] {UserId, AccountNumber, UUID, "INET:" + InetFlag};
-		//Helper_Functions.WriteUserToExcel(UserId, Account_Info.Password);
+		//Helper_Functions.WriteUserToExcel(UserId, Account_Info.User_Info.PASSWORD);
 		//return Arrays.toString(ReturnValue);
 		return true;
 	}
@@ -365,9 +365,9 @@ public class WFCL_Functions_UsingData{
 		};
 		
 		String UUID = WebDriver_Functions.GetCookieUUID();
-		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + Account_Info.UserId + "/" + Account_Info.Password + "--" + Account_Info.Account_Number + "--" + UUID, true);
-		String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Account_Number, UUID, "INET:" + InetFlag};
-		Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + Account_Info.User_Info.USER_ID + "/" + Account_Info.User_Info.PASSWORD + "--" + Account_Info.Account_Number + "--" + UUID, true);
+		String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.Account_Number, UUID, "INET:" + InetFlag};
+		Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		return Arrays.toString(ReturnValue);
 	}//end WFCL_AccountRegistration
 	
@@ -393,7 +393,7 @@ public class WFCL_Functions_UsingData{
 
 			//Step 1: Enter the contact information.
 			ContactInfo_Page(Account_Info, true); //enters all of the details
-			Account_Info.UUID = WebDriver_Functions.GetCookieUUID();
+			Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
 			
 			//Step 2: Enter the credit card details
 			WebDriver_Functions.WaitPresent(By.id("CCType"));
@@ -413,11 +413,11 @@ public class WFCL_Functions_UsingData{
 			//Check the Administration page
 			AdminFlag = Check_WADM_Enrolled(Account_Info.Billing_Address_Info.Country_Code);
 			
-			Helper_Functions.PrintOut("Finished CreditCardRegistrationEnroll  " + Account_Info.UserId + "/" + Account_Info.Password + "--" + Account_Info.Account_Number + "--" + Account_Info.UUID, true);
+			Helper_Functions.PrintOut("Finished CreditCardRegistrationEnroll  " + Account_Info.User_Info.USER_ID + "/" + Account_Info.User_Info.PASSWORD + "--" + Account_Info.Account_Number + "--" + Account_Info.User_Info.UUID_NBR, true);
 			
-			String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID, Account_Data.Last_Four_of_Credit_Card(Account_Info), "INET:" + InetFlag, "Admin:" + AdminFlag};
+			String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR, Account_Data.Last_Four_of_Credit_Card(Account_Info), "INET:" + InetFlag, "Admin:" + AdminFlag};
 			
-			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 			return ReturnValue;
 		}catch (Exception e) {
 			Account_Data.Print_High_Level_Details(Account_Info);
@@ -480,9 +480,9 @@ public class WFCL_Functions_UsingData{
 				throw new Exception("Error, user not created.");
 			}
 			
-			Helper_Functions.PrintOut("Finished WFCL_UserRegistration  " + Account_Info.UserId + "/" + Account_Info.Password + " -- " + UUID, true);
-			String ReturnValue[] = new String[]{Account_Info.UserId, Account_Info.Password,  UUID};
-			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);//Write User to file for later reference
+			Helper_Functions.PrintOut("Finished WFCL_UserRegistration  " + Account_Info.User_Info.USER_ID + "/" + Account_Info.User_Info.PASSWORD + " -- " + UUID, true);
+			String ReturnValue[] = new String[]{Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD,  UUID};
+			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);//Write User to file for later reference
 			return ReturnValue;
 		}catch (Exception e) {
 			if (e.getMessage().contains("[(@name='accountType') and (@value = 'noAccount')]")){
@@ -594,13 +594,13 @@ public class WFCL_Functions_UsingData{
  			Account_Entry_Screen(Account_Info);
 	 		
  			Verify_Confirmaiton_Page("WDPA", Account_Info);
-		    Account_Info.UUID = WebDriver_Functions.GetCookieUUID();
+		    Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
 		    
 		    WebDriver_Functions.Click(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/p[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr[1]/td[2]/a/img"));
 		    WebDriver_Functions.WaitPresent(By.id("module.account._headerTitle"));
 		    
-		    String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
-		    Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+		    String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR};
+		    Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		    return ReturnValue;
  		}catch (Exception e) {
  			e.printStackTrace();
@@ -911,8 +911,8 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.takeSnapShot("Page.png");
 			
 			String UUID = WebDriver_Functions.GetCookieUUID();
-		    String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Account_Number, UUID};
-		    Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+		    String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.Account_Number, UUID};
+		    Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		    return ReturnValue;
  		}catch (Exception e) {
  			throw e;
@@ -935,7 +935,7 @@ public class WFCL_Functions_UsingData{
 		}
 		
 		//Step 2 Account information
-		Account_Info.UUID = WebDriver_Functions.GetCookieUUID();//print out the UUID for reference
+		Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();//print out the UUID for reference
 		Account_Info.Account_Nickname = Account_Info.Account_Number + "_" + CountryCode;
 		Account_Entry_Screen(Account_Info);
 
@@ -963,8 +963,8 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.WaitPresent(By.xpath("//*[@id='appTitle']"));
 		}
 
-		String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID, "INET:" + InetFlag};
-		Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+		String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR, "INET:" + InetFlag};
+		Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		return ReturnValue;
 	}//end WFCL_AccountRegistration
 		
@@ -1120,7 +1120,7 @@ public class WFCL_Functions_UsingData{
  			}
  			ContactInfo_Page(Account_Info, true);
  			
- 			Account_Info.UUID = WebDriver_Functions.GetCookieUUID();
+ 			Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
  			
  			boolean account_entry = Account_Entry_Screen(Account_Info);
  			if (!account_entry) {
@@ -1140,7 +1140,7 @@ public class WFCL_Functions_UsingData{
  				ConfrimationPageCheck = true;
  			}
  			
-		    return new String[] {Account_Info.UserId, Account_Info.UUID, Account_Info.Account_Number, Account_Info.Billing_Address_Info.Country_Code, "Confirmation: " + ConfrimationPageCheck};
+		    return new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.UUID_NBR, Account_Info.Account_Number, Account_Info.Billing_Address_Info.Country_Code, "Confirmation: " + ConfrimationPageCheck};
  		}catch (Exception e) {
  			throw e;
  		}
@@ -1262,7 +1262,7 @@ public class WFCL_Functions_UsingData{
  			
  			//Login with the user.       //need to recheck if this is expected.
  			WebDriver_Functions.Type(By.name("username"), UserId);
- 			WebDriver_Functions.Type(By.name("password"), Account_Info.Password);
+ 			WebDriver_Functions.Type(By.name("password"), Account_Info.User_Info.PASSWORD);
  			WebDriver_Functions.Click(By.name("login"));
  			
  			//The InSight confirmation page
@@ -1325,7 +1325,7 @@ public class WFCL_Functions_UsingData{
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.id("mainContentId:accSmyCmdLink")));//wait for the GFBO page to load
 			captureScreenShot("WFCL", WFCLPath + "Page.png");
 	 		
-		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_GFBO  " + UserId + "/" + Account_Info.Password + "--" + AccountNumber);
+		    Helper_Functions.PrintOut("Finished WFCL_AccountRegistration_GFBO  " + UserId + "/" + Account_Info.User_Info.PASSWORD + "--" + AccountNumber);
  		}catch (Exception e) {
  			GeneralFailure(e);
  		}

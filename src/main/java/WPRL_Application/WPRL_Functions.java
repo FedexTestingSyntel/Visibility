@@ -1,14 +1,10 @@
 package WPRL_Application;
 
 import static org.testng.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import org.openqa.selenium.By;
 import org.testng.Assert;
-
-import Data_Structures.Account_Data;
 import Data_Structures.Credit_Card_Data;
 import Data_Structures.User_Data;
 import SupportClasses.Environment;
@@ -520,12 +516,12 @@ public class WPRL_Functions {
 		return new String[] {"Need to add details"};
 	}//end WPRL_FDM
 	
-	public static String[] WPRL_FDM_Credit_Card(User_Data User_Informaiton, Credit_Card_Data Credit_Card_Info) throws Exception{
+	public static String[] WPRL_FDM_Credit_Card(User_Data User_Info, Credit_Card_Data Credit_Card_Info) throws Exception{
 		//https://wwwdev.idev.fedex.com/apps/myprofile/deliverymanager/?locale=en_us&cntry_code=us
 		
 		try {
-			WebDriver_Functions.Login(User_Informaiton.USER_ID, User_Informaiton.PASSWORD);
-			WebDriver_Functions.ChangeURL("WPRL_FDM", User_Informaiton.Address_Info.Country_Code, false);
+			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
+			WebDriver_Functions.ChangeURL("WPRL_FDM", User_Info.Address_Info.Country_Code, false);
 			WebDriver_Functions.WaitPresent(By.id("notifAddNotificationsLink"));
 			WebDriver_Functions.WaitForText(By.id("moduleHeader"), "Recipient Contact Information");
 			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
@@ -544,7 +540,7 @@ public class WPRL_Functions {
 // Test the Credit Card Section
 			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
 			WebDriver_Functions.Click(By.cssSelector("#creditcardinformation > #show-hide > div.fx-toggler > #edit"));
-			WPRL_CreditCard_Input(User_Informaiton, Credit_Card_Info);
+			WPRL_CreditCard_Input(User_Info, Credit_Card_Info);
 			WebDriver_Functions.Click(By.id("card-continue-save-btn"));
 			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
 			WebDriver_Functions.WaitPresent(By.cssSelector("#general-errors-creditcard > p"));
@@ -565,7 +561,7 @@ public class WPRL_Functions {
 				Helper_Functions.PrintOut("Not able to remove newly added CC ", true);
 			}
 			
-			return new String[] {User_Informaiton.USER_ID, User_Informaiton.PASSWORD, Credit_Card_Info.CARD_NUMBER_LAST_FOUR, "Card Removed: "+ Card_Removed};
+			return new String[] {User_Info.USER_ID, User_Info.PASSWORD, Credit_Card_Info.CARD_NUMBER_LAST_FOUR, "Card Removed: "+ Card_Removed};
 	 	}catch (Exception e) {
 			e.printStackTrace();
 			throw e;

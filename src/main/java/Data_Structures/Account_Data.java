@@ -36,7 +36,6 @@ public class Account_Data {
 	public String Tax_ID_One = "";
 	public String Tax_ID_Two = "";
 	
-	//These are generic values that can be set during registration
 	public String Company_Name = "";
 	public String FirstName = "";
 	public String MiddleName = "";
@@ -44,14 +43,19 @@ public class Account_Data {
 	public String LanguageCode = "EN";
 	public String Email = "accept@testing.com";
 	
+	/*
 	public String UserId = "";
 	public String Password = "Test1234";
 	public String UUID = "";
 	public String Secret_Question = "SP2Q1"; //"What is your mother's first name?"
 	public String Secret_Answer = "mom";
+	*/
+	public User_Data User_Info = new User_Data();
+	
 	
 	public Account_Data() {
 		//generic constructor
+		User_Info.EMAIL_ADDRESS = Email;
 	}
 
 	public static void Print_Account_Address(Account_Data Account_Info) {
@@ -64,7 +68,7 @@ public class Account_Data {
 	}
 	
 	public static void Print_High_Level_Details(Account_Data Account_Info) {
-		String HighLevel[] = new String[] {Account_Info.UserId, Account_Info.UUID, Account_Info.Account_Number, Account_Info.FirstName, Account_Info.MiddleName, Account_Info.LastName, Account_Info.Email};
+		String HighLevel[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.UUID_NBR, Account_Info.Account_Number, Account_Info.FirstName, Account_Info.MiddleName, Account_Info.LastName, Account_Info.Email};
 		Helper_Functions.PrintOut(Arrays.toString(HighLevel));
 	}
 	
@@ -104,8 +108,8 @@ public class Account_Data {
 	}
 	
 	public static Account_Data Set_UserId(Account_Data Account_Info, String Base) {
-		Account_Info.UserId = Helper_Functions.LoadUserID(Base);
-		Account_Info.Password = Helper_Functions.myPassword;
+		Account_Info.User_Info.USER_ID = Helper_Functions.LoadUserID(Base);
+		Account_Info.User_Info.PASSWORD = Helper_Functions.myPassword;
 		return Account_Info;
 	}
 	
@@ -148,13 +152,13 @@ public class Account_Data {
 		One.FirstName == Two.FirstName && 
 		One.MiddleName == Two.MiddleName && 
 		One.LastName == Two.LastName && 
-		One.UserId == Two.UserId && 
+		One.User_Info.USER_ID == Two.User_Info.USER_ID && 
 		One.Email == Two.Email && 
-		One.Password == Two.Password && 
+		One.User_Info.PASSWORD == Two.User_Info.PASSWORD && 
 		One.Company_Name == Two.Company_Name && 
-		One.Secret_Question == Two.Secret_Question && 
-		One.Secret_Answer == Two.Secret_Answer && 
-		One.UUID == Two.UUID) {
+		One.User_Info.SECRET_QUESTION_DESC == Two.User_Info.SECRET_QUESTION_DESC && 
+		One.User_Info.SECRET_ANSWER_DESC == Two.User_Info.SECRET_ANSWER_DESC && 
+		One.User_Info.UUID_NBR == Two.User_Info.UUID_NBR) {
 			return true;
 		}
 			return false;
@@ -198,13 +202,13 @@ public class Account_Data {
 		this.FirstName = account_Info.FirstName;
 		this.MiddleName = account_Info.MiddleName;
 		this.LastName = account_Info.LastName;
-		this.UserId = account_Info.UserId;
+		this.User_Info.USER_ID = account_Info.User_Info.USER_ID;
 		this.Email = account_Info.Email;
-		this.UUID = account_Info.UUID;
+		this.User_Info.UUID_NBR = account_Info.User_Info.UUID_NBR;
 		this.Company_Name = account_Info.Company_Name;
-		this.Secret_Answer = account_Info.Secret_Answer;
-		this.Secret_Question = account_Info.Secret_Question;
-		this.Password = account_Info.Password;
+		this.User_Info.SECRET_ANSWER_DESC = account_Info.User_Info.SECRET_ANSWER_DESC;
+		this.User_Info.SECRET_QUESTION_DESC = account_Info.User_Info.SECRET_QUESTION_DESC;
+		this.User_Info.PASSWORD = account_Info.User_Info.PASSWORD;
 		this.LanguageCode = account_Info.LanguageCode;
 	}
 	

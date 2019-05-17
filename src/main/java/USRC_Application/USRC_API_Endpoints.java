@@ -372,11 +372,11 @@ public class USRC_API_Endpoints {
 			.put("countryCode", Account_Info.Billing_Address_Info.Country_Code)
 			.put("emailAddress", Account_Info.Email)
 			.put("phoneNumber", Account_Info.Billing_Address_Info.Phone_Number)
-			.put("userId", Account_Info.UserId)
-			.put("password", Account_Info.Password)
-			.put("reenterPassword", Account_Info.Password)
-			.put("secretQuestion", Account_Info.Secret_Question)
-			.put("secretAnswer", Account_Info.Secret_Answer);
+			.put("userId", Account_Info.User_Info.USER_ID)
+			.put("password", Account_Info.User_Info.PASSWORD)
+			.put("reenterPassword", Account_Info.User_Info.PASSWORD)
+			.put("secretQuestion", Account_Info.User_Info.SECRET_QUESTION_DESC)
+			.put("secretAnswer", Account_Info.User_Info.SECRET_ANSWER_DESC);
 
 		String json = main.toString();
 				

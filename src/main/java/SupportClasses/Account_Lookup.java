@@ -317,7 +317,7 @@ public class Account_Lookup extends Helper_Functions{
 			PrintOut("Address Returned: " + Account_Details.Account_Number + Arrays.toString(BillingAddress), true);
 			//will load dummy values
 			Account_Details.Email = Helper_Functions.MyEmail;
-			Account_Details.Password = Helper_Functions.myPassword;
+			Account_Details.User_Info.PASSWORD = Helper_Functions.myPassword;
 			return Account_Details;
  		}catch (Exception e){
  			e.printStackTrace();

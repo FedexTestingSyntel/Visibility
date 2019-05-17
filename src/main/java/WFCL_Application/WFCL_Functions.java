@@ -81,6 +81,7 @@ public class WFCL_Functions{
 		}
 	}//end CreditCardRegistrationEnroll
 	
+	
 	public static boolean Check_INET_Enrolled(String CountryCode) {
 		try{
 			WebDriver_Functions.ChangeURL("INET", CountryCode, false);

@@ -233,15 +233,15 @@ public class USRC_General {
 		//Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails("642893505", Level, "FX");
 		//1 - Login, get cookies and uuid
 		Account_Info.Email = "accept@fedex.com";
-		Account_Info.UserId = "L" + USRC_Details.Level + "Account" + Account_Number;
+		Account_Info.User_Info.USER_ID = "L" + USRC_Details.Level + "Account" + Account_Number;
 		Account_Data.Set_Dummy_Contact_Name(Account_Info);
 		
 		String Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, Account_Info);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
-		String Results[] = new String[] {Account_Info.UserId, Account_Info.Password};
-		Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+		String Results[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD};
+		Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		Helper_Functions.PrintOut(Arrays.toString(Results), false);
 	}
 	

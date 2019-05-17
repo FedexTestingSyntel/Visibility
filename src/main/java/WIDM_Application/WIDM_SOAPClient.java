@@ -97,7 +97,7 @@ public class WIDM_SOAPClient {
 			Account_Data.Print_High_Level_Details(Account_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 			Helper_Functions.PrintOut(Response);
-			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -108,13 +108,13 @@ public class WIDM_SOAPClient {
 		try {
 			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Info.UserId = "L" + Level + "Email" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2) + "@accept.com";
+			Account_Info.User_Info.USER_ID = "L" + Level + "Email" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2) + "@accept.com";
 			Account_Info.Email = "other@email.com";
 			String Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, Email_As_UserId);
 			Account_Data.Print_High_Level_Details(Account_Info);
 			assertThat(Response, CoreMatchers.containsString(WIDM_Error_Codes.WIDM_Error_Code("98")));
 			Helper_Functions.PrintOut(Response);
-			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -125,18 +125,18 @@ public class WIDM_SOAPClient {
 		try {
 			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Info.UserId = "L" + Level + "Email" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2) + "@accept.com";
-			Account_Info.Email = Account_Info.UserId;
+			Account_Info.User_Info.USER_ID = "L" + Level + "Email" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2) + "@accept.com";
+			Account_Info.Email = Account_Info.User_Info.USER_ID;
 			String Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, Email_As_UserId);
 			Account_Data.Print_High_Level_Details(Account_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 			//login with the user to confirm created successfully.
 			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
-			String[] fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, Account_Info.UserId, Account_Info.Password);
+			String[] fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 			
-			Helper_Functions.WriteUserToExcel(Account_Info.UserId, Account_Info.Password);
+			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 			
-			String ReturnValue[] = new String[] {Account_Info.UserId, Account_Info.Password, fdx_login_fcl_uuid[1]};
+			String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD, fdx_login_fcl_uuid[1]};
 			Helper_Functions.PrintOut(Arrays.toString(ReturnValue), false);
 			
 		}catch (Exception e) {

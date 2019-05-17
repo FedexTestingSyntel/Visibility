@@ -1,33 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="12" total="13" passed="1">
+<testng-results skipped="0" failed="0" ignored="0" total="0" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="82355" started-at="2019-05-17T18:09:23Z" finished-at="2019-05-17T18:10:45Z">
+  <suite name="Default suite" duration-ms="696" started-at="2019-05-17T19:18:59Z" finished-at="2019-05-17T19:19:00Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="82355" started-at="2019-05-17T18:09:23Z" finished-at="2019-05-17T18:10:45Z">
-      <class name="WFCL_Application.WFCL_New">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WFCL_Application.WFCL_New@6cc7b4de]" name="beforeClass" is-config="true" duration-ms="33" started-at="2019-05-17T18:09:23Z" finished-at="2019-05-17T18:09:23Z">
+    <test name="Default test" duration-ms="696" started-at="2019-05-17T19:18:59Z" finished-at="2019-05-17T19:19:00Z">
+      <class name="IPAS_Application.IPAS_Invitation">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:IPAS_Application.IPAS_Invitation@11c9af63]" name="beforeClass" is-config="true" duration-ms="36" started-at="2019-05-17T19:18:59Z" finished-at="2019-05-17T19:18:59Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="UserRegistration_Account_Data(java.lang.String, Data_Structures.Account_Data)[pri:0, instance:WFCL_Application.WFCL_New@6cc7b4de]" name="UserRegistration_Account_Data" duration-ms="81807" started-at="2019-05-17T18:09:23Z" data-provider="dp" finished-at="2019-05-17T18:10:45Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[3]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.Account_Data@72b8f7b2]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- UserRegistration_Account_Data -->
-      </class> <!-- WFCL_Application.WFCL_New -->
+      </class> <!-- IPAS_Application.IPAS_Invitation -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

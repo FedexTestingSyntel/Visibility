@@ -140,7 +140,7 @@ public class WFCL_SmokeTest{
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			boolean InetFlag = WFCL_Functions_UsingData.INET_Registration(Account_Info);
-			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID, "Inet: " + InetFlag};
+			String Result[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR, "Inet: " + InetFlag};
 			Result = Arrays.copyOf(Result, Result.length + 1);
 			Result[Result.length - 1] = "Admin: " + WFCL_Functions.Admin_Registration(Account_Info.Billing_Address_Info.Country_Code, Account_Info.Account_Number);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
@@ -160,7 +160,7 @@ public class WFCL_SmokeTest{
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			//register the user id to INET
 			WFCL_Functions_UsingData.INET_Registration(Account_Info);
-			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID};
+			String Result[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR};
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

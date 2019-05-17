@@ -16,13 +16,7 @@ public class User_Data {
 	public String MIDDLE_NM = "";
 	public String LAST_NM = "";
 	public String EMAIL_ADDRESS = "";
-	/*
-	public String STREET_DESC = "";
-	public String STREET_DESC_2 = "";
-	public String CITY_NM = "";
-	public String STATE_CD = "";
-	public String POSTAL_CD = "";
-	public String COUNTRY_CD = "";*/
+	
 	public Address_Data Address_Info = new Address_Data();
 	
 	public String ACCOUNT_NUMBER = "";
@@ -58,8 +52,8 @@ public class User_Data {
 		this.PHONE = Helper_Functions.myPhone;
 	}
 	
-	public static User_Data Set_Dummy_Contact_Name(User_Data User_Info, String CountryCode, String Level) {
-		String ContactName[] = Helper_Functions.LoadDummyName(CountryCode, Level);
+	public static User_Data Set_Dummy_Contact_Name(User_Data User_Info, String BaseValue, String Level) {
+		String ContactName[] = Helper_Functions.LoadDummyName(BaseValue, Level);
 		User_Info.FIRST_NM = ContactName[0];
 		User_Info.LAST_NM = ContactName[2];
 		return User_Info;
