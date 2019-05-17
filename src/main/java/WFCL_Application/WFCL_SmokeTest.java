@@ -75,23 +75,23 @@ public class WFCL_SmokeTest{
 				}
 	    		break;
 	    	case "WFCL_Reset_Password_Secret":
-	    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+	    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
-	    			for (int k = 0; k < UD.length; k++) {
-	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].SECRET_ANSWER_DESC.contentEquals("")) {
-	    					data.add( new Object[] {Level, UD[k], UD[k].PASSWORD + "A"});
+	    			for (int k = 0; k < User_Info.length; k++) {
+	    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("")) {
+	    					data.add( new Object[] {Level, User_Info[k], User_Info[k].PASSWORD + "A"});
 	    					break;
 	    				}
 	    			}
 				}
 	    		break;
 	    	case "WFCL_Reset_Password_Email":
-	    		UD = Environment.Get_UserIds(intLevel);
+	    		User_Info = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
-	    			for (int k = 0; k < UD.length; k++) {
+	    			for (int k = 0; k < User_Info.length; k++) {
 	    				//make sure have your email address set as the Helper_Functions.MyEmail
-	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
-	    					data.add( new Object[] {Level, UD[k]});
+	    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
+	    					data.add( new Object[] {Level, User_Info[k]});
 	    					break;
 	    				}
 	    			}

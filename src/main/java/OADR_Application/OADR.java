@@ -40,16 +40,16 @@ public class OADR{
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "OADR_Apply_Discount_To_Account":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 		    		int Enrollments = 0;
 		    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (Enrollment_Data Enrollment: ED) {
 		    				if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0])) {
-					    		for (int k = 0; k < UD.length; k++) {
-				    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contentEquals("T")) {
-				    					data.add( new Object[] {Level, Enrollment, UD[j].USER_ID, UD[j].PASSWORD});
-				    					UD[k].COUNTRY_CD = "";//so the same user will not be used again for same scenario
+					    		for (int k = 0; k < User_Info.length; k++) {
+				    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].PASSKEY.contentEquals("T")) {
+				    					data.add( new Object[] {Level, Enrollment, User_Info[j].USER_ID, User_Info[j].PASSWORD});
+				    					User_Info[k].Address_Info.Country_Code = "";//so the same user will not be used again for same scenario
 				    					Enrollments++;
 					    				break;
 				    				}
@@ -80,8 +80,8 @@ public class OADR{
 		try {
 			WebDriver_Functions.Login(UserId, Password);
 			String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
-			USRC_Data UD = USRC_Data.LoadVariables(Level);
-			String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(UD.GenericUSRCURL, "fdx_login=" + Login_Cookie);
+			USRC_Data User_Info = USRC_Data.LoadVariables(Level);
+			String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(User_Info.GenericUSRCURL, "fdx_login=" + Login_Cookie);
 			
 			WebDriver_Functions.ChangeURL_EnrollmentID(ED, false, false);
 

@@ -65,7 +65,7 @@ public class WIDM_SOAPClient {
 					User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
-		    				if (User_Info[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("") && User_Info[k].USER_TYPE.contentEquals("NON_MANAGED")) {
+		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("") && User_Info[k].USER_TYPE.contentEquals("NON_MANAGED")) {
 		    					data.add( new Object[] {Level, User_Info[k]});
 		    					break;
 		    				}
@@ -76,7 +76,7 @@ public class WIDM_SOAPClient {
 					User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
-		    				if (User_Info[k].USER_ID.contains("@") && User_Info[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("") && User_Info[k].USER_TYPE.contentEquals("NON_MANAGED")) {
+		    				if (User_Info[k].USER_ID.contains("@") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("") && User_Info[k].USER_TYPE.contentEquals("NON_MANAGED")) {
 		    					data.add( new Object[] {Level, User_Info[k]});
 		    					break;
 		    				}
@@ -149,7 +149,7 @@ public class WIDM_SOAPClient {
 		try {
 			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
 			User_Data.Print_High_Level_Details(User_Info);
-			User_Data.Set_Dummy_Contact_Name(User_Info, User_Info.COUNTRY_CD, Level);
+			User_Data.Set_Dummy_Contact_Name(User_Info, User_Info.Address_Info.Country_Code, Level);
 			String Response = WIDM_Endpoints.AAA_User_Update(WIDM_Info.EndpointUrl, User_Info, null);
 			User_Data.Print_High_Level_Details(User_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
@@ -163,7 +163,7 @@ public class WIDM_SOAPClient {
 		try {
 			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
 			User_Data.Print_High_Level_Details(User_Info);
-			User_Data.Set_Dummy_Contact_Name(User_Info, User_Info.COUNTRY_CD, Level);
+			User_Data.Set_Dummy_Contact_Name(User_Info, User_Info.Address_Info.Country_Code, Level);
 			String Response = WIDM_Endpoints.AAA_User_Update(WIDM_Info.EndpointUrl, User_Info, null);
 			User_Data.Print_High_Level_Details(User_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));

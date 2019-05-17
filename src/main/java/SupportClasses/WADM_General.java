@@ -45,11 +45,11 @@ public class WADM_General{
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WADM_Add_Users":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info_Array[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].PASSKEY.contentEquals("T")) {
-		    					data.add( new Object[] {Level, UD});
+		    			for (int k = 0; k < User_Info_Array.length; k++) {
+		    				if (User_Info_Array[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info_Array[k].PASSKEY.contentEquals("T")) {
+		    					data.add( new Object[] {Level, User_Info_Array[k]});
 		    					break;
 		    				}
 		    			}
@@ -75,7 +75,7 @@ public class WADM_General{
 	}
 	
 	public static String WADM_Add_User_To_Company(User_Data User_Info, User_Data New_User_Info) throws Exception{
- 		WebDriver_Functions.ChangeURL("INET", User_Info.COUNTRY_CD, true);
+ 		WebDriver_Functions.ChangeURL("INET", User_Info.Address_Info.Country_Code, true);
  		
     	try{
 

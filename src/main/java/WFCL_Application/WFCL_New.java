@@ -91,59 +91,59 @@ public class WFCL_New{
 					}
 		    		break;
 		    	case "Password_Reset_Secret":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].SECRET_ANSWER_DESC.contentEquals("")) {
-		    					data.add( new Object[] {Level, UD[k], UD[k].PASSWORD + "A"});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("")) {
+		    					data.add( new Object[] {Level, User_Info[k], User_Info[k].PASSWORD + "A"});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "Reset_Password_Email":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
+		    			for (int k = 0; k < User_Info.length; k++) {
 		    				//make sure have your email address set as the Helper_Functions.MyEmail
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
-		    					data.add( new Object[] {Level, UD[k]});
+		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
+		    					data.add( new Object[] {Level, User_Info[k]});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "FCLA_WADM_Invitaiton":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
+		    			for (int k = 0; k < User_Info.length; k++) {
 		    				//make sure have your email address set as the Helper_Functions.MyEmail
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contains("T")) {
-		    					data.add( new Object[] {Level, UD[k]});
+		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].PASSKEY.contains("T")) {
+		    					data.add( new Object[] {Level, User_Info[k]});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "Link_Account_To_User":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 30; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contains("F")) {
+		    			for (int k = 30; k < User_Info.length; k++) {
+		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].PASSKEY.contains("F")) {
 		    					Account_Info = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
-		    					data.add( new Object[] {Level, UD[k], Account_Info});
+		    					data.add( new Object[] {Level, User_Info[k], Account_Info});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "WFCL_GFBO_Registration":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 30; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].PASSKEY.contains("F") && UD[k].GFBO_ENABLED.contains("F")) {
+		    			for (int k = 30; k < User_Info.length; k++) {
+		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].PASSKEY.contains("F") && User_Info[k].GFBO_ENABLED.contains("F")) {
 		    					Account_Info = Helper_Functions.getFreshAccount(Level, CountryList[j][0]);
-		    					data.add( new Object[] {Level, UD[k], Account_Info});
+		    					data.add( new Object[] {Level, User_Info[k], Account_Info});
 		    					break;
 		    				}
 		    			}

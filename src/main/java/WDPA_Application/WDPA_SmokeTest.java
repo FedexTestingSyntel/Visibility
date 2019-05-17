@@ -36,11 +36,11 @@ public class WDPA_SmokeTest{
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 			case "WDPA_Ground":
-	    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+	    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
-	    			for (int k = 1; k < UD.length; k++) {
-	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].GROUND_ENABLED.contentEquals("T")) {
-	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
+	    			for (int k = 1; k < User_Info.length; k++) {
+	    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].WDPA_ENABLED.contentEquals("T") && User_Info[k].GROUND_ENABLED.contentEquals("T")) {
+	    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD});
 	    					break;
 	    				}
 	    			}
@@ -48,22 +48,22 @@ public class WDPA_SmokeTest{
 	    		break;
 	    	case "WDPA_Express":
 	    	case "WDPA_ExpressFreight"://need to fix this later, not for all countries.
-	    		UD = Environment.Get_UserIds(intLevel);
+	    		User_Info = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
-	    			for (int k = 1; k < UD.length; k++) {
-	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].EXPRESS_ENABLED.contentEquals("T")) {
-	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
+	    			for (int k = 1; k < User_Info.length; k++) {
+	    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].WDPA_ENABLED.contentEquals("T") && User_Info[k].EXPRESS_ENABLED.contentEquals("T")) {
+	    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD});
 	    					break;
 	    				}
 	    			}
 				}
 	    		break;
 	    	case "WDPA_LTLFreight":
-	    		UD = Environment.Get_UserIds(intLevel);
+	    		User_Info = Environment.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
-	    			for (int k = 0; k < UD.length; k++) {
-	    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].WDPA_ENABLED.contentEquals("T") && UD[k].FREIGHT_ENABLED.contentEquals("T")) {
-	    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
+	    			for (int k = 0; k < User_Info.length; k++) {
+	    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].WDPA_ENABLED.contentEquals("T") && User_Info[k].FREIGHT_ENABLED.contentEquals("T")) {
+	    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD});
 	    					break;
 	    				}
 	    			}

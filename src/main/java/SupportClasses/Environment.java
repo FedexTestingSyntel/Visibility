@@ -543,101 +543,101 @@ public class Environment {
 		List<String[]> FullDataFromExcel = new ArrayList<String[]>();
 		FullDataFromExcel = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TestingData.xls", "L" + intLevel);
 		//a list of the Userids
-		User_Data DataClass[] = new User_Data[FullDataFromExcel.size() - 1];
+		User_Data User_Info_Array[] = new User_Data[FullDataFromExcel.size() - 1];
 		
 		String Headers[] = FullDataFromExcel.get(0);
 		for (int i = 1; i < FullDataFromExcel.size(); i++) {
 			String Row[] = FullDataFromExcel.get(i);
-			DataClass[i - 1] = new User_Data(); 
+			User_Info_Array[i - 1] = new User_Data(); 
 			for (int j = 0; j <Headers.length; j++) {
 				int pos = i - 1;
 				switch (Headers[j]) {
 		  		case "UUID_NBR":
-					DataClass[pos].UUID_NBR = Row[j];
+					User_Info_Array[pos].UUID_NBR = Row[j];
 					break;
 		  		case "SSO_LOGIN_DESC":
-		  			DataClass[pos].USER_ID = Row[j];
+		  			User_Info_Array[pos].USER_ID = Row[j];
 					break;
 		  		case "USER_PASSWORD_DESC":
-		  			DataClass[pos].PASSWORD = Row[j];
+		  			User_Info_Array[pos].PASSWORD = Row[j];
 					break;
 		  		case "SECRET_QUESTION_DESC":
-		  			DataClass[pos].SECRET_QUESTION_DESC = Row[j];
+		  			User_Info_Array[pos].SECRET_QUESTION_DESC = Row[j];
 					break;
 		  		case "SECRET_ANSWER_DESC":
-		  			DataClass[pos].SECRET_ANSWER_DESC = Row[j];
+		  			User_Info_Array[pos].SECRET_ANSWER_DESC = Row[j];
 					break;
 		  		case "FIRST_NM":
-		  			DataClass[pos].FIRST_NM = Row[j];
+		  			User_Info_Array[pos].FIRST_NM = Row[j];
 					break;
 		  		case "LAST_NM":
-		  			DataClass[pos].LAST_NM = Row[j];
+		  			User_Info_Array[pos].LAST_NM = Row[j];
 					break;
 		  		case "EMAIL_ADDRESS":
-		  			DataClass[pos].EMAIL_ADDRESS = Row[j];
+		  			User_Info_Array[pos].EMAIL_ADDRESS = Row[j];
 					break;
 		  		case "STREET_DESC":
-		  			DataClass[pos].STREET_DESC = Row[j];
+		  			User_Info_Array[pos].Address_Info.Address_Line_1 = Row[j];
 					break;
 		  		case "CITY_NM":
-		  			DataClass[pos].CITY_NM = Row[j];
+		  			User_Info_Array[pos].Address_Info.City = Row[j];
 					break;
 		  		case "STATE_CD":
-		  			DataClass[pos].STATE_CD = Row[j];
+		  			User_Info_Array[pos].Address_Info.City = Row[j];
 					break;
 		  		case "POSTAL_CD":
-		  			DataClass[pos].POSTAL_CD = Row[j];
+		  			User_Info_Array[pos].Address_Info.City = Row[j];
 					break;
 		  		case "COUNTRY_CD":
-		  			DataClass[pos].COUNTRY_CD = Row[j];
+		  			User_Info_Array[pos].Address_Info.Country_Code = Row[j];
 					break;
 		  		case "ACCOUNT_NUMBER":
-		  			DataClass[pos].ACCOUNT_NUMBER = Row[j];
+		  			User_Info_Array[pos].ACCOUNT_NUMBER = Row[j];
 					break;
 		  		case "WCRV_ENABLED":
-		  			DataClass[pos].WCRV_ENABLED = Row[j];
+		  			User_Info_Array[pos].WCRV_ENABLED = Row[j];
 					break;	
 		  		case "GFBO_ENABLED":
-		  			DataClass[pos].GFBO_ENABLED = Row[j];
+		  			User_Info_Array[pos].GFBO_ENABLED = Row[j];
 					break;	
 		  		case "WGRT_ENABLED":
-		  			DataClass[pos].WGRT_ENABLED = Row[j];
+		  			User_Info_Array[pos].WGRT_ENABLED = Row[j];
 					break;	
 		  		case "WDPA_ENABLED":
-		  			DataClass[pos].WDPA_ENABLED = Row[j];
+		  			User_Info_Array[pos].WDPA_ENABLED = Row[j];
 					break;	
 		  		case "GROUND_ENABLED":
-		  			DataClass[pos].GROUND_ENABLED = Row[j];
+		  			User_Info_Array[pos].GROUND_ENABLED = Row[j];
 					break;
 		  		case "EXPRESS_ENABLED":
-		  			DataClass[pos].EXPRESS_ENABLED = Row[j];
+		  			User_Info_Array[pos].EXPRESS_ENABLED = Row[j];
 					break;
 		  		case "PASSKEY":
-		  			DataClass[pos].PASSKEY = Row[j];
+		  			User_Info_Array[pos].PASSKEY = Row[j];
 					break;
 		  		case "FDM_STATUS":
-		  			DataClass[pos].FDM_STATUS = Row[j];
+		  			User_Info_Array[pos].FDM_STATUS = Row[j];
 					break;	
 		  		case "FREIGHT_ENABLED":
-		  			DataClass[pos].FREIGHT_ENABLED = Row[j];
+		  			User_Info_Array[pos].FREIGHT_ENABLED = Row[j];
 					break;	
 		  		case "ERROR":
-		  			DataClass[pos].ERROR = Row[j];
+		  			User_Info_Array[pos].ERROR = Row[j];
 					break;	
 		  		case "MIGRATION_STATUS":
-		  			DataClass[pos].MIGRATION_STATUS = Row[j];
+		  			User_Info_Array[pos].MIGRATION_STATUS = Row[j];
 					break;	
 		  		case "USER_TYPE":
-		  			DataClass[pos].USER_TYPE = Row[j];
+		  			User_Info_Array[pos].USER_TYPE = Row[j];
 					break;	
 				}//end switch
 			}
 			
-			if (DataClass[i - 1].USER_ID == null || DataClass[i - 1].USER_ID.contentEquals("")) {
-				DataClass[i - 1].ERROR = "ERROR";
+			if (User_Info_Array[i - 1].USER_ID == null || User_Info_Array[i - 1].USER_ID.contentEquals("")) {
+				User_Info_Array[i - 1].ERROR = "ERROR";
 			}
 		}
 		
-		return DataClass;
+		return User_Info_Array;
 	}
 }

@@ -73,11 +73,11 @@ public class MC_PI_4{
 					}
 					break;
 				case "WFCL_Rewards_Login_APAC_AND_LAC":
-					User_Data UD[] = Environment.Get_UserIds(intLevel);
-		    		for (int k = 0; k < UD.length; k++) {
-		    			if (UD[k].PASSKEY.contentEquals("T")) {
+					User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+		    		for (int k = 0; k < User_Info.length; k++) {
+		    			if (User_Info[k].PASSKEY.contentEquals("T")) {
 		    				for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
-		    					data.add( new Object[] {Level, Rewards_APAC_AND_LAC[j], UD[k]});
+		    					data.add( new Object[] {Level, Rewards_APAC_AND_LAC[j], User_Info[k]});
 							}
 							break;
 		    			}
@@ -90,12 +90,12 @@ public class MC_PI_4{
 					}
 					break;
 				case "WFCL_Rewards_Logout":
-					UD = Environment.Get_UserIds(intLevel);
+					User_Info = Environment.Get_UserIds(intLevel);
 					for (String Instance[]: Rewards_APAC_AND_LAC_Lang) {
-						for (int k = 0; k < UD.length; k++) {
-							if (UD[k].PASSKEY.contentEquals("T")) {
-				    			data.add( new Object[] {Level, Instance[0], Instance[1], UD[k]});
-				    			UD[k].PASSKEY = "";//so user will not be used a second time
+						for (int k = 0; k < User_Info.length; k++) {
+							if (User_Info[k].PASSKEY.contentEquals("T")) {
+				    			data.add( new Object[] {Level, Instance[0], Instance[1], User_Info[k]});
+				    			User_Info[k].PASSKEY = "";//so user will not be used a second time
 				    			break;
 							}
 		    			}

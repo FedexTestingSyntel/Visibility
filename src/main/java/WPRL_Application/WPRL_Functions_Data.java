@@ -14,7 +14,7 @@ import SupportClasses.WebDriver_Functions;
 public class WPRL_Functions_Data {
 	
 	public static User_Data WPRL_Contact(User_Data User_Info) throws Exception{
-	 	String CountryCode = User_Info.COUNTRY_CD;
+	 	String CountryCode = User_Info.Address_Info.Country_Code;
 		try {
 			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
 			WebDriver_Functions.ChangeURL("WPRL", CountryCode, false);
@@ -37,7 +37,7 @@ public class WPRL_Functions_Data {
 	public static void WPRL_Contact_Input(User_Data User_Info, String Phone[][], String Subsection) throws Exception{
 		try{
 			WebDriver_Functions.Click(By.cssSelector("#contactinfo > #show-hide > div.fx-toggler > #edit"));
-			WebDriver_Functions.WaitPresent(By.cssSelector("#" + Subsection + "_country_input option[value=" + User_Info.COUNTRY_CD + "]"));
+			WebDriver_Functions.WaitPresent(By.cssSelector("#" + Subsection + "_country_input option[value=" + User_Info.Address_Info.Country_Code + "]"));
 			
 			if(WebDriver_Functions.isPresent(By.id("countryText"))) {
 				WebDriver_Functions.ElementMatches(By.id("countryText"), "Country / Territory", 116603);
@@ -49,28 +49,28 @@ public class WPRL_Functions_Data {
 			//WebDriver_Functions.WaitPresent(By.cssSelector("#" + Subsection + "_country_input option[value=US]")));
 			//WebDriver_Functions.WaitPresent(By.cssSelector("#" + Subsection + "_state_input option[value=Please select]")));
 			
-			if (WebDriver_Functions.GetValue(By.id(Subsection + "_zip_input")).contentEquals(User_Info.POSTAL_CD)){ //refresh the city field if updating same address zip code
+			if (WebDriver_Functions.GetValue(By.id(Subsection + "_zip_input")).contentEquals(User_Info.Address_Info.Zip)){ //refresh the city field if updating same address zip code
 				WebDriver_Functions.Type(By.id(Subsection + "_zip_input") , "12345");
 				WebDriver_Functions.Type(By.id(Subsection + "_firstname_input") , "12345");
-				WebDriver_Functions.Type(By.id(Subsection + "_zip_input") , User_Info.POSTAL_CD);
+				WebDriver_Functions.Type(By.id(Subsection + "_zip_input") , User_Info.Address_Info.Zip);
 				WebDriver_Functions.Type(By.id(Subsection + "_firstname_input"), "12345");
 			}
 
-			WebDriver_Functions.Select(By.id(Subsection + "_country_input"), User_Info.COUNTRY_CD, "v");
+			WebDriver_Functions.Select(By.id(Subsection + "_country_input"), User_Info.Address_Info.Country_Code, "v");
 			WebDriver_Functions.Type(By.id(Subsection + "_firstname_input"), User_Info.FIRST_NM);
 			WebDriver_Functions.Type(By.id(Subsection + "_lastname_input"), User_Info.LAST_NM);
-			WebDriver_Functions.Type(By.id(Subsection + "_zip_input"), User_Info.POSTAL_CD);
-			WebDriver_Functions.Type(By.id(Subsection + "_streetone_input"), User_Info.STREET_DESC);
-			WebDriver_Functions.Type(By.id(Subsection + "_streettwo_input"), User_Info.STREET_DESC_2);
+			WebDriver_Functions.Type(By.id(Subsection + "_zip_input"), User_Info.Address_Info.Zip);
+			WebDriver_Functions.Type(By.id(Subsection + "_streetone_input"), User_Info.Address_Info.Address_Line_1);
+			WebDriver_Functions.Type(By.id(Subsection + "_streettwo_input"), User_Info.Address_Info.Address_Line_2);
 
 			if (WebDriver_Functions.isPresent(By.id(Subsection + "_city_input_select"))){
-				WebDriver_Functions.Click(By.cssSelector("#" + Subsection + "_city_input_select option[value=" + User_Info.CITY_NM.toUpperCase() + "]"));
+				WebDriver_Functions.Click(By.cssSelector("#" + Subsection + "_city_input_select option[value=" + User_Info.Address_Info.City.toUpperCase() + "]"));
 			}else if (WebDriver_Functions.isPresent(By.id(Subsection + "_city_select"))){
-				WebDriver_Functions.Click(By.cssSelector("#" + Subsection + "_city_select option[value=" + User_Info.CITY_NM.toUpperCase() + "]"));
+				WebDriver_Functions.Click(By.cssSelector("#" + Subsection + "_city_select option[value=" + User_Info.Address_Info.City.toUpperCase() + "]"));
 			}
 
-			WebDriver_Functions.WaitPresent(By.cssSelector("#" + Subsection + "_state_input option[value=" + User_Info.STATE_CD.toUpperCase() + "]"));
-			WebDriver_Functions.Select(By.cssSelector("#" + Subsection + "_state_input"), User_Info.STATE_CD.toUpperCase(), "v");
+			WebDriver_Functions.WaitPresent(By.cssSelector("#" + Subsection + "_state_input option[value=" + User_Info.Address_Info.State_Code.toUpperCase() + "]"));
+			WebDriver_Functions.Select(By.cssSelector("#" + Subsection + "_state_input"), User_Info.Address_Info.State_Code.toUpperCase(), "v");
 
 			WebDriver_Functions.Type(By.id(Subsection + "_phone_input"), Phone[0][1]);
 			

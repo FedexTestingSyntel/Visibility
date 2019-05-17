@@ -42,7 +42,7 @@ public class USRC_General {
 	    	int intLevel = Integer.parseInt(strLevel);
 	    	//loading the OAuth token and having all of the variables set.
 	    	USRC_Data.LoadVariables(strLevel);
-	    	User_Data UD[];
+	    	User_Data User_Info[];
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 			case "CreateUsers":
 				for (int j = 0 ; j < 1; j++) {
@@ -50,11 +50,11 @@ public class USRC_General {
 				}
 				break;
 			case "CreateUsers_User_Data":
-				UD = Environment.Get_UserIds(intLevel);
+				User_Info = Environment.Get_UserIds(intLevel);
 				int counter = 0;
-	    		for (int k = 0; k < UD.length; k++) {
-	    			if (UD[k].COUNTRY_CD.contentEquals("US") && !UD[k].SECRET_ANSWER_DESC.contentEquals("")) {
-	    				data.add( new Object[] {strLevel, UD[k]});
+	    		for (int k = 0; k < User_Info.length; k++) {
+	    			if (User_Info[k].Address_Info.Country_Code.contentEquals("US") && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("")) {
+	    				data.add( new Object[] {strLevel, User_Info[k]});
 	    				counter++;
 	    				if (counter > 10) {
 	    					break;
@@ -88,19 +88,19 @@ public class USRC_General {
 			case "CheckLogin":
 				//loading the OAuth token and having all of the variables set.
 				PRDC_Data.LoadVariables(strLevel);
-				UD = Environment.Get_UserIds(intLevel);
-				for (int k = 0; k < UD.length; k++) {
-    				if (UD[k].EMAIL_ADDRESS.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
+				User_Info = Environment.Get_UserIds(intLevel);
+				for (int k = 0; k < User_Info.length; k++) {
+    				if (User_Info[k].EMAIL_ADDRESS.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
     				}
     			}
 				break;
 			case "Check_FDM_Status":
 				//loading the OAuth token and having all of the variables set.
-				UD = Environment.Get_UserIds(intLevel);
-				for (int k = 0; k < UD.length; k++) {
-					if(UD[k].FDM_STATUS.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
+				User_Info = Environment.Get_UserIds(intLevel);
+				for (int k = 0; k < User_Info.length; k++) {
+					if(User_Info[k].FDM_STATUS.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
     				}
     			}
 				break;
@@ -114,34 +114,34 @@ public class USRC_General {
 			case  "UpdateValue":
 			case "Check_WCRV_Status":
 				//loading the OAuth token and having all of the variables set.
-				UD = Environment.Get_UserIds(intLevel);
-				for (int k = 0; k < UD.length; k++) {
-					if(UD[k].WCRV_ENABLED.contentEquals("Enabled")) {
-    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
+				User_Info = Environment.Get_UserIds(intLevel);
+				for (int k = 0; k < User_Info.length; k++) {
+					if(User_Info[k].WCRV_ENABLED.contentEquals("Enabled")) {
+    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
     				}
     			}
 				break;
 			case "CheckIfUserInvalidLogin":
-				UD = Environment.Get_UserIds(intLevel);
-				for (int k = 0; k < UD.length; k++) {
-    				if (UD[k].FIRST_NM.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
+				User_Info = Environment.Get_UserIds(intLevel);
+				for (int k = 0; k < User_Info.length; k++) {
+    				if (User_Info[k].FIRST_NM.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
     				}
     			}
 				break;
 				
 			case "UpdateUserContactInformation":
-				UD = Environment.Get_UserIds(intLevel);
-				for (int k = 0; k < UD.length; k++) {
-    				if (UD[k] != null && UD[k].USER_ID.contentEquals("L3FCLUse081616")) {
-    					data.add(new Object[] {strLevel, UD[k]});
+				User_Info = Environment.Get_UserIds(intLevel);
+				for (int k = 0; k < User_Info.length; k++) {
+    				if (User_Info[k] != null && User_Info[k].USER_ID.contentEquals("L3FCLUse081616")) {
+    					data.add(new Object[] {strLevel, User_Info[k]});
     					break;
     				}
     			}
 				break;
 			case "Testing_API_Login":
-				UD = Environment.Get_UserIds(intLevel);
-				data.add(new Object[] {strLevel, UD[0]});
+				User_Info = Environment.Get_UserIds(intLevel);
+				data.add(new Object[] {strLevel, User_Info[0]});
 			}//end switch MethodName
 		}
 	    
@@ -153,31 +153,31 @@ public class USRC_General {
 	}
 	
 	@Test (dataProvider = "dp", enabled = true)
-	public void Testing_API_Login(String Level, User_Data User_Information) {
-		String Response = USRC_API_Endpoints.Login_API_Load_Cookies(User_Information.USER_ID, User_Information.PASSWORD);
+	public void Testing_API_Login(String Level, User_Data User_Info) {
+		String Response = USRC_API_Endpoints.Login_API_Load_Cookies(User_Info.USER_ID, User_Info.PASSWORD);
 		Helper_Functions.PrintOut(Response);
 	}
 	
 	@Test (dataProvider = "dp", enabled = false)
-	public void CreateUsers_User_Data(String Level, User_Data User_Information) {
+	public void CreateUsers_User_Data(String Level, User_Data User_Info) {
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		String UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		//1 - Login, get cookies and uuid
-		User_Information.USER_ID = Helper_Functions.LoadUserID("L" + Level + User_Information.COUNTRY_CD);
-		User_Information.EMAIL_ADDRESS = Helper_Functions.getRandomString(10) + "@accept.com";
-		User_Data.Set_Dummy_Contact_Name(User_Information, User_Information.COUNTRY_CD, Level);
+		User_Info.USER_ID = Helper_Functions.LoadUserID("L" + Level + User_Info.Address_Info.Country_Code);
+		User_Info.EMAIL_ADDRESS = Helper_Functions.getRandomString(10) + "@accept.com";
+		User_Data.Set_Dummy_Contact_Name(User_Info, User_Info.Address_Info.Country_Code, Level);
 		//create the new user
-		String Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, User_Information);
+		String Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, User_Info);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Information.USER_ID, User_Information.PASSWORD);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
 		UUID = fdx_login_fcl_uuid[1];
-		String Results[] = new String[] {User_Information.USER_ID,  User_Information.PASSWORD, UUID};
+		String Results[] = new String[] {User_Info.USER_ID,  User_Info.PASSWORD, UUID};
 		Helper_Functions.PrintOut(Arrays.toString(Results), false);
-		Helper_Functions.WriteUserToExcel(User_Information.USER_ID,  User_Information.PASSWORD);
+		Helper_Functions.WriteUserToExcel(User_Info.USER_ID,  User_Info.PASSWORD);
 	}
 	
 	@Test (dataProvider = "dp", enabled = false)

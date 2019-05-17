@@ -63,14 +63,14 @@ public class MC_PI_3{
 					}
 					break;
 				case "WFCL_Alliance_Marketing_CodeRequired":
-					User_Data UD[] = Environment.Get_UserIds(intLevel);
-		    		for (int k = 0; k < UD.length; k++) {
-		    			if (UD[k].PASSKEY.contentEquals("T")) {
+					User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+		    		for (int k = 0; k < User_Info.length; k++) {
+		    			if (User_Info[k].PASSKEY.contentEquals("T")) {
 							ED = Environment.getEnrollmentDetails(intLevel);
 							for (Enrollment_Data Enrollment_info: ED) {
 								//if AEM and a pass code/membership is required.
 								if (!Enrollment_info.AEM_LINK.contentEquals("") && (!Enrollment_info.MEMBERSHIP_ID.contentEquals("") ||  !Enrollment_info.PASSCODE.contentEquals(""))) {
-									data.add( new Object[] {Level, UD[k], Enrollment_info});
+									data.add( new Object[] {Level, User_Info[k], Enrollment_info});
 								}
 							}
 							break;
@@ -78,14 +78,14 @@ public class MC_PI_3{
 					}
 					break;
 				case "WFCL_Alliance_Marketing":
-					UD = Environment.Get_UserIds(intLevel);
-		    		for (int k = 0; k < UD.length; k++) {
-		    			if (UD[k].PASSKEY.contentEquals("T")) {
+					User_Info = Environment.Get_UserIds(intLevel);
+		    		for (int k = 0; k < User_Info.length; k++) {
+		    			if (User_Info[k].PASSKEY.contentEquals("T")) {
 							Enrollment_Data ED_One[] = Environment.getEnrollmentDetails(intLevel);
 							for (Enrollment_Data Enrollment_Info: ED_One) {
 								//if AEM and a pass code/membership is required.
 								if (!Enrollment_Info.AEM_LINK.contentEquals("") && Enrollment_Info.MEMBERSHIP_ID.contentEquals("") && Enrollment_Info.PASSCODE.contentEquals("")) {
-									data.add( new Object[] {Level, UD[k], Enrollment_Info});
+									data.add( new Object[] {Level, User_Info[k], Enrollment_Info});
 								}
 							}
 							break;
@@ -103,11 +103,11 @@ public class MC_PI_3{
 					}
 					break;
 				case "WFCL_Rewards_Login_APAC_AND_LAC":
-					UD = Environment.Get_UserIds(intLevel);
-		    		for (int k = 0; k < UD.length; k++) {
-		    			if (UD[k].PASSKEY.contentEquals("T")) {
+					User_Info = Environment.Get_UserIds(intLevel);
+		    		for (int k = 0; k < User_Info.length; k++) {
+		    			if (User_Info[k].PASSKEY.contentEquals("T")) {
 		    				for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
-		    					data.add( new Object[] {Level, Rewards_APAC_AND_LAC[j], UD[k]});
+		    					data.add( new Object[] {Level, Rewards_APAC_AND_LAC[j], User_Info[k]});
 							}
 							break;
 		    			}

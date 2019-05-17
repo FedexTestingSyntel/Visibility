@@ -525,7 +525,7 @@ public class WPRL_Functions {
 		
 		try {
 			WebDriver_Functions.Login(User_Informaiton.USER_ID, User_Informaiton.PASSWORD);
-			WebDriver_Functions.ChangeURL("WPRL_FDM", User_Informaiton.COUNTRY_CD, false);
+			WebDriver_Functions.ChangeURL("WPRL_FDM", User_Informaiton.Address_Info.Country_Code, false);
 			WebDriver_Functions.WaitPresent(By.id("notifAddNotificationsLink"));
 			WebDriver_Functions.WaitForText(By.id("moduleHeader"), "Recipient Contact Information");
 			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present

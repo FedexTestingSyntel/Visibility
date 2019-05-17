@@ -286,9 +286,9 @@ public class Helper_Functions{
 		WriteToExcel(DataDirectory + "\\TestingData.xls", "L" + intLevel, Data, -1); 
 		/*
 		 * delete this later if above words
-		User_Data UD[] =  Environment.Get_UserIds(intLevel);
+		User_Data User_Info[] =  Environment.Get_UserIds(intLevel);
 		
-		int Row = UD.length;            //////////Fix this later to write the whole line
+		int Row = User_Info.length;            //////////Fix this later to write the whole line
 		
 		writeExcelData(, "L" + intLevel, UserID, Row, 1);
 		writeExcelData(DataDirectory + "\\TestingData.xls", , Password, Row, 2);

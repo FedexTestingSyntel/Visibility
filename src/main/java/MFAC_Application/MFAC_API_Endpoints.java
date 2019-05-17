@@ -30,7 +30,7 @@ public class MFAC_API_Endpoints {
 			return e.toString();
 		}
 			/*
-			Sample url:    https://apidev.idev.fedex.com:8443/security/v1/addresses/velocitycheck____http://mfacdev-cos-vip.test.cloud.fedex.com:9090/mfac/v3/addressVelocityCheck
+			Sample url:    https://apidev.idev.fedex.com:8443/security/v1/addresses/velocitycheck____http://mfacdev-cos-vip.test.cloUser_Info.fedex.com:9090/mfac/v3/addressVelocityCheck
 		 	Sample request:   {"orgName":"FDM-POSTCARD-PIN","userName":"32t48NRQ0A-hOvDu6EgstCYeRiyKMDpKZzN"}
 			Sample Successful Response: {"transactionId":"6166229d-c0cf-416a-92e2-0884927b9fa6","output":{"advice":"ALLOW"}}
 			Sample velocity threshold Response: {"transactionId":"9e15ab6a-885b-45fb-8cbd-c641cfeac075","errors":[{"code":"DENY","message":"Unfortunately, too many failed attempts for registration have occurred. Please try again later."}]}
@@ -57,7 +57,7 @@ public class MFAC_API_Endpoints {
 			return e.toString();
 		}
 		/*
-		 sample URL: https://apidev.idev.fedex.com:8443/security/v1/pin____http://mfacdev-cos-vip.test.cloud.fedex.com:9090/mfac/v3/issuePIN
+		 sample URL: https://apidev.idev.fedex.com:8443/security/v1/pin____http://mfacdev-cos-vip.test.cloUser_Info.fedex.com:9090/mfac/v3/issuePIN
 		 sample Request: {"orgName":"FDM-PHONE-PIN","userName":"rvjspdeayd-ousyqpuplxoutltxrhizxvad"}
 		 sample Response: {"transactionId":"4d32b0b0-d3f9-44ff-8ebf-12f3f3a83712","output":{"pinOTP":"768752","pinExpirationDate":"09/16/2018 04:49 AM GMT"}}
 		 */
@@ -84,7 +84,7 @@ public class MFAC_API_Endpoints {
 			return e.toString();
 		}
 		/*
-		 sample URL: https://apidev.idev.fedex.com:8443/security/v1/pin/verify____http://mfacdev-cos-vip.test.cloud.fedex.com:9090/mfac/v3/verifyPIN
+		 sample URL: https://apidev.idev.fedex.com:8443/security/v1/pin/verify____http://mfacdev-cos-vip.test.cloUser_Info.fedex.com:9090/mfac/v3/verifyPIN
 		 sample Request: {"orgName":"FDM-PHONE-PIN","otpInput":"345713","userName":"gkpusdeqcu-pfwongykpssmcntpqgmalvqo"}
          sample Response: {"transactionId":"b9a85dc6-d374-4e64-b5f1-e8b24091e4fc","output":{"pinOTP":"219118","pinExpirationDate":"09/16/2018 05:09 AM GMT"}}
 		 sample Response for invalid pin: {"transactionId":"0dda1468-eaca-414c-b6fd-e3208a488fe1","errors":[{"code":"PIN.FAILURE","message":"Unfortunately, you have entered an invalid PIN. Please try again."}]}

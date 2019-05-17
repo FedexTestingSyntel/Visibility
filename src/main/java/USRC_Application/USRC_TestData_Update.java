@@ -40,39 +40,39 @@ public class USRC_TestData_Update {
 	    	PRDC_Data.LoadVariables(strLevel);
 	    	
 	    	//load user ids since both of the below use that value
-	    	User_Data UD[] = Environment.Get_UserIds(intLevel);
+	    	User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.	
 			case "CheckLogin":
-				for (int k = 0; k < UD.length; k++) {
-    				if (UD[k].UUID_NBR.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
-    				}else if (!UD[k].ERROR.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
+				for (int k = 0; k < User_Info.length; k++) {
+    				if (User_Info[k].UUID_NBR.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
+    				}else if (!User_Info[k].ERROR.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
     				}
     				//uncomment if need to run all
-    				//else{data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});}
+    				//else{data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});}
 
     			}
 				break;
 			case "CheckMigration":
-				for (int k = 0; k < UD.length; k++) {
-    				if (UD[k].MIGRATION_STATUS.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k].USER_ID, UD[k].PASSWORD});
+				for (int k = 0; k < User_Info.length; k++) {
+    				if (User_Info[k].MIGRATION_STATUS.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
     				}
     			}
 				break;
 			case "UpdateUser":
-				for (int k = 0; k < UD.length; k++) {
-					if (UD[k].COUNTRY_CD.contentEquals("US")) {
-    					data.add(new Object[] {strLevel, UD[k]});
+				for (int k = 0; k < User_Info.length; k++) {
+					if (User_Info[k].Address_Info.Country_Code.contentEquals("US")) {
+    					data.add(new Object[] {strLevel, User_Info[k]});
     					break;
     				}
     			}
 				break;
 			case "Check_WCRV_Status":
-				for (int k = 0; k < UD.length; k++) {
-    				if (!UD[k].WCRV_ENABLED.contentEquals("T") && !UD[k].UUID_NBR.contentEquals("")) {
-    					data.add(new Object[] {strLevel, UD[k]});
+				for (int k = 0; k < User_Info.length; k++) {
+    				if (!User_Info[k].WCRV_ENABLED.contentEquals("T") && !User_Info[k].UUID_NBR.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info[k]});
     				}
     			}
 			}//end switch MethodName
@@ -82,22 +82,22 @@ public class USRC_TestData_Update {
 	}
 
 	@Test (dataProvider = "dp", enabled = false)
-	public void UpdateUser(String Level, User_Data User_Information) {
+	public void UpdateUser(String Level, User_Data User_Info) {
 		Environment.getInstance().setLevel(Level);
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
-		User_Information.FIRST_NM = "Bob";
+		User_Info.FIRST_NM = "Bob";
 		
 		String fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Information.USER_ID, User_Information.PASSWORD);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
 		
-		String Test = USRC_API_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Information, fdx_login_fcl_uuid[0]);
+		String Test = USRC_API_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Info, fdx_login_fcl_uuid[0]);
 		
 		Helper_Functions.PrintOut(Test);
 	}
 	
 	@Test (dataProvider = "dp", enabled = true )
-	public void Check_WCRV_Status(String Level, User_Data User_Information) {
+	public void Check_WCRV_Status(String Level, User_Data User_Info) {
 		boolean updatefile = false;
 		
 		Environment.getInstance().setLevel(Level);
@@ -105,11 +105,11 @@ public class USRC_TestData_Update {
 		
 		//get the cookies and the uuid of the user
 		String fdx_login_fcl_uuid[] = null;
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Information.USER_ID, User_Information.PASSWORD);
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
 		if (fdx_login_fcl_uuid != null) {
-			String Details[][] = {{"UUID_NBR", User_Information.UUID_NBR},//index 0 and set below
-					{"SSO_LOGIN_DESC", User_Information.USER_ID},
-					{"USER_PASSWORD_DESC", User_Information.PASSWORD},
+			String Details[][] = {{"UUID_NBR", User_Info.UUID_NBR},//index 0 and set below
+					{"SSO_LOGIN_DESC", User_Info.USER_ID},
+					{"USER_PASSWORD_DESC", User_Info.PASSWORD},
 					};
 			Details = WCRV_Access(Level, Details, fdx_login_fcl_uuid[0]);
 			

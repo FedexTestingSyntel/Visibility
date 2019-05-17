@@ -11,33 +11,8 @@ public class Account_Data {
 	public String Level = ""; 
 	
 	//Shipping Address
-	/*
-	public String Shipping_Address_Line_1 = "";
-	public String Shipping_Address_Line_2 = "";
-	public String Shipping_City = "";
-	public String Shipping_State = "";
-	public String Shipping_State_Code = "";
-	public String Shipping_Phone_Number = "";
-	public String Shipping_Zip = "";
-	public String Shipping_Country_Code = "";
-	public String Shipping_Region = "";
-	public String Shipping_Country = "";
-	public String Shipping_Share_Id = "";*/
 	public Address_Data Shipping_Address_Info = new Address_Data();
 	
-	//Billing Address
-	 /*
-	public String Billing_Address_Line_1 = "";
-	public String Billing_Address_Line_2 = "";
-	public String Billing_City = "";
-	public String Billing_State = "";
-	public String Billing_State_Code = "";
-	public String Billing_Phone_Number = "";
-	public String Billing_Zip = "";
-	public String Billing_Country_Code = "";
-	public String Billing_Region = "";
-	public String Billing_Country = "";
-	public String Billing_Share_Id = "";*/
 	//Billing Address
 	public Address_Data Billing_Address_Info = new Address_Data();
 	

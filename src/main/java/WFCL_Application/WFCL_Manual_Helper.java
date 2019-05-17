@@ -57,10 +57,10 @@ public class WFCL_Manual_Helper{
 		    		break;
 		    		*/
 		    		
-		    		User_Data[] UD = Environment.Get_UserIds(intLevel);
-		    		for (int k = 0; k < UD.length; k++) {
-		    			if (UD[k].ERROR.contentEquals("12")) {
-		    				String Account = UD[k].USER_ID.replace("L6Account", "");
+		    		User_Data User_Info_Array[] = Environment.Get_UserIds(intLevel);
+		    		for (int k = 0; k < User_Info_Array.length; k++) {
+		    			if (User_Info_Array[k].ERROR.contentEquals("12")) {
+		    				String Account = User_Info_Array[k].USER_ID.replace("L6Account", "");
 		    				data.add( new Object[] {Level, Account});
 		    			}
 		    		}

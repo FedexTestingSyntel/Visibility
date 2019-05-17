@@ -196,17 +196,17 @@ public class WIDM_Endpoints {
 			soapBodyElem2.addTextNode(FillerCompany);
 
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_STREET_DESC");
-			soapBodyElem2.addTextNode(User_Info.STREET_DESC);
+			soapBodyElem2.addTextNode(User_Info.Address_Info.Address_Line_1);
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_STREET_2DESC");
-			soapBodyElem2.addTextNode(User_Info.STREET_DESC_2);
+			soapBodyElem2.addTextNode(User_Info.Address_Info.Address_Line_2);
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_CITY_NM");
-			soapBodyElem2.addTextNode(User_Info.CITY_NM);
+			soapBodyElem2.addTextNode(User_Info.Address_Info.City);
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_STATE_CD");
-			soapBodyElem2.addTextNode(User_Info.STATE_CD);
+			soapBodyElem2.addTextNode(User_Info.Address_Info.State_Code);
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_POSTAL_CD");
-			soapBodyElem2.addTextNode(User_Info.POSTAL_CD);
+			soapBodyElem2.addTextNode(User_Info.Address_Info.Zip);
 			soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_COUNTRY_PCT_");
-			soapBodyElem2.addTextNode(User_Info.COUNTRY_CD);
+			soapBodyElem2.addTextNode(User_Info.Address_Info.Country_Code);
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_PHONE_NBR");
 			soapBodyElem2.addTextNode(User_Info.PHONE);
 			soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_FAX_NBR");

@@ -37,15 +37,15 @@ public class MFAC_Data {
 		String LevelIdentifier[] = null;
   		switch (Level) {
   		case "1":
-  			LevelIdentifier = new String[] {"", "http://mfacbase-cos-vip.test.cloud.fedex.com:9090"}; break;
+  			LevelIdentifier = new String[] {"", "http://mfacbase-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "2":
-  			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com:8443", "http://mfacdev-cos-vip.test.cloud.fedex.com:9090"}; break;
+  			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com:8443", "http://mfacdev-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "3":
-  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com:8443", "http://mfacdrt-cos-vip.test.cloud.fedex.com:9090"}; break;
+  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com:8443", "http://mfacdrt-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "4":
-  			LevelIdentifier = new String[] {"https://apistress.idev.fedex.com", "http://mfacstress-cos-vip.test.cloud.fedex.com:9090"}; break;
+  			LevelIdentifier = new String[] {"https://apistress.idev.fedex.com", "http://mfacstress-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "5":
-  			LevelIdentifier = new String[] {"https://apibit.idev.fedex.com:8443", "http://mfacbit-cos-vip.test.cloud.fedex.com:9090"}; break;
+  			LevelIdentifier = new String[] {"https://apibit.idev.fedex.com:8443", "http://mfacbit-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "6":
   			//L6 is not valid for direct URL
   			LevelIdentifier = new String[] {"https://apitest.fedex.com", ""}; break;

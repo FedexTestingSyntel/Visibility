@@ -47,9 +47,9 @@ public class OADR_SmokeTest{
 		    				if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0])) {
 					    		for (int k = 0; k < User_Info_Array.length; k++) {
 					    			//user from correct coutry that is an admin with an account number.
-				    				if (User_Info_Array[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && User_Info_Array[k].PASSKEY.contentEquals("T") && !User_Info_Array[k].ACCOUNT_NUMBER.contentEquals("")) {
+				    				if (User_Info_Array[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info_Array[k].PASSKEY.contentEquals("T") && !User_Info_Array[k].ACCOUNT_NUMBER.contentEquals("")) {
 				    					data.add( new Object[] {Level, Enrollment, User_Info_Array[k].USER_ID, User_Info_Array[k].PASSWORD});
-				    					User_Info_Array[k].COUNTRY_CD = "";//so the same user will not be used again for same scenario
+				    					User_Info_Array[k].Address_Info.Country_Code = "";//so the same user will not be used again for same scenario
 					    				break;
 				    				}
 				    			}
@@ -179,8 +179,8 @@ public class OADR_SmokeTest{
 		}else if (WebDriver_Functions.isPresent(By.name("lastFourDigits"))) {
 			if (CCNumber == null) {
 				String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
-				USRC_Data UD = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
-				CCNumber = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(UD.GenericUSRCURL, "fdx_login=" + Login_Cookie);
+				USRC_Data User_Info = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
+				CCNumber = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(User_Info.GenericUSRCURL, "fdx_login=" + Login_Cookie);
 				if (CCNumber.contentEquals("")) {
 					Helper_Functions.PrintOut("WARNING, not able to retrive Credit Card linked to this account. Attmpeting with 4460");
 					CCNumber = "4460";

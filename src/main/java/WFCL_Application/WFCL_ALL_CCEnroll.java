@@ -50,12 +50,12 @@ public class WFCL_ALL_CCEnroll{
 					}
 		    		break;
 		    	case "DiscountValidate":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 1; k < UD.length; k++) {
+		    			for (int k = 1; k < User_Info.length; k++) {
 		    				//user must have an account number and be checking below to see if pass key user.
-		    				if (!UD[k].ACCOUNT_NUMBER.contentEquals("") && UD[k].PASSKEY.contentEquals("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].USER_ID.contains("CC")){
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
+		    				if (!User_Info[k].ACCOUNT_NUMBER.contentEquals("") && User_Info[k].PASSKEY.contentEquals("T") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].USER_ID.contains("CC")){
+		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD});
 		    					break;
 		    				}
 		    			}
@@ -106,8 +106,8 @@ public class WFCL_ALL_CCEnroll{
 			
 			/*
 			String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
-			USRC_Data UD = USRC_Data.LoadVariables(Level);
-			String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(UD.GenericUSRCURL, "fdx_login=" + Login_Cookie);
+			USRC_Data User_Info = USRC_Data.LoadVariables(Level);
+			String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(User_Info.GenericUSRCURL, "fdx_login=" + Login_Cookie);
 			*/
 			
 			Enrollment_Data ED[] = Environment.getEnrollmentDetails(Integer.parseInt(Level));

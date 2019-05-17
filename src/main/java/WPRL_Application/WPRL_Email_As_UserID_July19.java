@@ -42,11 +42,11 @@ public class WPRL_Email_As_UserID_July19 {
 			//Based on the method that is being called the array list will be populated.
 			switch (m.getName()) { 
 		    	case "WPRL_Contact_Admin":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].USER_ID.contains("@")) {
-		    					data.add( new Object[] {Level, UD[k]});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].USER_ID.contains("@")) {
+		    					data.add( new Object[] {Level, User_Info[k]});
 		    					break;
 		    				}
 		    			}

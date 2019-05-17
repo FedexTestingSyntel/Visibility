@@ -44,11 +44,11 @@ public class WIDM{
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WIDM_ResetPasswordSecret":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].USER_ID.contains("WIDM")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD + "5", UD[k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].USER_ID.contains("WIDM")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD + "5", User_Info[k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -71,11 +71,11 @@ public class WIDM{
 					data.add( new Object[] {Level, CountryList[0][0]});
 					break;
 				case "ResetPasswordWIDM_Email":
-					UD = Environment.Get_UserIds(intLevel);
+					User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD});
 		    					break;
 		    				}
 		    			}

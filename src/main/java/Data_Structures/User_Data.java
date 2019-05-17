@@ -16,12 +16,15 @@ public class User_Data {
 	public String MIDDLE_NM = "";
 	public String LAST_NM = "";
 	public String EMAIL_ADDRESS = "";
+	/*
 	public String STREET_DESC = "";
 	public String STREET_DESC_2 = "";
 	public String CITY_NM = "";
 	public String STATE_CD = "";
 	public String POSTAL_CD = "";
-	public String COUNTRY_CD = "";
+	public String COUNTRY_CD = "";*/
+	public Address_Data Address_Info = new Address_Data();
+	
 	public String ACCOUNT_NUMBER = "";
 	public String WCRV_ENABLED = "";
 	public String GFBO_ENABLED = "";
@@ -69,12 +72,12 @@ public class User_Data {
 	}
 	
 	public static User_Data Set_Same_Account_Data(User_Data User_Info, Account_Data Account_Info) {
-		User_Info.CITY_NM = Account_Info.Billing_Address_Info.City;
-		User_Info.COUNTRY_CD = Account_Info.Billing_Address_Info.Country_Code;
-		User_Info.POSTAL_CD = Account_Info.Billing_Address_Info.Zip ;
-		User_Info.STATE_CD = Account_Info.Billing_Address_Info.State_Code ;
-		User_Info.STREET_DESC = Account_Info.Billing_Address_Info.Address_Line_1 ;
-		User_Info.STREET_DESC_2 = Account_Info.Billing_Address_Info.Address_Line_2 ;	
+		User_Info.Address_Info.City = Account_Info.Billing_Address_Info.City;
+		User_Info.Address_Info.Country_Code = Account_Info.Billing_Address_Info.Country_Code;
+		User_Info.Address_Info.Zip = Account_Info.Billing_Address_Info.Zip ;
+		User_Info.Address_Info.State_Code = Account_Info.Billing_Address_Info.State_Code ;
+		User_Info.Address_Info.Address_Line_1 = Account_Info.Billing_Address_Info.Address_Line_1 ;
+		User_Info.Address_Info.Address_Line_2 = Account_Info.Billing_Address_Info.Address_Line_2 ;	
 		return User_Info;
 	}
 	

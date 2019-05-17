@@ -46,11 +46,11 @@ public class WIDM_SmokeTest{
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WIDM_ResetPasswordSecret":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].USER_ID.contains("WIDM")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD, UD[k].SECRET_ANSWER_DESC});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].USER_ID.contains("WIDM")) {
+		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD, User_Info[k].SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -70,28 +70,28 @@ public class WIDM_SmokeTest{
 					break;
 				case "WIDM_Login":
 					//test login for email as user id and legacy user.
-					UD = Environment.Get_UserIds(intLevel);
+					User_Info = Environment.Get_UserIds(intLevel);
 					boolean Email_As_UserID = false, Legacy_User = false;
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
+		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (Legacy_User == true && Email_As_UserID == true) {
 		    					break;
-		    				}else if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].USER_ID.contains("@") && !Email_As_UserID) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
+		    				}else if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].USER_ID.contains("@") && !Email_As_UserID) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD});
 		    					Email_As_UserID = true;
-		    				}else if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].USER_ID.contains("@") && !Legacy_User) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
+		    				}else if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].USER_ID.contains("@") && !Legacy_User) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD});
 		    					Legacy_User = true;
 		    				}
 		    			}
 					}
 					break;
 				case "WIDM_ResetPassword_Email":
-					UD = Environment.Get_UserIds(intLevel);
+					User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && UD[k].EMAIL_ADDRESS.contains(Helper_Functions.MyEmail)) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].EMAIL_ADDRESS.contains(Helper_Functions.MyEmail)) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD});
 		    					break;
 		    				}
 		    			}

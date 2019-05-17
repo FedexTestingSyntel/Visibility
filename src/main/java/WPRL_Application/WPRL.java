@@ -41,44 +41,44 @@ public class WPRL {
 			switch (m.getName()) { 
 		    	case "WPRL_Contact_Admin":
 		    	case "WPRL_AccountManagement_Passkey":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].USER_ID.contains("WADM")) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].USER_ID.contains("WADM")) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    	break;
 		    	case "WPRL_FDM":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].USER_ID.contains("FDM")) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].USER_ID.contains("FDM")) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    	break;
 		    	case "WPRL_AccountManagement_NonPasskey":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].USER_ID.contains("INET")) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].USER_ID.contains("INET")) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "WPRL_Contact_NonAdmin":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].USER_ID.contains("Create")) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].USER_ID.contains("Create")) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}

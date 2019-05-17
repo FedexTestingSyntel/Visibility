@@ -39,55 +39,55 @@ public class WPRL_SmokeTest {
 			//Based on the method that is being called the array list will be populated.
 			switch (m.getName()) { 
 		    	case "WPRL_ContactInfo_Admin":
-		    		User_Data UD[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].PASSKEY.contentEquals("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, UD[k].COUNTRY_CD, Helper_Functions.MyEmail});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].PASSKEY.contentEquals("T") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, User_Info[k].Address_Info.Country_Code, Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "WPRL_AccountManagement_Passkey":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].PASSKEY.contentEquals("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].ACCOUNT_NUMBER.contentEquals("")) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, UD[k].COUNTRY_CD, Helper_Functions.MyEmail});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].PASSKEY.contentEquals("T") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].ACCOUNT_NUMBER.contentEquals("")) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, User_Info[k].Address_Info.Country_Code, Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    	break;
 		    	case "WPRL_FDM":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (!UD[k].FDM_STATUS.contentEquals("F") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyFakeEmail});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (!User_Info[k].FDM_STATUS.contentEquals("F") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, CountryList[j][0], Helper_Functions.MyFakeEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    	break;
 		    	case "WPRL_AccountManagement_NonPasskey":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].PASSKEY.contentEquals("F") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0]) && !UD[k].ACCOUNT_NUMBER.contentEquals("")) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, UD[k].COUNTRY_CD, Helper_Functions.MyEmail});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].PASSKEY.contentEquals("F") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].ACCOUNT_NUMBER.contentEquals("")) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, User_Info[k].Address_Info.Country_Code, Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}
 					}
 		    		break;
 		    	case "WPRL_ContactInfo_NonAdmin":
-		    		UD = Environment.Get_UserIds(intLevel);
+		    		User_Info = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].PASSKEY.contentEquals("F") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, UD[k].USER_ID, UD[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
+		    			for (int k = 0; k < User_Info.length; k++) {
+		    				if (User_Info[k].PASSKEY.contentEquals("F") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0])) {
+		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, CountryList[j][0], Helper_Functions.MyEmail});
 		    					break;
 		    				}
 		    			}

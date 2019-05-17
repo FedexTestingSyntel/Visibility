@@ -745,7 +745,7 @@ public class WFCL_Functions_UsingData{
 	}
 
 	public static String WFCL_Secret_Answer(User_Data User_Info, String NewPassword) throws Exception{
- 		WebDriver_Functions.ChangeURL("INET", User_Info.COUNTRY_CD, true);
+ 		WebDriver_Functions.ChangeURL("INET", User_Info.Address_Info.Country_Code, true);
  		
     	try{
     		//click the forgot password link
@@ -804,7 +804,7 @@ public class WFCL_Functions_UsingData{
     		}
     		
     		//trigger the password reset email
-    		WebDriver_Functions.ChangeURL("INET", User_Info.COUNTRY_CD, true);
+    		WebDriver_Functions.ChangeURL("INET", User_Info.Address_Info.Country_Code, true);
     		WebDriver_Functions.Click(By.name("forgotUidPwd"));
     		WebDriver_Functions.Type(By.name("userID"), User_Info.USER_ID);
     		
@@ -976,7 +976,7 @@ public class WFCL_Functions_UsingData{
  				WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
  			}
  			
-			WebDriver_Functions.ChangeURL("GFBO_Login", User_Info.COUNTRY_CD, false);
+			WebDriver_Functions.ChangeURL("GFBO_Login", User_Info.Address_Info.Country_Code, false);
 			
 			if (WebDriver_Functions.isPresent(By.name("newAccountNumber"))){ 
 				WebDriver_Functions.Type(By.name("newAccountNumber"), Account_Info.Account_Number);
@@ -1054,8 +1054,8 @@ public class WFCL_Functions_UsingData{
 					WebDriver_Functions.takeSnapShot(Enrollment_Info.ENROLLMENT_ID + " Discount Matching.png");
 					/*
 					String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
-					USRC_Data UD = USRC_Data.LoadVariables(Level);
-					String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(UD.GenericUSRCURL, "fdx_login=" + Login_Cookie);
+					USRC_Data User_Info = USRC_Data.LoadVariables(Level);
+					String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(User_Info.GenericUSRCURL, "fdx_login=" + Login_Cookie);
 					Apply_Discount(DT_Status, EN, Credit_Card, DTValue, UserId);
 					*/
 				}else {

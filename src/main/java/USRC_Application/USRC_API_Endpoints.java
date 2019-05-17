@@ -89,7 +89,7 @@ public class USRC_API_Endpoints {
   	}
 	
 	///////////////////////////////not finished
-	public static String UpdateUserContactInformationWIDM(String URL, User_Data User_Informaiton, String Cookie){
+	public static String UpdateUserContactInformationWIDM(String URL, User_Data User_Info, String Cookie){
   		try{
   			HttpPost httppost = new HttpPost(URL);
 
@@ -99,25 +99,25 @@ public class USRC_API_Endpoints {
   			
   			
   			JSONObject personName = new JSONObject()
-  					.put("firstName", User_Informaiton.FIRST_NM)
-  					.put("middleName", User_Informaiton.MIDDLE_NM)
-  					.put("lastName", User_Informaiton.LAST_NM);
+  					.put("firstName", User_Info.FIRST_NM)
+  					.put("middleName", User_Info.MIDDLE_NM)
+  					.put("lastName", User_Info.LAST_NM);
   			
   			String CompanyName = "Company"; //filler value
   			JSONObject contact = new JSONObject()
   					.put("personName", personName)
   					.put("companyName", CompanyName)
-  					.put("phoneNumber", User_Informaiton.PHONE)
-  					.put("emailAddress", User_Informaiton.EMAIL_ADDRESS)
-  					.put("faxNumber", User_Informaiton.FAX_NUMBER);
+  					.put("phoneNumber", User_Info.PHONE)
+  					.put("emailAddress", User_Info.EMAIL_ADDRESS)
+  					.put("faxNumber", User_Info.FAX_NUMBER);
   			
-  			String StreetLines[] = new String[] {User_Informaiton.STREET_DESC, User_Informaiton.STREET_DESC_2};
+  			String StreetLines[] = new String[] {User_Info.Address_Info.Address_Line_1, User_Info.Address_Info.Address_Line_2};
   			JSONObject address = new JSONObject()
   				.put("streetLines", StreetLines)
-  				.put("city", User_Informaiton.CITY_NM)
-  				.put("stateOrProvinceCode", User_Informaiton.STATE_CD)
-  				.put("postalCode", User_Informaiton.POSTAL_CD)
-  				.put("countryCode", User_Informaiton.COUNTRY_CD);
+  				.put("city", User_Info.Address_Info.City)
+  				.put("stateOrProvinceCode", User_Info.Address_Info.State_Code)
+  				.put("postalCode", User_Info.Address_Info.Zip)
+  				.put("countryCode", User_Info.Address_Info.Country_Code);
   				
   			JSONObject parsedContactAddress = new JSONObject()
   				.put("contact", contact)
@@ -321,12 +321,12 @@ public class USRC_API_Endpoints {
 			.put("middleName", User_Info.MIDDLE_NM)
 			.put("lastName", User_Info.LAST_NM)
 			.put("deviceId", "optional")
-			.put("addressLine1", User_Info.STREET_DESC)
-			.put("addressLine2", User_Info.STREET_DESC_2)
-			.put("city", User_Info.CITY_NM)
-			.put("stateCode", User_Info.STATE_CD)
-			.put("zipCode", User_Info.POSTAL_CD)
-			.put("countryCode", User_Info.COUNTRY_CD)
+			.put("addressLine1", User_Info.Address_Info.Address_Line_1)
+			.put("addressLine2", User_Info.Address_Info.Address_Line_2)
+			.put("city", User_Info.Address_Info.City)
+			.put("stateCode", User_Info.Address_Info.State_Code)
+			.put("zipCode", User_Info.Address_Info.Zip)
+			.put("countryCode", User_Info.Address_Info.Country_Code)
 			.put("emailAddress", User_Info.EMAIL_ADDRESS)
 			.put("phoneNumber", User_Info.PHONE)
 			.put("userId", User_Info.USER_ID)
