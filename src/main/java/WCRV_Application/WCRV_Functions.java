@@ -179,20 +179,27 @@ public class WCRV_Functions{
 			Helper_Functions.PrintOut(RateSheetName + " was successfully submitted with ID of " + RateSheetID, true);
 			WebDriver_Functions.takeSnapShot(RateSheetName + "Conf.png");
 
-			WebDriver_Functions.Click(By.id("success-ok"));
-			WebDriver_Functions.WaitPresent(By.cssSelector("th.sorting"));
-			if (AccountCountry.contentEquals("US") && State.contentEquals("PR")){
-				//ITG 166046 - ID 1509566
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='manageTable']/tbody/tr[1]/td[3]"), "PR");
-			}else{
-				WebDriver_Functions.WaitForText(By.xpath("//*[@id='manageTable']/tbody/tr[1]/td[3]"), AccountCountry);
+			boolean RateSheetHistory = false;
+			try {
+				WebDriver_Functions.Click(By.id("success-ok"));
+				WebDriver_Functions.WaitPresent(By.cssSelector("th.sorting"));
+				if (AccountCountry.contentEquals("US") && State.contentEquals("PR")){
+					//ITG 166046 - ID 1509566
+					WebDriver_Functions.WaitForText(By.xpath("//*[@id='manageTable']/tbody/tr[1]/td[3]"), "PR");
+				}else{
+					WebDriver_Functions.WaitForText(By.xpath("//*[@id='manageTable']/tbody/tr[1]/td[3]"), AccountCountry);
+				}
+				
+				WebDriver_Functions.WaitForText(By.xpath("//*[@id='manageTable']/tbody/tr[1]/td[5]"), RateSheetID);
+				WebDriver_Functions.WaitForText(By.xpath("//table[@id='manageTable']/tbody/tr/td[8]"), "Pending");
+				WebDriver_Functions.takeSnapShot(RateSheetName + "RSHT.png");
+				RateSheetHistory = true;
+			}catch (Exception RSH) {
+				Helper_Functions.PrintOut("Not able to validate Rate Sheet history table.");
 			}
 			
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id='manageTable']/tbody/tr[1]/td[5]"), RateSheetID);
-			WebDriver_Functions.WaitForText(By.xpath("//table[@id='manageTable']/tbody/tr/td[8]"), "Pending");
-			WebDriver_Functions.takeSnapShot(RateSheetName + "RSHT.png");
 		
-			return new String[] {User, RateSheetName, RateSheetID};
+			return new String[] {User, RateSheetName, RateSheetID, "History Table: " + RateSheetHistory};
 			//need to create a new thread here to wait 10mins then check if rate sheet is completed then download.
 		} catch (Exception e) {
 			Helper_Functions.PrintOut("Not able to complete WCRV_Generate", true);

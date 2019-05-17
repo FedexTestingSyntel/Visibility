@@ -35,18 +35,8 @@ public class WCRV_SmokeTest{
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
-
+			User_Data UD[];
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
-				case "WCRV_CheckPermission":
-					User_Data UD[] = Environment.Get_UserIds(intLevel);
-					for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < UD.length; k++) {
-		    				if (UD[k].WCRV_ENABLED.contains("T") && UD[k].COUNTRY_CD.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], UD[k].USER_ID, UD[k].PASSWORD});
-		    				}
-		    			}
-		    		}
-					break;
 		    	case "WCRV_Generate_RateSheet":
 		    		UD = Environment.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
@@ -129,18 +119,4 @@ public class WCRV_SmokeTest{
 		}
 	}
 	
-	@Test(dataProvider = "dp", enabled = false)
-	public void WCRV_CheckPermission(String Level, String CountryCode, String UserId, String Password) {
-		try {
-			boolean access = WCRV_Functions.WCRV_CheckPermission(CountryCode, UserId, Password);
-			if (access){
-				Helper_Functions.PrintOut(UserId + " has access to WCRV.", false);
-			}else {
-				throw new Exception("User does not have access.");
-			}
-		}catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
-
 }
