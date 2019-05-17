@@ -71,28 +71,28 @@ public class WIDM_Endpoints {
 		 	soapBodyElem2.addTextNode(Accont_Info.Email);
 
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_STREET_DESC");
-		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Line_1);
+		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Info.Address_Line_1);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_STREET2_DESC");
-		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Line_2);
+		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Info.Address_Line_2);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_CITY_NM");
-		 	soapBodyElem2.addTextNode(Accont_Info.Billing_City);
+		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Info.City);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_STATE_CD");
-		 	soapBodyElem2.addTextNode(Accont_Info.Billing_State_Code);
+		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Info.State_Code);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_POSTAL_CD");
-		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Zip);
+		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Info.Zip);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("_PCT_COUNTRY_PCT_");
-		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Country_Code);
+		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Info.Country_Code);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_PHONE_NBR");
-		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Phone_Number);
+		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Info.Phone_Number);
 		 	
 		 	soapBodyElem2 = soapBodyElem1.addChildElement("LOGIN_DOT_FAX_NBR");
-		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Phone_Number);                  ////currently sending the phone number
+		 	soapBodyElem2.addTextNode(Accont_Info.Billing_Address_Info.Phone_Number);                  ////currently sending the phone number
 
 		 	//populate the field if receive a value, if no value then will not add
 		 	if(Email_As_UserId != null && !Email_As_UserId.isEmpty()){

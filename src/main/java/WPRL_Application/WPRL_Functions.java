@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 
 import Data_Structures.Account_Data;
+import Data_Structures.Credit_Card_Data;
 import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
@@ -518,7 +519,59 @@ public class WPRL_Functions {
 		}
 		return new String[] {"Need to add details"};
 	}//end WPRL_FDM
-	 	
+	
+	public static String[] WPRL_FDM_Credit_Card(User_Data User_Informaiton, Credit_Card_Data Credit_Card_Info) throws Exception{
+		//https://wwwdev.idev.fedex.com/apps/myprofile/deliverymanager/?locale=en_us&cntry_code=us
+		
+		try {
+			WebDriver_Functions.Login(User_Informaiton.USER_ID, User_Informaiton.PASSWORD);
+			WebDriver_Functions.ChangeURL("WPRL_FDM", User_Informaiton.COUNTRY_CD, false);
+			WebDriver_Functions.WaitPresent(By.id("notifAddNotificationsLink"));
+			WebDriver_Functions.WaitForText(By.id("moduleHeader"), "Recipient Contact Information");
+			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
+			//if there is already a credit card linked remove it
+			try{
+				if (WebDriver_Functions.isVisable(By.id("cci_remove"))){
+					WebDriver_Functions.Click(By.id("cci_remove"));
+					WebDriver_Functions.Click(By.id("dialog-yes"));
+					WebDriver_Functions.WaitForText(By.id("cii_header_info"), "You can store your credit card information for future use when requesting special delivery options for shipments coming to your home address");
+					Helper_Functions.PrintOut("Removed existng CC", true);
+				}
+			}catch(Exception e){
+				Helper_Functions.PrintOut("Failure when removing existing credit card", true);
+			}
+	 			
+// Test the Credit Card Section
+			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
+			WebDriver_Functions.Click(By.cssSelector("#creditcardinformation > #show-hide > div.fx-toggler > #edit"));
+			WPRL_CreditCard_Input(User_Informaiton, Credit_Card_Info);
+			WebDriver_Functions.Click(By.id("card-continue-save-btn"));
+			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
+			WebDriver_Functions.WaitPresent(By.cssSelector("#general-errors-creditcard > p"));
+			Assert.assertNotSame("Error Message\nFedEx cannot process your credit card request with the information entered. Please verify all credit card data and resubmit your request.",WebDriver_Functions.GetText(By.cssSelector("#general-errors-creditcard > p")));
+			WebDriver_Functions.WaitForText(By.id("cci_update_msg"), "Your updates have been saved.");
+			WebDriver_Functions.WaitNotVisable(By.id("Loadingtxt"));//wait for the loading overlay to not be present
+			WebDriver_Functions.takeSnapShot("FDMCC added.png");
+			    
+			//remove the credit card that was just added
+			boolean Card_Removed = false;
+			try{
+				WebDriver_Functions.Click(By.id("cci_remove"));
+				WebDriver_Functions.Click(By.id("dialog-yes"));
+				WebDriver_Functions.WaitForText(By.id("cii_header_info"), "You can store your credit card information for future use when requesting special delivery options for shipments coming to your home address");
+				WebDriver_Functions.takeSnapShot("FDMCC removed.png");
+				Card_Removed = true;
+			}catch(Exception e){
+				Helper_Functions.PrintOut("Not able to remove newly added CC ", true);
+			}
+			
+			return new String[] {User_Informaiton.USER_ID, User_Informaiton.PASSWORD, Credit_Card_Info.CARD_NUMBER_LAST_FOUR, "Card Removed: "+ Card_Removed};
+	 	}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}//end WPRL_FDM
+	
 	public static boolean WPRL_FDM_RemoveNotifications(String CountryCode, String User, String Password){
 		try {
 			WebDriver_Functions.Login(User, Password);
@@ -879,6 +932,50 @@ public class WPRL_Functions {
 			WebDriver_Functions.Type(By.id("card-phone-fld"), Phone);
 			WebDriver_Functions.Type(By.id("card-email-fld"), Email);
 			WebDriver_Functions.Type(By.id("card-email-retype-fld"), Email);
+		}catch (Exception e){}
+	}//End WPRL_CreditCard_Input
+	
+	public static void WPRL_CreditCard_Input(User_Data User_Info, Credit_Card_Data Credit_Card_Info){
+		try{
+			WebDriver_Functions.WaitPresent(By.cssSelector("#card-state-fld option[value=" + Credit_Card_Info.Address_Info.State_Code + "]"));
+			WebDriver_Functions.Type(By.id("card-first-name-fld"), User_Info.FIRST_NM);
+			WebDriver_Functions.Type(By.id("card-middle-name-fld"), User_Info.MIDDLE_NM);
+			WebDriver_Functions.Type(By.id("card-last-name-fld"), User_Info.LAST_NM);
+			WebDriver_Functions.Type(By.id("card-company-fld"), "Company Here");
+			
+			WebDriver_Functions.WaitPresent(By.cssSelector("#card-type-fld option[value=" + Credit_Card_Info.TYPE.toUpperCase() + "]"));
+			WebDriver_Functions.Select(By.id("card-type-fld"), Credit_Card_Info.TYPE.toUpperCase(), "t");
+			WebDriver_Functions.Type(By.id("card-number-fld"), Credit_Card_Info.CARD_NUMBER);
+
+			try{//Credit Card Expiration Month
+				WebDriver_Functions.WaitPresent(By.cssSelector("#card-expiration-month-fld option[value=Dec]"));
+				WebDriver_Functions.Select(By.id("card-expiration-month-fld"), Credit_Card_Info.EXPIRATION_MONTH, "t");
+			}catch (Exception e){
+				Helper_Functions.PrintOut("Not able to select exp month", false);
+			}
+					
+					
+			try{//Note that the below is hard coded for last two digits of the year
+				WebDriver_Functions.Select(By.id("card-expiration-year-fld"), "20" + Credit_Card_Info.EXPIRATION_YEAR, "t");
+			}catch (Exception e){Helper_Functions.PrintOut("Not able to select exp year", false);}
+					
+			WebDriver_Functions.Type(By.id("card-security-code-fld"),Credit_Card_Info.CVV);
+			WebDriver_Functions.ElementMatches(By.id("card-country-lbl"), "Country/Territory", 116605);
+			WebDriver_Functions.Type(By.id("card-address1-fld"), Credit_Card_Info.Address_Info.Address_Line_1);
+			WebDriver_Functions.Type(By.id("card-address2-fld"), Credit_Card_Info.Address_Info.Address_Line_2);
+			WebDriver_Functions.Type(By.id("card-zip-fld"),  Credit_Card_Info.Address_Info.Zip);
+			WebDriver_Functions.Type(By.id("card-city-fld"),  Credit_Card_Info.Address_Info.City);
+			WebDriver_Functions.Click(By.cssSelector("#card-state-fld > option"));
+			
+			try{
+				WebDriver_Functions.Select(By.id("card-state-fld"),  Credit_Card_Info.Address_Info.State_Code, "t");
+			}catch (Exception e){
+				Helper_Functions.PrintOut("-" +  Credit_Card_Info.Address_Info.State_Code + "- State not present", false); 
+			}
+			
+			WebDriver_Functions.Type(By.id("card-phone-fld"), User_Info.PHONE);
+			WebDriver_Functions.Type(By.id("card-email-fld"), User_Info.EMAIL_ADDRESS);
+			WebDriver_Functions.Type(By.id("card-email-retype-fld"), User_Info.EMAIL_ADDRESS);
 		}catch (Exception e){}
 	}//End WPRL_CreditCard_Input
 	

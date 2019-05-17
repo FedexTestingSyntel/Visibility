@@ -69,12 +69,12 @@ public class User_Data {
 	}
 	
 	public static User_Data Set_Same_Account_Data(User_Data User_Info, Account_Data Account_Info) {
-		User_Info.CITY_NM = Account_Info.Billing_City;
-		User_Info.COUNTRY_CD = Account_Info.Billing_Country_Code;
-		User_Info.POSTAL_CD = Account_Info.Billing_Zip ;
-		User_Info.STATE_CD = Account_Info.Billing_State_Code ;
-		User_Info.STREET_DESC = Account_Info.Billing_Address_Line_1 ;
-		User_Info.STREET_DESC_2 = Account_Info.Billing_Address_Line_2 ;	
+		User_Info.CITY_NM = Account_Info.Billing_Address_Info.City;
+		User_Info.COUNTRY_CD = Account_Info.Billing_Address_Info.Country_Code;
+		User_Info.POSTAL_CD = Account_Info.Billing_Address_Info.Zip ;
+		User_Info.STATE_CD = Account_Info.Billing_Address_Info.State_Code ;
+		User_Info.STREET_DESC = Account_Info.Billing_Address_Info.Address_Line_1 ;
+		User_Info.STREET_DESC_2 = Account_Info.Billing_Address_Info.Address_Line_2 ;	
 		return User_Info;
 	}
 	

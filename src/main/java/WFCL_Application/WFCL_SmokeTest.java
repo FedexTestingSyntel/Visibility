@@ -107,7 +107,7 @@ public class WFCL_SmokeTest{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
-			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
+			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Address_Info.Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
@@ -121,7 +121,7 @@ public class WFCL_SmokeTest{
 	public void WFCL_CreateUserID(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
-			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Country_Code + "Create");
+			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Address_Info.Country_Code + "Create");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			String Result = Arrays.toString(WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info));
 			Helper_Functions.PrintOut(Result, false);
@@ -135,14 +135,14 @@ public class WFCL_SmokeTest{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
-			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
+			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			boolean InetFlag = WFCL_Functions_UsingData.INET_Registration(Account_Info);
 			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID, "Inet: " + InetFlag};
 			Result = Arrays.copyOf(Result, Result.length + 1);
-			Result[Result.length - 1] = "Admin: " + WFCL_Functions.Admin_Registration(Account_Info.Billing_Country_Code, Account_Info.Account_Number);
+			Result[Result.length - 1] = "Admin: " + WFCL_Functions.Admin_Registration(Account_Info.Billing_Address_Info.Country_Code, Account_Info.Account_Number);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -154,8 +154,8 @@ public class WFCL_SmokeTest{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "Inet" + Account_Info.Billing_Country_Code);
+			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "Inet" + Account_Info.Billing_Address_Info.Country_Code);
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			//register the user id to INET
@@ -183,8 +183,8 @@ public class WFCL_SmokeTest{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "Wdpa" + Account_Info.Billing_Country_Code);
+			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "Wdpa" + Account_Info.Billing_Address_Info.Country_Code);
 			
 			String Result[] = WFCL_Functions_UsingData.WDPA_Registration(Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);

@@ -102,7 +102,7 @@ public class DriverFactory{
 			   		
 			   BrowserCurrent++;
 		   }catch (Exception e) {
-			   e.printStackTrace();
+			   //e.printStackTrace();
 			   System.err.println("ERROR CREATING DRIVER, Attempt " + i);
 		   }
 		   

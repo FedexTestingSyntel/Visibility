@@ -69,10 +69,10 @@ public class Create_Accounts_New{
 	public void Account_Creation(String Level, Account_Data Account_Info) {
 		try {
 			String Operating_Companies = "E";
-			if ("US_CA_".contains(Account_Info.Billing_Country_Code)) {
+			if ("US_CA_".contains(Account_Info.Billing_Address_Info.Country_Code)) {
 				Operating_Companies += "G";
 			}
-			if ("US_CA_MX_".contains(Account_Info.Billing_Country_Code)) {
+			if ("US_CA_MX_".contains(Account_Info.Billing_Address_Info.Country_Code)) {
 				Operating_Companies += "F";
 			}
 			Account_Data[] Accounts = null;
@@ -110,7 +110,7 @@ public class Create_Accounts_New{
 			}
 
 			WebDriver_Functions.WaitPresent(By.id("acct_info_ship_countrylist"));
-			String ShippingCountrCode = Account_Info.Shipping_Country_Code, BillingCountryCode = Account_Info.Billing_Country_Code;
+			String ShippingCountrCode = Account_Info.Shipping_Address_Info.Country_Code, BillingCountryCode = Account_Info.Billing_Address_Info.Country_Code;
 			WebDriver_Functions.Select(By.id("acct_info_countrylist"), BillingCountryCode, "v");//billing country
 			WebDriver_Functions.Select(By.id("acct_info_ship_countrylist"), ShippingCountrCode, "v");//shipping country
 			WebDriver_Functions.Select(By.id("acct_info_source_grp"), "ALLIANCES","v");//the Source group of the account numbers
@@ -146,28 +146,28 @@ public class Create_Accounts_New{
 				WebDriver_Functions.Select(By.id("contact_language") , "EN","v");//set the language as English
 			}catch (Exception e){}
 			
-			WebDriver_Functions.Type(By.id("contact_phn_one"), Account_Info.Shipping_Phone_Number);
+			WebDriver_Functions.Type(By.id("contact_phn_one"), Account_Info.Shipping_Address_Info.Phone_Number);
 			WebDriver_Functions.Click(By.name("ship_radio"));
 			WebDriver_Functions.Click(By.id("next_address"));
 			
 			//Account Address
-			WebDriver_Functions.Type(By.id("acctinfo_postal_input_info"), Account_Info.Billing_Zip);
+			WebDriver_Functions.Type(By.id("acctinfo_postal_input_info"), Account_Info.Billing_Address_Info.Zip);
 			WebDriver_Functions.Type(By.id("add_info_company"), Account_Info.Company_Name);
-			WebDriver_Functions.Type(By.id("address_phn_number"), Account_Info.Billing_Phone_Number);
-			WebDriver_Functions.Type(By.id("acctinfo_addr_one"), Account_Info.Billing_Address_Line_1);
-			WebDriver_Functions.Type(By.id("acctinfo_addr_two"), Account_Info.Billing_Address_Line_2);
+			WebDriver_Functions.Type(By.id("address_phn_number"), Account_Info.Billing_Address_Info.Phone_Number);
+			WebDriver_Functions.Type(By.id("acctinfo_addr_one"), Account_Info.Billing_Address_Info.Address_Line_1);
+			WebDriver_Functions.Type(By.id("acctinfo_addr_two"), Account_Info.Billing_Address_Info.Address_Line_2);
 			
 			//try and select the city, may be only the single city or multiple based on zip code.
 			if (WebDriver_Functions.isVisable(By.id("acctinfo_city_input_info_list"))) {
 				WebDriver_Functions.WaitClickable(By.id("acctinfo_city_input_info_list"));
-				WebDriver_Functions.Select(By.id("acctinfo_city_input_info_list"), Account_Info.Billing_City.toUpperCase(), "v");
+				WebDriver_Functions.Select(By.id("acctinfo_city_input_info_list"), Account_Info.Billing_Address_Info.City.toUpperCase(), "v");
 			}else if (WebDriver_Functions.isVisable(By.id("acctinfo_city_input_info_box"))) {
-				WebDriver_Functions.Type(By.id("acctinfo_city_input_info_box"), Account_Info.Billing_City.toUpperCase());
+				WebDriver_Functions.Type(By.id("acctinfo_city_input_info_box"), Account_Info.Billing_Address_Info.City.toUpperCase());
 			}
 			
 			//enter the state
 			if (WebDriver_Functions.isVisable(By.id("acctinfo_state_input_info"))) {
-				WebDriver_Functions.Select(By.id("acctinfo_state_input_info"), Account_Info.Billing_State_Code.toUpperCase(), "v");
+				WebDriver_Functions.Select(By.id("acctinfo_state_input_info"), Account_Info.Billing_Address_Info.State_Code.toUpperCase(), "v");
 			}
 			
 			if (WebDriver_Functions.isVisable(By.id("nomatch"))) {
@@ -192,7 +192,7 @@ public class Create_Accounts_New{
 			String StateTax = "", CountryTax = "";
 			if (WebDriver_Functions.isVisable(By.id("next_reg"))) {
 				if (WebDriver_Functions.isVisable(By.id("dyn_vat_lbl"))){//Vat Number
-					WebDriver_Functions.Type(By.id("dyn_vat_lbl"), Account_Info.Billing_Country_Code + "000000000000000000"); //generic no vat number
+					WebDriver_Functions.Type(By.id("dyn_vat_lbl"), Account_Info.Billing_Address_Info.Country_Code + "000000000000000000"); //generic no vat number
 				}
 				
 				Tax_Data Tax_Info = Environment.getTaxDetails(BillingCountryCode);
@@ -305,26 +305,26 @@ public class Create_Accounts_New{
 	public static boolean writeAccountsToExcel(Account_Data Account_Info[], String Operating_Companies, String fileName, String sheetName) throws Exception{
 		for(Account_Data AD: Account_Info) {
 			String ContactDetailsParsed[][] = {{"Level", AD.Level},
-					{"Shipping_Address_Line_1", AD.Shipping_Address_Line_1},
-					{"Shipping_Address_Line_2", AD.Shipping_Address_Line_2},
-					{"Shipping_City", AD.Shipping_City},
-					{"Shipping_State", AD.Shipping_State},
-					{"Shipping_State_Code", AD.Shipping_State_Code},
-					{"Shipping_Phone_Number", AD.Shipping_Phone_Number},
-					{"Shipping_Zip", AD.Shipping_Zip},
-					{"Shipping_Country_Code", AD.Shipping_Country_Code},
-					{"Shipping_Region", AD.Shipping_Region},
-					{"Shipping_Country", AD.Shipping_Country},
-					{"Billing_Address_Line_1", AD.Billing_Address_Line_1},
-					{"Billing_Address_Line_2", AD.Billing_Address_Line_2},
-					{"Billing_City", AD.Billing_City},
-					{"Billing_State", AD.Billing_State},
-					{"Billing_State_Code", AD.Billing_State_Code},
-					{"Billing_Phone_Number", AD.Billing_Phone_Number},
-					{"Billing_Zip", AD.Billing_Zip},
-					{"Billing_Country_Code", AD.Billing_Country_Code},
-					{"Billing_Region", AD.Billing_Region},
-					{"Billing_Country", AD.Billing_Country},
+					{"Shipping_Address_Line_1", AD.Shipping_Address_Info.Address_Line_1},
+					{"Shipping_Address_Line_2", AD.Shipping_Address_Info.Address_Line_2},
+					{"Shipping_City", AD.Shipping_Address_Info.City},
+					{"Shipping_State", AD.Shipping_Address_Info.State},
+					{"Shipping_State_Code", AD.Shipping_Address_Info.State_Code},
+					{"Shipping_Phone_Number", AD.Shipping_Address_Info.Phone_Number},
+					{"Shipping_Zip", AD.Shipping_Address_Info.Zip},
+					{"Shipping_Country_Code", AD.Shipping_Address_Info.Country_Code},
+					{"Shipping_Region", AD.Shipping_Address_Info.Region},
+					{"Shipping_Country", AD.Shipping_Address_Info.Country},
+					{"Billing_Address_Line_1", AD.Billing_Address_Info.Address_Line_1},
+					{"Billing_Address_Line_2", AD.Billing_Address_Info.Address_Line_2},
+					{"Billing_City", AD.Billing_Address_Info.City},
+					{"Billing_State", AD.Billing_Address_Info.State},
+					{"Billing_State_Code", AD.Billing_Address_Info.State_Code},
+					{"Billing_Phone_Number", AD.Billing_Address_Info.Phone_Number},
+					{"Billing_Zip", AD.Billing_Address_Info.Zip},
+					{"Billing_Country_Code", AD.Billing_Address_Info.Country_Code},
+					{"Billing_Region", AD.Billing_Address_Info.Region},
+					{"Billing_Country", AD.Billing_Address_Info.Country},
 					{"Account_Number", AD.Account_Number},
 					{"Credit_Card_Type", AD.Credit_Card_Type},
 					{"Credit_Card_Number", AD.Credit_Card_Number},
@@ -457,7 +457,7 @@ public class Create_Accounts_New{
 		
 		JSONObject localization = new JSONObject()
 			.put("languageCode", Account_Info.LanguageCode)
-			.put("localeCode", Account_Info.Billing_Country_Code);  //assumed country code
+			.put("localeCode", Account_Info.Billing_Address_Info.Country_Code);  //assumed country code
 				
 		String marketingCorrespondenceTypes[] = new String[] {};//not sure what this is atm
 		JSONObject communicationDetail = new JSONObject()
@@ -465,19 +465,19 @@ public class Create_Accounts_New{
 			.put("localization", localization);
 	
 		String streetLines[];
-		if (Account_Info.Billing_Address_Line_2 == null || Account_Info.Billing_Address_Line_2.contentEquals("")) {
-			streetLines = new String[] {Account_Info.Billing_Address_Line_1};
+		if (Account_Info.Billing_Address_Info.Address_Line_2 == null || Account_Info.Billing_Address_Info.Address_Line_2.contentEquals("")) {
+			streetLines = new String[] {Account_Info.Billing_Address_Info.Address_Line_1};
 		}else {
-			streetLines = new String[] {Account_Info.Billing_Address_Line_1, Account_Info.Billing_Address_Line_2};
+			streetLines = new String[] {Account_Info.Billing_Address_Info.Address_Line_1, Account_Info.Billing_Address_Info.Address_Line_2};
 		}
 		JSONObject address = new JSONObject()
-			.put("shareId", Account_Info.Billing_Share_Id)
+			.put("shareId", Account_Info.Billing_Address_Info.Share_Id)
 			.put("addressClassification", "UNKNOWN")
 			.put("streetLines", streetLines)
-			.put("city", Account_Info.Billing_City)
-			.put("stateOrProvinceCode", Account_Info.Billing_State_Code)
-			.put("postalCode", Account_Info.Billing_Zip)
-			.put("countryCode", Account_Info.Billing_Country_Code)
+			.put("city", Account_Info.Billing_Address_Info.City)
+			.put("stateOrProvinceCode", Account_Info.Billing_Address_Info.State_Code)
+			.put("postalCode", Account_Info.Billing_Address_Info.Zip)
+			.put("countryCode", Account_Info.Billing_Address_Info.Country_Code)
 			.put("residential", false); //default to false currently
 		
 		JSONObject companyName = new JSONObject()
@@ -487,8 +487,8 @@ public class Create_Accounts_New{
 			.put("CALL", "GRANT")
 			.put("TEXT", "DENY");
 		
-		String area_code = Account_Info.Billing_Phone_Number.substring(0, 3);//assumption that first 3 digits are the area code.
-		String localNumber = Account_Info.Billing_Phone_Number.substring(3, Account_Info.Billing_Phone_Number.length());
+		String area_code = Account_Info.Billing_Address_Info.Phone_Number.substring(0, 3);//assumption that first 3 digits are the area code.
+		String localNumber = Account_Info.Billing_Address_Info.Phone_Number.substring(3, Account_Info.Billing_Address_Info.Phone_Number.length());
 		String countryCode = "1";
 		JSONObject number = new JSONObject()
 			.put("areaCode", area_code)
@@ -577,10 +577,10 @@ public class Create_Accounts_New{
 		
 		JSONObject address_credit_card = new JSONObject()
 				.put("streetLines", streetLines)
-				.put("city", Account_Info.Billing_City)
-				.put("stateOrProvinceCode", Account_Info.Billing_State_Code)
-				.put("postalCode", Account_Info.Billing_Zip)
-				.put("countryCode", Account_Info.Billing_Country_Code)
+				.put("city", Account_Info.Billing_Address_Info.City)
+				.put("stateOrProvinceCode", Account_Info.Billing_Address_Info.State_Code)
+				.put("postalCode", Account_Info.Billing_Address_Info.Zip)
+				.put("countryCode", Account_Info.Billing_Address_Info.Country_Code)
 				.put("residential", false); //default to false currently
 		
 		JSONObject holder = new JSONObject()

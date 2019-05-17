@@ -33,35 +33,35 @@ public class WFCL_Functions_UsingData{
 		
 		if (WebDriver_Functions.isPresent(By.id("country"))) {
 			try { // added on 5/9/19 due to MFXR pages have not editable country codes.
-				WebDriver_Functions.Select(By.id("country"), Account_Info.Billing_Country_Code.toUpperCase(), "v");
+				WebDriver_Functions.Select(By.id("country"), Account_Info.Billing_Address_Info.Country_Code.toUpperCase(), "v");
 			}catch (Exception e){
 				System.err.println("Not able to select country from dropdown.");
 			}
 		}
 		
-		WebDriver_Functions.Type(By.id("address1"), Account_Info.Billing_Address_Line_1);
-		WebDriver_Functions.Type(By.name("address2"), Account_Info.Billing_Address_Line_2);
+		WebDriver_Functions.Type(By.id("address1"), Account_Info.Billing_Address_Info.Address_Line_1);
+		WebDriver_Functions.Type(By.name("address2"), Account_Info.Billing_Address_Info.Address_Line_2);
 
 		if (WebDriver_Functions.isPresent(By.name("city"))) {
-			WebDriver_Functions.Type(By.name("city"),Account_Info.Billing_City);
+			WebDriver_Functions.Type(By.name("city"),Account_Info.Billing_Address_Info.City);
 		}else if (WebDriver_Functions.isPresent(By.name("city1"))){
-			WebDriver_Functions.Type(By.name("city1"), Account_Info.Billing_City);
+			WebDriver_Functions.Type(By.name("city1"), Account_Info.Billing_Address_Info.City);
 		}
 
-		if (Account_Info.Billing_State_Code != "" && WebDriver_Functions.isPresent(By.name("state"))){
+		if (Account_Info.Billing_Address_Info.State_Code != "" && WebDriver_Functions.isPresent(By.name("state"))){
 			try {
 				//for the legacy registration page such as WDPA the code must be entered as text
-				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_State_Code);
+				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_Address_Info.State_Code);
 			}catch (Exception e){}
 		}
-		if (Account_Info.Billing_State_Code != "" && WebDriver_Functions.isPresent(By.id("state"))) {
+		if (Account_Info.Billing_Address_Info.State_Code != "" && WebDriver_Functions.isPresent(By.id("state"))) {
 			try{
-				WebDriver_Functions.Select(By.id("state"), Account_Info.Billing_State_Code,  "v");
+				WebDriver_Functions.Select(By.id("state"), Account_Info.Billing_Address_Info.State_Code,  "v");
 			}catch (Exception e){}
 		}
 
-		WebDriver_Functions.Type(By.id("zip"), Account_Info.Billing_Zip);
-		WebDriver_Functions.Type(By.id("phone"), Account_Info.Billing_Phone_Number);
+		WebDriver_Functions.Type(By.id("zip"), Account_Info.Billing_Address_Info.Zip);
+		WebDriver_Functions.Type(By.id("phone"), Account_Info.Billing_Address_Info.Phone_Number);
 		WebDriver_Functions.Type(By.id("uid"), Account_Info.UserId);
 		WebDriver_Functions.Type(By.id("password"), Account_Info.Password);
 		WebDriver_Functions.Type(By.id("retypePassword"), Account_Info.Password);
@@ -133,7 +133,7 @@ public class WFCL_Functions_UsingData{
 	
 	//need to add here for the different applications.
 	public static boolean Verify_Confirmaiton_Page(String Application, Account_Data Account_Info) throws Exception {
-		String CC = Account_Info.Billing_Country_Code.toUpperCase();
+		String CC = Account_Info.Billing_Address_Info.Country_Code.toUpperCase();
 		try{
 			switch (Application) {
 			case "FDDT":
@@ -193,7 +193,7 @@ public class WFCL_Functions_UsingData{
 	//will return the updated Account_Data with the uuid added.
 	public static Account_Data Account_Linkage(Account_Data Account_Info) throws Exception{
 		Helper_Functions.PrintOut("Attempting to register with " + Account_Info.Account_Number, true);
-		String CountryCode = Account_Info.Billing_Country_Code.toUpperCase();
+		String CountryCode = Account_Info.Billing_Address_Info.Country_Code.toUpperCase();
 
 		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
 			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
@@ -221,7 +221,7 @@ public class WFCL_Functions_UsingData{
 	//will return the updated Account_Data with the uuid added.
 	public static Account_Data Account_Linkage_FDDT(Account_Data Account_Info) throws Exception{
 		Helper_Functions.PrintOut("Attempting to register with " + Account_Info.Account_Number, true);
-		String CountryCode = Account_Info.Billing_Country_Code.toUpperCase();
+		String CountryCode = Account_Info.Billing_Address_Info.Country_Code.toUpperCase();
 
 		WebDriver_Functions.ChangeURL("FDDT", CountryCode, true);
 		
@@ -254,7 +254,7 @@ public class WFCL_Functions_UsingData{
 	//will return the updated Account_Data with the uuid added.
 	public static String[] Account_Linkage(User_Data User_Info, Account_Data Account_Info) throws Exception{
 		Helper_Functions.PrintOut("Attempting to link " + User_Info.USER_ID + " with " + Account_Info.Account_Number, true);
-		String CountryCode = Account_Info.Billing_Country_Code.toUpperCase();
+		String CountryCode = Account_Info.Billing_Address_Info.Country_Code.toUpperCase();
 		String UUID = WebDriver_Functions.GetCookieUUID();
 		if (UUID == null) {
 			//if user is not logged in then do so.
@@ -278,16 +278,16 @@ public class WFCL_Functions_UsingData{
 	public static void AddressMismatchPage(Account_Data Account_Info) throws Exception {
 		if (WebDriver_Functions.isPresent(By.name("address1"))) {
 			WebDriver_Functions.WaitPresent(By.name("address1"));
-			WebDriver_Functions.Type(By.name("address1"), Account_Info.Billing_Address_Line_1);
-			WebDriver_Functions.Type(By.name("address2"), Account_Info.Billing_Address_Line_2);
-			WebDriver_Functions.Type(By.name("city"), Account_Info.Billing_City);
+			WebDriver_Functions.Type(By.name("address1"), Account_Info.Billing_Address_Info.Address_Line_1);
+			WebDriver_Functions.Type(By.name("address2"), Account_Info.Billing_Address_Info.Address_Line_2);
+			WebDriver_Functions.Type(By.name("city"), Account_Info.Billing_Address_Info.City);
 			try {
-				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_State_Code);
-				WebDriver_Functions.Type(By.name("zip"), Account_Info.Billing_Zip);
-				if (Account_Info.Billing_Country_Code.toLowerCase().contentEquals("ca")) {
+				WebDriver_Functions.Type(By.name("state"), Account_Info.Billing_Address_Info.State_Code);
+				WebDriver_Functions.Type(By.name("zip"), Account_Info.Billing_Address_Info.Zip);
+				if (Account_Info.Billing_Address_Info.Country_Code.toLowerCase().contentEquals("ca")) {
 					WebDriver_Functions.Select(By.name("country"), "ca_english", "v");
 				}else {
-					WebDriver_Functions.Select(By.name("country"), Account_Info.Billing_Country_Code.toLowerCase(), "v");
+					WebDriver_Functions.Select(By.name("country"), Account_Info.Billing_Address_Info.Country_Code.toLowerCase(), "v");
 				}
 				
 			}catch (Exception e) {}
@@ -299,7 +299,7 @@ public class WFCL_Functions_UsingData{
 	}
 	
 	public static boolean INET_Registration(Account_Data Account_Info) throws Exception{
-		String CountryCode =  Account_Info.Billing_Country_Code.toUpperCase();
+		String CountryCode =  Account_Info.Billing_Address_Info.Country_Code.toUpperCase();
 
 		WebDriver_Functions.ChangeURL("INET", CountryCode, false);
 		//Register the account number for INET
@@ -325,7 +325,7 @@ public class WFCL_Functions_UsingData{
 	
 	public static String Account_Number_Masking(Account_Data Account_Info, Account_Data Account_Info_Mismatch) throws Exception{
 		boolean InetFlag = false;
-		String CountryCode = Account_Info.Billing_Country_Code;
+		String CountryCode = Account_Info.Billing_Address_Info.Country_Code;
 		
 		Account_Linkage(Account_Info_Mismatch) ;
 
@@ -374,9 +374,9 @@ public class WFCL_Functions_UsingData{
 	public static String[] CreditCardRegistrationEnroll(Enrollment_Data Enrollment, Account_Data Account_Info, Tax_Data Tax_Info) throws Exception{
 		try {
 			//go to the INET page just to load the cookies
-			WebDriver_Functions.ChangeURL("INET", Account_Info.Billing_Country_Code, true);
+			WebDriver_Functions.ChangeURL("INET", Account_Info.Billing_Address_Info.Country_Code, true);
 			WebDriver_Functions.ChangeURL_EnrollmentID(Enrollment, false, false);
-			//WebDriver_Functions.ChangeURL("Enrollment_" + Enrollment.ENROLLMENT_ID, Account_Info.Billing_Country_Code, false);
+			//WebDriver_Functions.ChangeURL("Enrollment_" + Enrollment.ENROLLMENT_ID, Account_Info.Billing_Address_Info.Country_Code, false);
 
 			WebDriver_Functions.takeSnapShot("Discount Page.png");
 			
@@ -408,10 +408,10 @@ public class WFCL_Functions_UsingData{
 			boolean InetFlag = false, AdminFlag = false;
 
 			//Check the INET page
-			InetFlag = Check_INET_Enrolled(Account_Info.Billing_Country_Code);
+			InetFlag = Check_INET_Enrolled(Account_Info.Billing_Address_Info.Country_Code);
 
 			//Check the Administration page
-			AdminFlag = Check_WADM_Enrolled(Account_Info.Billing_Country_Code);
+			AdminFlag = Check_WADM_Enrolled(Account_Info.Billing_Address_Info.Country_Code);
 			
 			Helper_Functions.PrintOut("Finished CreditCardRegistrationEnroll  " + Account_Info.UserId + "/" + Account_Info.Password + "--" + Account_Info.Account_Number + "--" + Account_Info.UUID, true);
 			
@@ -461,7 +461,7 @@ public class WFCL_Functions_UsingData{
 
 	//will return a string array with 0 as the user id and 1 as the password, 2 is the uuid
 	public static String[] WFCL_UserRegistration(Account_Data Account_Info) throws Exception{
-		String CountryCode = Account_Info.Billing_Country_Code;
+		String CountryCode = Account_Info.Billing_Address_Info.Country_Code;
 		try {
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
 			WebDriver_Functions.WaitClickable(By.id("registernow"));
@@ -471,7 +471,7 @@ public class WFCL_Functions_UsingData{
 
 			String UUID = WebDriver_Functions.GetCookieUUID();
 			
-			if ("US".contains(Account_Info.Billing_Country_Code)) {
+			if ("US".contains(Account_Info.Billing_Address_Info.Country_Code)) {
 				//Confirmation page
 				Verify_Confirmaiton_Page("WFCL_CREATE", Account_Info);
 			}
@@ -494,7 +494,7 @@ public class WFCL_Functions_UsingData{
 	
 	//will return a string array with 0 as the user id and 1 as the password, 2 is the uuid
 	public static void WFCL_UserRegistration_Captcha(Account_Data Account_Info, int Attempts) throws Exception{
-		String CountryCode = Account_Info.Billing_Country_Code;
+		String CountryCode = Account_Info.Billing_Address_Info.Country_Code;
 		try {
 			WebDriver_Functions.ChangeURL("Pref", CountryCode, true);//navigate to email preferences page to load cookies
 			WebDriver_Functions.WaitClickable(By.id("registernow"));
@@ -548,7 +548,7 @@ public class WFCL_Functions_UsingData{
 	
 	public static boolean Admin_Registration(Account_Data Account_Info) throws Exception {
 		try{
-			WebDriver_Functions.ChangeURL("AdminReg", Account_Info.Billing_Country_Code, false);
+			WebDriver_Functions.ChangeURL("AdminReg", Account_Info.Billing_Address_Info.Country_Code, false);
 			
 			if (WebDriver_Functions.isPresent(By.name("accountNumber"))){ 
 				WebDriver_Functions.Select(By.name("accountNumber"), "1", "i");
@@ -584,7 +584,7 @@ public class WFCL_Functions_UsingData{
 	
 	public static String[] WDPA_Registration(Account_Data Account_Info) throws Exception{
  		try {
- 			String CountryCode = Account_Info.Billing_Country_Code;
+ 			String CountryCode = Account_Info.Billing_Address_Info.Country_Code;
  			WebDriver_Functions.ChangeURL("WDPA", CountryCode, true);
  			WebDriver_Functions.Click(By.name("signupnow"));
  	
@@ -628,7 +628,7 @@ public class WFCL_Functions_UsingData{
 	}//end Forgot_User_Email
 
 	public static Account_Data WFCL_CC_Page(Account_Data Account_Info, Tax_Data Tax_Info) throws Exception{
-		String CountryCode = Account_Info.Billing_Country_Code;
+		String CountryCode = Account_Info.Billing_Address_Info.Country_Code;
 		Helper_Functions.PrintOut("WFCL_CC_Page recieved: " + Account_Info.Credit_Card_Number + ", " + CountryCode + " From: " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
 
 		WebDriver_Functions.WaitForTextPresentIn(By.cssSelector("#CCType"), Account_Info.Credit_Card_Type.substring(0, 1));//wait for the credit card types to load, check for first character since Mastercard and MasterCard issue.
@@ -654,8 +654,8 @@ public class WFCL_Functions_UsingData{
 			}
 			
 			//if the zip code does not match what was enterd on previous page then update. This was change as part of the TNT features for the Jan19CL.
-			if (WebDriver_Functions.isPresent(By.id("creditCardZipCode")) && !WebDriver_Functions.GetText(By.id("creditCardZipCode")).contentEquals(Account_Info.Billing_Zip)) {
-				WebDriver_Functions.Type(By.id("creditCardZipCode"), Account_Info.Billing_Zip);
+			if (WebDriver_Functions.isPresent(By.id("creditCardZipCode")) && !WebDriver_Functions.GetText(By.id("creditCardZipCode")).contentEquals(Account_Info.Billing_Address_Info.Zip)) {
+				WebDriver_Functions.Type(By.id("creditCardZipCode"), Account_Info.Billing_Address_Info.Zip);
 			}
 		}
 
@@ -864,7 +864,7 @@ public class WFCL_Functions_UsingData{
     }
     
 	public static String[] WFCL_AccountRegistration_GFBO(Account_Data Account_Info) throws Exception{
-		String CountryCode = Account_Info.Billing_Country_Code;
+		String CountryCode = Account_Info.Billing_Address_Info.Country_Code;
 		
 		//The below applicable countries list was updated on 1/30/18
 		String GFBOCountry_List[] = {"SV", "LU", "MO", "GU", "AE", "AN", "AR", "AT", "AU", "AW", "BB", "BE", "BH", "BM", "BR", "BS", "CH", "CL", "CN", "CR", "CZ", "DE", "DK", "DO", "EE", "ES", "FI", "FR", "GB", "GD", "GP", "GR", "GT", "HK", "HU", "IE", "IN", "IT", "JM", "JP", "KN", "KR", "KV", "KW", "KY", "LC", "LT", "LV", "MQ", "MX", "MY", "NL", "NO", "NZ", "PA", "PL", "PT", "RU", "SE", "SG", "TC", "TH", "TR", "TT", "TW", "US", "UY", "VC", "VE", "VG", "VI", "CA", "CW", "BQ", "SX", "MF", "BW", "LS", "MW", "MZ", "NA", "SI", "ZA", "SZ", "ZM", "VN", "BG", "HR", "RO", "SK", "QA", "PH", "AD", "AF", "AL", "AM", "AO", "AZ", "BA", "BD", "BF", "BI", "BJ", "BT", "BY", "CD", "CF", "CG", "CI", "CM", "CV", "CY", "DJ", "DZ", "EG", "ER", "ET", "GA", "GE", "GH", "GI", "GL", "GM", "GN", "GQ", "GW", "IL", "IQ", "IR", "IS", "JO", "KE", "KG", "KZ", "LB", "LI", "LK", "LR", "LY", "MA", "MC", "MD", "ME", "MG", "MK", "ML", "MR", "MT", "MU", "MV", "NE", "NG", "NP", "OM", "PK", "PS", "RE", "RS", "RW", "SA", "SC", "SD", "SL", "SN", "SO", "SY", "TD", "TG", "TM", "TN", "TZ", "UA", "UG", "UZ"};
@@ -921,7 +921,7 @@ public class WFCL_Functions_UsingData{
     
 	public static String[] WFCL_AccountRegistration_INET(Account_Data Account_Info) throws Exception{
 		boolean InetFlag = false;
-		String CountryCode = Account_Info.Billing_Country_Code;
+		String CountryCode = Account_Info.Billing_Address_Info.Country_Code;
 
 		if (CountryCode.contentEquals("US") || CountryCode.contentEquals("CA")){
 			WebDriver_Functions.ChangeURL("FCLLink", CountryCode, true);
@@ -1107,8 +1107,8 @@ public class WFCL_Functions_UsingData{
 	public static String[] WFCL_RewardsRegistration(Account_Data Account_Info) throws Exception{
  		try {
  			
- 			WebDriver_Functions.ChangeURL("HOME", Account_Info.Billing_Country_Code, true);
- 			WebDriver_Functions.ChangeURL("WFCLREWARDS", Account_Info.Billing_Country_Code, true);
+ 			WebDriver_Functions.ChangeURL("HOME", Account_Info.Billing_Address_Info.Country_Code, true);
+ 			WebDriver_Functions.ChangeURL("WFCLREWARDS", Account_Info.Billing_Address_Info.Country_Code, true);
  			
  			//click sign up now and begin registration
  			WebDriver_Functions.WaitClickable(By.name("signupnow"));
@@ -1131,7 +1131,7 @@ public class WFCL_Functions_UsingData{
  			
  			//add a step here for the confirmation page.
  			boolean ConfrimationPageCheck = false;
- 			if ("US_CA_us_ca_".contains(Account_Info.Billing_Country_Code)) {
+ 			if ("US_CA_us_ca_".contains(Account_Info.Billing_Address_Info.Country_Code)) {
  				
  			}else {
  				//This is the AEM button for "Go to My FedEx Rewards"
@@ -1140,7 +1140,7 @@ public class WFCL_Functions_UsingData{
  				ConfrimationPageCheck = true;
  			}
  			
-		    return new String[] {Account_Info.UserId, Account_Info.UUID, Account_Info.Account_Number, Account_Info.Billing_Country_Code, "Confirmation: " + ConfrimationPageCheck};
+		    return new String[] {Account_Info.UserId, Account_Info.UUID, Account_Info.Account_Number, Account_Info.Billing_Address_Info.Country_Code, "Confirmation: " + ConfrimationPageCheck};
  		}catch (Exception e) {
  			throw e;
  		}

@@ -328,7 +328,7 @@ public class USRC_General {
 	
 	public String[][] WCRV_Access(String Level, String Details[][], String Cookies) {
 		PRDC_Data PRDC_D = PRDC_Data.LoadVariables(Level);
-		String AccountDetails = PRDC_API_Endpoints.Accounts_Call(PRDC_D.AccountsURL, Cookies);
+		String AccountDetails = PRDC_API_Endpoints.PRDC_Accounts_Call(PRDC_D.AccountsURL, Cookies);
 		String WCRV_Access = "";
 		if (AccountDetails.contains("displayRateSheetFlag\":true") && AccountDetails.contains("discountPricingFlag\":true") && AccountDetails.contains("accountCountryEnabledFlag\":true")){
 			WCRV_Access = "T";

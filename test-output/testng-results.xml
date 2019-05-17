@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="4" total="5" passed="1">
+<testng-results skipped="0" failed="0" ignored="12" total="13" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="174023" started-at="2019-05-17T03:32:57Z" finished-at="2019-05-17T03:35:51Z">
+  <suite name="Default suite" duration-ms="82355" started-at="2019-05-17T18:09:23Z" finished-at="2019-05-17T18:10:45Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="174023" started-at="2019-05-17T03:32:57Z" finished-at="2019-05-17T03:35:51Z">
-      <class name="WDPA_Application.WDPA_SmokeTest">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WDPA_Application.WDPA_SmokeTest@dd0c991]" name="beforeClass" is-config="true" duration-ms="50" started-at="2019-05-17T03:32:57Z" finished-at="2019-05-17T03:32:57Z">
+    <test name="Default test" duration-ms="82355" started-at="2019-05-17T18:09:23Z" finished-at="2019-05-17T18:10:45Z">
+      <class name="WFCL_Application.WFCL_New">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WFCL_Application.WFCL_New@6cc7b4de]" name="beforeClass" is-config="true" duration-ms="33" started-at="2019-05-17T18:09:23Z" finished-at="2019-05-17T18:09:23Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="WDPA_Express(java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:WDPA_Application.WDPA_SmokeTest@dd0c991]" name="WDPA_Express" duration-ms="173399" started-at="2019-05-17T03:32:57Z" data-provider="dp" finished-at="2019-05-17T03:35:51Z">
+        <test-method status="PASS" signature="UserRegistration_Account_Data(java.lang.String, Data_Structures.Account_Data)[pri:0, instance:WFCL_Application.WFCL_New@6cc7b4de]" name="UserRegistration_Account_Data" duration-ms="81807" started-at="2019-05-17T18:09:23Z" data-provider="dp" finished-at="2019-05-17T18:10:45Z">
           <params>
             <param index="0">
               <value>
@@ -20,24 +20,14 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[US]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[L3642210300US101118T153422]]>
-              </value>
-            </param>
-            <param index="3">
-              <value>
-                <![CDATA[Test1234]]>
+                <![CDATA[Data_Structures.Account_Data@72b8f7b2]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- WDPA_Express -->
-      </class> <!-- WDPA_Application.WDPA_SmokeTest -->
+        </test-method> <!-- UserRegistration_Account_Data -->
+      </class> <!-- WFCL_Application.WFCL_New -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

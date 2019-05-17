@@ -1034,7 +1034,7 @@ public class Helper_Functions{
 		Account_Data D[] = Environment.getAccountDetails(Level);
 		CountryCode = CountryCode.toUpperCase();
 		for (Account_Data Current: D) {
-			if (Current != null && Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
+			if (Current != null && Current.Billing_Address_Info.Country_Code != null && Current.Billing_Address_Info.Country_Code.contentEquals(CountryCode)) {
 				return Current;
 			}
 		}
@@ -1045,7 +1045,7 @@ public class Helper_Functions{
 		CountryCode = CountryCode.toUpperCase();
 		Account_Data D[] = Environment.getAddressDetails();
 		for (Account_Data Current: D) {
-			if (Current != null && Current.Billing_Country_Code != null && Current.Billing_Country_Code.contentEquals(CountryCode)) {
+			if (Current != null && Current.Billing_Address_Info.Country_Code != null && Current.Billing_Address_Info.Country_Code.contentEquals(CountryCode)) {
 				Current.Level = Level;
 				//Will load the dummy values for the name associated with address.
 				final String[] numNames = {"", "one","two","three","four","five","six","seven"};

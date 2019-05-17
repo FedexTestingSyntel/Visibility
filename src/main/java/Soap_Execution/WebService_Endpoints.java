@@ -118,7 +118,7 @@ public class WebService_Endpoints {
 	    //CompanyName.addTextNode(Account_Info.Company_Name);
 	    CompanyName.addTextNode("STORAGETEK PR-SOUTH");
 	    SOAPElement PhoneNumber = Contact.addChildElement("PhoneNumber", "v5");
-	    //PhoneNumber.addTextNode(Account_Info.Billing_Phone_Number);
+	    //PhoneNumber.addTextNode(Account_Info.Billing_Address_Info.Phone_Number);
 	    PhoneNumber.addTextNode("1234567890");
 	    SOAPElement EmailAddress = Contact.addChildElement("EMailAddress", "v5");
 	    //EmailAddress.addTextNode(Account_Info.Email);
@@ -128,15 +128,15 @@ public class WebService_Endpoints {
 	    ////Address starts
 	    SOAPElement Address = Subscriber.addChildElement(envelope.createName("Address","v5", NSv5));
 	    SOAPElement StreetLines = Address.addChildElement("StreetLines", "v5");
-	    StreetLines.addTextNode(Account_Info.Shipping_Address_Line_1);
+	    StreetLines.addTextNode(Account_Info.Shipping_Address_Info.Address_Line_1);
 	    SOAPElement City = Address.addChildElement("City", "v5");
-	    City.addTextNode(Account_Info.Shipping_City);
+	    City.addTextNode(Account_Info.Shipping_Address_Info.City);
 	    SOAPElement StateOrProvinceCode = Address.addChildElement("StateOrProvinceCode", "v5");
-	    StateOrProvinceCode.addTextNode(Account_Info.Shipping_State_Code);
+	    StateOrProvinceCode.addTextNode(Account_Info.Shipping_Address_Info.State_Code);
 	    SOAPElement PostalCode = Address.addChildElement("PostalCode", "v5");
-	    PostalCode.addTextNode(Account_Info.Shipping_Zip);
+	    PostalCode.addTextNode(Account_Info.Shipping_Address_Info.Zip);
 	    SOAPElement CountryCode = Address.addChildElement("CountryCode", "v5");
-	    CountryCode.addTextNode(Account_Info.Shipping_Country_Code);
+	    CountryCode.addTextNode(Account_Info.Shipping_Address_Info.Country_Code);
 	    ////Address ends
 	    ///Subscriber ends
 	    
@@ -144,15 +144,15 @@ public class WebService_Endpoints {
 	    		//assuming same address for now
 	    SOAPElement AccountShippingAddress = SubscriptionRequest.addChildElement(envelope.createName("AccountShippingAddress","v5", NSv5));
 	    SOAPElement StreetLines1 = AccountShippingAddress.addChildElement("StreetLines", "v5");
-	    StreetLines1.addTextNode(Account_Info.Billing_Address_Line_1);
+	    StreetLines1.addTextNode(Account_Info.Billing_Address_Info.Address_Line_1);
 	    SOAPElement City1 = AccountShippingAddress.addChildElement("City", "v5");
-	    City1.addTextNode(Account_Info.Billing_City);
+	    City1.addTextNode(Account_Info.Billing_Address_Info.City);
 	    SOAPElement StateOrProvinceCode1 = AccountShippingAddress.addChildElement("StateOrProvinceCode", "v5");
-	    StateOrProvinceCode1.addTextNode(Account_Info.Billing_State_Code);
+	    StateOrProvinceCode1.addTextNode(Account_Info.Billing_Address_Info.State_Code);
 	    SOAPElement PostalCode1 = AccountShippingAddress.addChildElement("PostalCode", "v5");
-	    PostalCode1.addTextNode(Account_Info.Billing_Zip);
+	    PostalCode1.addTextNode(Account_Info.Billing_Address_Info.Zip);
 	    SOAPElement CountryCode1 = AccountShippingAddress.addChildElement("CountryCode", "v5");
-	    CountryCode1.addTextNode(Account_Info.Billing_Country_Code);
+	    CountryCode1.addTextNode(Account_Info.Billing_Address_Info.Country_Code);
 	    ////AccountShippingAddress ends
 	    
 	    String strPeripheralType = "SOFTWARE";

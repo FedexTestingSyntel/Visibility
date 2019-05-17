@@ -92,7 +92,7 @@ public class WIDM_SOAPClient {
 	public void AAAUserCreate(String Level, Account_Data Account_Info){
 		try {
 			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Address_Info.Country_Code);
 			String Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, null);
 			Account_Data.Print_High_Level_Details(Account_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));

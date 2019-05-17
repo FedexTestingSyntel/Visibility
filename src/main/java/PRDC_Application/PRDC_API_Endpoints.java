@@ -1,13 +1,11 @@
 package PRDC_Application;
 
 import org.apache.http.client.methods.HttpGet;
-
 import SupportClasses.General_API_Calls;
-import SupportClasses.Helper_Functions;
 
 public class PRDC_API_Endpoints {
 
-	public static String Accounts_Call(String URL, String Cookie){
+	public static String PRDC_Accounts_Call(String URL, String Cookie){
 		HttpGet httpGet = new HttpGet(URL);
 		
 		httpGet.addHeader("Content-Type", "application/json");
@@ -18,7 +16,6 @@ public class PRDC_API_Endpoints {
 		
 		String Response;
 		try {
-			Helper_Functions.PrintOut("Account Call.", true);
 			Response = General_API_Calls.HTTPCall(httpGet, "");
 			return Response;
 		} catch (Exception e) {

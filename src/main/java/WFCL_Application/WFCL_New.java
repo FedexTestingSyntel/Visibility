@@ -29,7 +29,7 @@ public class WFCL_New{
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("JP");
-		//CountryList = Environment.getCountryList("JP");
+		//CountryList = Environment.getCountryList("GB");
 		//CountryList = new String[][]{{"US", ""}, {"CA", ""}};
 		//CountryList = Environment.getCountryList("high");
 		Helper_Functions.MyEmail = "accept@fedex.com";
@@ -159,7 +159,7 @@ public class WFCL_New{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Credit_Card(Account_Info, Environment.getCreditCardDetails(Level, "V"));
-			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
+			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Address_Info.Country_Code + Enrollment_Info.ENROLLMENT_ID + "CC");
 
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
@@ -173,12 +173,12 @@ public class WFCL_New{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "Inet" + Account_Info.Billing_Country_Code);
+			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "Inet" + Account_Info.Billing_Address_Info.Country_Code);
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			//register the user id to INET
-			if ("US CA".contains(Account_Info.Billing_Country_Code)) {
+			if ("US CA".contains(Account_Info.Billing_Address_Info.Country_Code)) {
 				WFCL_Functions_UsingData.INET_Registration(Account_Info);
 			}
 			
@@ -194,8 +194,8 @@ public class WFCL_New{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "AccountOnline" + Account_Info.Billing_Country_Code);
+			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "AccountOnline" + Account_Info.Billing_Address_Info.Country_Code);
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 
@@ -210,7 +210,7 @@ public class WFCL_New{
 	public void UserRegistration_Account_Data(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
-			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Country_Code + "Create");
+			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Address_Info.Country_Code + "Create");
 			String Result[] = WFCL_Functions_UsingData.WFCL_UserRegistration(Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
@@ -222,7 +222,7 @@ public class WFCL_New{
 	public void UserRegistration_Account_Data_Captcha(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
-			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Country_Code + "Create");
+			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Billing_Address_Info.Country_Code + "Create");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Info.Email = Helper_Functions.getRandomString(12) + "@fedex.com";
 			WFCL_Functions_UsingData.WFCL_UserRegistration_Captcha(Account_Info, 4);
@@ -236,14 +236,14 @@ public class WFCL_New{
 	public void AccountRegistration_Admin(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
-			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
-			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
+			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level  + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 			boolean INET_Result = WFCL_Functions_UsingData.INET_Registration(Account_Info);
 			String Result[] = new String[] {Account_Info.UserId, Account_Info.Password, Account_Info.Account_Number, Account_Info.UUID, "INET: " + INET_Result};
 			Result = Arrays.copyOf(Result, Result.length + 1);
-			Result[Result.length - 1] = "Admin: " + WFCL_Functions.Admin_Registration(Account_Info.Billing_Country_Code, Account_Info.Account_Number);
+			Result[Result.length - 1] = "Admin: " + WFCL_Functions.Admin_Registration(Account_Info.Billing_Address_Info.Country_Code, Account_Info.Account_Number);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -265,8 +265,8 @@ public class WFCL_New{
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "Wdpa" + Account_Info.Billing_Country_Code);
+			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "Wdpa" + Account_Info.Billing_Address_Info.Country_Code);
 			String Result[] = WFCL_Functions_UsingData.WDPA_Registration(Account_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 			

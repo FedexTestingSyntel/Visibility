@@ -71,7 +71,7 @@ public class WFCL_API_Functions {
   			if (Account_Info.UserId.contentEquals("")) {
   				// Create the user id
   	  			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
-  	  			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
+  	  			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
   	  			Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, null);
   	  			Account_Data.Print_High_Level_Details(Account_Info);
   	  			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
@@ -107,12 +107,12 @@ public class WFCL_API_Functions {
   	  		urlParameters.add(new BasicNameValuePair("creditCardNumber", ""));
   	  		urlParameters.add(new BasicNameValuePair("invoiceNumberB", ""));
   	  		urlParameters.add(new BasicNameValuePair("invoiceNumberA", ""));
-  	  		urlParameters.add(new BasicNameValuePair("country1", Account_Info.Billing_Country_Code.toLowerCase()));
-  	  		urlParameters.add(new BasicNameValuePair("zip", Account_Info.Billing_Zip));
-  	  		urlParameters.add(new BasicNameValuePair("state", Account_Info.Billing_State_Code));
-  	  		urlParameters.add(new BasicNameValuePair("city", Account_Info.Billing_City));
-  	  		urlParameters.add(new BasicNameValuePair("address2", Account_Info.Billing_Address_Line_2));
-  	  		urlParameters.add(new BasicNameValuePair("address1", Account_Info.Billing_Address_Line_1));
+  	  		urlParameters.add(new BasicNameValuePair("country1", Account_Info.Billing_Address_Info.Country_Code.toLowerCase()));
+  	  		urlParameters.add(new BasicNameValuePair("zip", Account_Info.Billing_Address_Info.Zip));
+  	  		urlParameters.add(new BasicNameValuePair("state", Account_Info.Billing_Address_Info.State_Code));
+  	  		urlParameters.add(new BasicNameValuePair("city", Account_Info.Billing_Address_Info.City));
+  	  		urlParameters.add(new BasicNameValuePair("address2", Account_Info.Billing_Address_Info.Address_Line_2));
+  	  		urlParameters.add(new BasicNameValuePair("address1", Account_Info.Billing_Address_Info.Address_Line_1));
   	  		urlParameters.add(new BasicNameValuePair("lastName", Account_Info.LastName));
   	  		urlParameters.add(new BasicNameValuePair("initials", Account_Info.MiddleName));
   	  		urlParameters.add(new BasicNameValuePair("firstName", Account_Info.FirstName));
@@ -120,12 +120,12 @@ public class WFCL_API_Functions {
   	  		urlParameters.add(new BasicNameValuePair("accountNumber", Account_Info.Account_Number));
   	  		urlParameters.add(new BasicNameValuePair("displayScreen", "addressScreen"));
   	  		urlParameters.add(new BasicNameValuePair("deviceID", ""));
-  	  		urlParameters.add(new BasicNameValuePair("country", Account_Info.Billing_Country_Code.toLowerCase()));
+  	  		urlParameters.add(new BasicNameValuePair("country", Account_Info.Billing_Address_Info.Country_Code.toLowerCase()));
   	  		urlParameters.add(new BasicNameValuePair("allvalid", "false"));
   	  		urlParameters.add(new BasicNameValuePair("programIndicator", "p314t9n1ey"));
-  	  		urlParameters.add(new BasicNameValuePair("locale", Account_Info.Billing_Country_Code.toLowerCase() + "_" + Account_Info.LanguageCode.toLowerCase()));
+  	  		urlParameters.add(new BasicNameValuePair("locale", Account_Info.Billing_Address_Info.Country_Code.toLowerCase() + "_" + Account_Info.LanguageCode.toLowerCase()));
   	  		urlParameters.add(new BasicNameValuePair("languageCode", Account_Info.LanguageCode.toLowerCase()));
-  	  		urlParameters.add(new BasicNameValuePair("countryCode", Account_Info.Billing_Country_Code.toLowerCase()));
+  	  		urlParameters.add(new BasicNameValuePair("countryCode", Account_Info.Billing_Address_Info.Country_Code.toLowerCase()));
   	  		urlParameters.add(new BasicNameValuePair("afterwardsURL", Level_Url + ":443/fcl/web/jsp/oadr.jsp"));
   	  		urlParameters.add(new BasicNameValuePair("step3URL", "https%3A//.fedex.com%3A443/fcl/web/jsp/fclValidateAndCreate.jsp")); //set to prod
   	  		urlParameters.add(new BasicNameValuePair("fclHost", Level_Url));
@@ -156,7 +156,7 @@ public class WFCL_API_Functions {
   			if (Account_Info.UserId.contentEquals("")) {
   				// Create the user id
   	  			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
-  	  			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
+  	  			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
   	  			Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, null);
   	  			Account_Data.Print_High_Level_Details(Account_Info);
   	  			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
@@ -185,7 +185,7 @@ public class WFCL_API_Functions {
   	  		urlParameters.add(new BasicNameValuePair("appName", "fclfsm"));
   	  		urlParameters.add(new BasicNameValuePair("step3URL", "https://wwwdev.idev.fedex.com/shipping/shipEntryAction.do?method=doRegistration&link=1&locale=en_US&urlparams=us&sType=F"));
   	  		urlParameters.add(new BasicNameValuePair("afterwardsURL", "https://wwwdev.idev.fedex.com/shipping/shipEntryAction.do?method=doEntry&link=1&locale=en_US&urlparams=us&sType=F&programIndicator=0"));
-  	  		urlParameters.add(new BasicNameValuePair("countryCode", Account_Info.Billing_Country_Code.toLowerCase()));
+  	  		urlParameters.add(new BasicNameValuePair("countryCode", Account_Info.Billing_Address_Info.Country_Code.toLowerCase()));
   	  		urlParameters.add(new BasicNameValuePair("languageCode", Account_Info.LanguageCode.toLowerCase()));
   	  		urlParameters.add(new BasicNameValuePair("programIndicator", "1"));
   	  		urlParameters.add(new BasicNameValuePair("registrationType", "updateRegistration"));

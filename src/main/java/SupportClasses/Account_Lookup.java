@@ -238,35 +238,35 @@ public class Account_Lookup extends Helper_Functions{
 				
 				String region = "", countryName = "";
 				for (Account_Data Address: AllAddresses) {
-					if (Address != null && Address.Billing_Country_Code.contentEquals(countryCode)) {
-						region = Address.Billing_Region;
-						countryName = Address.Billing_Country;
+					if (Address != null && Address.Billing_Address_Info.Country_Code.contentEquals(countryCode)) {
+						region = Address.Billing_Address_Info.Region;
+						countryName = Address.Billing_Address_Info.Country;
 						break;
 					}
 				}
 				
 				if (k == 0) {
-					Account_Details.Shipping_Address_Line_1 = Streetline1;
-					Account_Details.Shipping_Address_Line_2 = Streetline2;
-					Account_Details.Shipping_City = City;
-					Account_Details.Shipping_State = State;
-					Account_Details.Shipping_State_Code = StateCode;
-					Account_Details.Shipping_Phone_Number = areaCode + phoneNumber;
-					Account_Details.Shipping_Zip = postalCode;
-					Account_Details.Shipping_Country_Code = countryCode;
-					Account_Details.Shipping_Region = region;
-					Account_Details.Shipping_Country = countryName;
+					Account_Details.Shipping_Address_Info.Address_Line_1 = Streetline1;
+					Account_Details.Shipping_Address_Info.Address_Line_2 = Streetline2;
+					Account_Details.Shipping_Address_Info.City = City;
+					Account_Details.Shipping_Address_Info.State = State;
+					Account_Details.Shipping_Address_Info.State_Code = StateCode;
+					Account_Details.Shipping_Address_Info.Phone_Number = areaCode + phoneNumber;
+					Account_Details.Shipping_Address_Info.Zip = postalCode;
+					Account_Details.Shipping_Address_Info.Country_Code = countryCode;
+					Account_Details.Shipping_Address_Info.Region = region;
+					Account_Details.Shipping_Address_Info.Country = countryName;
 				}else if (k == 1) {
-					Account_Details.Billing_Address_Line_1 = Streetline1;
-					Account_Details.Billing_Address_Line_2 = Streetline2;
-					Account_Details.Billing_City = City;
-					Account_Details.Billing_State = State;
-					Account_Details.Billing_State_Code = StateCode;
-					Account_Details.Billing_Phone_Number = areaCode + phoneNumber;
-					Account_Details.Billing_Zip = postalCode;
-					Account_Details.Billing_Country_Code = countryCode;
-					Account_Details.Billing_Region = region;
-					Account_Details.Billing_Country = countryName;
+					Account_Details.Billing_Address_Info.Address_Line_1 = Streetline1;
+					Account_Details.Billing_Address_Info.Address_Line_2 = Streetline2;
+					Account_Details.Billing_Address_Info.City = City;
+					Account_Details.Billing_Address_Info.State = State;
+					Account_Details.Billing_Address_Info.State_Code = StateCode;
+					Account_Details.Billing_Address_Info.Phone_Number = areaCode + phoneNumber;
+					Account_Details.Billing_Address_Info.Zip = postalCode;
+					Account_Details.Billing_Address_Info.Country_Code = countryCode;
+					Account_Details.Billing_Address_Info.Region = region;
+					Account_Details.Billing_Address_Info.Country = countryName;
 				}
 				
 			}
@@ -301,7 +301,7 @@ public class Account_Lookup extends Helper_Functions{
 			}
 			
 			Account_Details.Account_Number = AccountNumber;
-			Account_Details.Account_Nickname = AccountNumber + "_" + Account_Details.Billing_Country_Code;
+			Account_Details.Account_Nickname = AccountNumber + "_" + Account_Details.Billing_Address_Info.Country_Code;
 			Account_Details.Masked_Account_Number = Account_Details.Account_Nickname + " - " + Account_Details.Account_Number.substring(Account_Details.Account_Number.length() - 3, Account_Details.Account_Number.length());
 			Account_Details.Credit_Card_Type = Credit_Card_Type;
 			Account_Details.Credit_Card_Number = Credit_Card_Number;
@@ -313,7 +313,7 @@ public class Account_Lookup extends Helper_Functions{
 			Account_Details.Account_Type = "";
 			Account_Details.Tax_ID_One = "";
 			Account_Details.Tax_ID_Two = "";
-			String BillingAddress[] = {Account_Details.Billing_Address_Line_1, Account_Details.Billing_Address_Line_2, Account_Details.Billing_City, Account_Details.Billing_State_Code, Account_Details.Billing_Zip, Account_Details.Billing_Country_Code}; 
+			String BillingAddress[] = {Account_Details.Billing_Address_Info.Address_Line_1, Account_Details.Billing_Address_Info.Address_Line_2, Account_Details.Billing_Address_Info.City, Account_Details.Billing_Address_Info.State_Code, Account_Details.Billing_Address_Info.Zip, Account_Details.Billing_Address_Info.Country_Code}; 
 			PrintOut("Address Returned: " + Account_Details.Account_Number + Arrays.toString(BillingAddress), true);
 			//will load dummy values
 			Account_Details.Email = Helper_Functions.MyEmail;
@@ -427,23 +427,23 @@ public class Account_Lookup extends Helper_Functions{
 				}
   				
   	  			if (j == 0) {//shipping address
-  	  				Account_Info.Shipping_Share_Id = AccountDetails[shareId][2];
-  					Account_Info.Shipping_Address_Line_1 = AccountDetails[streetline1][2];
-  					Account_Info.Shipping_Address_Line_2 = AccountDetails[streetline2][2];
-  					Account_Info.Shipping_City = AccountDetails[city][2];
-  					Account_Info.Shipping_State_Code = AccountDetails[statecode][2];
-  					Account_Info.Shipping_Zip = AccountDetails[postalcode][2];
-  					Account_Info.Shipping_Country_Code = AccountDetails[countrycode][2];
-  					Account_Info.Shipping_Phone_Number = AccountDetails[areacode][2] + AccountDetails[phoneNumber][2];		
+  	  				Account_Info.Shipping_Address_Info.Share_Id = AccountDetails[shareId][2];
+  					Account_Info.Shipping_Address_Info.Address_Line_1 = AccountDetails[streetline1][2];
+  					Account_Info.Shipping_Address_Info.Address_Line_2 = AccountDetails[streetline2][2];
+  					Account_Info.Shipping_Address_Info.City = AccountDetails[city][2];
+  					Account_Info.Shipping_Address_Info.State_Code = AccountDetails[statecode][2];
+  					Account_Info.Shipping_Address_Info.Zip = AccountDetails[postalcode][2];
+  					Account_Info.Shipping_Address_Info.Country_Code = AccountDetails[countrycode][2];
+  					Account_Info.Shipping_Address_Info.Phone_Number = AccountDetails[areacode][2] + AccountDetails[phoneNumber][2];		
   				}else {//billing address
-  					Account_Info.Billing_Share_Id = AccountDetails[shareId][2];
-  					Account_Info.Billing_Address_Line_1 = AccountDetails[streetline1][2];
-  					Account_Info.Billing_Address_Line_2 = AccountDetails[streetline2][2];
-  					Account_Info.Billing_City = AccountDetails[city][2];
-  					Account_Info.Billing_State_Code = AccountDetails[statecode][2];
-  					Account_Info.Billing_Zip = AccountDetails[postalcode][2];
-  					Account_Info.Billing_Country_Code = AccountDetails[countrycode][2];
-  					Account_Info.Billing_Phone_Number = AccountDetails[areacode][2] + AccountDetails[phoneNumber][2];
+  					Account_Info.Billing_Address_Info.Share_Id = AccountDetails[shareId][2];
+  					Account_Info.Billing_Address_Info.Address_Line_1 = AccountDetails[streetline1][2];
+  					Account_Info.Billing_Address_Info.Address_Line_2 = AccountDetails[streetline2][2];
+  					Account_Info.Billing_Address_Info.City = AccountDetails[city][2];
+  					Account_Info.Billing_Address_Info.State_Code = AccountDetails[statecode][2];
+  					Account_Info.Billing_Address_Info.Zip = AccountDetails[postalcode][2];
+  					Account_Info.Billing_Address_Info.Country_Code = AccountDetails[countrycode][2];
+  					Account_Info.Billing_Address_Info.Phone_Number = AccountDetails[areacode][2] + AccountDetails[phoneNumber][2];
   				}
 
   	  			if (!AccountDetails[language][2].contentEquals("")) {
@@ -458,7 +458,7 @@ public class Account_Lookup extends Helper_Functions{
 			}
 
   			//make sure country is valid
-  			if (Account_Info.Billing_Country_Code.length() > 5 || Account_Info.Billing_Country_Code.length() == 0){
+  			if (Account_Info.Billing_Address_Info.Country_Code.length() > 5 || Account_Info.Billing_Address_Info.Country_Code.length() == 0){
 				return null;
 			}else {
   				//check and add the region and country name
@@ -467,14 +467,14 @@ public class Account_Lookup extends Helper_Functions{
 				}
 				for (Account_Data Address: AllAddresses) {
 					boolean Billing = false, Shipping = false;
-					if (!Billing && Address != null && Address.Billing_Country_Code.contentEquals(AccountDetails[countrycode][2])) {
-						Account_Info.Billing_Region = Address.Billing_Region;
-	  					Account_Info.Billing_Country = Address.Billing_Country;
+					if (!Billing && Address != null && Address.Billing_Address_Info.Country_Code.contentEquals(AccountDetails[countrycode][2])) {
+						Account_Info.Billing_Address_Info.Region = Address.Billing_Address_Info.Region;
+	  					Account_Info.Billing_Address_Info.Country = Address.Billing_Address_Info.Country;
 	  					Billing = true;
 					}
-					if (!Shipping && Address != null && Address.Shipping_Country_Code.contentEquals(AccountDetails[countrycode][2])) {
-						Account_Info.Shipping_Region = Address.Shipping_Region;
-	  					Account_Info.Shipping_Country = Address.Shipping_Country;
+					if (!Shipping && Address != null && Address.Shipping_Address_Info.Country_Code.contentEquals(AccountDetails[countrycode][2])) {
+						Account_Info.Shipping_Address_Info.Region = Address.Shipping_Address_Info.Region;
+	  					Account_Info.Shipping_Address_Info.Country = Address.Shipping_Address_Info.Country;
 	  					Shipping = true;
 					}
 					if (Billing && Shipping) {
@@ -483,7 +483,7 @@ public class Account_Lookup extends Helper_Functions{
 				}
 			}
   			
-  			Account_Info.Account_Nickname = Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code;
+  			Account_Info.Account_Nickname = Account_Info.Account_Number + "_" + Account_Info.Billing_Address_Info.Country_Code;
   			Account_Info.Masked_Account_Number = Account_Info.Account_Nickname + " - " + Account_Info.Account_Number.substring(Account_Info.Account_Number.length() - 3, Account_Info.Account_Number.length());
 			
   			return Account_Info;

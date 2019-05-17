@@ -50,11 +50,11 @@ public class MC_PI_1{
 		    		Account_Data[] Accounts = Environment.getAccountDetails(Level);
 		    		boolean invoiceflag = false, creditcardflag = false;
 		    		for (int j = 0; j < Accounts.length - 1; j++) {
-		    			if (!invoiceflag && Accounts[j].Billing_Country_Code.contentEquals("US") && Accounts[j].Credit_Card_Type.isEmpty()) {
+		    			if (!invoiceflag && Accounts[j].Billing_Address_Info.Country_Code.contentEquals("US") && Accounts[j].Credit_Card_Type.isEmpty()) {
 		    				data.add( new Object[] {Level, Accounts[j], ""});
 				    		data.add( new Object[] {Level, Accounts[j], "Nickname"});
 				    		invoiceflag = true;
-		    			}else if (!creditcardflag && Accounts[j].Billing_Country_Code.contentEquals("US") && Accounts[j].Invoice_Number_A.isEmpty()) {
+		    			}else if (!creditcardflag && Accounts[j].Billing_Address_Info.Country_Code.contentEquals("US") && Accounts[j].Invoice_Number_A.isEmpty()) {
 		    				data.add( new Object[] {Level, Accounts[j], ""});
 				    		data.add( new Object[] {Level, Accounts[j], "Nickname"});
 				    		creditcardflag = true;
@@ -151,14 +151,14 @@ public class MC_PI_1{
 			
 			Account_Info = Account_Data.Set_Account_Nickname(Account_Info, Nickname);
 			
-			Account_Info.UserId = Helper_Functions.LoadUserID("L" + Level + Account_Info.Billing_Country_Code);
+			Account_Info.UserId = Helper_Functions.LoadUserID("L" + Level + Account_Info.Billing_Address_Info.Country_Code);
 			
 			Account_Data Account_Info_Mismatch = new Account_Data(Account_Info);
 			//update the address with different data, currently only configured for US account
-			Account_Info_Mismatch.Billing_City = "MEMPHIS";
-			Account_Info_Mismatch.Billing_State = "Tennessee";
-			Account_Info_Mismatch.Billing_State_Code = "TN";
-			Account_Info_Mismatch.Billing_Zip = "38119";
+			Account_Info_Mismatch.Billing_Address_Info.City = "MEMPHIS";
+			Account_Info_Mismatch.Billing_Address_Info.State = "Tennessee";
+			Account_Info_Mismatch.Billing_Address_Info.State_Code = "TN";
+			Account_Info_Mismatch.Billing_Address_Info.Zip = "38119";
 			
 			String Result = WFCL_Functions_UsingData.Account_Number_Masking(Account_Info, Account_Info_Mismatch);
 			Helper_Functions.PrintOut(Result, false);

@@ -76,26 +76,26 @@ public class Create_Accounts{
 			//OperatingCompanies = "F";
 			Account_Data Account_Details = new Account_Data();
 			Account_Details.Level = Level;
-			Account_Details.Shipping_Address_Line_1 = CountryDetails[0];
-			Account_Details.Shipping_Address_Line_2 = CountryDetails[1];
-			Account_Details.Shipping_City = CountryDetails[2];
-			Account_Details.Shipping_State = CountryDetails[3];
-			Account_Details.Shipping_State_Code = CountryDetails[4];
-			Account_Details.Shipping_Zip = CountryDetails[5];
-			Account_Details.Shipping_Country_Code = CountryDetails[6];
-			Account_Details.Shipping_Region = CountryDetails[7];
-			Account_Details.Shipping_Country = CountryDetails[8];
-			Account_Details.Shipping_Phone_Number = Helper_Functions.ValidPhoneNumber(CountryCode);
-			Account_Details.Billing_Address_Line_1 = CountryDetails[0];
-			Account_Details.Billing_Address_Line_2 = CountryDetails[1];
-			Account_Details.Billing_City = CountryDetails[2];
-			Account_Details.Billing_State = CountryDetails[3];
-			Account_Details.Billing_State_Code = CountryDetails[4];
-			Account_Details.Billing_Zip = CountryDetails[5];
-			Account_Details.Billing_Country_Code = CountryDetails[6];
-			Account_Details.Billing_Region = CountryDetails[7];
-			Account_Details.Billing_Country = CountryDetails[8];
-			Account_Details.Billing_Phone_Number = Helper_Functions.ValidPhoneNumber(CountryCode);
+			Account_Details.Shipping_Address_Info.Address_Line_1 = CountryDetails[0];
+			Account_Details.Shipping_Address_Info.Address_Line_2 = CountryDetails[1];
+			Account_Details.Shipping_Address_Info.City = CountryDetails[2];
+			Account_Details.Shipping_Address_Info.State = CountryDetails[3];
+			Account_Details.Shipping_Address_Info.State_Code = CountryDetails[4];
+			Account_Details.Shipping_Address_Info.Zip = CountryDetails[5];
+			Account_Details.Shipping_Address_Info.Country_Code = CountryDetails[6];
+			Account_Details.Shipping_Address_Info.Region = CountryDetails[7];
+			Account_Details.Shipping_Address_Info.Country = CountryDetails[8];
+			Account_Details.Shipping_Address_Info.Phone_Number = Helper_Functions.ValidPhoneNumber(CountryCode);
+			Account_Details.Billing_Address_Info.Address_Line_1 = CountryDetails[0];
+			Account_Details.Billing_Address_Info.Address_Line_2 = CountryDetails[1];
+			Account_Details.Billing_Address_Info.City = CountryDetails[2];
+			Account_Details.Billing_Address_Info.State = CountryDetails[3];
+			Account_Details.Billing_Address_Info.State_Code = CountryDetails[4];
+			Account_Details.Billing_Address_Info.Zip = CountryDetails[5];
+			Account_Details.Billing_Address_Info.Country_Code = CountryDetails[6];
+			Account_Details.Billing_Address_Info.Region = CountryDetails[7];
+			Account_Details.Billing_Address_Info.Country = CountryDetails[8];
+			Account_Details.Billing_Address_Info.Phone_Number = Helper_Functions.ValidPhoneNumber(CountryCode);
 
 			Account_Data[] Accounts = null;
 			Helper_Functions.PrintOut("Attempting to create account number for " + Arrays.toString(CountryDetails), false);
@@ -134,7 +134,7 @@ public class Create_Accounts{
 			}
 
 			WebDriver_Functions.WaitPresent(By.id("acct_info_ship_countrylist"));
-			String ShippingCountrCode = Account_Info.Shipping_Country_Code, BillingCountryCode = Account_Info.Billing_Country_Code;
+			String ShippingCountrCode = Account_Info.Shipping_Address_Info.Country_Code, BillingCountryCode = Account_Info.Billing_Address_Info.Country_Code;
 			WebDriver_Functions.Select(By.id("acct_info_countrylist"), BillingCountryCode, "v");//billing country
 			WebDriver_Functions.Select(By.id("acct_info_ship_countrylist"), ShippingCountrCode, "v");//shipping country
 			WebDriver_Functions.Select(By.id("acct_info_source_grp"), "ALLIANCES","v");//the Source group of the account numbers
@@ -162,34 +162,34 @@ public class Create_Accounts{
 			WebDriver_Functions.Click(By.id("next_contact"));
 			
 			//Account Contact Information
-			WebDriver_Functions.Type(By.id("first_name"), "First" + Account_Info.Billing_Country_Code);
+			WebDriver_Functions.Type(By.id("first_name"), "First" + Account_Info.Billing_Address_Info.Country_Code);
 			WebDriver_Functions.Type(By.id("last_name"), "Last" + Account_Type);
 			try {
 				WebDriver_Functions.Select(By.id("contact_language") , "EN","v");//set the language as English
 			}catch (Exception e){}
 			
-			WebDriver_Functions.Type(By.id("contact_phn_one"), Account_Info.Shipping_Phone_Number);
+			WebDriver_Functions.Type(By.id("contact_phn_one"), Account_Info.Shipping_Address_Info.Phone_Number);
 			WebDriver_Functions.Click(By.name("ship_radio"));
 			WebDriver_Functions.Click(By.id("next_address"));
 			
 			//Account Address
-			WebDriver_Functions.Type(By.id("acctinfo_postal_input_info"), Account_Info.Billing_Zip);
+			WebDriver_Functions.Type(By.id("acctinfo_postal_input_info"), Account_Info.Billing_Address_Info.Zip);
 			WebDriver_Functions.Type(By.id("add_info_company"), Helper_Functions.CurrentDateTime());
-			WebDriver_Functions.Type(By.id("address_phn_number"), Account_Info.Billing_Phone_Number);
-			WebDriver_Functions.Type(By.id("acctinfo_addr_one"), Account_Info.Billing_Address_Line_1);
-			WebDriver_Functions.Type(By.id("acctinfo_addr_two"), Account_Info.Billing_Address_Line_2);
+			WebDriver_Functions.Type(By.id("address_phn_number"), Account_Info.Billing_Address_Info.Phone_Number);
+			WebDriver_Functions.Type(By.id("acctinfo_addr_one"), Account_Info.Billing_Address_Info.Address_Line_1);
+			WebDriver_Functions.Type(By.id("acctinfo_addr_two"), Account_Info.Billing_Address_Info.Address_Line_2);
 			
 			//try and select the city, may be only the single city or multiple based on zip code.
 			if (WebDriver_Functions.isVisable(By.id("acctinfo_city_input_info_list"))) {
 				WebDriver_Functions.WaitClickable(By.id("acctinfo_city_input_info_list"));
-				WebDriver_Functions.Select(By.id("acctinfo_city_input_info_list"), Account_Info.Billing_City.toUpperCase(), "v");
+				WebDriver_Functions.Select(By.id("acctinfo_city_input_info_list"), Account_Info.Billing_Address_Info.City.toUpperCase(), "v");
 			}else if (WebDriver_Functions.isVisable(By.id("acctinfo_city_input_info_box"))) {
-				WebDriver_Functions.Type(By.id("acctinfo_city_input_info_box"), Account_Info.Billing_City.toUpperCase());
+				WebDriver_Functions.Type(By.id("acctinfo_city_input_info_box"), Account_Info.Billing_Address_Info.City.toUpperCase());
 			}
 			
 			//enter the state
 			if (WebDriver_Functions.isVisable(By.id("acctinfo_state_input_info"))) {
-				WebDriver_Functions.Select(By.id("acctinfo_state_input_info"), Account_Info.Billing_State_Code.toUpperCase(), "v");
+				WebDriver_Functions.Select(By.id("acctinfo_state_input_info"), Account_Info.Billing_Address_Info.State_Code.toUpperCase(), "v");
 			}
 			
 			if (WebDriver_Functions.isVisable(By.id("nomatch"))) {
@@ -361,26 +361,26 @@ public class Create_Accounts{
 					Account_Info[i].Level, 
 					Account_Info[i].FirstName,
 					Account_Info[i].LastName,
-					Account_Info[i].Shipping_Address_Line_1, 
-					Account_Info[i].Shipping_Address_Line_2,
-					Account_Info[i].Shipping_City,
-					Account_Info[i].Shipping_State,
-					Account_Info[i].Shipping_State_Code,
-					Account_Info[i].Shipping_Phone_Number,
-					Account_Info[i].Shipping_Zip,
-					Account_Info[i].Shipping_Country_Code,
-					Account_Info[i].Shipping_Region,
-					Account_Info[i].Shipping_Country,
-					Account_Info[i].Billing_Address_Line_1,
-					Account_Info[i].Billing_Address_Line_2,
-					Account_Info[i].Billing_City,
-					Account_Info[i].Billing_State,
-					Account_Info[i].Billing_State_Code,
-					Account_Info[i].Billing_Phone_Number,
-					Account_Info[i].Billing_Zip,
-					Account_Info[i].Billing_Country_Code,
-					Account_Info[i].Billing_Region,
-					Account_Info[i].Billing_Country,
+					Account_Info[i].Shipping_Address_Info.Address_Line_1, 
+					Account_Info[i].Shipping_Address_Info.Address_Line_2,
+					Account_Info[i].Shipping_Address_Info.City,
+					Account_Info[i].Shipping_Address_Info.State,
+					Account_Info[i].Shipping_Address_Info.State_Code,
+					Account_Info[i].Shipping_Address_Info.Phone_Number,
+					Account_Info[i].Shipping_Address_Info.Zip,
+					Account_Info[i].Shipping_Address_Info.Country_Code,
+					Account_Info[i].Shipping_Address_Info.Region,
+					Account_Info[i].Shipping_Address_Info.Country,
+					Account_Info[i].Billing_Address_Info.Address_Line_1,
+					Account_Info[i].Billing_Address_Info.Address_Line_2,
+					Account_Info[i].Billing_Address_Info.City,
+					Account_Info[i].Billing_Address_Info.State,
+					Account_Info[i].Billing_Address_Info.State_Code,
+					Account_Info[i].Billing_Address_Info.Phone_Number,
+					Account_Info[i].Billing_Address_Info.Zip,
+					Account_Info[i].Billing_Address_Info.Country_Code,
+					Account_Info[i].Billing_Address_Info.Region,
+					Account_Info[i].Billing_Address_Info.Country,
 					Account_Info[i].Account_Number,
 					Account_Info[i].Credit_Card_Type,
 					Account_Info[i].Credit_Card_Number,
@@ -448,26 +448,26 @@ public class Create_Accounts{
 				worksheet.createRow(RowtoWrite);
 				String AccountInformation[] = new String[] {
 					Account_Info[i].Level, 
-					Account_Info[i].Shipping_Address_Line_1, 
-					Account_Info[i].Shipping_Address_Line_2,
-					Account_Info[i].Shipping_City,
-					Account_Info[i].Shipping_State,
-					Account_Info[i].Shipping_State_Code,
-					Account_Info[i].Shipping_Phone_Number,
-					Account_Info[i].Shipping_Zip,
-					Account_Info[i].Shipping_Country_Code,
-					Account_Info[i].Shipping_Region,
-					Account_Info[i].Shipping_Country,
-					Account_Info[i].Billing_Address_Line_1,
-					Account_Info[i].Billing_Address_Line_2,
-					Account_Info[i].Billing_City,
-					Account_Info[i].Billing_State,
-					Account_Info[i].Billing_State_Code,
-					Account_Info[i].Billing_Phone_Number,
-					Account_Info[i].Billing_Zip,
-					Account_Info[i].Billing_Country_Code,
-					Account_Info[i].Billing_Region,
-					Account_Info[i].Billing_Country,
+					Account_Info[i].Shipping_Address_Info.Address_Line_1, 
+					Account_Info[i].Shipping_Address_Info.Address_Line_2,
+					Account_Info[i].Shipping_Address_Info.City,
+					Account_Info[i].Shipping_Address_Info.State,
+					Account_Info[i].Shipping_Address_Info.State_Code,
+					Account_Info[i].Shipping_Address_Info.Phone_Number,
+					Account_Info[i].Shipping_Address_Info.Zip,
+					Account_Info[i].Shipping_Address_Info.Country_Code,
+					Account_Info[i].Shipping_Address_Info.Region,
+					Account_Info[i].Shipping_Address_Info.Country,
+					Account_Info[i].Billing_Address_Info.Address_Line_1,
+					Account_Info[i].Billing_Address_Info.Address_Line_2,
+					Account_Info[i].Billing_Address_Info.City,
+					Account_Info[i].Billing_Address_Info.State,
+					Account_Info[i].Billing_Address_Info.State_Code,
+					Account_Info[i].Billing_Address_Info.Phone_Number,
+					Account_Info[i].Billing_Address_Info.Zip,
+					Account_Info[i].Billing_Address_Info.Country_Code,
+					Account_Info[i].Billing_Address_Info.Region,
+					Account_Info[i].Billing_Address_Info.Country,
 					Account_Info[i].Account_Number,
 					Account_Info[i].Credit_Card_Type,
 					Account_Info[i].Credit_Card_Number,

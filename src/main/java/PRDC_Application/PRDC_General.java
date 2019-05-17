@@ -62,7 +62,7 @@ public class PRDC_General {
 			Cookies = fdx_login_fcl_uuid[0];
 			//save the uuid
 			WCRV_Access_List[0][1] =  fdx_login_fcl_uuid[1]; 
-			String AccountDetails = PRDC_API_Endpoints.Accounts_Call(PRDC_Details.AccountsURL, Cookies);
+			String AccountDetails = PRDC_API_Endpoints.PRDC_Accounts_Call(PRDC_Details.AccountsURL, Cookies);
 			
 			if (AccountDetails.contains("displayRateSheetFlag\":true") && AccountDetails.contains("discountPricingFlag\":true") && AccountDetails.contains("accountCountryEnabledFlag\":true")){
 				WCRV_Access_List[3][1] = "Enabled";

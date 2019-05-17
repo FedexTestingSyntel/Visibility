@@ -19,10 +19,9 @@ import SupportClasses.General_API_Calls;
 import org.testng.annotations.Test;
 import ADMC_Application.ADMC_API_Endpoints;
 
-
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -69,6 +68,13 @@ public class USRC_TestData_Update {
     					break;
     				}
     			}
+				break;
+			case "Check_WCRV_Status":
+				for (int k = 0; k < UD.length; k++) {
+    				if (!UD[k].WCRV_ENABLED.contentEquals("T") && !UD[k].UUID_NBR.contentEquals("")) {
+    					data.add(new Object[] {strLevel, UD[k]});
+    				}
+    			}
 			}//end switch MethodName
 		}
 	    System.out.println(data.size() + " scenarios.");
@@ -89,6 +95,35 @@ public class USRC_TestData_Update {
 		
 		Helper_Functions.PrintOut(Test);
 	}
+	
+	@Test (dataProvider = "dp", enabled = true )
+	public void Check_WCRV_Status(String Level, User_Data User_Information) {
+		boolean updatefile = false;
+		
+		Environment.getInstance().setLevel(Level);
+		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
+		
+		//get the cookies and the uuid of the user
+		String fdx_login_fcl_uuid[] = null;
+		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Information.USER_ID, User_Information.PASSWORD);
+		if (fdx_login_fcl_uuid != null) {
+			String Details[][] = {{"UUID_NBR", User_Information.UUID_NBR},//index 0 and set below
+					{"SSO_LOGIN_DESC", User_Information.USER_ID},
+					{"USER_PASSWORD_DESC", User_Information.PASSWORD},
+					};
+			Details = WCRV_Access(Level, Details, fdx_login_fcl_uuid[0]);
+			
+			String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
+			updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, 0);
+			Helper_Functions.PrintOut("Contact Details: " + Arrays.deepToString(Details), true);
+		}else {
+			Assert.fail("Not able to login.");
+		}
+		
+		if (!updatefile) {
+			Assert.fail("Not able to update file.");
+		}
+	}
 
 	@Test (dataProvider = "dp", enabled = true)
 	public void CheckLogin(String Level, String UserID, String Password) {
@@ -96,13 +131,11 @@ public class USRC_TestData_Update {
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
-		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		
+
 		//in case cannot login will check with the generic other passwords
-		String GenericPasswords[] = new String[] {"Test1234", "Test12345", "Test123456", "Password1", "Inet2010"};
+		String GenericPasswords[] = new String[] {Password.replaceAll(" ", ""), "Test1234", "Test12345", "Test123456", "Password1", "Inet2010"};
 		for (String TestPassword: GenericPasswords) {
-			if (fdx_login_fcl_uuid == null){
+			if (fdx_login_fcl_uuid == null && !TestPassword.contentEquals("")){
 				Password = TestPassword;
 				fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password);
 			}
@@ -208,13 +241,13 @@ public class USRC_TestData_Update {
 	
 	public String[][] WCRV_Access(String Level, String Details[][], String Cookies) {
 		PRDC_Data PRDC_D = PRDC_Data.LoadVariables(Level);
-		String AccountDetails = PRDC_API_Endpoints.Accounts_Call(PRDC_D.AccountsURL, Cookies);
+		String AccountDetails = PRDC_API_Endpoints.PRDC_Accounts_Call(PRDC_D.AccountsURL, Cookies);
 		String WCRV_Access = "";
 		if (AccountDetails.contains("displayRateSheetFlag\":true") && AccountDetails.contains("discountPricingFlag\":true") && AccountDetails.contains("accountCountryEnabledFlag\":true")){
 			WCRV_Access = "T";
 		}else if (!AccountDetails.contains("displayRateSheetFlag")){
 			Helper_Functions.PrintOut("PRDC call did not return premission status.", false);
-			WCRV_Access = AccountDetails;
+			WCRV_Access = "Error";
 		}else {
 			if (AccountDetails.contains("displayRateSheetFlag\":false")){
 				//the user does not have the view rate sheet privilege

@@ -303,7 +303,7 @@ public class MC_PI_2{
 	public void WFCL_Registration_Email_Validation_Legacy(String Level, Account_Data AccountDetails, String UserID, String Email, boolean ErrorExpected){
 		try {
 			String Account = AccountDetails.Account_Number;
-			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Line_1, AccountDetails.Billing_Address_Line_2, AccountDetails.Billing_City, AccountDetails.Billing_State, AccountDetails.Billing_State_Code, AccountDetails.Billing_Zip, AccountDetails.Billing_Country_Code};
+			String AddressDetails[] = new String[] {AccountDetails.Billing_Address_Info.Address_Line_1, AccountDetails.Billing_Address_Info.Address_Line_2, AccountDetails.Billing_Address_Info.City, AccountDetails.Billing_Address_Info.State, AccountDetails.Billing_Address_Info.State_Code, AccountDetails.Billing_Address_Info.Zip, AccountDetails.Billing_Address_Info.Country_Code};
 			String ContactName[] = Helper_Functions.LoadDummyName("FCL", Level);
 			if (ErrorExpected) {
 				try {

@@ -146,75 +146,75 @@ public class Environment {
 		  			Account_Details[pos].Level = Row[j];
 		  			break;
 		  		case "Shipping_Address_Line_1":
-		  			Account_Details[pos].Shipping_Address_Line_1 = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.Address_Line_1 = Row[j];
 		  			break;
 		  		case "Shipping_Address_Line_2":
-		  			Account_Details[pos].Shipping_Address_Line_2 = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.Address_Line_2 = Row[j];
 		  			break;
 		  		case "Shipping_City":
-		  			Account_Details[pos].Shipping_City = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.City = Row[j];
 		  			break;
 		  		case "Shipping_State":
-		  			Account_Details[pos].Shipping_State = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.State = Row[j];
 		  			break;
 		  		case "Shipping_State_Code":
-		  			Account_Details[pos].Shipping_State_Code = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.State_Code = Row[j];
 		  			break;
 		  		case "Shipping_Phone_Number":
-		  			Account_Details[pos].Shipping_Phone_Number = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.Phone_Number = Row[j];
 		  			break;
 		  		case "Shipping_Zip":
-		  			Account_Details[pos].Shipping_Zip = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.Zip = Row[j];
 		  			break;
 		  		case "Shipping_Country_Code":
-		  			Account_Details[pos].Shipping_Country_Code = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.Country_Code = Row[j];
 		  			break;
 		  		case "Shipping_Region":
-		  			Account_Details[pos].Shipping_Region = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.Region = Row[j];
 		  			break;
 		  		case "Shipping_Country":
-		  			Account_Details[pos].Shipping_Country = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.Country = Row[j];
 		  			break;
 		  		case "Shipping_Share_Id":
-		  			Account_Details[pos].Shipping_Share_Id = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.Share_Id = Row[j];
 		  			break;
 		  		case "Billing_Address_Line_1":
-		  			Account_Details[pos].Billing_Address_Line_1 = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.Address_Line_1 = Row[j];
 		  			break;
 		  		case "Billing_Address_Line_2":
-		  			Account_Details[pos].Billing_Address_Line_2 = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.Address_Line_2 = Row[j];
 		  			break;
 		  		case "Billing_City":
-		  			Account_Details[pos].Billing_City = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.City = Row[j];
 		  			break;
 		  		case "Billing_State":
-		  			Account_Details[pos].Billing_State = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.State = Row[j];
 		  			break;
 		  		case "Billing_State_Code":
-		  			Account_Details[pos].Billing_State_Code = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.State_Code = Row[j];
 		  			break;
 		  		case "Billing_Phone_Number":
-		  			Account_Details[pos].Billing_Phone_Number = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.Phone_Number = Row[j];
 		  			break;
 		  		case "Billing_Zip":
-		  			Account_Details[pos].Billing_Zip = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.Zip = Row[j];
 		  			break;
 		  		case "Billing_Country_Code":
-		  			Account_Details[pos].Billing_Country_Code = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.Country_Code = Row[j];
 		  			break;
 		  		case "Billing_Region":
-		  			Account_Details[pos].Billing_Region = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.Region = Row[j];
 		  			break;
 		  		case "Billing_Country":
-		  			Account_Details[pos].Billing_Country = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.Country = Row[j];
 		  			break;
 		  		case "Billing_Share_Id":
-		  			Account_Details[pos].Billing_Share_Id = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.Share_Id = Row[j];
 		  			break;
 		  		case "Account_Number":
 		  			Account_Details[pos].Account_Number = Row[j];
-		  			if (Account_Details[pos].Billing_Country_Code != null && !Account_Details[pos].Billing_Country_Code.contentEquals("")) {
-		  				Account_Details[pos].Account_Nickname = Row[j] + "_" + Account_Details[pos].Billing_Country_Code;
+		  			if (Account_Details[pos].Billing_Address_Info.Country_Code != null && !Account_Details[pos].Billing_Address_Info.Country_Code.contentEquals("")) {
+		  				Account_Details[pos].Account_Nickname = Row[j] + "_" + Account_Details[pos].Billing_Address_Info.Country_Code;
 		  			}else {
 		  				Account_Details[pos].Account_Nickname = Row[j] + "_Acc";
 		  			}
@@ -456,13 +456,13 @@ public class Environment {
 		CountryCode = CountryCode.toUpperCase();
 		
 		for (Account_Data AD: AllAddresses) {
-			if (AD != null && AD.Billing_Country_Code.contentEquals(CountryCode)) {
-				if (Level.contentEquals("7") && Type.contentEquals("CreditCard") && AD.Billing_Address_Line_1.contentEquals("10 FEDEX PKWY 2nd FL")){
+			if (AD != null && AD.Billing_Address_Info.Country_Code.contentEquals(CountryCode)) {
+				if (Level.contentEquals("7") && Type.contentEquals("CreditCard") && AD.Billing_Address_Info.Address_Line_1.contentEquals("10 FEDEX PKWY 2nd FL")){
 					//unique to credit card registration.
 					AD.Level = Level;
 					Account_Data.Set_Dummy_Contact_Name(AD);
 					return AD;
-				}else if (!Level.contentEquals("7") || (!Type.contentEquals("CreditCard") && !AD.Billing_Country_Code.contentEquals("US"))){
+				}else if (!Level.contentEquals("7") || (!Type.contentEquals("CreditCard") && !AD.Billing_Address_Info.Country_Code.contentEquals("US"))){
 					AD.Level = Level;
 					Account_Data.Set_Dummy_Contact_Name(AD);
 					return AD;
@@ -489,50 +489,50 @@ public class Environment {
 				int pos = i - 1;
 				switch (Headers[j]) {
 		  		case "Address_Line_1":
-		  			Address_Data[pos].Shipping_Address_Line_1 = Row[j];
-		  			Address_Data[pos].Billing_Address_Line_1 = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.Address_Line_1 = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.Address_Line_1 = Row[j];
 		  			break;
 		  		case "Address_Line_2":
-		  			Address_Data[pos].Shipping_Address_Line_2 = Row[j];
-		  			Address_Data[pos].Billing_Address_Line_2 = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.Address_Line_2 = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.Address_Line_2 = Row[j];
 		  			break;
 		  		case "City":
-		  			Address_Data[pos].Shipping_City = Row[j];
-		  			Address_Data[pos].Billing_City = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.City = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.City = Row[j];
 		  			break;
 		  		case "State":
-		  			Address_Data[pos].Shipping_State = Row[j];
-		  			Address_Data[pos].Billing_State = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.State = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.State = Row[j];
 		  			break;
 		  		case "State_Code":
-		  			Address_Data[pos].Shipping_State_Code = Row[j];
-		  			Address_Data[pos].Billing_State_Code = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.State_Code = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.State_Code = Row[j];
 		  			break;
 		  		case "Zip":
-		  			Address_Data[pos].Shipping_Zip = Row[j];
-		  			Address_Data[pos].Billing_Zip = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.Zip = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.Zip = Row[j];
 		  			break;
 		  		case "Country_Code":
-		  			Address_Data[pos].Shipping_Country_Code = Row[j];
-		  			Address_Data[pos].Billing_Country_Code = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.Country_Code = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.Country_Code = Row[j];
 		  			break;
 		  		case "Region":
-		  			Address_Data[pos].Shipping_Region = Row[j];
-		  			Address_Data[pos].Billing_Region = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.Region = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.Region = Row[j];
 		  			break;
 		  		case "Country":
-		  			Address_Data[pos].Shipping_Country = Row[j];
-		  			Address_Data[pos].Billing_Country = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.Country = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.Country = Row[j];
 		  			break;
 		  		case "Share_Id":
-		  			Address_Data[pos].Shipping_Share_Id = Row[j];
-		  			Address_Data[pos].Billing_Share_Id = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.Share_Id = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.Share_Id = Row[j];
 		  			break;
 				}//end switch
 			}
 			//will load the dummy email address and phone number by default.
-			Address_Data[i -1].Billing_Phone_Number = Helper_Functions.myPhone;
-			Address_Data[i -1].Shipping_Phone_Number = Helper_Functions.myPhone;
+			Address_Data[i -1].Billing_Address_Info.Phone_Number = Helper_Functions.myPhone;
+			Address_Data[i -1].Shipping_Address_Info.Phone_Number = Helper_Functions.myPhone;
 			Address_Data[i -1].Email = Helper_Functions.MyEmail;
 		}
   		return Address_Data;

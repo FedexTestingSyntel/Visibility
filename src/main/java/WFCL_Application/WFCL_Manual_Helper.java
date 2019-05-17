@@ -17,7 +17,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_Manual_Helper{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "7";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -46,7 +46,7 @@ public class WFCL_Manual_Helper{
 		    		//
 		    		
 
-		    		data.add( new Object[] {Level, "643112507"}); 
+		    		data.add( new Object[] {Level, "931114352"}); 
 		    		break;
 		    	case "AccountRegistration_FDDT":
 		    		/*
@@ -113,8 +113,8 @@ public class WFCL_Manual_Helper{
 			Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
-			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Country_Code);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
+			Account_Data.Set_Account_Nickname(Account_Info, Account_Info.Account_Number + "_" + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
 			//create user id and link to account number.
 			Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 
@@ -191,11 +191,11 @@ public class WFCL_Manual_Helper{
 			try {
 				Account_Data Account_Info = Account_Lookup.Account_Details(Account, Level);
 				Account_Data.Set_Dummy_Contact_Name(Account_Info);
-				Account_Data.Set_UserId(Account_Info, "L" + Level + "MAGIC" + Account_Info.Account_Number + Account_Info.Billing_Country_Code);
+				Account_Data.Set_UserId(Account_Info, "L" + Level + "MAGIC" + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
 				//create user id and link to account number.
 				Account_Info = WFCL_Functions_UsingData.Account_Linkage(Account_Info);
 				//register the userid to INET, if not from us or CA then already registered.
-				if ("US CA".contains(Account_Info.Billing_Country_Code)) {
+				if ("US CA".contains(Account_Info.Billing_Address_Info.Country_Code)) {
 					WFCL_Functions_UsingData.INET_Registration(Account_Info);
 				}
 				

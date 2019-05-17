@@ -211,7 +211,7 @@ public class MC_PI_3{
 	public void WFCL_Rewards_Registration_APAC_AND_LAC(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Country_Code + "Rewards");
+			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Address_Info.Country_Code + "Rewards");
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			
 			String Result[] = WFCL_Functions_UsingData.WFCL_RewardsRegistration(Account_Info);
