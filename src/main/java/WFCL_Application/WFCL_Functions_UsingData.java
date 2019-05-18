@@ -735,10 +735,13 @@ public class WFCL_Functions_UsingData{
 		if (WebDriver_Functions.isVisable(By.name("invoiceNumberA"))){
 			WebDriver_Functions.Type(By.name("invoiceNumberA"), Account_Info.Invoice_Number_A);
 			WebDriver_Functions.Type(By.name("invoiceNumberB"), Account_Info.Invoice_Number_B);
+			WebDriver_Functions.takeSnapShot("Invoice_Validaiton.png");
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("invoiceNumberB"));
+			
 		}else if (WebDriver_Functions.isVisable(By.name("creditCardNumber"))) {
 			WebDriver_Functions.Type(By.name("creditCardNumber"), Account_Data.Last_Four_of_Credit_Card(Account_Info));
+			WebDriver_Functions.takeSnapShot("CreditCard_Validaiton.png");
 			WebDriver_Functions.Click(By.className("buttonpurple"));
 			WebDriver_Functions.WaitNotPresent(By.name("creditCardNumber"));
 		}

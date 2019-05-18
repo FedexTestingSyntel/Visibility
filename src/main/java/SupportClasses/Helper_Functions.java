@@ -288,7 +288,7 @@ public class Helper_Functions{
 		 * delete this later if above words
 		User_Data User_Info[] =  Environment.Get_UserIds(intLevel);
 		
-		int Row = User_Info.length;            //////////Fix this later to write the whole line
+		int Row = UD.length;            //////////Fix this later to write the whole line
 		
 		writeExcelData(, "L" + intLevel, UserID, Row, 1);
 		writeExcelData(DataDirectory + "\\TestingData.xls", , Password, Row, 2);
@@ -337,7 +337,7 @@ public class Helper_Functions{
 			}
 		}
 		
-		PrintOut("Unable to find desired card. LoadCreditCard is Returning: " + Arrays.toString(CreditCardList.get(1)), true);
+		PrintOut("Unable to find desired card. LoadCreditCard is Returning: " + Arrays.toString(CreditCardList.get(0)), true);
 		return CreditCardList.get(0);
 	}//end LoadCreditCard
 	

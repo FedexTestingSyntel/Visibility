@@ -22,11 +22,15 @@ public class IPAS_Functions {
 		WebDriver_Functions.Select(By.id("viewDeptSelId"), "1", "i");
 		
 		//enter the user details
-    	//trying to make a unique value to enter
-		User_Info_Invited.USER_ID = Helper_Functions.getRandomString(10);;
-		WebDriver_Functions.Type(By.name("userID"), User_Info_Invited.USER_ID);
-		
+    	
 		Date curDate = new Date();
+		//trying to make a unique value to enter with the date created.
+		//there is a slim chance this may not be unique if attempted multiple times a day.
+		SimpleDateFormat Dateformatter = new SimpleDateFormat("MMddyy");
+		String Unique_Id = Dateformatter.format(curDate) + Helper_Functions.getRandomString(4);
+		WebDriver_Functions.Type(By.name("userID"), Unique_Id);
+		User_Info_Invited.USER_ID = Unique_Id;
+		
     	SimpleDateFormat Timeformatter = new SimpleDateFormat("HHmmss"); //using time to have a measurement of how long it took to get the invite
 		User_Data.Set_Dummy_Contact_Name(User_Info_Invited, Timeformatter.format(curDate), Environment.getInstance().getLevel());
 		WebDriver_Functions.Type(By.name("userFirstName"), User_Info_Invited.FIRST_NM);
@@ -39,6 +43,7 @@ public class IPAS_Functions {
 				WebDriver_Functions.Click(By.xpath("//input[(@name='adminRoleCd') and (@value = 'U')]"));
 				break;
 			case "DEPARTMENT":
+			case "GROUP"://added to avoid confusion. The WADM flow refers to departments as groups.
 				WebDriver_Functions.Click(By.xpath("//input[(@name='adminRoleCd') and (@value = 'D')]"));
 				break;
 			case "COMPANY":
