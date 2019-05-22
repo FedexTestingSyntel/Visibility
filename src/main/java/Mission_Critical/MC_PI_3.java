@@ -25,7 +25,7 @@ import WIDM_Application.WIDM_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class MC_PI_3{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	final boolean EnableCompleted = false;
 	
@@ -175,7 +175,7 @@ public class MC_PI_3{
 	
 	//443446 alliance program page transition - getting rid of old WFCL marketing page
 	//443452 loading dt.html
-	@Test(dataProvider = "dp", description = "482695, 443446, 443452", enabled = false)
+	@Test(dataProvider = "dp", description = "482695, 443446, 443452", enabled = true)
 	public void WFCL_Alliance_Marketing_CodeRequired(String Level, User_Data User_Info, Enrollment_Data Enrollment_Info) {
 		try {
 			String Result[] = WFCL_Functions_UsingData.AEM_Discount_Validate( User_Info, Enrollment_Info);
@@ -196,7 +196,7 @@ public class MC_PI_3{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "482700, 494070", enabled = true)
+	@Test(dataProvider = "dp", description = "482700, 494070", enabled = false)
 	public void WFCL_Alliance_Marketing_Error_Page_Blank(String Level, Enrollment_Data Enrollment_Info) {
 		try {
 			String Result = WFCL_Functions_UsingData.AEM_Error_Validation(Enrollment_Info, " ");

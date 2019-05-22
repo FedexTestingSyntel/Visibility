@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="1" name="SMOKE_Test_Suit" configfailurepolicy="continue">
+<suite thread-count="1" name="SMOKE_Test_Suit" configfailurepolicy="continue"  parallel="methods">
 	<listeners>
 		<listener class-name="SupportClasses.TestNG_ReportListener"/>
 	</listeners>
   
-	<test thread-count="3" name="SMOKE_Test" parallel="methods" group-by-instances="true">
+	<test thread-count="3" name="SMOKE_Test">
 		<parameter name="Level" value="3" />
     	<classes>
 			<class name="SupportClasses.Environment"/>
@@ -15,11 +15,12 @@
 			<class name="WDPA_Application.WDPA_SmokeTest"/>
 			<class name="WCRV_Application.WCRV_SmokeTest"/>
 			<class name="OADR_Application.OADR_SmokeTest"/>
+			<class name="WFCL_Application.WFCL_SmokeTest"/>
       		<!--
       		<class name="ADAT_Application.ADAT_SmokeTest"/>
-      		<class name="WFCL_Application.WFCL_SmokeTest"/>
+      		
       		-->
       		   
     	</classes>
-  	</test> <!-- WDPA_Test -->
-</suite> <!-- WDPA_Suite -->
+  	</test> 
+</suite>

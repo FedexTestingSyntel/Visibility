@@ -16,9 +16,11 @@ public class IPAS_Functions {
 		WebDriver_Functions.ChangeURL("IPAS", User_Info.Address_Info.Country_Code, false);
 
 		//click the invite user button
+		WebDriver_Functions.WaitPresent(By.xpath("//*[@id='usersModule']/table/tbody[2]/tr[3]/td[2]/input"));
 		WebDriver_Functions.Click(By.xpath("//*[@id='usersModule']/table/tbody[2]/tr[3]/td[2]/input"));
 		
 		//select the first department
+		WebDriver_Functions.WaitPresent(By.id("viewDeptSelId"));
 		WebDriver_Functions.Select(By.id("viewDeptSelId"), "1", "i");
 		
 		//enter the user details
@@ -31,8 +33,9 @@ public class IPAS_Functions {
 		WebDriver_Functions.Type(By.name("userID"), Unique_Id);
 		User_Info_Invited.USER_ID = Unique_Id;
 		
-    	SimpleDateFormat Timeformatter = new SimpleDateFormat("HHmmss"); //using time to have a measurement of how long it took to get the invite
-		User_Data.Set_Dummy_Contact_Name(User_Info_Invited, Timeformatter.format(curDate), Environment.getInstance().getLevel());
+		User_Info_Invited.FIRST_NM = "L" + Environment.getInstance().getLevel() + Helper_Functions.CurrentDateTime();
+		User_Info_Invited.LAST_NM = "IPAS" + Role;
+		
 		WebDriver_Functions.Type(By.name("userFirstName"), User_Info_Invited.FIRST_NM);
 		WebDriver_Functions.Type(By.name("userLastName"), User_Info_Invited.LAST_NM);
 		WebDriver_Functions.Type(By.name("emailId"), User_Info_Invited.EMAIL_ADDRESS);

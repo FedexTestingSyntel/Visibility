@@ -2,6 +2,8 @@ package WPRL_Application;
 
 import java.util.ArrayList;
 import org.openqa.selenium.By;
+
+import MFAC_Application.MFAC_API_Endpoints;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 	
@@ -25,7 +27,7 @@ public class WERL_Functions {
 			
 			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
 			String ShareID = Contact[11];
-			String Pin = MFAC_PinGeneration.IssuePinAPI(UUID + "-" + ShareID, "postal");
+			String Pin = MFAC_API_Endpoints.IssuePinAPI_External(UUID + "-" + ShareID, "postal");
 			//check the confirmation page that the postcard has been sent
 			WebDriver_Functions.WaitForText(By.xpath("//*[@id='angularWerl']/app-root/app-postal-confirmation/div/h1"), "Your activation code is on the way");
 			WebDriver_Functions.ChangeURL("WPRL_FDM", "US", false);//navigate to WPRL FDM page

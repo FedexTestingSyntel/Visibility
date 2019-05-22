@@ -39,19 +39,19 @@ public class ADAT_Data {
 			DC.AddressVelocityThreshold = 10;
   			break;
   		case "2":
-  			LevelIdentifier = "http://adat9-satxws-l2.test.cloUser_Info.fedex.com"; 
+  			LevelIdentifier = "http://adat9-satxws-l2.test.cloud.fedex.com"; 
   			DC.PostcardPinVelocityThreshold = 3;
 			DC.PhonePinVelocityThreshold = 3;
 			DC.AddressVelocityThreshold = 10;
   			break;
   		case "3":
-  			LevelIdentifier = "http://adat9-udweb-l3-edcw.test.cloUser_Info.fedex.com";
+  			LevelIdentifier = "http://adat9-udweb-l3-edcw.test.cloud.fedex.com";
   			DC.PostcardPinVelocityThreshold = 3;
 			DC.PhonePinVelocityThreshold = 3;
 			DC.AddressVelocityThreshold = 10;
   			break;
   		case "4"://not confirmed since do not validate on L4
-  			LevelIdentifier = "http://adat-satxws-l4-edcw.test.cloUser_Info.fedex.com"; 
+  			LevelIdentifier = "http://adat-satxws-l4-edcw.test.cloud.fedex.com"; 
   			DC.PostcardPinVelocityThreshold = 3;
 			DC.PhonePinVelocityThreshold = 3;
 			DC.AddressVelocityThreshold = 10;
@@ -69,8 +69,10 @@ public class ADAT_Data {
 			DC.AddressVelocityThreshold = 10;
   			break;
   		case "7":
-  			LevelIdentifier = "http://adat-satxws-lp.prod.cloUser_Info.fedex.com"; 
-  			LevelIdentifier = "http://localhost"; 
+  			LevelIdentifier = "http://adat-satxws-lp.prod.cloud.fedex.com";   
+  			//got from Ritchie on 5/19 not able to work and he's getting same. said was working last checkout.
+  			//http://c0002104.prod.cloud.fedex.com:7001/arcotuds/services/ArcotUserRegistrySvc 
+  			LevelIdentifier = "http://c0002104.prod.cloud.fedex.com"; 
   			DC.PostcardPinVelocityThreshold = 3;
 			DC.PhonePinVelocityThreshold = 3;
 			DC.AddressVelocityThreshold = 10;
@@ -81,8 +83,8 @@ public class ADAT_Data {
   		DC.CreateUserUrl = LevelIdentifier + ":7001/arcotuds/services/ArcotUserRegistrySvc";
   		DC.VelocityUrl = LevelIdentifier + ":7778/services/RiskFortEvaluateRiskSvc";
   		if (Level.contentEquals("3")) {//try and optimize this later for all levels
-  			DC.VelocityUrl = "http://adat9-ratxws-l3-edcw.test.cloUser_Info.fedex.com" + ":7778/services/RiskFortEvaluateRiskSvc";
-  			DC.CreatePinUrl = "http://adat9-satxws-l3-edcw.test.cloUser_Info.fedex.com" + ":9744/services/WebFortAuthSvc";
+  			DC.VelocityUrl = "http://adat9-ratxws-l3-edcw.test.cloud.fedex.com" + ":7778/services/RiskFortEvaluateRiskSvc";
+  			DC.CreatePinUrl = "http://adat9-satxws-l3-edcw.test.cloud.fedex.com" + ":9744/services/WebFortAuthSvc";
   		}
   		
   		DC.VerifyPinUrl = DC.CreatePinUrl;//same end point is used.

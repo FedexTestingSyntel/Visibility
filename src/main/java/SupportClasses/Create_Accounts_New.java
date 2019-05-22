@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.http.Header;
@@ -14,6 +15,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -347,7 +349,7 @@ public class Create_Accounts_New{
 		Account_Info.Company_Name = "Company" + Helper_Functions.CurrentDateTime();
 		Credit_Card_Data CC_Info = Environment.getCreditCardDetails(Account_Info.Level, "V");
 		Account_Data.Set_Credit_Card(Account_Info, CC_Info);
-		/*
+		
 		try {
 			Environment.getInstance().setLevel("2");
 			WebDriver_Functions.ChangeURL("ECAM", "", false);
@@ -362,6 +364,7 @@ public class Create_Accounts_New{
 	        String Name = "OAMAuth";
 	        while (itr.hasNext()) {
 	            Cookie cookie = itr.next();
+	            Helper_Functions.PrintOut(cookie.toString(), true);
 	            if (cookie.getName().contains(Name)){
 	            	Helper_Functions.PrintOut(cookie.getName() + " value is " + cookie.getValue(), true);
 	            }
@@ -371,7 +374,7 @@ public class Create_Accounts_New{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
 		
 		
 		//String Cookie = Loggin();

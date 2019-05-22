@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="SupportClasses.Account_Lookup">
+      <class name="WCRV_Application.WCRV">
         <methods>
-          <include name="Update_Account_Details" invocation-numbers="1893 1894"/>
+          <include name="WCRV_Help_Link" invocation-numbers="0 3"/>
           <include name="beforeClass"/>
         </methods>
-      </class> <!-- SupportClasses.Account_Lookup -->
+      </class> <!-- WCRV_Application.WCRV -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

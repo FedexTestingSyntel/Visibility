@@ -23,7 +23,7 @@ import USRC_Application.USRC_API_Endpoints;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM_SOAPClient {
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -51,6 +51,7 @@ public class WIDM_SOAPClient {
 				case "AAAUserCreate":
 					for (int j = 0; j < CountryList.length; j++) {
 						Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
+						Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Address_Info.Country_Code);
 						data.add( new Object[] {Level, Account_Info});
 					}
 					break;
@@ -89,11 +90,9 @@ public class WIDM_SOAPClient {
 	}
 
 	@Test(dataProvider = "dp")
-	public void AAAUserCreate(String Level, Account_Data Account_Info){
+	public static void AAAUserCreate(String Level, Account_Data Account_Info){
 		try {
-			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
-			Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Address_Info.Country_Code);
-			String Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, null);
+			String Response = WIDM_Endpoints.AAA_User_Create(Account_Info, null);
 			Account_Data.Print_High_Level_Details(Account_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 			Helper_Functions.PrintOut(Response);
@@ -106,11 +105,10 @@ public class WIDM_SOAPClient {
 	@Test(dataProvider = "dp")
 	public void AAAUserCreate_Email_As_UserId_Mismatch(String Level, Account_Data Account_Info, String Email_As_UserId){
 		try {
-			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Info.User_Info.USER_ID = "L" + Level + "Email" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2) + "@accept.com";
 			Account_Info.Email = "other@email.com";
-			String Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, Email_As_UserId);
+			String Response = WIDM_Endpoints.AAA_User_Create(Account_Info, Email_As_UserId);
 			Account_Data.Print_High_Level_Details(Account_Info);
 			assertThat(Response, CoreMatchers.containsString(WIDM_Error_Codes.WIDM_Error_Code("98")));
 			Helper_Functions.PrintOut(Response);
@@ -123,11 +121,10 @@ public class WIDM_SOAPClient {
 	@Test(dataProvider = "dp")
 	public void AAAUserCreate_Email_As_UserId(String Level, Account_Data Account_Info, String Email_As_UserId){
 		try {
-			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			Account_Info.User_Info.USER_ID = "L" + Level + "Email" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2) + "@accept.com";
 			Account_Info.Email = Account_Info.User_Info.USER_ID;
-			String Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, Email_As_UserId);
+			String Response = WIDM_Endpoints.AAA_User_Create(Account_Info, Email_As_UserId);
 			Account_Data.Print_High_Level_Details(Account_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 			//login with the user to confirm created successfully.
@@ -147,10 +144,9 @@ public class WIDM_SOAPClient {
 	@Test(dataProvider = "dp")
 	public void AAAUserUpdate(String Level, User_Data User_Info){
 		try {
-			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
 			User_Data.Print_High_Level_Details(User_Info);
 			User_Data.Set_Dummy_Contact_Name(User_Info, User_Info.Address_Info.Country_Code, Level);
-			String Response = WIDM_Endpoints.AAA_User_Update(WIDM_Info.EndpointUrl, User_Info, null);
+			String Response = WIDM_Endpoints.AAA_User_Update(User_Info, null);
 			User_Data.Print_High_Level_Details(User_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 		}catch (Exception e) {
@@ -161,10 +157,9 @@ public class WIDM_SOAPClient {
 	@Test(dataProvider = "dp")
 	public void AAAUserUpdate_Email_As_UserId(String Level, User_Data User_Info){
 		try {
-			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
 			User_Data.Print_High_Level_Details(User_Info);
 			User_Data.Set_Dummy_Contact_Name(User_Info, User_Info.Address_Info.Country_Code, Level);
-			String Response = WIDM_Endpoints.AAA_User_Update(WIDM_Info.EndpointUrl, User_Info, null);
+			String Response = WIDM_Endpoints.AAA_User_Update(User_Info, null);
 			User_Data.Print_High_Level_Details(User_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 		}catch (Exception e) {

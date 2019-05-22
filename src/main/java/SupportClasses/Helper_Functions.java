@@ -14,11 +14,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.openqa.selenium.By;
 import Data_Structures.Account_Data;
 import jxl.Sheet;
@@ -480,7 +485,6 @@ public class Helper_Functions{
 	
 	public static String LoadUserID(String Base){
 		String User = Base + CurrentDateTime() + getRandomString(4);
-		Helper_Functions.PrintOut("UserID: " + User, false);
 		return User;
 	}
 	
@@ -1060,3 +1064,10 @@ public class Helper_Functions{
 	
 
 }//End Class
+
+
+/*
+//Way to get X number of random unique numbers
+List<Integer> range = IntStream.range(min, max).boxed().collect(Collectors.toCollection(ArrayList::new));
+Collections.shuffle(range);
+*/

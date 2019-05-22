@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" name="WFCL_Suite" parallel="methods">
+	<listeners>
+		<listener class-name="SupportClasses.TestNG_ReportListener"/>
+	</listeners>
+  
+	<test thread-count="8" name="WFCL_Test_Invitations">
+		<parameter name="Level" value= "7" />
+		<classes>
+			<class name="SupportClasses.Environment"/>
+      		<class name="WADM_Application.WADM_Invitation"/>
+      		<class name="IPAS_Application.IPAS_Invitation"/>
+    	</classes>
+  	</test> <!-- WFCL_Test -->
+</suite> <!-- WFCL_Suite -->

@@ -457,7 +457,7 @@ public class Environment {
 		
 		for (Account_Data AD: AllAddresses) {
 			if (AD != null && AD.Billing_Address_Info.Country_Code.contentEquals(CountryCode)) {
-				if (Level.contentEquals("7") && Type.contentEquals("CreditCard") && AD.Billing_Address_Info.Address_Line_1.contentEquals("10 FEDEX PKWY 2nd FL")){
+				if (Level.contentEquals("7") && Type.contentEquals("CreditCard") && AD.Billing_Address_Info.Address_Line_1.contentEquals("10 FED EX PKWY")  && AD.Billing_Address_Info.Address_Line_2.contentEquals("2ND FL")){
 					//unique to credit card registration.
 					AD.Level = Level;
 					Account_Data.Set_Dummy_Contact_Name(AD);
@@ -579,14 +579,17 @@ public class Environment {
 		  		case "STREET_DESC":
 		  			User_Info_Array[pos].Address_Info.Address_Line_1 = Row[j];
 					break;
+		  		case "STREET_DESC_TWO":
+		  			User_Info_Array[pos].Address_Info.Address_Line_2 = Row[j];
+					break;
 		  		case "CITY_NM":
 		  			User_Info_Array[pos].Address_Info.City = Row[j];
 					break;
 		  		case "STATE_CD":
-		  			User_Info_Array[pos].Address_Info.City = Row[j];
+		  			User_Info_Array[pos].Address_Info.State_Code = Row[j];
 					break;
 		  		case "POSTAL_CD":
-		  			User_Info_Array[pos].Address_Info.City = Row[j];
+		  			User_Info_Array[pos].Address_Info.Zip = Row[j];
 					break;
 		  		case "COUNTRY_CD":
 		  			User_Info_Array[pos].Address_Info.Country_Code = Row[j];

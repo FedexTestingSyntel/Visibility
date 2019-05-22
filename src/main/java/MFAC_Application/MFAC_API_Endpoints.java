@@ -4,6 +4,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 
+import Data_Structures.MFAC_Data;
+import SupportClasses.Environment;
 import SupportClasses.General_API_Calls;
 
 public class MFAC_API_Endpoints {
@@ -35,6 +37,12 @@ public class MFAC_API_Endpoints {
 			Sample Successful Response: {"transactionId":"6166229d-c0cf-416a-92e2-0884927b9fa6","output":{"advice":"ALLOW"}}
 			Sample velocity threshold Response: {"transactionId":"9e15ab6a-885b-45fb-8cbd-c641cfeac075","errors":[{"code":"DENY","message":"Unfortunately, too many failed attempts for registration have occurred. Please try again later."}]}
 			*/
+	}
+	
+	//used as an external helper function when a pin is needed.
+	public static String IssuePinAPI_External(String UserName, String OrgName){
+		MFAC_Data MFAC_Info = MFAC_Data.LoadVariables(Environment.getInstance().getLevel());
+		return IssuePinAPI(UserName, OrgName, MFAC_Info.AIssueURL, MFAC_Info.OAuth_Token);
 	}
 	
 	public static String IssuePinAPI(String UserName, String OrgName, String URL, String OAuth_Token){

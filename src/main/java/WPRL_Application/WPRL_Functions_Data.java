@@ -11,11 +11,10 @@ public class WPRL_Functions_Data {
 	public static User_Data WPRL_Contact(User_Data User_Info) throws Exception{
 	 	String CountryCode = User_Info.Address_Info.Country_Code;
 		try {
-			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
+			WebDriver_Functions.Login(User_Info);
 			WebDriver_Functions.ChangeURL("WPRL", CountryCode, false);
 			//edit the contact information
-			String Phone[][] = Helper_Functions.LoadPhone_Mobile_Fax_Email(CountryCode);
-	 		WPRL_Contact_Input(User_Info, Phone, "ci");
+	 		WPRL_Contact_Input(User_Info, "ci");
 	 		WebDriver_Functions.takeSnapShot("Login contactEdit.png");
 	 		return User_Info;
 		}catch (Exception e) {
@@ -29,7 +28,7 @@ public class WPRL_Functions_Data {
 	//AddressDetails[] =  {Streetline1 - 0, Streetline2 - 1, City - 2, State - 3, StateCode - 4, postalCode - 5, countryCode - 6}
 	//String Phone[] = {Phone - 0, Mobile - 1, Fax - 2}
 	//Subsection is the code for the element id needing to be updated. either ci for contact information or
-	public static void WPRL_Contact_Input(User_Data User_Info, String Phone[][], String Subsection) throws Exception{
+	public static void WPRL_Contact_Input(User_Data User_Info, String Subsection) throws Exception{
 		try{
 			WebDriver_Functions.Click(By.cssSelector("#contactinfo > #show-hide > div.fx-toggler > #edit"));
 			WebDriver_Functions.WaitPresent(By.cssSelector("#" + Subsection + "_country_input option[value=" + User_Info.Address_Info.Country_Code + "]"));
@@ -67,15 +66,15 @@ public class WPRL_Functions_Data {
 			WebDriver_Functions.WaitPresent(By.cssSelector("#" + Subsection + "_state_input option[value=" + User_Info.Address_Info.State_Code.toUpperCase() + "]"));
 			WebDriver_Functions.Select(By.cssSelector("#" + Subsection + "_state_input"), User_Info.Address_Info.State_Code.toUpperCase(), "v");
 
-			WebDriver_Functions.Type(By.id(Subsection + "_phone_input"), Phone[0][1]);
+			WebDriver_Functions.Type(By.id(Subsection + "_phone_input"), User_Info.PHONE);
 			
 			if (Subsection.contentEquals("ci")){
 				WebDriver_Functions.Type(By.id(Subsection + "_middle_input"), User_Info.MIDDLE_NM);
-				WebDriver_Functions.Select(By.id(Subsection + "_phone_prefix_select"), Phone[0][0], "t");
-				WebDriver_Functions.Select(By.id(Subsection + "_mobile_prefix_select"), Phone[1][0], "t");
-				WebDriver_Functions.Type(By.id(Subsection + "_mobile_input"), Phone[1][1]);
-				WebDriver_Functions.Select(By.id(Subsection + "_fax_prefix_select"), Phone[2][0], "t");
-				WebDriver_Functions.Type(By.id(Subsection + "_fax_input"), Phone[2][1]);
+				WebDriver_Functions.Select(By.id(Subsection + "_phone_prefix_select"), User_Info.PH_INTL_CALL_PREFIX_CD, "t");
+				WebDriver_Functions.Select(By.id(Subsection + "_mobile_prefix_select"), User_Info.MOBL_INTL_CALL_PREFIX_CD, "t");
+				WebDriver_Functions.Type(By.id(Subsection + "_mobile_input"), User_Info.MOBILE_PHONE);
+				WebDriver_Functions.Select(By.id(Subsection + "_fax_prefix_select"), User_Info.FAX_INTL_CALL_PREFIX_CD, "t");
+				WebDriver_Functions.Type(By.id(Subsection + "_fax_input"), User_Info.FAX_NUMBER);
 			}else if (Subsection.contentEquals("rc")){
 				WebDriver_Functions.Type(By.id(Subsection + "_middleinitial_input"), User_Info.MIDDLE_NM);
 			}

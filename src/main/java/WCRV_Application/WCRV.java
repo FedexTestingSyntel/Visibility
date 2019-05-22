@@ -19,59 +19,59 @@ import java.util.List;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WCRV{
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		CountryList = Environment.getCountryList("smoke");
-		//CountryList = Environment.getCountryList("full");
+		//CountryList = Environment.getCountryList("smoke");
+		CountryList = Environment.getCountryList("full");
 		//CountryList = Environment.getCountryList("high");
 		//CountryList = new String[][]{{"US", "United States"},{"AU", "Australia"},{"CA", "Canada"},{"GB", "United Kingdom"},{"BR", "Brazil"},{"AE", "United Arab Emirates"}};
-
 		//CountryList = new String[][]{{"US", "United States"}};
+		CountryList = new String[][]{{"US", ""}, {"HK", ""}, {"ID", ""}, {"LT", ""}, {"GP", ""}};
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
-			//int intLevel = Integer.parseInt(Level);
+			User_Data User_Info_Array[] = Environment.Get_UserIds(intLevel);
+			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WCRV_CheckPermission":
-					User_Data User_Info[] = Environment.Get_UserIds(intLevel);
-					for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < User_Info.length; k++) {
-		    				if (User_Info[k].WCRV_ENABLED.contains("T") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0])) {
-		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD});
+					for (String Country[]: CountryList) {
+		    			for (User_Data User_Info: User_Info_Array) {
+		    				if (User_Info.WCRV_ENABLED.contains("T") && User_Info.Address_Info.Country_Code.contentEquals(Country[0])) {
+		    					data.add( new Object[] {Level, Country[0], User_Info.USER_ID, User_Info.PASSWORD});
 		    				}
 		    			}
 		    		}
 					break;
 		    	case "WCRV_Generate_RateSheet":
-		    		User_Info = Environment.Get_UserIds(intLevel);
-		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < User_Info.length; k++) {
-		    				if (User_Info[k].WCRV_ENABLED.contains("T") && User_Info[k].Address_Info.Country_Code.contains(CountryList[j][0]) && !User_Info[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
-		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD, "INTRA_COUNTRY", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD, "EXPORT", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD, "IMPORT", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD, "THIRD_PARTY", 1});
-		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD, "ANY", 4});
+		    		for (String Country[]: CountryList) {
+		    			for (User_Data User_Info: User_Info_Array) {
+		    				if (User_Info.WCRV_ENABLED.contains("T") && User_Info.Address_Info.Country_Code.contains(Country[0]) && !User_Info.EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
+		    					data.add( new Object[] {Level, Country[0], User_Info.USER_ID, User_Info.PASSWORD, "INTRA_COUNTRY", 1});
+		    					data.add( new Object[] {Level, Country[0], User_Info.USER_ID, User_Info.PASSWORD, "EXPORT", 1});
+		    					data.add( new Object[] {Level, Country[0], User_Info.USER_ID, User_Info.PASSWORD, "IMPORT", 1});
+		    					data.add( new Object[] {Level, Country[0], User_Info.USER_ID, User_Info.PASSWORD, "THIRD_PARTY", 1});
+		    					data.add( new Object[] {Level, Country[0], User_Info.USER_ID, User_Info.PASSWORD, "ANY", 4});
 		    					break;
 		    				}
 		    			}
 		    		}
 		    	break;
 		    	case "WCRV_Help_Link":
-		    		User_Info = Environment.Get_UserIds(intLevel);
-		    		for (int k = 0; k < User_Info.length; k++) {
-		    			if (User_Info[k].WCRV_ENABLED.contains("T")) {
-		    				data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD});
+		    		for (User_Data User_Info: User_Info_Array) {
+		    			if (User_Info.WCRV_ENABLED.contains("T")) {
+		    				for (String Country[]:CountryList) {	
+		    					data.add( new Object[] {Level, User_Info, Country[0]});
+		    				}
 		    				break;
 		    			}
 		    		}
@@ -82,7 +82,7 @@ public class WCRV{
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = false)
 	public void WCRV_Generate_RateSheet(String Level, String CountryCode, String UserId, String Password, String Service, int ServiceCount) {
 		try {
 			String Result[] = WCRV_Functions.WCRV_Generate(CountryCode, UserId, Password, Service, ServiceCount);
@@ -93,32 +93,15 @@ public class WCRV{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void WCRV_Help_Link(String Level, String UserId, String Password) {
+	public void WCRV_Help_Link(String Level, User_Data User_Info, String CountryCode) {
 		try {
-			String Working = "", NotWorking = "", NotEnabled = "";
-			WebDriver_Functions.Login(UserId, Password);
+			String CurrentCookie = WebDriver_Functions.GetCookieUUID();
+			if (CurrentCookie == null || !User_Info.UUID_NBR.contains(CurrentCookie)) {
+				WebDriver_Functions.Login(User_Info);
+			}
 			
-    		for (int j = 0; j < CountryList.length; j++) {
-    	 		//updated on March 2019 after apac being added
-    	 		String ECRV_ENABLED_COUNTRIES_LOCALE= "es_AR,en_AR,en_AW,de_AT,en_AT,en_BS,en_BB,en_BM,en_BQ,pt_BR,en_BR,en_VG,en_KY,es_CL,en_CL,es_CO,en_CO,en_CW,da_DK,en_DK,es_DO,en_DO,en_EE,en_FI,fi_FI,de_DE,en_DE,en_GD,fr_GP,en_GP,it_IT,en_IT,en_JM,en_LV,en_LT,fr_MQ,en_MQ,en_NO,no_NO,en_PL,pl_PL,es_ES,en_ES,en_KN,en_LC,en_SX,en_VC,sv_SE,en_SE,en_TT,en_TC,es_UY,en_UY,en_VI,es_VE,en_VE,en_BE,fr_BE,nl_BE,es_CR,en_CR,cs_CZ,en_CZ,fr_FR,en_FR,es_GT,en_GT,en_HU,hu_HU,en_LU,nl_NL,en_NL,es_PA,en_PA,sl_SI,en_SI,en_CH,de_CH,fr_CH,it_CH,fr_CA,en_CA,en_IE,en_GB,en_MX,es_MX,en_BH,en_IN,en_KW,en_AE,ar_AE,en_BW,en_MW,en_MZ,en_NA,en_ZA,en_SZ,en_ZM,en_US,es_US,en_PR,es_PR,en_AU,zh_CN,en_CN,en_GU,tc_HK,en_HK,zh_HK,ja_JP,en_JP,en_MO,en_MY,en_NZ,en_PH,en_SG,ko_KR,en_KR,tc_TW,en_TW,zh_TW,en_TH,th_TH,en_VN,en_ID,";
-    	 		if (ECRV_ENABLED_COUNTRIES_LOCALE.contains(CountryList[j][0] + ",")) {
-        			boolean Help_Present = WCRV_Functions.WCRV_Check_Help_Links(CountryList[j][0], UserId, Password);
-        			if (Help_Present) {
-        				Working += CountryList[j][0] + ", ";
-        				Helper_Functions.PrintOut(CountryList[j][0] + " Working", false);
-        			}else {
-        				NotWorking += CountryList[j][0] + ", ";
-        				Helper_Functions.PrintOut(CountryList[j][0] + " help page not loading correctly", false);
-        			}
-    	 		}else {
-    	 			NotEnabled+= CountryList[j][0] + ", ";
-    	 		}
-
-    		}
-			
-    		Helper_Functions.PrintOut("   Countries with working help pages: " + Working, false);
-    		Helper_Functions.PrintOut("   Countries with incorrect help pages: " + NotWorking, false);
-    		Helper_Functions.PrintOut("   Countries skipped as not enabled for WCRV: " + NotEnabled, false);
+			String Result = WCRV_Functions.WCRV_Check_Help_Links(CountryCode);
+			Helper_Functions.PrintOut(Result);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -137,5 +120,4 @@ public class WCRV{
 			Assert.fail(e.getMessage());
 		}
 	}
-
 }

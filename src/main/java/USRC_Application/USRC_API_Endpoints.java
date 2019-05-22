@@ -79,7 +79,7 @@ public class USRC_API_Endpoints {
   					}
   				}
   			}
-  			Helper_Functions.PrintOut(full_cookies, false);   //for debug
+  			//Helper_Functions.PrintOut(full_cookies, false);   //for debug
 
   			return full_cookies;
   		}catch (Exception e){

@@ -15,7 +15,7 @@ import Data_Structures.ADAT_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
-//listner needed for using overwrites for report generation and 
+//Listener needed for using overwrites for report generation and 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class ADAT_SmokeTest {

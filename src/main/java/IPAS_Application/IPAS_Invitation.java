@@ -45,6 +45,11 @@ public class IPAS_Invitation {
 			    		}
 		    		}
 		    	break;
+		    	case "IPAS_Invitation_Registration":
+			    	//data.add( new Object[] {Level, "US", "", "REGULAR"});
+			    	//data.add( new Object[] {Level, "US", "", "DEPARTMENT"});
+			    	//data.add( new Object[] {Level, "US", "", "COMPANY"});
+		    	break;
 			}
 		}	
 		return data.iterator();
@@ -57,6 +62,22 @@ public class IPAS_Invitation {
 			User_Info_Invited.EMAIL_ADDRESS = Helper_Functions.MyEmail;
 
 			String Result[] = IPAS_Functions.Invite_User(User_Info, User_Info_Invited, Role);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp")
+	public void IPAS_Invitation_Registration(String Level, String Country_Code, String Registration_Url, String Role) {
+		try {
+			User_Data User_Info_Invited = new User_Data();
+			User_Data.Set_Generic_Address(User_Info_Invited, Country_Code);
+			User_Data.Set_Dummy_Contact_Name(User_Info_Invited, Role, Level);
+			User_Data.Set_User_Id(User_Info_Invited, Role);
+
+			String Result[] = null;
+			///////////////////////////////////////////////////////////Did not finish
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

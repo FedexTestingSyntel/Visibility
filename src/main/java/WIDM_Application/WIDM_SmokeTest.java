@@ -98,11 +98,13 @@ public class WIDM_SmokeTest{
 					}
 					break;
 				case "AAAUserCreate_Email_As_UserId":
-					for (int j = 0; j < CountryList.length; j++) {
-						Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
-						Account_Info.User_Info.USER_ID = "L" + Level + "Email" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2) + "@accept.com";
-						Account_Info.Email = Account_Info.User_Info.USER_ID;
-						data.add( new Object[] {Level, Account_Info, "true"});
+					if (intLevel != 7) {//not valid in production due to connection.
+						for (int j = 0; j < CountryList.length; j++) {
+							Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
+							Account_Info.User_Info.USER_ID = "L" + Level + "Email" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2) + "@accept.com";
+							Account_Info.Email = Account_Info.User_Info.USER_ID;
+							data.add( new Object[] {Level, Account_Info, "true"});
+						}
 					}
 					break;
 			}
@@ -193,10 +195,9 @@ public class WIDM_SmokeTest{
 	@Test(dataProvider = "dp")
 	public void AAAUserCreate_Email_As_UserId(String Level, Account_Data Account_Info, String Email_As_UserId){
 		try {
-			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			//Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Country_Code);
-			String Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, Email_As_UserId);
+			String Response = WIDM_Endpoints.AAA_User_Create(Account_Info, Email_As_UserId);
 			Account_Data.Print_High_Level_Details(Account_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 			//login with the user to confirm created successfully.

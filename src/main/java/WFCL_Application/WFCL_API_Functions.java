@@ -70,9 +70,8 @@ public class WFCL_API_Functions {
   			//Account_Info.User_Info.USER_ID = "L2A784800580US051319T101455zhiz";
   			if (Account_Info.User_Info.USER_ID.contentEquals("")) {
   				// Create the user id
-  	  			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
   	  			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
-  	  			Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, null);
+  	  			Response = WIDM_Endpoints.AAA_User_Create(Account_Info, null);
   	  			Account_Data.Print_High_Level_Details(Account_Info);
   	  			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
   	  			Helper_Functions.PrintOut(Response);
@@ -155,9 +154,8 @@ public class WFCL_API_Functions {
   			//Account_Info.User_Info.USER_ID = "L2A784800580US051319T101455zhiz";
   			if (Account_Info.User_Info.USER_ID.contentEquals("")) {
   				// Create the user id
-  	  			WIDM_Data WIDM_Info = WIDM_Data.LoadVariables(Level);
   	  			Account_Data.Set_UserId(Account_Info, "L" + Level + "A" + Account_Info.Account_Number + Account_Info.Billing_Address_Info.Country_Code);
-  	  			Response = WIDM_Endpoints.AAA_User_Create(WIDM_Info.EndpointUrl, Account_Info, null);
+  	  			Response = WIDM_Endpoints.AAA_User_Create(Account_Info, null);
   	  			Account_Data.Print_High_Level_Details(Account_Info);
   	  			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
   	  			Helper_Functions.PrintOut(Response);

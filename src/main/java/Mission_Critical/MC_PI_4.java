@@ -3,6 +3,7 @@ package Mission_Critical;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import org.testng.annotations.Test;
 import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
@@ -13,10 +14,13 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 import WFCL_Application.WFCL_Functions_UsingData;
+import WIDM_Application.WIDM_SOAPClient;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
@@ -29,9 +33,10 @@ public class MC_PI_4{
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		CountryList = Environment.getCountryList("smoke");
+		Helper_Functions.MyEmail = "accept@fedex.com";
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider (parallel = false)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -41,9 +46,17 @@ public class MC_PI_4{
 			String Rewards_APAC_AND_LAC[] = new String[] {"au", "cn", "hk", "jp", "my", "nz", "ph", "sg", "kr", "tw", "th", "br", "mx"};
 			String Rewards_APAC_AND_LAC_Lang[][] = new String[][] {{"au", "en"}, {"cn", "en"}, {"cn", "zh"}, {"hk", "en"}, {"hk", "zh"}, {"jp", "en"}, {"jp", "ja"}, {"my", "en"}, {"nz", "en"}, {"ph", "en"}, {"sg", "en"}, {"kr", "en"}, {"kr", "ko"}, {"tw", "en"}, {"tw", "zh"}, {"th", "en"}, {"th", "th"}, {"mx", "en"}, {"br", "en"}, {"mx", "es"}, {"br", "pt"}};
 			
-			Rewards_APAC_AND_LAC = new String[] {"us"};
+			//Rewards_APAC_AND_LAC = new String[] {"cn", "au", "mx"};
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WFCL_Rewards_Registration_APAC_AND_LAC":
+					if (intLevel == 6) {
+						//load a list with all possible options and shuffle and take first three options.
+						List<Integer> range = IntStream.range(0, Rewards_APAC_AND_LAC.length).boxed().collect(Collectors.toCollection(ArrayList::new));
+						Collections.shuffle(range);
+						//due to captcha in L6 only doing three of the countries randomly. Will need to make sure to enter the captcha manually.
+						Rewards_APAC_AND_LAC = new String[] {Rewards_APAC_AND_LAC[range.get(0)], Rewards_APAC_AND_LAC[range.get(1)], Rewards_APAC_AND_LAC[range.get(2)]};
+					}
+				case "WFCL_Rewards_Registration_APAC_AND_LAC_Existing_User":
 		    		for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
 		    			Account_Data Account_Info = Helper_Functions.getFreshAccount(Level, Rewards_APAC_AND_LAC[j]);
 		    			if (Account_Info != null) {
@@ -108,7 +121,7 @@ public class MC_PI_4{
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", description = "518325", enabled = true) ///483863
+	@Test(dataProvider = "dp", description = "518325", enabled = false) ///483863
 	public void WFCL_Rewards_Registration_APAC_AND_LAC(String Level, Account_Data Account_Info) {
 		try {
 			Account_Data.Print_Account_Address(Account_Info);
@@ -116,6 +129,25 @@ public class MC_PI_4{
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			
 			String Result[] = WFCL_Functions_UsingData.WFCL_RewardsRegistration(Account_Info);
+
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	//////////// Not completed
+	@Test(dataProvider = "dp", description = "518325", enabled = true) ///483863
+	public void WFCL_Rewards_Registration_APAC_AND_LAC_Existing_User(String Level, Account_Data Account_Info) {
+		try {
+			Account_Data.Print_Account_Address(Account_Info);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Address_Info.Country_Code + "Rewards");
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			//Will create the user id.
+			//WIDM_SOAPClient.AAAUserCreate(Level, Account_Info);
+			Account_Info.User_Info.USER_ID = "L6JPRewards052019T105042tefq";
+			
+			String Result[] = WFCL_Functions_UsingData.WFCL_RewardsRegistration_Login(Account_Info);
 
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
@@ -139,7 +171,7 @@ public class MC_PI_4{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "483861", enabled = EnableCompleted)
+	@Test(dataProvider = "dp", description = "483861", enabled = false)
 	public void WFCL_Rewards_Login_APAC_AND_LAC(String Level, String CountryCode, User_Data User_Info) {
 		try {
 
@@ -151,7 +183,7 @@ public class MC_PI_4{
 		}
 	}
 	
-	@Test(dataProvider = "dp", description = "518318", enabled = true)
+	@Test(dataProvider = "dp", description = "518318", enabled = EnableCompleted)
 	public void WFCL_Rewards_AEM_Link(String Level, String CountryCode, String LanguageCode) {
 		try {
 

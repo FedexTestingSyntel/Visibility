@@ -82,14 +82,13 @@ public class WIDM{
 					}
 					break;
 				case "AAAUserCreate":
-					WIDM_Data WD = WIDM_Data.LoadVariables(Level);
 					for (int j = 0; j < CountryList.length; j++) {
 						for (int k = 0 ; k < 1; k++) {
 							Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
 							Account_Info.User_Info.USER_ID = "L" + Level + "Email" + Helper_Functions.getRandomString(10) + "@" + Helper_Functions.getRandomString(10) + ".com";
 							Account_Info.Email = Account_Info.User_Info.USER_ID;
 							String EmailUserIdFlag = "true";
-							data.add( new Object[] {Level, Account_Info, WD, EmailUserIdFlag});
+							data.add( new Object[] {Level, Account_Info, EmailUserIdFlag});
 						}
 					}
 					break;
@@ -99,12 +98,12 @@ public class WIDM{
 	}
 
 	@Test(dataProvider = "dp")
-	public void AAAUserCreate(String Level, Account_Data Account_Info, WIDM_Data WD, String EmailUserIdFlag){
+	public void AAAUserCreate(String Level, Account_Data Account_Info, String EmailUserIdFlag){
 		try {
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			//Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Country_Code);
 			
-			String Response = WIDM_Endpoints.AAA_User_Create(WD.EndpointUrl, Account_Info, EmailUserIdFlag);
+			String Response = WIDM_Endpoints.AAA_User_Create(Account_Info, EmailUserIdFlag);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
 			Helper_Functions.PrintOut(Response);
 			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);

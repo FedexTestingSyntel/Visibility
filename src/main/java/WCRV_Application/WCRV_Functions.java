@@ -12,6 +12,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+
+import Data_Structures.User_Data;
 import SupportClasses.DriverFactory;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
@@ -575,8 +577,7 @@ public class WCRV_Functions{
 		}
  	}//end WCRV_Generate
 
- 	public static boolean  WCRV_Check_Help_Links(String CountryCode, String User, String Password){
- 		boolean Response = false;
+ 	public static String WCRV_Check_Help_Links(String CountryCode) throws Exception{
  		String mainWindowHandle = DriverFactory.getInstance().getDriver().getWindowHandle();
  		try {
  			//to load the cookies for the given country
@@ -591,24 +592,30 @@ public class WCRV_Functions{
  				//If window handle is not main window handle then close it 
  				if(!childWindowHandle.equals(mainWindowHandle)){
  					DriverFactory.getInstance().getDriver().switchTo().window(childWindowHandle);
- 					WebDriver_Functions.WaitForTextNot(By.tagName("body"), (""));
- 					if (WebDriver_Functions.CheckBodyText("Generate a Rate Sheet")) {
- 						Response = true;
- 					}			
- 					// Close child windows
- 					DriverFactory.getInstance().getDriver().close(); 
- 					
- 					//switch back to main window
-	
+ 					try {
+ 						WebDriver_Functions.WaitForTextNot(By.tagName("body"), (""));
+ 	 					if (!WebDriver_Functions.CheckBodyText("Generate a Rate Sheet")) {
+ 	 						throw new Exception("Text not present in help file.");
+ 	 					}
+ 					}catch (Exception e){
+ 						throw e;
+ 					}finally {
+ 						// Close child windows
+ 	 					DriverFactory.getInstance().getDriver().close(); 
+ 					}
  				}
  			}//end for child window
- 			
  		}catch (Exception e) {
- 			
+ 			String ECRV_ENABLED_COUNTRIES_LOCALE= "es_AR,en_AR,en_AW,de_AT,en_AT,en_BS,en_BB,en_BM,en_BQ,pt_BR,en_BR,en_VG,en_KY,es_CL,en_CL,es_CO,en_CO,en_CW,da_DK,en_DK,es_DO,en_DO,en_EE,en_FI,fi_FI,de_DE,en_DE,en_GD,fr_GP,en_GP,it_IT,en_IT,en_JM,en_LV,en_LT,fr_MQ,en_MQ,en_NO,no_NO,en_PL,pl_PL,es_ES,en_ES,en_KN,en_LC,en_SX,en_VC,sv_SE,en_SE,en_TT,en_TC,es_UY,en_UY,en_VI,es_VE,en_VE,en_BE,fr_BE,nl_BE,es_CR,en_CR,cs_CZ,en_CZ,fr_FR,en_FR,es_GT,en_GT,en_HU,hu_HU,en_LU,nl_NL,en_NL,es_PA,en_PA,sl_SI,en_SI,en_CH,de_CH,fr_CH,it_CH,fr_CA,en_CA,en_IE,en_GB,en_MX,es_MX,en_BH,en_IN,en_KW,en_AE,ar_AE,en_BW,en_MW,en_MZ,en_NA,en_ZA,en_SZ,en_ZM,en_US,es_US,en_PR,es_PR,en_AU,zh_CN,en_CN,en_GU,tc_HK,en_HK,zh_HK,ja_JP,en_JP,en_MO,en_MY,en_NZ,en_PH,en_SG,ko_KR,en_KR,tc_TW,en_TW,zh_TW,en_TH,th_TH,en_VN,en_ID,";
+		 	if (ECRV_ENABLED_COUNTRIES_LOCALE.contains(CountryCode + ",")) {         		
+		 		throw new Exception(CountryCode + " Help page not loading correctly.");
+		 	}else {
+		 		throw new Exception(CountryCode + " Help page not loading correctly. May not be WCRV enabled.");
+		 	}
  		}finally {
  			DriverFactory.getInstance().getDriver().switchTo().window(mainWindowHandle);
  		}
  		
-		return Response;
+	 	return "Help File is appearing for " + CountryCode;
  	}	
 }

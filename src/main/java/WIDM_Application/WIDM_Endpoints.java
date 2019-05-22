@@ -11,16 +11,20 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
+import Data_Structures.WIDM_Data;
 import Soap_Execution.GeneralSoapSupport;
+import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
 public class WIDM_Endpoints {
 	private static String MainNaimspace = "http://schemas.xmlsoap.org/soap/envelope/", MainPrefix = "soapenv";
 	
 	//will return the soap message as a string
-	public static String AAA_User_Create(String soapCreateUserUrl, Account_Data Accont_Info, String Email_As_UserId) throws Exception {
+	public static String AAA_User_Create(Account_Data Accont_Info, String Email_As_UserId) throws Exception {
 		try {
 			String FillerCompany = "Company" + Helper_Functions.CurrentDateTime(), lnge_Cd = "en", email_Flag = "false", device_ID = "12345", ip_address = "192.168.33.26", fdxcbid_BAR = "12345678901234", email_opt_flag = "false";
+			
+			String soapCreateUserUrl = WIDM_Data.get_EndpointURL(Environment.getInstance().getLevel());
 			
 			SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
 			SOAPPart soapPart = request.getSOAPPart();
@@ -142,9 +146,11 @@ public class WIDM_Endpoints {
 	}
 
 	//will return the soap message as a string
-	public static String AAA_User_Update(String soapUpdateUserUrl, User_Data User_Info, String Email_As_UserId) throws Exception {
+	public static String AAA_User_Update(User_Data User_Info, String Email_As_UserId) throws Exception {
 		try {
 			String FillerCompany = "Company" + Helper_Functions.CurrentDateTime();
+			
+			String soapUpdateUserUrl = WIDM_Data.get_EndpointURL(Environment.getInstance().getLevel());
 			
 			SOAPMessage request = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
 			SOAPPart soapPart = request.getSOAPPart();

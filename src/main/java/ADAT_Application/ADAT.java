@@ -21,7 +21,7 @@ import SupportClasses.Helper_Functions;
 public class ADAT {
 
 	//will parse this string and run all the levels listed in the data provider.
-	static String LevelsToTest = "236";	
+	static String LevelsToTest = "2";	
 	
 	@BeforeClass
 	public void beforeClass() {

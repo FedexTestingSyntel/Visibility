@@ -2,9 +2,7 @@ package WADM_Application;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.openqa.selenium.By;
-
 import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
@@ -42,8 +40,9 @@ public class WADM_Functions {
 		WebDriver_Functions.Type(By.name("userAlias"), Unique_Id);
 		User_Info_Invited.USER_ID = Unique_Id;
 		
-    	SimpleDateFormat Timeformatter = new SimpleDateFormat("HHmmss"); //using time to have a measurement of how long it took to get the invite
-		User_Data.Set_Dummy_Contact_Name(User_Info_Invited, Timeformatter.format(curDate), Environment.getInstance().getLevel());
+		User_Info_Invited.FIRST_NM = "L" + Environment.getInstance().getLevel() + Helper_Functions.CurrentDateTime();
+		User_Info_Invited.LAST_NM = "WADM" + Role;
+		
 		WebDriver_Functions.Type(By.name("userfirstName"), User_Info_Invited.FIRST_NM);
 		WebDriver_Functions.Type(By.name("middleName"), User_Info_Invited.MIDDLE_NM);
 		WebDriver_Functions.Type(By.name("userlastName"), User_Info_Invited.LAST_NM);

@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "6";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -164,6 +164,7 @@ public class WFCL_New{
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
+			Account_Data.Print_High_Level_Details(Account_Info);
 			Assert.fail(e.getMessage());
 		}
 	}

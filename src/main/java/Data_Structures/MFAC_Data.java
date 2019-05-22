@@ -1,6 +1,11 @@
 package Data_Structures;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import SupportClasses.Environment;
 import SupportClasses.General_API_Calls;
+import SupportClasses.Helper_Functions;
 
 public class MFAC_Data {
 	public String OAuth_Token_URL = "";
@@ -19,9 +24,12 @@ public class MFAC_Data {
 	public int PinVelocityThresholdPostcard = 0;
 	public int PinVelocityThresholdPhone = 0;
 	public int AddressVelocityThreshold = 0;
+	
+	private static String Prod_Client_ID = "";
+	private static String Prod_Client_Secret = "";
 
 	//Stores the data for each individual level
-	private static MFAC_Data DataClass[] = new MFAC_Data[8];
+	public static MFAC_Data DataClass[] = new MFAC_Data[8];
 	
 	public static MFAC_Data LoadVariables(String Level){
 		int intLevel = Integer.parseInt(Level);
@@ -114,8 +122,9 @@ public class MFAC_Data {
 			DC.AddressVelocityThreshold = 10;
 			break;
 		case "7"://need to update these values manually, do not share
-			DC.OAuth_Token_Client_ID = "";
-			DC.OAuth_Token_Client_Secret ="";
+			Load_Prod_Data();
+			DC.OAuth_Token_Client_ID = Prod_Client_ID;
+			DC.OAuth_Token_Client_Secret = Prod_Client_Secret;
 			DC.PinVelocityThresholdPostcard = 3;
 			DC.PinVelocityThresholdPhone = 3;
 			DC.AddressVelocityThreshold = 10;
@@ -129,5 +138,17 @@ public class MFAC_Data {
 		DataClass[intLevel] = DC;
 		
 		return DC;
+	}
+
+	public static void Load_Prod_Data() {
+		ArrayList<String[]> Excel_Data = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\MFAC_Properties.xls",  "MFAC");//load the relevant information from excel file.
+		int ExcelRow = 7;//the rows will correspond to the correct level. With the row 0 being the column titles.
+		//below is each column that is expected in the excel and will be loaded.    08/24/18
+		//OAuthToken (Will be populated within the class)	Level	OAuthToken_URL	Client_ID	Client_Secret	IssuePin_APIGURL	VerifyPin_APIGURL	Velocity_APIGURL	IssuePin_DirectURL	VerifyPin_DirectURL	Velocity_DirectURL	Pin_Velocity_PostCard	Pin_Velocity_Phone	Address_Velocity
+		String EnvironmentInformation[] = Excel_Data.get(ExcelRow);
+
+		Prod_Client_ID = EnvironmentInformation[3];
+		Prod_Client_Secret = EnvironmentInformation[4];
+		Helper_Functions.PrintOut(Arrays.toString(EnvironmentInformation), false);//print out all of the urls and date for the level, this is just a reference point to executer
 	}
 }

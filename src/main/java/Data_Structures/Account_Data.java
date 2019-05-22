@@ -61,7 +61,7 @@ public class Account_Data {
 	public static void Print_Account_Address(Account_Data Account_Info) {
 		if (Account_Info != null) {
 			String Address[] = new String[] {Account_Info.Billing_Address_Info.Address_Line_1, Account_Info.Billing_Address_Info.Address_Line_2, Account_Info.Billing_Address_Info.City, Account_Info.Billing_Address_Info.State_Code, Account_Info.Billing_Address_Info.Zip, Account_Info.Billing_Address_Info.Country_Code, Account_Info.Billing_Address_Info.Region};
-			Helper_Functions.PrintOut(Account_Info.Account_Number + "   " + Arrays.toString(Address));
+			Helper_Functions.PrintOut("Account: " + Account_Info.Account_Number + "   " + Arrays.toString(Address));
 		}else {
 			Helper_Functions.PrintOut("Print_Account_Address recieved null Account_Data");
 		}
@@ -110,6 +110,7 @@ public class Account_Data {
 	public static Account_Data Set_UserId(Account_Data Account_Info, String Base) {
 		Account_Info.User_Info.USER_ID = Helper_Functions.LoadUserID(Base);
 		Account_Info.User_Info.PASSWORD = Helper_Functions.myPassword;
+		Helper_Functions.PrintOut("UserID: " + Account_Info.User_Info.USER_ID + "   Password: " + Account_Info.User_Info.PASSWORD, false);
 		return Account_Info;
 	}
 	

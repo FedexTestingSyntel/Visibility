@@ -2,6 +2,7 @@ package Data_Structures;
 
 import java.util.Arrays;
 
+import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
 public class User_Data {
@@ -59,6 +60,17 @@ public class User_Data {
 		return User_Info;
 	}
 	
+	public static User_Data Set_Dummy_Phone_Number(User_Data User_Info) {
+		String ContactDetails[][] = Helper_Functions.LoadPhone_Mobile_Fax_Email(User_Info.Address_Info.Country_Code);
+		User_Info.PH_INTL_CALL_PREFIX_CD = ContactDetails[0][0];
+		User_Info.PHONE = ContactDetails[0][1];
+		User_Info.FAX_INTL_CALL_PREFIX_CD = ContactDetails[0][0];
+		User_Info.FAX_NUMBER = ContactDetails[0][1];
+		User_Info.MOBL_INTL_CALL_PREFIX_CD = ContactDetails[0][0];
+		User_Info.MOBILE_PHONE = ContactDetails[0][1];
+		return User_Info;
+	}
+	
 	public static User_Data Print_High_Level_Details(User_Data User_Info) {
 		String Details[] = new String[] {User_Info.USER_ID, User_Info.PASSWORD, User_Info.UUID_NBR, User_Info.FIRST_NM, User_Info.MIDDLE_NM, User_Info.LAST_NM};
 		Helper_Functions.PrintOut(Arrays.toString(Details));
@@ -66,6 +78,18 @@ public class User_Data {
 	}
 	
 	public static User_Data Set_Same_Account_Data(User_Data User_Info, Account_Data Account_Info) {
+		User_Info.Address_Info.City = Account_Info.Billing_Address_Info.City;
+		User_Info.Address_Info.Country_Code = Account_Info.Billing_Address_Info.Country_Code;
+		User_Info.Address_Info.Zip = Account_Info.Billing_Address_Info.Zip ;
+		User_Info.Address_Info.State_Code = Account_Info.Billing_Address_Info.State_Code ;
+		User_Info.Address_Info.Address_Line_1 = Account_Info.Billing_Address_Info.Address_Line_1 ;
+		User_Info.Address_Info.Address_Line_2 = Account_Info.Billing_Address_Info.Address_Line_2 ;	
+		return User_Info;
+	}
+	
+	public static User_Data Set_Generic_Address(User_Data User_Info, String Country_Code) {
+		//will load a dummy address from the given country then apply the same to the User_Data.
+		Account_Data Account_Info = Helper_Functions.getAddressDetails(Environment.getInstance().getLevel(), Country_Code);
 		User_Info.Address_Info.City = Account_Info.Billing_Address_Info.City;
 		User_Info.Address_Info.Country_Code = Account_Info.Billing_Address_Info.Country_Code;
 		User_Info.Address_Info.Zip = Account_Info.Billing_Address_Info.Zip ;

@@ -104,9 +104,12 @@ public class Account_Lookup extends Helper_Functions{
 		Account_Data Account_Info = new Account_Data();
 		Account_Info.Account_Number = AccountNumber;
 		Account_Info.Level = Level;
+		//get the address for the account number
 		Account_Info = Account_Data_Address_Lookup(Account_Info);
+		//get if the user is linked to credit card or invoice.
 		Account_Info = Account_Data_CreditDetail_Lookup(Account_Info);
 		Account_Data.Print_Account_Address(Account_Info);
+		
 		return Account_Info;
 	}
 	

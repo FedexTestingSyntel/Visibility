@@ -75,7 +75,7 @@ public class WADM_General{
 		}
 	}
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled = false)
 	public void WADM_Add_Users(String Level, User_Data User_Info) {
 		try {
 			for (int i = 0 ; i < 10; i++) {

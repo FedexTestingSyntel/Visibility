@@ -21,7 +21,7 @@ import ADMC_Application.ADMC_API_Endpoints;
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -45,9 +45,9 @@ public class USRC_TestData_Update {
 			case "CheckLogin":
 				for (int k = 0; k < User_Info.length; k++) {
     				if (User_Info[k].UUID_NBR.contentEquals("")) {
-    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
+    					data.add(new Object[] {strLevel, User_Info[k]});
     				}else if (!User_Info[k].ERROR.contentEquals("")) {
-    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
+    					data.add(new Object[] {strLevel, User_Info[k]});
     				}
     				//uncomment if need to run all
     				//else{data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});}
@@ -71,7 +71,7 @@ public class USRC_TestData_Update {
 				break;
 			case "Check_WCRV_Status":
 				for (int k = 0; k < User_Info.length; k++) {
-    				if (!User_Info[k].WCRV_ENABLED.contentEquals("T") && !User_Info[k].UUID_NBR.contentEquals("")) {
+    				if (User_Info[k].WCRV_ENABLED.contentEquals("Error")) {
     					data.add(new Object[] {strLevel, User_Info[k]});
     				}
     			}
@@ -96,7 +96,7 @@ public class USRC_TestData_Update {
 		Helper_Functions.PrintOut(Test);
 	}
 	
-	@Test (dataProvider = "dp", enabled = true )
+	@Test (dataProvider = "dp", enabled = false )
 	public void Check_WCRV_Status(String Level, User_Data User_Info) {
 		boolean updatefile = false;
 		
@@ -126,18 +126,18 @@ public class USRC_TestData_Update {
 	}
 
 	@Test (dataProvider = "dp", enabled = true)
-	public void CheckLogin(String Level, String UserID, String Password) {
+	public void CheckLogin(String Level, User_Data User_Info) {
 		Environment.getInstance().setLevel(Level);
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
 
 		//in case cannot login will check with the generic other passwords
-		String GenericPasswords[] = new String[] {Password.replaceAll(" ", ""), "Test1234", "Test12345", "Test123456", "Password1", "Inet2010"};
+		String GenericPasswords[] = new String[] {User_Info.PASSWORD.replaceAll(" ", ""), "Test1234", "Test12345", "Test123456", "Password1", "Inet2010"};
 		for (String TestPassword: GenericPasswords) {
 			if (fdx_login_fcl_uuid == null && !TestPassword.contentEquals("")){
-				Password = TestPassword;
-				fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password);
+				User_Info.PASSWORD = TestPassword;
+				fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
 			}
 		}
 
@@ -145,8 +145,8 @@ public class USRC_TestData_Update {
 		int keyPosition = 1;
 		
 		String Details[][] = {{"UUID_NBR", ""},//index 0 and set below
-				{"SSO_LOGIN_DESC", UserID}, //set as the key position for making updates above. int keyPosition
-				{"USER_PASSWORD_DESC", Password},
+				{"SSO_LOGIN_DESC", User_Info.USER_ID}, //set as the key position for making updates above. int keyPosition
+				{"USER_PASSWORD_DESC", User_Info.PASSWORD},
 				{"SECRET_QUESTION_DESC", ""}, 
 				{"SECRET_ANSWER_DESC", ""},
 				{"FIRST_NM", ""}, 
@@ -176,7 +176,7 @@ public class USRC_TestData_Update {
 			Details = Migration_And_Manage_Check(Level, Details, Cookies);
 		}else {
 			//will save the current time of the failure.
-			Details = new String[][]{{"SSO_LOGIN_DESC", UserID}, {"ERROR", Helper_Functions.CurrentDateTime(true)}};
+			Details = new String[][]{{"SSO_LOGIN_DESC", User_Info.USER_ID}, {"ERROR", Helper_Functions.CurrentDateTime(true)}};
 			keyPosition = 0;
 		}
 		

@@ -776,7 +776,7 @@ public class WFCL_Functions_UsingData{
 			Helper_Functions.PrintOut(User_Info.USER_ID + " has had the password changed to " + NewPassword, true);
 			
 			//if recursive the password already changed once
-			if (Thread.currentThread().getStackTrace()[2].getMethodName().contentEquals("WFCL_Secret_Answer")){
+			if (loginAttempt && Thread.currentThread().getStackTrace()[2].getMethodName().contentEquals("WFCL_Secret_Answer")){
 		    	return User_Info.USER_ID + " " + NewPassword;
 			}else if (loginAttempt){
 				return WFCL_Secret_Answer(User_Info,  User_Info.PASSWORD);//change the password back
@@ -1003,6 +1003,8 @@ public class WFCL_Functions_UsingData{
 	
 	public static String[] AEM_Discount_Validate(User_Data User_Info, Enrollment_Data Enrollment_Info) throws Exception {
 		
+		boolean CorrectAEMLink = true;
+		
 		try {
 			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
 
@@ -1016,7 +1018,13 @@ public class WFCL_Functions_UsingData{
 			if (DTValue.contains(" Up to 29% off select FedEx Express U.S. shipping")) {
 				DTValue = DTValue.replace(" Up to 29% off select FedEx Express U.S. shipping", "Up to 29% off select FedEx Express U.S. shipping");
 			}
-			Helper_Functions.PrintOut("DT Discount: ___" + DTValue + "___");
+			
+			if (DTValue.contains("Page Not Found")){
+				DTValue = "";
+				Helper_Functions.PrintOut("DT Discount is not present for " + Enrollment_Info.ENROLLMENT_ID);
+			}else {
+				Helper_Functions.PrintOut("DT Discount: ___" + DTValue + "___");
+			}
 			
 			String ApplyNowUrl = "";
 			if (!Enrollment_Info.AEM_LINK.contentEquals("")) {
@@ -1024,15 +1032,11 @@ public class WFCL_Functions_UsingData{
 				ApplyNowUrl = WebDriver_Functions.getURLByLinkText("APPLY NOW");
 			}
 	
-			String CodeRequired = "";
+			String CodeRequired = "", ExpectedUrl = "";
 			
 			//when membership/pass codes are not needed then check the link of the apply now button.
-			if (Enrollment_Info.MEMBERSHIP_ID.contentEquals("") && Enrollment_Info.PASSCODE.contentEquals("")) {
-				String ExpectedUrl = WebDriver_Functions.ChangeURL("Enrollment_" + Enrollment_Info.ENROLLMENT_ID, Enrollment_Info.COUNTRY_CODE, false);
-				if (!ExpectedUrl.contentEquals(ApplyNowUrl)) {
-					throw new Exception("Aem link does not match expected. " + ExpectedUrl + " " + ApplyNowUrl);
-				}
-			}else {
+			if (!Enrollment_Info.MEMBERSHIP_ID.contentEquals("") || !Enrollment_Info.PASSCODE.contentEquals("")) {
+				try {
 					if (WebDriver_Functions.isPresent(By.id("field_Passcode"))) {
 						WebDriver_Functions.Type(By.id("field_Passcode"), Enrollment_Info.PASSCODE);
 						CodeRequired = "Passcode: " + Enrollment_Info.PASSCODE;
@@ -1049,33 +1053,47 @@ public class WFCL_Functions_UsingData{
 					WebDriver_Functions.Click(By.cssSelector("div#overview button[type=\"submit\"]"));
 					//since will open in new tab this will close and condense tabs.
 					WebDriver_Functions.CloseNewTabAndNavigateInCurrent();
+				}catch (Exception e) {
+					CorrectAEMLink = false;
+					Helper_Functions.PrintOut("Aem page does not match expected. ");
 				}
+			}
 			
-				String BodyText = WebDriver_Functions.GetBodyText();//for sake of debug
+			//ExpectedUrl = WebDriver_Functions.ChangeURL("Enrollment_" + Enrollment_Info.ENROLLMENT_ID, Enrollment_Info.COUNTRY_CODE, false);
+			ExpectedUrl = WebDriver_Functions.ChangeURL_EnrollmentID(Enrollment_Info, false, false);
+			if (ApplyNowUrl.contentEquals("") || !ExpectedUrl.contentEquals(ApplyNowUrl)) {
+				CorrectAEMLink = false;
+				Helper_Functions.PrintOut("Aem link does not match expected. _" + ExpectedUrl + "_   _" + ApplyNowUrl + "_");
+			}
+			
+			String BodyText = WebDriver_Functions.GetBodyText();//for sake of debug
 
-				if (BodyText.contains(DTValue)) {
-					WebDriver_Functions.takeSnapShot(Enrollment_Info.ENROLLMENT_ID + " Discount Matching.png");
-					/*
-					String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
-					USRC_Data User_Info = USRC_Data.LoadVariables(Level);
-					String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(User_Info.GenericUSRCURL, "fdx_login=" + Login_Cookie);
-					Apply_Discount(DT_Status, EN, Credit_Card, DTValue, UserId);
-					*/
+			if (BodyText.contains(DTValue)) {
+				WebDriver_Functions.WaitForBodyText(User_Info.USER_ID);
+				WebDriver_Functions.takeSnapShot(Enrollment_Info.ENROLLMENT_ID + " Discount Matching.png");
+				/*
+				String Login_Cookie = WebDriver_Functions.GetCookieValue("fdx_login");
+				USRC_Data User_Info = USRC_Data.LoadVariables(Level);
+				String Credit_Card = USRC_API_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(User_Info.GenericUSRCURL, "fdx_login=" + Login_Cookie);
+				Apply_Discount(DT_Status, EN, Credit_Card, DTValue, UserId);
+				*/
+			}else {
+				if (WebDriver_Functions.CheckBodyText("Sorry, we cannot find the web page you are looking for.")) {
+					throw new Exception("Sorry, we cannot find the web page you are looking for. Need to check if the discount is loaded in environment correctly.");
+				}else if (WebDriver_Functions.CheckBodyText("Apply now")){
+					throw new Exception("Error when checking discount. Please check why the old marketing page is present.");
 				}else {
-					if (WebDriver_Functions.CheckBodyText("Sorry, we cannot find the web page you are looking for.")) {
-						throw new Exception("Sorry, we cannot find the web page you are looking for. Need to check if the discount is loaded in environment correctly.");
-					}else if (WebDriver_Functions.CheckBodyText("Apply now")){
-						throw new Exception("Error when checking discount. Please check why the old marketing page is present.");
-					}else {
-						throw new Exception("Error when checking discount. Please check to see if discount is migrated.");
-					}
+					throw new Exception("Error when checking discount. Please check to see if discount is migrated.");
 				}
+			}
 				
-				if (CodeRequired.contentEquals("")) {
-					return new String[] {Enrollment_Info.ENROLLMENT_ID};
-				}else {
-					return new String[] {Enrollment_Info.ENROLLMENT_ID, CodeRequired};
-				}
+			if (!CorrectAEMLink) {
+				throw new Exception("Check the status of the AEM page.");
+			}else if (CodeRequired.contentEquals("")) {
+				return new String[] {Enrollment_Info.ENROLLMENT_ID};
+			}else {
+				return new String[] {Enrollment_Info.ENROLLMENT_ID, CodeRequired};
+			}
 				
 		}catch (Exception e) {
 			//added enrollment in front to make easier to see from failed responses.
@@ -1122,6 +1140,39 @@ public class WFCL_Functions_UsingData{
  				WebDriver_Functions.Click(By.id("accountType2Radio"));
  			}
  			ContactInfo_Page(Account_Info, true);
+ 			
+ 			Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
+ 			
+ 			boolean account_entry = Account_Entry_Screen(Account_Info);
+ 			if (!account_entry) {
+ 				throw new Exception("Not able to enter account number.");
+ 			}
+ 			AddressMismatchPage(Account_Info);
+ 			InvoiceOrCCValidaiton(Account_Info);
+ 			
+ 			//add a step here for the confirmation page.
+ 			boolean ConfrimationPageCheck = false;
+ 			if ("US_CA_us_ca_".contains(Account_Info.Billing_Address_Info.Country_Code)) {
+ 				
+ 			}else {
+ 				//This is the AEM button for "Go to My FedEx Rewards"
+ 				WebDriver_Functions.WaitPresent(By.cssSelector("body > div.fxg-main-content > div > div > div.fxg-wrapper > div.link.section > div > a"));
+ 				Helper_Functions.PrintOut("Current URL: " + WebDriver_Functions.GetCurrentURL() + "\n" + WebDriver_Functions.getURLByhref(By.cssSelector("body > div.fxg-main-content > div > div > div.fxg-wrapper > div.link.section > div > a"))); 
+ 				ConfrimationPageCheck = true;
+ 			}
+ 			
+		    return new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.UUID_NBR, Account_Info.Account_Number, Account_Info.Billing_Address_Info.Country_Code, "Confirmation: " + ConfrimationPageCheck};
+ 		}catch (Exception e) {
+ 			throw e;
+ 		}
+ 	}//end WFCL_RewardsRegistration
+	
+	public static String[] WFCL_RewardsRegistration_Login(Account_Data Account_Info) throws Exception{
+ 		try {
+ 			
+ 			WebDriver_Functions.Login(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
+ 			WebDriver_Functions.ChangeURL("WFCLREWARDS", Account_Info.Billing_Address_Info.Country_Code, false);
+ 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////Still in progress
  			
  			Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
  			
@@ -1199,8 +1250,8 @@ public class WFCL_Functions_UsingData{
 	
 	public static String[] WFCL_Rewards_Logout(String CountryCode, String LanguageCode, User_Data User_Info) throws Exception{
  		try {
- 			WebDriver_Functions.ChangeURL("WFCL_REWARDS_CONFIRMATION", CountryCode, true);
  			WebDriver_Functions.Login(User_Info.USER_ID, User_Info.PASSWORD);
+ 			
  			WebDriver_Functions.ChangeURL("WFCL_REWARDS_CONFIRMATION", CountryCode, false);
  			WebDriver_Functions.ChangeURL("WFCL_REWARDS_PAGE", CountryCode, false);
  			String LogoutJsPUrl = WebDriver_Functions.ChangeURL("LOGOUT_JSP", CountryCode, LanguageCode, false);

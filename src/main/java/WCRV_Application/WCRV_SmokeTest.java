@@ -70,7 +70,7 @@ public class WCRV_SmokeTest{
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].WCRV_ENABLED.contains("T")) {
-		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD, CountryList[j][0]});
+		    					data.add( new Object[] {Level, User_Info[k], CountryList[j][0]});
 		    					break;
 		    				}
 		    			}
@@ -103,17 +103,15 @@ public class WCRV_SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void WCRV_Help_Link(String Level, String UserId, String Password, String CountryCode) {
+	public void WCRV_Help_Link(String Level, User_Data User_Info, String CountryCode) {
 		try {
-			WebDriver_Functions.Login(UserId, Password);
-
-        	boolean Help_Present = WCRV_Functions.WCRV_Check_Help_Links(CountryCode, UserId, Password);
-        	if (Help_Present) {
-        		Helper_Functions.PrintOut(CountryCode + " Working", false);
-        	}else {
-        		Helper_Functions.PrintOut(CountryCode + " help page not loading correctly", false);
-        		throw new Exception (CountryCode + " help page not loading correctly");
-        	}
+			String CurrentCookie = WebDriver_Functions.GetCookieUUID();
+			if (CurrentCookie == null || !User_Info.UUID_NBR.contains(CurrentCookie)) {
+				WebDriver_Functions.Login(User_Info);
+			}
+			
+			String Result = WCRV_Functions.WCRV_Check_Help_Links(CountryCode);
+			Helper_Functions.PrintOut(Result);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

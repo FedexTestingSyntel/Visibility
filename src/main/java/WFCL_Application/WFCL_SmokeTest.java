@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "6";
+	static String LevelsToTest = "7";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -42,7 +42,7 @@ public class WFCL_SmokeTest{
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (Enrollment_Data Enrollment: ED) {
 		    			if (Enrollment.COUNTRY_CODE.contentEquals(CountryList[j][0]) ) {   //&& Enrollment.ENROLLMENT_ID.contentEquals("cc16323414")
-		    				AccountDetails = Environment.getAddressDetails(Level, CountryList[j][0]);
+		    				AccountDetails = Environment.getAddressDetails(Level, CountryList[j][0], "CreditCard");
 		    				AccountDetails.Account_Type = "P";//Personal account
 		    				data.add( new Object[] {Level, Enrollment, AccountDetails, Environment.getTaxDetails(CountryList[j][0])});
 		    				break;

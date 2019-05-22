@@ -7,12 +7,14 @@
   <test thread-count="8" name="WCRV_Test(failed)" parallel="methods">
     <parameter name="Level" value="3"/>
     <classes>
-      <class name="WCRV_Application.WCRV">
+      <class name="WCRV_Application.WCRV_SmokeTest">
         <methods>
-          <include name="WCRV_Generate_RateSheet" invocation-numbers="2 4 1 3 0"/>
+          <include name="WCRV_Generate_RateSheet" invocation-numbers="3 2 1 0"/>
           <include name="beforeClass"/>
+          <include name="WCRV_Generate_RateSheet_Passkey" invocation-numbers="0 3 2 1"/>
+          <include name="WCRV_Help_Link" invocation-numbers="0"/>
         </methods>
-      </class> <!-- WCRV_Application.WCRV -->
+      </class> <!-- WCRV_Application.WCRV_SmokeTest -->
     </classes>
   </test> <!-- WCRV_Test(failed) -->
 </suite> <!-- Failed suite [WCRV_Suite] -->

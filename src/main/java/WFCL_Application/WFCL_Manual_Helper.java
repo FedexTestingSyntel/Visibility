@@ -17,7 +17,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_Manual_Helper{
-	static String LevelsToTest = "7";  
+	static String LevelsToTest = "3";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -46,7 +46,7 @@ public class WFCL_Manual_Helper{
 		    		//
 		    		
 
-		    		data.add( new Object[] {Level, "931114352"}); 
+		    		data.add( new Object[] {Level, "600281739"}); 
 		    		break;
 		    	case "AccountRegistration_FDDT":
 		    		/*
