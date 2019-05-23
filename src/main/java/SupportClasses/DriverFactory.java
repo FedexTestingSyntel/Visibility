@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -141,6 +140,7 @@ public class DriverFactory{
 	   for (int i = 0 ; i < BrowserLimit; i++) {
 		   try {
 			   DriverStorage[i].close();
+			   DriverStorage[i] = null;
 		   }catch (Exception e) {
 			   //e.printStackTrace();
 		   }

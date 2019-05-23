@@ -86,7 +86,7 @@ public class MC_PI_2{
 					
 				case "WIDM_Reset_Password_Secret_SamePassword_Error":
 				case "WFCL_Reset_Password_Secret_SamePassword_Error":
-					User_Data User_Info[] =  Environment.Get_UserIds(intLevel);
+					User_Data User_Info[] =  User_Data.Get_UserIds(intLevel);
 					for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if ((m.getName().contains("WIDM") && User_Info[k].USER_ID.contains("WIDM")) || (m.getName().contains("WFCL") && User_Info[k].USER_ID.contains("Create"))) {

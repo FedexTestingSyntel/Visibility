@@ -3,8 +3,8 @@ package WIDM_Application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.openqa.selenium.By;
-
 import Data_Structures.USRC_Data;
+import Data_Structures.User_Data;
 import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
@@ -12,32 +12,6 @@ import SupportClasses.WebDriver_Functions;
 import USRC_Application.USRC_API_Endpoints;
 
 public class WIDM_Functions{
-	
-	public static String strPassword = "Test1234";
-	
-	public static String WIDM_Registration(String AddressDetails[], String Name[], String UserId, String Email_Address) throws Exception{
-		String CountryCode = AddressDetails[6];
-		try {
-			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
-			WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
-
-			//Enter all of the form data
-			WIDM_Registration_Input(AddressDetails, Name, UserId, Email_Address);
-			WebDriver_Functions.takeSnapShot("Contact Information.png");
-			WebDriver_Functions.Click(By.id("createUserID"));
-
-			//confirmation page
-			WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b"), UserId);
-			String UUID = WebDriver_Functions.GetCookieValue("fcl_uuid");
-			WebDriver_Functions.takeSnapShot("Registration WIDM Confirmation.png");
-			String ReturnValue[] = new String[] {UserId, strPassword, UUID};
-			Helper_Functions.WriteUserToExcel(UserId, strPassword);
-			Helper_Functions.PrintOut(Arrays.toString(ReturnValue), false);
-			return Arrays.toString(ReturnValue);
-		}catch (Exception e) {
-			throw e;
-		}
-	}//end WIDM_Registration
 
 	public static String WIDM_RegistrationEFWS(String AddressDetails[], String Name[], String UserId) throws Exception{
 		String CountryCode = AddressDetails[6];
@@ -108,8 +82,8 @@ public class WIDM_Functions{
 		
 		WebDriver_Functions.Type(By.id("uid"), UserId); 
 		//Helper_Functions.PrintOut("Userid is: " + UserId, true);
-		WebDriver_Functions.Type(By.id("password"), strPassword);
-		WebDriver_Functions.Type(By.id("retypePassword"), strPassword);
+		WebDriver_Functions.Type(By.id("password"), Helper_Functions.myPassword);
+		WebDriver_Functions.Type(By.id("retypePassword"), Helper_Functions.myPassword);
 		WebDriver_Functions.Select(By.id("reminderQuestion"), "What is your mother's first name?", "t");
 		WebDriver_Functions.Type(By.id("reminderAnswer"), "mom");
 		WebDriver_Functions.Click(By.id("acceptterms"));
@@ -215,10 +189,10 @@ public class WIDM_Functions{
 		WebDriver_Functions.takeSnapShot("New Password " + NewPassword + "Confirmation.png");
 		boolean loginAttempt = WebDriver_Functions.Login(strUserName, NewPassword);
 		Helper_Functions.PrintOut(strUserName + " has had the password changed to " + NewPassword, true);
-		if (NewPassword.contentEquals(strPassword)){
+		if (NewPassword.contentEquals(Helper_Functions.myPassword)){
 			return NewPassword;
 		}else if (loginAttempt){
-			String Result = strUserName + " " + NewPassword + " " +  ResetPasswordWIDM_Secret(CountryCode, strUserName, strPassword, SecretAnswer, false);//change the password back
+			String Result = strUserName + " " + NewPassword + " " +  ResetPasswordWIDM_Secret(CountryCode, strUserName, Helper_Functions.myPassword, SecretAnswer, false);//change the password back
 			Helper_Functions.PrintOut(Result, false);
 			return Result;
 		}else{
@@ -275,4 +249,123 @@ public class WIDM_Functions{
 			throw e;
 		}
 	}//end ResetPasswordWIDM
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static User_Data WIDM_Registration(User_Data User_Info) throws Exception{
+		String CountryCode = User_Info.Address_Info.Country_Code;
+		try {
+			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
+			WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
+
+			//Enter all of the form data
+			WIDM_Registration_Input(User_Info, true);
+			
+			//confirmation page
+			WebDriver_Functions.WaitForText(By.xpath("//*[@id='content']/div/table/tbody/tr[1]/td[2]/table[2]/tbody/tr[3]/td/table[2]/tbody/tr/td[1]/table/tbody/tr[2]/td/b"), User_Info.USER_ID);
+			WebDriver_Functions.takeSnapShot("Registration WIDM Confirmation.png");
+			return User_Info;
+		}catch (Exception e) {
+			throw e;
+		}
+	}//end WIDM_Registration
+	
+	public static User_Data WIDM_RegistrationEFWS(User_Data User_Info) throws Exception{
+		String CountryCode = User_Info.Address_Info.Country_Code;
+
+		try {
+			WebDriver_Functions.ChangeURL("WIDM", CountryCode, true);
+			WebDriver_Functions.Click(By.linkText("Sign Up Now!"));
+
+			//Enter all of the form data
+			String EfwsEmail = "robmus50@yahoo.com";
+			User_Info.EMAIL_ADDRESS = EfwsEmail;
+			WIDM_Registration_Input(User_Info, true);
+			//Check that the correct error message appears.
+			WebDriver_Functions.WaitForText(By.cssSelector("#module\\2e registration\\2e _expanded > table > tbody > tr:nth-child(2) > td > b"), "Your registration request is not approved based on the information submitted.");
+			WebDriver_Functions.takeSnapShot("Message.png");
+			return User_Info;
+		}catch (Exception e) {
+			throw e;
+		}
+	}//end WIDM_Registration_EFWS
+	
+	public static void WIDM_Registration_Input(User_Data User_Info, boolean Submit) throws Exception{
+		WebDriver_Functions.WaitPresent(By.cssSelector("#reminderQuestion option[value=SP2Q1]"));//wait for secret questions to load.
+		
+		WebDriver_Functions.Type(By.id("firstName"), User_Info.FIRST_NM);
+		WebDriver_Functions.Type(By.id("initials"), User_Info.MIDDLE_NM);
+		WebDriver_Functions.Type(By.id("lastName"), User_Info.LAST_NM);
+		
+		WebDriver_Functions.Type(By.id("email"), User_Info.EMAIL_ADDRESS);
+		WebDriver_Functions.Type(By.id("retypeEmail"), User_Info.EMAIL_ADDRESS);
+		
+		WebDriver_Functions.Type(By.id("address1"), User_Info.Address_Info.Address_Line_1);
+		WebDriver_Functions.Type(By.id("address2"), User_Info.Address_Info.Address_Line_2);
+		if (WebDriver_Functions.isPresent(By.id("city"))) {
+			WebDriver_Functions.Type(By.id("city"), User_Info.Address_Info.City);
+		}
+
+		//if (AddressDetails[4] != ""){
+			WebDriver_Functions.Type(By.id("state"), User_Info.Address_Info.State_Code);
+		//}
+		
+		//if (AddressDetails[5] != ""){
+			WebDriver_Functions.Type(By.id("zip"), User_Info.Address_Info.Zip);
+		//}		
+			
+		if (User_Info.Address_Info.Country_Code.toLowerCase().contains("ca")) {
+			//for Canada the list populates ca_english or ca_french
+			WebDriver_Functions.Select(By.id("country1"), "ca_english", "v");
+		}else{
+			WebDriver_Functions.Select(By.id("country1"), User_Info.Address_Info.Country_Code.toLowerCase(), "v");
+		}
+			
+		WebDriver_Functions.Type(By.id("phone"), Helper_Functions.ValidPhoneNumber(User_Info.Address_Info.Phone_Number));
+		
+		if (WebDriver_Functions.isPresent(By.xpath("//*[@id='module.registration._expanded']/table/tbody/tr/td[1]/table/tbody/tr[24]/td[2]"))) {
+			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='module.registration._expanded']/table/tbody/tr/td[1]/table/tbody/tr[24]/td[2]"), "Country/Territory", 116678);
+		}else {
+			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='module.registration._expanded']/table/tbody/tr/td[1]/table/tbody/tr[23]/td[2]"), "Country/Territory", 116678); //for non us
+		}
+		
+		WebDriver_Functions.Type(By.id("uid"), User_Info.USER_ID); 
+		//Helper_Functions.PrintOut("Userid is: " + UserId, true);
+		WebDriver_Functions.Type(By.id("password"), User_Info.PASSWORD);
+		WebDriver_Functions.Type(By.id("retypePassword"), User_Info.PASSWORD);
+		//WebDriver_Functions.Select(By.id("reminderQuestion"), "What is your mother's first name?", "t");
+		WebDriver_Functions.Select(By.id("reminderQuestion"), User_Info.SECRET_QUESTION_DESC, "v");
+		WebDriver_Functions.Type(By.id("reminderAnswer"), User_Info.SECRET_ANSWER_DESC);
+		WebDriver_Functions.Click(By.id("acceptterms"));
+		if (!DriverFactory.getInstance().getDriver().findElement(By.id("acceptterms")).isSelected()){//added this as there is an issue with error messages and script clicking checkbox, works normally manually.
+			WebDriver_Functions.Click(By.id("acceptterms"));
+		}
+		
+		WebDriver_Functions.takeSnapShot("Contact Information.png");
+		
+		if (Submit) {
+			WebDriver_Functions.Click(By.id("createUserID"));
+			User_Info.UUID_NBR = WebDriver_Functions.GetCookieValue("fcl_uuid");
+			if (User_Info.UUID_NBR != null && User_Info.UUID_NBR != "") {
+				Helper_Functions.WriteUserToExcel(User_Info.USER_ID, User_Info.PASSWORD);
+			}
+		}
+	}//end WIDM_Registration_Input
 }

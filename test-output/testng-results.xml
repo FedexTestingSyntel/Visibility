@@ -1,194 +1,311 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="2" ignored="2" total="7" passed="3">
+<testng-results skipped="0" failed="0" ignored="0" total="14" passed="14">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="151492" started-at="2019-05-22T14:46:36Z" finished-at="2019-05-22T14:49:07Z">
+  <suite name="ADAT_Suite" duration-ms="3352" started-at="2019-05-23T21:27:13Z" finished-at="2019-05-23T21:27:17Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="151492" started-at="2019-05-22T14:46:36Z" finished-at="2019-05-22T14:49:07Z">
-      <class name="WCRV_Application.WCRV">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WCRV_Application.WCRV@1442d7b5]" name="beforeClass" is-config="true" duration-ms="38" started-at="2019-05-22T14:46:36Z" finished-at="2019-05-22T14:46:36Z">
+    <test name="ADAT_Test" duration-ms="3352" started-at="2019-05-23T21:27:13Z" finished-at="2019-05-23T21:27:17Z">
+      <class name="ADAT_Application.ADAT">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:ADAT_Application.ADAT@11c20519]" name="beforeClass" is-config="true" duration-ms="29" started-at="2019-05-23T21:27:14Z" finished-at="2019-05-23T21:27:14Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="FAIL" signature="WCRV_Help_Link(java.lang.String, Data_Structures.User_Data, java.lang.String)[pri:0, instance:WCRV_Application.WCRV@1442d7b5]" name="WCRV_Help_Link" duration-ms="113590" started-at="2019-05-22T14:46:37Z" data-provider="dp" finished-at="2019-05-22T14:48:30Z">
+        <test-method status="PASS" signature="ADAT_CreateUser(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:1, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_CreateUser" duration-ms="646" started-at="2019-05-23T21:27:14Z" data-provider="dp" finished-at="2019-05-23T21:27:15Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[7]]>
+                <![CDATA[3]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.User_Data@42a48628]]>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[US]]>
-              </value>
-            </param>
-          </params>
-          <exception class="java.lang.AssertionError">
-            <message>
-              <![CDATA[US Help page not loading correctly.]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[java.lang.AssertionError: US Help page not loading correctly.
-at org.testng.Assert.fail(Assert.java:96)
-at WCRV_Application.WCRV.WCRV_Help_Link(WCRV.java:108)
-at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-at java.lang.reflect.Method.invoke(Unknown Source)
-at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:988)
-at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
-at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
-at org.testng.TestRunner.privateRun(TestRunner.java:648)
-at org.testng.TestRunner.run(TestRunner.java:505)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:455)
-at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:450)
-at org.testng.SuiteRunner.privateRun(SuiteRunner.java:415)
-at org.testng.SuiteRunner.run(SuiteRunner.java:364)
-at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:84)
-at org.testng.TestNG.runSuitesSequentially(TestNG.java:1208)
-at org.testng.TestNG.runSuitesLocally(TestNG.java:1137)
-at org.testng.TestNG.runSuites(TestNG.java:1049)
-at org.testng.TestNG.run(TestNG.java:1017)
-at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
-at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
-at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
-]]>
-            </full-stacktrace>
-          </exception> <!-- java.lang.AssertionError -->
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- WCRV_Help_Link -->
-        <test-method status="PASS" signature="WCRV_Help_Link(java.lang.String, Data_Structures.User_Data, java.lang.String)[pri:0, instance:WCRV_Application.WCRV@1442d7b5]" name="WCRV_Help_Link" duration-ms="7496" started-at="2019-05-22T14:48:32Z" data-provider="dp" finished-at="2019-05-22T14:48:39Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[7]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.User_Data@42a48628]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[HK]]>
+                <![CDATA[FDM-POSTCARD-PIN]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- WCRV_Help_Link -->
-        <test-method status="PASS" signature="WCRV_Help_Link(java.lang.String, Data_Structures.User_Data, java.lang.String)[pri:0, instance:WCRV_Application.WCRV@1442d7b5]" name="WCRV_Help_Link" duration-ms="7782" started-at="2019-05-22T14:48:39Z" data-provider="dp" finished-at="2019-05-22T14:48:47Z">
+        </test-method> <!-- ADAT_CreateUser -->
+        <test-method status="PASS" signature="ADAT_CreateUser(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:1, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_CreateUser" duration-ms="646" started-at="2019-05-23T21:27:14Z" data-provider="dp" finished-at="2019-05-23T21:27:15Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[7]]>
+                <![CDATA[3]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.User_Data@42a48628]]>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[ID]]>
+                <![CDATA[FDM-PHONE-PIN]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- WCRV_Help_Link -->
-        <test-method status="FAIL" signature="WCRV_Help_Link(java.lang.String, Data_Structures.User_Data, java.lang.String)[pri:0, instance:WCRV_Application.WCRV@1442d7b5]" name="WCRV_Help_Link" duration-ms="9415" started-at="2019-05-22T14:48:47Z" data-provider="dp" finished-at="2019-05-22T14:48:56Z">
+        </test-method> <!-- ADAT_CreateUser -->
+        <test-method status="PASS" signature="ADAT_CreatePin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:2, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_CreatePin" duration-ms="268" started-at="2019-05-23T21:27:15Z" data-provider="dp" finished-at="2019-05-23T21:27:15Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[7]]>
+                <![CDATA[3]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[Data_Structures.User_Data@42a48628]]>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[LT]]>
-              </value>
-            </param>
-          </params>
-          <exception class="java.lang.AssertionError">
-            <message>
-              <![CDATA[LT Help page not loading correctly.]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[java.lang.AssertionError: LT Help page not loading correctly.
-at org.testng.Assert.fail(Assert.java:96)
-at WCRV_Application.WCRV.WCRV_Help_Link(WCRV.java:108)
-at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-at java.lang.reflect.Method.invoke(Unknown Source)
-at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:988)
-at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
-at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
-at org.testng.TestRunner.privateRun(TestRunner.java:648)
-at org.testng.TestRunner.run(TestRunner.java:505)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:455)
-at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:450)
-at org.testng.SuiteRunner.privateRun(SuiteRunner.java:415)
-at org.testng.SuiteRunner.run(SuiteRunner.java:364)
-at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:84)
-at org.testng.TestNG.runSuitesSequentially(TestNG.java:1208)
-at org.testng.TestNG.runSuitesLocally(TestNG.java:1137)
-at org.testng.TestNG.runSuites(TestNG.java:1049)
-at org.testng.TestNG.run(TestNG.java:1017)
-at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
-at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
-at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
-]]>
-            </full-stacktrace>
-          </exception> <!-- java.lang.AssertionError -->
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- WCRV_Help_Link -->
-        <test-method status="PASS" signature="WCRV_Help_Link(java.lang.String, Data_Structures.User_Data, java.lang.String)[pri:0, instance:WCRV_Application.WCRV@1442d7b5]" name="WCRV_Help_Link" duration-ms="9526" started-at="2019-05-22T14:48:58Z" data-provider="dp" finished-at="2019-05-22T14:49:07Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[7]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Data_Structures.User_Data@42a48628]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[GP]]>
+                <![CDATA[FDM-POSTCARD-PIN]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- WCRV_Help_Link -->
-      </class> <!-- WCRV_Application.WCRV -->
-    </test> <!-- Default test -->
-  </suite> <!-- Default suite -->
+        </test-method> <!-- ADAT_CreatePin -->
+        <test-method status="PASS" signature="ADAT_CreatePin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:2, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_CreatePin" duration-ms="267" started-at="2019-05-23T21:27:15Z" data-provider="dp" finished-at="2019-05-23T21:27:15Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-PHONE-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_CreatePin -->
+        <test-method status="PASS" signature="ADAT_AddressVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_AddressVelocity" duration-ms="1412" started-at="2019-05-23T21:27:15Z" data-provider="dp" finished-at="2019-05-23T21:27:16Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-POSTCARD-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_AddressVelocity -->
+        <test-method status="PASS" signature="ADAT_PhoneVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_PhoneVelocity" duration-ms="650" started-at="2019-05-23T21:27:15Z" data-provider="dp" finished-at="2019-05-23T21:27:16Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-POSTCARD-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_PhoneVelocity -->
+        <test-method status="PASS" signature="ADAT_PhoneVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_PhoneVelocity" duration-ms="652" started-at="2019-05-23T21:27:15Z" data-provider="dp" finished-at="2019-05-23T21:27:16Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-PHONE-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_PhoneVelocity -->
+        <test-method status="PASS" signature="ADAT_AddressVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_AddressVelocity" duration-ms="1532" started-at="2019-05-23T21:27:15Z" data-provider="dp" finished-at="2019-05-23T21:27:17Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-PHONE-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_AddressVelocity -->
+        <test-method status="PASS" signature="ADAT_PostcardVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_PostcardVelocity" duration-ms="681" started-at="2019-05-23T21:27:15Z" data-provider="dp" finished-at="2019-05-23T21:27:16Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-POSTCARD-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_PostcardVelocity -->
+        <test-method status="PASS" signature="ADAT_PostcardVelocity(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:3, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_PostcardVelocity" duration-ms="605" started-at="2019-05-23T21:27:15Z" data-provider="dp" finished-at="2019-05-23T21:27:16Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-PHONE-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_PostcardVelocity -->
+        <test-method status="PASS" signature="ADAT_VerifyPin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_VerifyPin" duration-ms="189" started-at="2019-05-23T21:27:17Z" data-provider="dp" finished-at="2019-05-23T21:27:17Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-POSTCARD-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_VerifyPin -->
+        <test-method status="PASS" signature="ADAT_VerifyPin(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_VerifyPin" duration-ms="249" started-at="2019-05-23T21:27:17Z" data-provider="dp" finished-at="2019-05-23T21:27:17Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-PHONE-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_VerifyPin -->
+        <test-method status="PASS" signature="ADAT_VerifyPin_Invalid(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_VerifyPin_Invalid" duration-ms="210" started-at="2019-05-23T21:27:17Z" data-provider="dp" finished-at="2019-05-23T21:27:17Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-POSTCARD-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_VerifyPin_Invalid -->
+        <test-method status="PASS" signature="ADAT_VerifyPin_Invalid(java.lang.String, Data_Structures.ADAT_Data, java.lang.String)[pri:4, instance:ADAT_Application.ADAT@11c20519]" name="ADAT_VerifyPin_Invalid" duration-ms="261" started-at="2019-05-23T21:27:17Z" data-provider="dp" finished-at="2019-05-23T21:27:17Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.ADAT_Data@219b1935]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[FDM-PHONE-PIN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ADAT_VerifyPin_Invalid -->
+      </class> <!-- ADAT_Application.ADAT -->
+    </test> <!-- ADAT_Test -->
+  </suite> <!-- ADAT_Suite -->
 </testng-results>

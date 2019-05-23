@@ -1,6 +1,8 @@
 package Data_Structures;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
@@ -77,6 +79,12 @@ public class User_Data {
 		return User_Info;
 	}
 	
+	public static User_Data Print_Full_Details(User_Data User_Info) {
+		String Details[] = new String[] {User_Info.USER_ID, User_Info.PASSWORD, User_Info.UUID_NBR, User_Info.FIRST_NM, User_Info.MIDDLE_NM, User_Info.LAST_NM, User_Info.MIGRATION_STATUS, User_Info.USER_TYPE};
+		Helper_Functions.PrintOut("User_Data: " + Arrays.toString(Details));
+		return User_Info;
+	}
+	
 	public static User_Data Set_Same_Account_Data(User_Data User_Info, Account_Data Account_Info) {
 		User_Info.Address_Info.City = Account_Info.Billing_Address_Info.City;
 		User_Info.Address_Info.Country_Code = Account_Info.Billing_Address_Info.Country_Code;
@@ -104,5 +112,128 @@ public class User_Data {
 		return User_Info;	
 	}
 	
+	public static String[][] Get_User_Data_String_Array(User_Data User_Info) {
+		String Data[][] = new String[][] {{"UUID_NBR", User_Info.UUID_NBR}, 
+			{"SSO_LOGIN_DESC", User_Info.USER_ID}, 
+			{"USER_PASSWORD_DESC", User_Info.PASSWORD}, 
+			{"SECRET_QUESTION_DESC", User_Info.SECRET_QUESTION_DESC}, 
+			{"SECRET_ANSWER_DESC", User_Info.SECRET_ANSWER_DESC}, 
+			{"FIRST_NM", User_Info.FIRST_NM}, 
+			{"LAST_NM", User_Info.LAST_NM}, 
+			{"EMAIL_ADDRESS", User_Info.EMAIL_ADDRESS}, 
+			{"STREET_DESC", User_Info.Address_Info.Address_Line_1}, 
+			{"STREET_DESC_TWO", User_Info.Address_Info.Address_Line_2}, 
+			{"CITY_NM", User_Info.Address_Info.City}, 
+			{"STATE_CD", User_Info.Address_Info.State_Code}, 
+			{"POSTAL_CD", User_Info.Address_Info.Zip}, 
+			{"COUNTRY_CD", User_Info.Address_Info.Country_Code}, };
+		return Data;	
+	}
+	
+	//will load the userids into the data class even if the rows have been changed.
+	public static User_Data[] Get_UserIds(int intLevel) {
+		List<String[]> FullDataFromExcel = new ArrayList<String[]>();
+		FullDataFromExcel = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TestingData.xls", "L" + intLevel);
+		//a list of the Userids
+		User_Data User_Info_Array[] = new User_Data[FullDataFromExcel.size() - 1];
+		
+		String Headers[] = FullDataFromExcel.get(0);
+		for (int i = 1; i < FullDataFromExcel.size(); i++) {
+			String Row[] = FullDataFromExcel.get(i);
+			User_Info_Array[i - 1] = new User_Data(); 
+			for (int j = 0; j <Headers.length; j++) {
+				int pos = i - 1;
+				switch (Headers[j]) {
+		  		case "UUID_NBR":
+					User_Info_Array[pos].UUID_NBR = Row[j];
+					break;
+		  		case "SSO_LOGIN_DESC":
+		  			User_Info_Array[pos].USER_ID = Row[j];
+					break;
+		  		case "USER_PASSWORD_DESC":
+		  			User_Info_Array[pos].PASSWORD = Row[j];
+					break;
+		  		case "SECRET_QUESTION_DESC":
+		  			User_Info_Array[pos].SECRET_QUESTION_DESC = Row[j];
+					break;
+		  		case "SECRET_ANSWER_DESC":
+		  			User_Info_Array[pos].SECRET_ANSWER_DESC = Row[j];
+					break;
+		  		case "FIRST_NM":
+		  			User_Info_Array[pos].FIRST_NM = Row[j];
+					break;
+		  		case "LAST_NM":
+		  			User_Info_Array[pos].LAST_NM = Row[j];
+					break;
+		  		case "EMAIL_ADDRESS":
+		  			User_Info_Array[pos].EMAIL_ADDRESS = Row[j];
+					break;
+		  		case "STREET_DESC":
+		  			User_Info_Array[pos].Address_Info.Address_Line_1 = Row[j];
+					break;
+		  		case "STREET_DESC_TWO":
+		  			User_Info_Array[pos].Address_Info.Address_Line_2 = Row[j];
+					break;
+		  		case "CITY_NM":
+		  			User_Info_Array[pos].Address_Info.City = Row[j];
+					break;
+		  		case "STATE_CD":
+		  			User_Info_Array[pos].Address_Info.State_Code = Row[j];
+					break;
+		  		case "POSTAL_CD":
+		  			User_Info_Array[pos].Address_Info.Zip = Row[j];
+					break;
+		  		case "COUNTRY_CD":
+		  			User_Info_Array[pos].Address_Info.Country_Code = Row[j];
+					break;
+		  		case "ACCOUNT_NUMBER":
+		  			User_Info_Array[pos].ACCOUNT_NUMBER = Row[j];
+					break;
+		  		case "WCRV_ENABLED":
+		  			User_Info_Array[pos].WCRV_ENABLED = Row[j];
+					break;	
+		  		case "GFBO_ENABLED":
+		  			User_Info_Array[pos].GFBO_ENABLED = Row[j];
+					break;	
+		  		case "WGRT_ENABLED":
+		  			User_Info_Array[pos].WGRT_ENABLED = Row[j];
+					break;	
+		  		case "WDPA_ENABLED":
+		  			User_Info_Array[pos].WDPA_ENABLED = Row[j];
+					break;	
+		  		case "GROUND_ENABLED":
+		  			User_Info_Array[pos].GROUND_ENABLED = Row[j];
+					break;
+		  		case "EXPRESS_ENABLED":
+		  			User_Info_Array[pos].EXPRESS_ENABLED = Row[j];
+					break;
+		  		case "PASSKEY":
+		  			User_Info_Array[pos].PASSKEY = Row[j];
+					break;
+		  		case "FDM_STATUS":
+		  			User_Info_Array[pos].FDM_STATUS = Row[j];
+					break;	
+		  		case "FREIGHT_ENABLED":
+		  			User_Info_Array[pos].FREIGHT_ENABLED = Row[j];
+					break;	
+		  		case "ERROR":
+		  			User_Info_Array[pos].ERROR = Row[j];
+					break;	
+		  		case "MIGRATION_STATUS":
+		  			User_Info_Array[pos].MIGRATION_STATUS = Row[j];
+					break;	
+		  		case "USER_TYPE":
+		  			User_Info_Array[pos].USER_TYPE = Row[j];
+					break;	
+				}//end switch
+			}
+			
+			if (User_Info_Array[i - 1].USER_ID == null || User_Info_Array[i - 1].USER_ID.contentEquals("")) {
+				User_Info_Array[i - 1].ERROR = "ERROR";
+			}
+		}
+		
+		return User_Info_Array;
+	}
 }
 

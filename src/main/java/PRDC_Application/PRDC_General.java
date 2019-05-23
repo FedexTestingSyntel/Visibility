@@ -37,7 +37,7 @@ public class PRDC_General {
 	    	
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "Check_WCRV_Access":
-					User_Data User_Info[] =  Environment.Get_UserIds(intLevel);
+					User_Data User_Info[] =  User_Data.Get_UserIds(intLevel);
 					for (int k = 0; k < User_Info.length; k++) {
 						data.add(new Object[] {strLevel, USRC_D, PRDC_D, User_Info[k].USER_ID, User_Info[k].PASSWORD});
 					}

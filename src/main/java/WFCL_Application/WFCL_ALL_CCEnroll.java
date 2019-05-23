@@ -50,7 +50,7 @@ public class WFCL_ALL_CCEnroll{
 					}
 		    		break;
 		    	case "DiscountValidate":
-		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < User_Info.length; k++) {
 		    				//user must have an account number and be checking below to see if pass key user.

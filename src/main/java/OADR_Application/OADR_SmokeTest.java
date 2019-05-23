@@ -40,7 +40,7 @@ public class OADR_SmokeTest{
 			User_Data User_Info_Array[];
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "OADR_Apply_Discount_To_Account":
-		    		User_Info_Array = Environment.Get_UserIds(intLevel);
+		    		User_Info_Array = User_Data.Get_UserIds(intLevel);
 		    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (Enrollment_Data Enrollment: ED) {

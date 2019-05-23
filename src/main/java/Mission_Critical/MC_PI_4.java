@@ -86,7 +86,7 @@ public class MC_PI_4{
 					}
 					break;
 				case "WFCL_Rewards_Login_APAC_AND_LAC":
-					User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+					User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 		    		for (int k = 0; k < User_Info.length; k++) {
 		    			if (User_Info[k].PASSKEY.contentEquals("T")) {
 		    				for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
@@ -103,7 +103,7 @@ public class MC_PI_4{
 					}
 					break;
 				case "WFCL_Rewards_Logout":
-					User_Info = Environment.Get_UserIds(intLevel);
+					User_Info = User_Data.Get_UserIds(intLevel);
 					for (String Instance[]: Rewards_APAC_AND_LAC_Lang) {
 						for (int k = 0; k < User_Info.length; k++) {
 							if (User_Info[k].PASSKEY.contentEquals("T")) {

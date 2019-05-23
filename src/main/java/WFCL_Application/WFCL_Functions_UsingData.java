@@ -393,10 +393,10 @@ public class WFCL_Functions_UsingData{
 
 			//Step 1: Enter the contact information.
 			ContactInfo_Page(Account_Info, true); //enters all of the details
-			Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
-			
+
 			//Step 2: Enter the credit card details
 			WebDriver_Functions.WaitPresent(By.id("CCType"));
+			Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
 
 			Account_Info = WFCL_CC_Page(Account_Info, Tax_Info);
 			

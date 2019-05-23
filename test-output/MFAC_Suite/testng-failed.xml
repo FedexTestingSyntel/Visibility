@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [MFAC_Suite]" parallel="methods">
+<suite thread-count="3" guice-stage="DEVELOPMENT" name="Failed suite [MFAC_Suite]">
   <listeners>
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
-  <test thread-count="8" name="MFAC_Test(failed)" parallel="methods">
+  <test thread-count="3" name="MFAC_Test(failed)" parallel="methods">
+    <parameter name="Level" value="6"/>
     <classes>
-      <class name="TestNG.MFAC">
+      <class name="MFAC_Application.MFAC">
         <methods>
           <include name="beforeClass"/>
-          <include name="afterClass"/>
-          <include name="IssuePin" invocation-numbers="1 0"/>
+          <include name="VerifyPinValid" invocation-numbers="0 1"/>
+          <include name="IssuePin" invocation-numbers="0 1"/>
+          <include name="AdditionalEnrollmentExpiration" invocation-numbers="0 1"/>
+          <include name="VerifyPinVelocity" invocation-numbers="0 1"/>
+          <include name="AddressVelocity" invocation-numbers="0 1"/>
+          <include name="IssuePinExpiration" invocation-numbers="1 0"/>
+          <include name="IssuePinVelocity" invocation-numbers="0 1"/>
+          <include name="VerifyPinNoLongerValid" invocation-numbers="1 0"/>
         </methods>
-      </class> <!-- TestNG.MFAC -->
+      </class> <!-- MFAC_Application.MFAC -->
     </classes>
   </test> <!-- MFAC_Test(failed) -->
 </suite> <!-- Failed suite [MFAC_Suite] -->

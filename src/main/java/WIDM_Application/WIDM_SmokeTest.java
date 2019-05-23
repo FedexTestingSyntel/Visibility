@@ -1,18 +1,13 @@
 package WIDM_Application;
 
 import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.testng.annotations.Test;
-
 import Data_Structures.Account_Data;
 import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
-import Data_Structures.WIDM_Data;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.hamcrest.CoreMatchers;
@@ -28,7 +23,7 @@ import USRC_Application.USRC_API_Endpoints;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM_SmokeTest{
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -40,17 +35,18 @@ public class WIDM_SmokeTest{
 	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
-
+		User_Data User_Info_Array[];
+		
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WIDM_ResetPasswordSecret":
-		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
-		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < User_Info.length; k++) {
-		    				if (User_Info[k].USER_ID.contains("WIDM")) {
-		    					data.add( new Object[] {Level, CountryList[j][0], User_Info[k].USER_ID, User_Info[k].PASSWORD, User_Info[k].SECRET_ANSWER_DESC});
+		    		User_Info_Array = User_Data.Get_UserIds(intLevel);
+		    		for (String Country[]: CountryList) {
+		    			for (User_Data User_Info: User_Info_Array) {
+		    				if (User_Info.USER_ID.contains("WIDM")) {
+		    					data.add( new Object[] {Level, Country[0], User_Info.USER_ID, User_Info.PASSWORD, User_Info.SECRET_ANSWER_DESC});
 		    					break;
 		    				}
 		    			}
@@ -61,8 +57,8 @@ public class WIDM_SmokeTest{
 					break;
 				case "WIDM_Registration":
 				case "WIDM_Registration_ErrorMessages":
-					for (int j=0; j < CountryList.length; j++) {
-						data.add( new Object[] {Level, CountryList[j][0]});
+					for (String Country[]: CountryList){
+						data.add( new Object[] {Level, Country[0]});
 					}
 					break;
 				case "WIDM_RegistrationEFWS":
@@ -70,28 +66,28 @@ public class WIDM_SmokeTest{
 					break;
 				case "WIDM_Login":
 					//test login for email as user id and legacy user.
-					User_Info = Environment.Get_UserIds(intLevel);
+					User_Info_Array = User_Data.Get_UserIds(intLevel);
 					boolean Email_As_UserID = false, Legacy_User = false;
-		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < User_Info.length; k++) {
+		    		for (String Country[]: CountryList) {
+		    			for (User_Data User_Info: User_Info_Array) {
 		    				if (Legacy_User == true && Email_As_UserID == true) {
 		    					break;
-		    				}else if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].USER_ID.contains("@") && !Email_As_UserID) {
-		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD});
+		    				}else if (User_Info.Address_Info.Country_Code.contentEquals(Country[0]) && User_Info.USER_ID.contains("@") && !Email_As_UserID) {
+		    					data.add( new Object[] {Level, User_Info.USER_ID, User_Info.PASSWORD});
 		    					Email_As_UserID = true;
-		    				}else if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].USER_ID.contains("@") && !Legacy_User) {
-		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD});
+		    				}else if (User_Info.Address_Info.Country_Code.contentEquals(Country[0]) && !User_Info.USER_ID.contains("@") && !Legacy_User) {
+		    					data.add( new Object[] {Level, User_Info.USER_ID, User_Info.PASSWORD});
 		    					Legacy_User = true;
 		    				}
 		    			}
 					}
 					break;
 				case "WIDM_ResetPassword_Email":
-					User_Info = Environment.Get_UserIds(intLevel);
-		    		for (int j = 0; j < CountryList.length; j++) {
-		    			for (int k = 0; k < User_Info.length; k++) {
-		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].EMAIL_ADDRESS.contains(Helper_Functions.MyEmail)) {
-		    					data.add( new Object[] {Level, User_Info[k].USER_ID, User_Info[k].PASSWORD});
+					User_Info_Array = User_Data.Get_UserIds(intLevel);
+		    		for (String Country[]: CountryList) {
+		    			for (User_Data User_Info: User_Info_Array) {
+		    				if (User_Info.Address_Info.Country_Code.contentEquals(Country[0]) && User_Info.EMAIL_ADDRESS.contains(Helper_Functions.MyEmail)) {
+		    					data.add( new Object[] {Level, User_Info.USER_ID, User_Info.PASSWORD});
 		    					break;
 		    				}
 		    			}
@@ -99,8 +95,8 @@ public class WIDM_SmokeTest{
 					break;
 				case "AAAUserCreate_Email_As_UserId":
 					if (intLevel != 7) {//not valid in production due to connection.
-						for (int j = 0; j < CountryList.length; j++) {
-							Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
+						for (String Country[]: CountryList) {
+							Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, Country[0]);
 							Account_Info.User_Info.USER_ID = "L" + Level + "Email" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2) + "@accept.com";
 							Account_Info.Email = Account_Info.User_Info.USER_ID;
 							data.add( new Object[] {Level, Account_Info, "true"});
@@ -111,26 +107,32 @@ public class WIDM_SmokeTest{
 		}	
 		return data.iterator();
 	}
- 
+	
 	@Test(dataProvider = "dp")
-	public void WIDM_Registration(String Level, String CountryCode){
+	public void WIDM_Registration(String Level, String Country_Code){
 		try {
-			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
-			String UserId = Helper_Functions.LoadUserID("L" + Level + "WIDM" + CountryCode);
-			WIDM_Functions.WIDM_Registration(Address, UserName, UserId, Helper_Functions.MyEmail);
+			User_Data User_Info = new User_Data();
+			User_Data.Set_Generic_Address(User_Info, Country_Code);
+			User_Data.Set_Dummy_Contact_Name(User_Info, "WIDM", Level);
+			User_Data.Set_User_Id(User_Info, "L"+ Level + "WIDM");
+			
+			WIDM_Functions.WIDM_Registration(User_Info);
+			User_Data.Print_High_Level_Details(User_Info);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
 	
 	@Test(dataProvider = "dp")
-	public void WIDM_RegistrationEFWS(String Level, String CountryCode){
+	public void WIDM_RegistrationEFWS(String Level, String Country_Code){
 		try {
-			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
-			String UserId = Helper_Functions.LoadUserID("L" + Level + "EFWS");
-			WIDM_Functions.WIDM_RegistrationEFWS(Address, UserName, UserId);
+			User_Data User_Info = new User_Data();
+			User_Data.Set_Generic_Address(User_Info, Country_Code);
+			User_Data.Set_Dummy_Contact_Name(User_Info, "WIDM", Level);
+			User_Data.Set_User_Id(User_Info, "L"+ Level + "WIDMEFWS");
+			
+			WIDM_Functions.WIDM_RegistrationEFWS(User_Info);
+			User_Data.Print_High_Level_Details(User_Info);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

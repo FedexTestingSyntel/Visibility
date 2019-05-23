@@ -44,7 +44,7 @@ public class WIDM{
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WIDM_ResetPasswordSecret":
-		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].USER_ID.contains("WIDM")) {
@@ -71,7 +71,7 @@ public class WIDM{
 					data.add( new Object[] {Level, CountryList[0][0]});
 					break;
 				case "ResetPasswordWIDM_Email":
-					User_Info = Environment.Get_UserIds(intLevel);
+					User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0])) {
@@ -113,15 +113,14 @@ public class WIDM{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void WIDM_Registration(String Level, String CountryCode, String EmailAddress){
+	public void WIDM_Registration(String Level, String Country_Code){
 		try {
-			String Address[] = Helper_Functions.LoadAddress(CountryCode);
-			//Address = Helper_Functions.AccountDetails("761391020");
-			String UserName[] = Helper_Functions.LoadDummyName("WIDM", Level);
-			String UserId = Helper_Functions.LoadUserID("L" + Level + "WIDM" + CountryCode);
-			//UserId = Helper_Functions.LoadUserID("L" + Level + "UserId" + CountryCode);
-			WIDM_Functions.WIDM_Registration(Address, UserName, UserId, EmailAddress);
+			User_Data User_Info = new User_Data();
+			User_Data.Set_Generic_Address(User_Info, Country_Code);
+			User_Data.Set_Dummy_Contact_Name(User_Info, "WIDM", Level);
+			User_Data.Set_User_Id(User_Info, "L"+ Level + "WIDM");
 			
+			WIDM_Functions.WIDM_Registration(User_Info);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}

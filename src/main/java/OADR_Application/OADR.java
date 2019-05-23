@@ -40,7 +40,7 @@ public class OADR{
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "OADR_Apply_Discount_To_Account":
-		    		User_Data User_Info_Array[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 		    		int Enrollments = 0;
 		    		Enrollment_Data ED[] = Environment.getEnrollmentDetails(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {

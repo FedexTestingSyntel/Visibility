@@ -24,7 +24,7 @@ import Data_Structures.Account_Data;
 //@Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Account_Lookup extends Helper_Functions{
-	static String LevelToTest = "3";
+	static String LevelToTest = "7";
 	static Account_Data AllAddresses[] = Environment.getAddressDetails();
 
 	@BeforeClass
@@ -37,7 +37,7 @@ public class Account_Lookup extends Helper_Functions{
 		AllAddresses = null;
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider// (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		
@@ -47,7 +47,7 @@ public class Account_Lookup extends Helper_Functions{
 			Account_Data Existing_Account_Numbers[] = Environment.getAccountDetails(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
     			case "AccountCheck":
-    				String AccountsNumbers[] = ParsedAcconts("768459240, 768459320, 768459380, 768459460, 768459720, 768459800, 768459860, 768459940, 768460000, 768460060");
+    				String AccountsNumbers[] = ParsedAcconts("627872739, 627872755, 627873131, 627873158, 627873352, 627873379, 627873670, 627873697, 627873816, 627873832, 627874057, 627874073, 627874359, 627874375, 627952899, 627952910, 627954255, 627954271, 627954530, 627954557, 627992190, 627992211, 627992874, 627992890, 627992475, 627992491");
 
     				String AccountsAlreadyPresent = "", PendingAdd = "{\"";
     				for (int j = 0; j < Existing_Account_Numbers.length - 1; j++) {
@@ -73,23 +73,19 @@ public class Account_Lookup extends Helper_Functions{
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", enabled = false)
+	@Test(dataProvider = "dp", enabled = true)
 	public static void AccountCheck(String Level, String Account_Number){
 		try {
 			Account_Data Account_Info[] = new Account_Data[] {Account_Details(Account_Number, Level)};
 			Account_Data.Write_Accounts_To_Excel(Account_Info, true);
 			
-			if (Account_Info[0].Level == "6") {
-				Account_Info[0].Level = "3";
-				Account_Data.Write_Accounts_To_Excel(Account_Info, true);
-			}
 		} catch (Exception e) {
 			Assert.fail("Cannot retrieve details");
 		}
 	}
 	
 	//this is a cleanup function. The goal is to go through all the account numbers from the test data sheet and make sure still present as well as update the values.
-	@Test(dataProvider = "dp", enabled = true)
+	@Test(dataProvider = "dp", enabled = false)
 	public static void Update_Account_Details(String Level, String Account_Number){
 		try {
 			Account_Data Account_Info[] = new Account_Data[] {Account_Details(Account_Number, Level)};

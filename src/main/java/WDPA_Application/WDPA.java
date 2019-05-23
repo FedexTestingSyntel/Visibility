@@ -41,7 +41,7 @@ public class WDPA extends WDPA_Functions{
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "Pickup_Ground":
-		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < User_Info.length; k++) {
 		    				if (User_Info[k].WDPA_ENABLED.contentEquals("T") && User_Info[k].GROUND_ENABLED.contentEquals("") &&
@@ -54,7 +54,7 @@ public class WDPA extends WDPA_Functions{
 		    		break;
 		    	case "Pickup_Express":
 		    	case "Pickup_ExpressFreight"://need to fix this later, not for all countries.
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < User_Info.length; k++) {
 		    				if (User_Info[k].WDPA_ENABLED.contentEquals("T") && User_Info[k].EXPRESS_ENABLED.contentEquals("") && User_Info[k].Address_Info.Country_Code.contains(CountryList[j][0])) {
@@ -65,7 +65,7 @@ public class WDPA extends WDPA_Functions{
 					}
 		    	break;
 		    	case "TestPickup_LTLFreightEnabled":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 1; k < User_Info.length; k++) {
 		    				if (User_Info[k].WDPA_ENABLED.contentEquals("T")) {
@@ -75,7 +75,7 @@ public class WDPA extends WDPA_Functions{
 					}
 		    		break;
 		    	case "Pickup_LTLFreight":    //update this later to restrict based on country
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].WDPA_ENABLED.contentEquals("T") && User_Info[k].FREIGHT_ENABLED.contentEquals("T") 

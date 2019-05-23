@@ -10,6 +10,7 @@
       <class name="WDPA_Application.WDPA_SmokeTest">
         <methods>
           <include name="WDPA_Express" invocation-numbers="0"/>
+          <include name="WDPA_Ground" invocation-numbers="0"/>
           <include name="WDPA_ExpressFreight" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>

@@ -34,10 +34,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class TestNG_ReportListener implements IReporter {
 	
-	int totalTestCount = 0;
-	int totalTestPassed = 0;
-	int totalTestFailed = 0;
-	int totalTestSkipped = 0;
+	int totalTestCount = 0, runningTotalTestCount = 0;
+	int totalTestPassed = 0, runningTotalTestPassed = 0;
+	int totalTestFailed = 0, runningTotalTestFailed = 0;
+	int totalTestSkipped = 0, runningTotalTestSkipped = 0;
 	
 	//the name of the set environment test, this will remove it from being printed in the report
 	//need to come back later and make this better
@@ -87,7 +87,7 @@ public class TestNG_ReportListener implements IReporter {
 			String ReportName = Helper_Functions.CurrentDateTime() + " L" + Environment.LevelsToTest + " " + Application + " Report";
 			outputDirectory = Helper_Functions.FileSaveDirectory + "\\" + Application + "\\" + ReportName;
 			//Add the test case count to the file name.
-			outputDirectory += String.format(" T%sP%sF%s.html", totalTestCount, totalTestPassed, totalTestFailed);
+			outputDirectory += String.format(" T%sP%sF%s.html", runningTotalTestCount, runningTotalTestPassed, runningTotalTestFailed);
 			File targetFile = new File(outputDirectory);
 			
 			//Create folder directory for writing the report.
@@ -194,7 +194,12 @@ public class TestNG_ReportListener implements IReporter {
 					totalTestPassed = testObj.getPassedTests().getAllMethods().size();
 					totalTestSkipped = testObj.getSkippedTests().getAllMethods().size();
 					totalTestFailed = testObj.getFailedTests().getAllMethods().size();
-					totalTestCount = totalTestPassed + totalTestSkipped + totalTestFailed + totalTestCount;
+					totalTestCount = totalTestPassed + totalTestSkipped + totalTestFailed;// + totalTestCount;
+					
+					runningTotalTestCount += totalTestCount;
+					runningTotalTestPassed += totalTestPassed;
+					runningTotalTestFailed += totalTestFailed;
+					runningTotalTestSkipped += totalTestSkipped;
 					
 					/* Test name. */
 					retBuf.append("<td>" + testObj.getName() + "</td>");

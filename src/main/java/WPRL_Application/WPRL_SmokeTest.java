@@ -39,7 +39,7 @@ public class WPRL_SmokeTest {
 			//Based on the method that is being called the array list will be populated.
 			switch (m.getName()) { 
 		    	case "WPRL_ContactInfo_Admin":
-		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].PASSKEY.contentEquals("T") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0])) {
@@ -50,7 +50,7 @@ public class WPRL_SmokeTest {
 					}
 		    		break;
 		    	case "WPRL_AccountManagement_Passkey":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].PASSKEY.contentEquals("T") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].ACCOUNT_NUMBER.contentEquals("")) {
@@ -61,7 +61,7 @@ public class WPRL_SmokeTest {
 					}
 		    	break;
 		    	case "WPRL_FDM":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (!User_Info[k].FDM_STATUS.contentEquals("F") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0])) {
@@ -72,7 +72,7 @@ public class WPRL_SmokeTest {
 					}
 		    	break;
 		    	case "WPRL_AccountManagement_NonPasskey":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].PASSKEY.contentEquals("F") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].ACCOUNT_NUMBER.contentEquals("")) {
@@ -83,7 +83,7 @@ public class WPRL_SmokeTest {
 					}
 		    		break;
 		    	case "WPRL_ContactInfo_NonAdmin":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].PASSKEY.contentEquals("F") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0])) {

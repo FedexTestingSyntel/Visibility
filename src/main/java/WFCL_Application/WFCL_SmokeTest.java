@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_SmokeTest{
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 
 	@BeforeClass
@@ -75,7 +75,7 @@ public class WFCL_SmokeTest{
 				}
 	    		break;
 	    	case "WFCL_Reset_Password_Secret":
-	    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+	    		User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 0; k < User_Info.length; k++) {
 	    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("")) {
@@ -86,7 +86,7 @@ public class WFCL_SmokeTest{
 				}
 	    		break;
 	    	case "WFCL_Reset_Password_Email":
-	    		User_Info = Environment.Get_UserIds(intLevel);
+	    		User_Info = User_Data.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 0; k < User_Info.length; k++) {
 	    				//make sure have your email address set as the Helper_Functions.MyEmail

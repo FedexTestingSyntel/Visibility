@@ -9,7 +9,7 @@
     <classes>
       <class name="OADR_Application.OADR_SmokeTest">
         <methods>
-          <include name="OADR_Apply_Discount_To_Account" invocation-numbers="4 0 3 1 2"/>
+          <include name="OADR_Apply_Discount_To_Account" invocation-numbers="0 4 1 2 3"/>
           <include name="beforeClass"/>
         </methods>
       </class> <!-- OADR_Application.OADR_SmokeTest -->

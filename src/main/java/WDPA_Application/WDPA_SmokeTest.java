@@ -36,7 +36,7 @@ public class WDPA_SmokeTest{
 
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 			case "WDPA_Ground":
-	    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+	    		User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 1; k < User_Info.length; k++) {
 	    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].WDPA_ENABLED.contentEquals("T") && User_Info[k].GROUND_ENABLED.contentEquals("T")) {
@@ -48,7 +48,7 @@ public class WDPA_SmokeTest{
 	    		break;
 	    	case "WDPA_Express":
 	    	case "WDPA_ExpressFreight"://need to fix this later, not for all countries.
-	    		User_Info = Environment.Get_UserIds(intLevel);
+	    		User_Info = User_Data.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 1; k < User_Info.length; k++) {
 	    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].WDPA_ENABLED.contentEquals("T") && User_Info[k].EXPRESS_ENABLED.contentEquals("T")) {
@@ -59,7 +59,7 @@ public class WDPA_SmokeTest{
 				}
 	    		break;
 	    	case "WDPA_LTLFreight":
-	    		User_Info = Environment.Get_UserIds(intLevel);
+	    		User_Info = User_Data.Get_UserIds(intLevel);
 	    		for (int j = 0; j < CountryList.length; j++) {
 	    			for (int k = 0; k < User_Info.length; k++) {
 	    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info[k].WDPA_ENABLED.contentEquals("T") && User_Info[k].FREIGHT_ENABLED.contentEquals("T")) {

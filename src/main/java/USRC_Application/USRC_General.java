@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_General {
 
-	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -50,13 +50,13 @@ public class USRC_General {
 				}
 				break;
 			case "CreateUsers_User_Data":
-				User_Info = Environment.Get_UserIds(intLevel);
+				User_Info = User_Data.Get_UserIds(intLevel);
 				int counter = 0;
 	    		for (int k = 0; k < User_Info.length; k++) {
 	    			if (User_Info[k].Address_Info.Country_Code.contentEquals("US") && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("")) {
 	    				data.add( new Object[] {strLevel, User_Info[k]});
 	    				counter++;
-	    				if (counter > 10) {
+	    				if (counter > 1) {
 	    					break;
 	    				}
 	    			}
@@ -88,7 +88,7 @@ public class USRC_General {
 			case "CheckLogin":
 				//loading the OAuth token and having all of the variables set.
 				PRDC_Data.LoadVariables(strLevel);
-				User_Info = Environment.Get_UserIds(intLevel);
+				User_Info = User_Data.Get_UserIds(intLevel);
 				for (int k = 0; k < User_Info.length; k++) {
     				if (User_Info[k].EMAIL_ADDRESS.contentEquals("")) {
     					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
@@ -97,7 +97,7 @@ public class USRC_General {
 				break;
 			case "Check_FDM_Status":
 				//loading the OAuth token and having all of the variables set.
-				User_Info = Environment.Get_UserIds(intLevel);
+				User_Info = User_Data.Get_UserIds(intLevel);
 				for (int k = 0; k < User_Info.length; k++) {
 					if(User_Info[k].FDM_STATUS.contentEquals("")) {
     					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
@@ -109,12 +109,13 @@ public class USRC_General {
 				Account_Data Account_Info = Environment.getAddressDetails(strLevel, "US");
 				for (int k = 0; k < AccountsNumbers.length; k++) {
 					data.add(new Object[] {strLevel, Account_Info, AccountsNumbers[k]});
+					break;
     			}
 				break;
 			case  "UpdateValue":
 			case "Check_WCRV_Status":
 				//loading the OAuth token and having all of the variables set.
-				User_Info = Environment.Get_UserIds(intLevel);
+				User_Info = User_Data.Get_UserIds(intLevel);
 				for (int k = 0; k < User_Info.length; k++) {
 					if(User_Info[k].WCRV_ENABLED.contentEquals("Enabled")) {
     					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
@@ -122,7 +123,7 @@ public class USRC_General {
     			}
 				break;
 			case "CheckIfUserInvalidLogin":
-				User_Info = Environment.Get_UserIds(intLevel);
+				User_Info = User_Data.Get_UserIds(intLevel);
 				for (int k = 0; k < User_Info.length; k++) {
     				if (User_Info[k].FIRST_NM.contentEquals("")) {
     					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
@@ -131,7 +132,7 @@ public class USRC_General {
 				break;
 				
 			case "UpdateUserContactInformation":
-				User_Info = Environment.Get_UserIds(intLevel);
+				User_Info = User_Data.Get_UserIds(intLevel);
 				for (int k = 0; k < User_Info.length; k++) {
     				if (User_Info[k] != null && User_Info[k].USER_ID.contentEquals("L3FCLUse081616")) {
     					data.add(new Object[] {strLevel, User_Info[k]});
@@ -140,7 +141,7 @@ public class USRC_General {
     			}
 				break;
 			case "Testing_API_Login":
-				User_Info = Environment.Get_UserIds(intLevel);
+				User_Info = User_Data.Get_UserIds(intLevel);
 				data.add(new Object[] {strLevel, User_Info[0]});
 			}//end switch MethodName
 		}
@@ -158,7 +159,7 @@ public class USRC_General {
 		Helper_Functions.PrintOut(Response);
 	}
 	
-	@Test (dataProvider = "dp", enabled = false)
+	@Test (dataProvider = "dp", enabled = true)
 	public void CreateUsers_User_Data(String Level, User_Data User_Info) {
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		String UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
@@ -177,7 +178,7 @@ public class USRC_General {
 		UUID = fdx_login_fcl_uuid[1];
 		String Results[] = new String[] {User_Info.USER_ID,  User_Info.PASSWORD, UUID};
 		Helper_Functions.PrintOut(Arrays.toString(Results), false);
-		Helper_Functions.WriteUserToExcel(User_Info.USER_ID,  User_Info.PASSWORD);
+		Helper_Functions.WriteUserToExcel(User_Info);
 	}
 	
 	@Test (dataProvider = "dp", enabled = false)
@@ -233,15 +234,19 @@ public class USRC_General {
 		//Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails("642893505", Level, "FX");
 		//1 - Login, get cookies and uuid
 		Account_Info.Email = "accept@fedex.com";
-		Account_Info.User_Info.USER_ID = "L" + USRC_Details.Level + "Account" + Account_Number;
-		Account_Data.Set_Dummy_Contact_Name(Account_Info);
+		User_Data.Set_User_Id(Account_Info.User_Info, "L" + USRC_Details.Level + "Account" + Account_Number);
 		
 		String Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, Account_Info);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
+		
+		//get the cookies and the uuid of the new user
+		String fdx_login_fcl_uuid[] = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
+		Account_Info.User_Info.UUID_NBR = fdx_login_fcl_uuid[1];
+		
 		String Results[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD};
-		Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
+		Helper_Functions.WriteUserToExcel(Account_Info.User_Info);
 		Helper_Functions.PrintOut(Arrays.toString(Results), false);
 	}
 	

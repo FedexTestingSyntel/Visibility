@@ -30,10 +30,14 @@ public class Environment {
 	}
 	
 	public static void SetLevelsToTest(String Levels) {
-		if (LevelsToTest == null) {
+		SetLevelsToTest(Levels, false);
+	}
+	
+	public static void SetLevelsToTest(String Levels, boolean ForceOverwrite) {
+		if (LevelsToTest == null || ForceOverwrite) {
 			LevelsToTest = Levels;
 			System.err.println("Levels set to " + Levels);
-		}else {
+		}else{
 			System.err.println("Levels has already been set from XML. Will execute with " + LevelsToTest);
 		}
 	}
@@ -61,9 +65,7 @@ public class Environment {
 	@Test (priority = 0)//will run on data sent in XML to configure levels
 	@Parameters("Level")
 	public void SetEvironmentLevel(@Optional String Levels) {
-		if (Levels != null) {
-			SetLevelsToTest(Levels);
-		}
+		SetLevelsToTest(Levels, true);
 		throw new SkipException("Forcing skip, will be deleted from report later");
 	}
 	
@@ -491,42 +493,52 @@ public class Environment {
 		  		case "Address_Line_1":
 		  			Address_Data[pos].Shipping_Address_Info.Address_Line_1 = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.Address_Line_1 = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.Address_Line_1 = Row[j]; 
 		  			break;
 		  		case "Address_Line_2":
 		  			Address_Data[pos].Shipping_Address_Info.Address_Line_2 = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.Address_Line_2 = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.Address_Line_2 = Row[j];
 		  			break;
 		  		case "City":
 		  			Address_Data[pos].Shipping_Address_Info.City = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.City = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.City = Row[j];
 		  			break;
 		  		case "State":
 		  			Address_Data[pos].Shipping_Address_Info.State = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.State = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.State = Row[j];
 		  			break;
 		  		case "State_Code":
 		  			Address_Data[pos].Shipping_Address_Info.State_Code = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.State_Code = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.State_Code = Row[j];
 		  			break;
 		  		case "Zip":
 		  			Address_Data[pos].Shipping_Address_Info.Zip = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.Zip = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.Zip = Row[j];
 		  			break;
 		  		case "Country_Code":
 		  			Address_Data[pos].Shipping_Address_Info.Country_Code = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.Country_Code = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.Country_Code = Row[j];
 		  			break;
 		  		case "Region":
 		  			Address_Data[pos].Shipping_Address_Info.Region = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.Region = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.Region = Row[j];
 		  			break;
 		  		case "Country":
 		  			Address_Data[pos].Shipping_Address_Info.Country = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.Country = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.Country = Row[j];
 		  			break;
 		  		case "Share_Id":
 		  			Address_Data[pos].Shipping_Address_Info.Share_Id = Row[j];
 		  			Address_Data[pos].Billing_Address_Info.Share_Id = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.Share_Id = Row[j];
 		  			break;
 				}//end switch
 			}
@@ -536,111 +548,5 @@ public class Environment {
 			Address_Data[i -1].Email = Helper_Functions.MyEmail;
 		}
   		return Address_Data;
-	}
-
-	//will load the userids into the data class even if the rows have been changed.
-	public static User_Data[] Get_UserIds(int intLevel) {
-		List<String[]> FullDataFromExcel = new ArrayList<String[]>();
-		FullDataFromExcel = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TestingData.xls", "L" + intLevel);
-		//a list of the Userids
-		User_Data User_Info_Array[] = new User_Data[FullDataFromExcel.size() - 1];
-		
-		String Headers[] = FullDataFromExcel.get(0);
-		for (int i = 1; i < FullDataFromExcel.size(); i++) {
-			String Row[] = FullDataFromExcel.get(i);
-			User_Info_Array[i - 1] = new User_Data(); 
-			for (int j = 0; j <Headers.length; j++) {
-				int pos = i - 1;
-				switch (Headers[j]) {
-		  		case "UUID_NBR":
-					User_Info_Array[pos].UUID_NBR = Row[j];
-					break;
-		  		case "SSO_LOGIN_DESC":
-		  			User_Info_Array[pos].USER_ID = Row[j];
-					break;
-		  		case "USER_PASSWORD_DESC":
-		  			User_Info_Array[pos].PASSWORD = Row[j];
-					break;
-		  		case "SECRET_QUESTION_DESC":
-		  			User_Info_Array[pos].SECRET_QUESTION_DESC = Row[j];
-					break;
-		  		case "SECRET_ANSWER_DESC":
-		  			User_Info_Array[pos].SECRET_ANSWER_DESC = Row[j];
-					break;
-		  		case "FIRST_NM":
-		  			User_Info_Array[pos].FIRST_NM = Row[j];
-					break;
-		  		case "LAST_NM":
-		  			User_Info_Array[pos].LAST_NM = Row[j];
-					break;
-		  		case "EMAIL_ADDRESS":
-		  			User_Info_Array[pos].EMAIL_ADDRESS = Row[j];
-					break;
-		  		case "STREET_DESC":
-		  			User_Info_Array[pos].Address_Info.Address_Line_1 = Row[j];
-					break;
-		  		case "STREET_DESC_TWO":
-		  			User_Info_Array[pos].Address_Info.Address_Line_2 = Row[j];
-					break;
-		  		case "CITY_NM":
-		  			User_Info_Array[pos].Address_Info.City = Row[j];
-					break;
-		  		case "STATE_CD":
-		  			User_Info_Array[pos].Address_Info.State_Code = Row[j];
-					break;
-		  		case "POSTAL_CD":
-		  			User_Info_Array[pos].Address_Info.Zip = Row[j];
-					break;
-		  		case "COUNTRY_CD":
-		  			User_Info_Array[pos].Address_Info.Country_Code = Row[j];
-					break;
-		  		case "ACCOUNT_NUMBER":
-		  			User_Info_Array[pos].ACCOUNT_NUMBER = Row[j];
-					break;
-		  		case "WCRV_ENABLED":
-		  			User_Info_Array[pos].WCRV_ENABLED = Row[j];
-					break;	
-		  		case "GFBO_ENABLED":
-		  			User_Info_Array[pos].GFBO_ENABLED = Row[j];
-					break;	
-		  		case "WGRT_ENABLED":
-		  			User_Info_Array[pos].WGRT_ENABLED = Row[j];
-					break;	
-		  		case "WDPA_ENABLED":
-		  			User_Info_Array[pos].WDPA_ENABLED = Row[j];
-					break;	
-		  		case "GROUND_ENABLED":
-		  			User_Info_Array[pos].GROUND_ENABLED = Row[j];
-					break;
-		  		case "EXPRESS_ENABLED":
-		  			User_Info_Array[pos].EXPRESS_ENABLED = Row[j];
-					break;
-		  		case "PASSKEY":
-		  			User_Info_Array[pos].PASSKEY = Row[j];
-					break;
-		  		case "FDM_STATUS":
-		  			User_Info_Array[pos].FDM_STATUS = Row[j];
-					break;	
-		  		case "FREIGHT_ENABLED":
-		  			User_Info_Array[pos].FREIGHT_ENABLED = Row[j];
-					break;	
-		  		case "ERROR":
-		  			User_Info_Array[pos].ERROR = Row[j];
-					break;	
-		  		case "MIGRATION_STATUS":
-		  			User_Info_Array[pos].MIGRATION_STATUS = Row[j];
-					break;	
-		  		case "USER_TYPE":
-		  			User_Info_Array[pos].USER_TYPE = Row[j];
-					break;	
-				}//end switch
-			}
-			
-			if (User_Info_Array[i - 1].USER_ID == null || User_Info_Array[i - 1].USER_ID.contentEquals("")) {
-				User_Info_Array[i - 1].ERROR = "ERROR";
-			}
-		}
-		
-		return User_Info_Array;
 	}
 }

@@ -38,7 +38,7 @@ public class WCRV_SmokeTest{
 			User_Data User_Info[];
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "WCRV_Generate_RateSheet":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].WCRV_ENABLED.contains("T") && User_Info[k].Address_Info.Country_Code.contains(CountryList[j][0]) && !User_Info[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail)) {
@@ -52,7 +52,7 @@ public class WCRV_SmokeTest{
 		    		}
 		    	break;
 		    	case "WCRV_Generate_RateSheet_Passkey":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].WCRV_ENABLED.contains("T") && User_Info[k].Address_Info.Country_Code.contains(CountryList[j][0]) && !User_Info[k].EMAIL_ADDRESS.contentEquals(Helper_Functions.MyEmail) && User_Info[k].PASSKEY.contains("T")) {
@@ -66,7 +66,7 @@ public class WCRV_SmokeTest{
 		    		}
 		    	break;
 		    	case "WCRV_Help_Link":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].WCRV_ENABLED.contains("T")) {

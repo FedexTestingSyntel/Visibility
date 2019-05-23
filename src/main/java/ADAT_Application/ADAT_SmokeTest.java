@@ -60,10 +60,10 @@ public class ADAT_SmokeTest {
 	}
 	
 	@Test(dataProvider = "dp", priority = 1)
-	public void ADAT_CreateUser(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
+	public void ADAT_CreateUser(String Level, ADAT_Data ADAT_Info, String Organization) throws Exception {
 		//Using the assumption the organization will be in the "FDM-??-PIN" format
 		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN"))) + "-" + Helper_Functions.CurrentDateTime();
-		String Response = ADAT_Endpoints.ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
+		String Response = ADAT_Endpoints.ADAT_UserCreation(ADAT_Info.CreateUserUrl, Organization, UserName);
 		
         String Response_Variables[] = new String[] {"udsTransactionID", "The operation was successful!"};
         for (String Variable: Response_Variables) {
@@ -74,12 +74,12 @@ public class ADAT_SmokeTest {
 	}
 	
 	@Test(dataProvider = "dp", priority = 2)
-	public void ADAT_CreatePin(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
+	public void ADAT_CreatePin(String Level, ADAT_Data ADAT_Info, String Organization) throws Exception {
 		//create the user to do the pin validation. Using the assumption the organization will be in the "FDM-??-PIN" format
 		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN")));
-		ADAT_Endpoints.ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
+		ADAT_Endpoints.ADAT_UserCreation(ADAT_Info.CreateUserUrl, Organization, UserName);
 		
-		String Response = ADAT_Endpoints.ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
+		String Response = ADAT_Endpoints.ADAT_PinCreation(ADAT_Info.CreatePinUrl, Organization, UserName);
 		
         String Response_Variables[] = new String[] {Organization, "createTime", "validityStartTime", "validityEndTime", "otp"};
         for (String Variable: Response_Variables) {
@@ -90,42 +90,42 @@ public class ADAT_SmokeTest {
 	}
 	
 	@Test(dataProvider = "dp", priority = 3)
-	public void ADAT_AddressVelocity(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
+	public void ADAT_AddressVelocity(String Level, ADAT_Data ADAT_Info, String Organization) throws Exception {
 		String UserName = Helper_Functions.LoadUserID("L" + Level + "AddVel");
-		ADAT_Endpoints.VelocityCheck(UserName, Data_Class.CreateUserUrl, Data_Class.VelocityUrl, Organization, Data_Class.OrgAddressVelocity, Data_Class.AddressVelocityThreshold);
+		ADAT_Endpoints.VelocityCheck(UserName, ADAT_Info.CreateUserUrl, ADAT_Info.VelocityUrl, Organization, ADAT_Info.OrgAddressVelocity, ADAT_Info.AddressVelocityThreshold);
 		
-		String Result[] = new String[] {Level, Organization, String.valueOf(Data_Class.AddressVelocityThreshold)};
+		String Result[] = new String[] {Level, Organization, String.valueOf(ADAT_Info.AddressVelocityThreshold)};
 		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	@Test(dataProvider = "dp", priority = 3)
-	public void ADAT_PostcardVelocity(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
+	public void ADAT_PostcardVelocity(String Level, ADAT_Data ADAT_Info, String Organization) throws Exception {
 		String UserName = Helper_Functions.LoadUserID("L" + Level + "PostVel");
-		ADAT_Endpoints.VelocityCheck(UserName, Data_Class.CreateUserUrl, Data_Class.VelocityUrl, Organization, Data_Class.OrgPostcardVelocity, Data_Class.PostcardPinVelocityThreshold);
+		ADAT_Endpoints.VelocityCheck(UserName, ADAT_Info.CreateUserUrl, ADAT_Info.VelocityUrl, Organization, ADAT_Info.OrgPostcardVelocity, ADAT_Info.PostcardPinVelocityThreshold);
 	
-		String Result[] = new String[] {Level, Organization, String.valueOf(Data_Class.PostcardPinVelocityThreshold)};
+		String Result[] = new String[] {Level, Organization, String.valueOf(ADAT_Info.PostcardPinVelocityThreshold)};
 		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	@Test(dataProvider = "dp", priority = 3)
-	public void ADAT_PhoneVelocity(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
+	public void ADAT_PhoneVelocity(String Level, ADAT_Data ADAT_Info, String Organization) throws Exception {
 		String UserName = Helper_Functions.LoadUserID("L" + Level + "PhoneVel");
-		ADAT_Endpoints.VelocityCheck(UserName, Data_Class.CreateUserUrl, Data_Class.VelocityUrl, Organization, Data_Class.OrgPhoneVelocity, Data_Class.PhonePinVelocityThreshold);
+		ADAT_Endpoints.VelocityCheck(UserName, ADAT_Info.CreateUserUrl, ADAT_Info.VelocityUrl, Organization, ADAT_Info.OrgPhoneVelocity, ADAT_Info.PhonePinVelocityThreshold);
 	
-		String Result[] = new String[] {Level, Organization, String.valueOf(Data_Class.PhonePinVelocityThreshold)};
+		String Result[] = new String[] {Level, Organization, String.valueOf(ADAT_Info.PhonePinVelocityThreshold)};
 		Helper_Functions.PrintOut(Arrays.toString(Result), false);
 	}
 	
 	@Test(dataProvider = "dp", priority = 4)
-	public void ADAT_VerifyPin(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
+	public void ADAT_VerifyPin(String Level, ADAT_Data ADAT_Info, String Organization) throws Exception {
 		//create the user to do the pin validation. Using the assumption the organization will be in the "FDM-??-PIN" format
 		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN")));
-		ADAT_Endpoints.ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
+		ADAT_Endpoints.ADAT_UserCreation(ADAT_Info.CreateUserUrl, Organization, UserName);
 
-		String Response = ADAT_Endpoints.ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
+		String Response = ADAT_Endpoints.ADAT_PinCreation(ADAT_Info.CreatePinUrl, Organization, UserName);
 		String Pin = ADAT_Endpoints.ParsePin(Response);
 		
-		Response = ADAT_Endpoints.ADAT_VerifyPin(Data_Class.VerifyPinUrl, Organization, UserName, ADAT_Endpoints.ParsePin(Response));
+		Response = ADAT_Endpoints.ADAT_VerifyPin(ADAT_Info.VerifyPinUrl, Organization, UserName, ADAT_Endpoints.ParsePin(Response));
 
         String Response_Variables[] = new String[] {"transactionID", "message", "<cx:message>The operation was successful.</cx:message>"};
         for (String Variable: Response_Variables) {
@@ -137,14 +137,14 @@ public class ADAT_SmokeTest {
 	}
 	
 	@Test(dataProvider = "dp", priority = 4)
-	public void ADAT_VerifyPin_Invalid(String Level, ADAT_Data Data_Class, String Organization) throws Exception {
+	public void ADAT_VerifyPin_Invalid(String Level, ADAT_Data ADAT_Info, String Organization) throws Exception {
 		//create the user to do the pin validation. Using the assumption the organization will be in the "FDM-??-PIN" format
 		String UserName = Helper_Functions.LoadUserID("L" + Level + Organization.substring(4 , Organization.indexOf("-PIN")));
-		ADAT_Endpoints.ADAT_UserCreation(Data_Class.CreateUserUrl, Organization, UserName);
+		ADAT_Endpoints.ADAT_UserCreation(ADAT_Info.CreateUserUrl, Organization, UserName);
 
-		String Response = ADAT_Endpoints.ADAT_PinCreation(Data_Class.CreatePinUrl, Organization, UserName);
+		String Response = ADAT_Endpoints.ADAT_PinCreation(ADAT_Info.CreatePinUrl, Organization, UserName);
 		
-		Response = ADAT_Endpoints.ADAT_VerifyPin(Data_Class.VerifyPinUrl, Organization, UserName, ADAT_Endpoints.ParsePin(Response) + "1");
+		Response = ADAT_Endpoints.ADAT_VerifyPin(ADAT_Info.VerifyPinUrl, Organization, UserName, ADAT_Endpoints.ParsePin(Response) + "1");
 		assertThat(Response, CoreMatchers.containsString("400Bad"));
 		
 		String Result[] = new String[] {Level, Organization, UserName, "400Bad as expected"};

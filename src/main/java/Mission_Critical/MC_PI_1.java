@@ -131,7 +131,7 @@ public class MC_PI_1{
 			String CreditCard[] = Helper_Functions.LoadCreditCard("V");
 			String CountryCode = EnrollmentID[1];
 			String ShippingAddress[] = Helper_Functions.LoadAddress(CountryCode), BillingAddress[] = ShippingAddress;
-			String UserId = Helper_Functions.LoadUserID("L" + Level + EnrollmentID + "CC");
+			String UserId = Helper_Functions.LoadUserID("L" + Level + CountryCode + "CC");
 			String ContactName[] = Helper_Functions.LoadDummyName(CountryCode + "CC", Level);
 
 			String Result[] = WFCL_Functions.CreditCardRegistrationEnroll(EnrollmentID, CreditCard, ShippingAddress, BillingAddress, ContactName, UserId, Helper_Functions.MyEmail, BuisnessAccount, VatNumber);

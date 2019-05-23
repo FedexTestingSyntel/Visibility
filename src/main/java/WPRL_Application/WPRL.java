@@ -41,7 +41,7 @@ public class WPRL {
 			switch (m.getName()) { 
 		    	case "WPRL_Contact_Admin":
 		    	case "WPRL_AccountManagement_Passkey":
-		    		User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].USER_ID.contains("WADM")) {
@@ -52,7 +52,7 @@ public class WPRL {
 					}
 		    	break;
 		    	case "WPRL_FDM":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].USER_ID.contains("FDM")) {
@@ -63,7 +63,7 @@ public class WPRL {
 					}
 		    	break;
 		    	case "WPRL_AccountManagement_NonPasskey":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].USER_ID.contains("INET")) {
@@ -74,7 +74,7 @@ public class WPRL {
 					}
 		    		break;
 		    	case "WPRL_Contact_NonAdmin":
-		    		User_Info = Environment.Get_UserIds(intLevel);
+		    		User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].USER_ID.contains("Create")) {

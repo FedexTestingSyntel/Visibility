@@ -9,6 +9,9 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
+
+import Data_Structures.Account_Data;
+import Data_Structures.User_Data;
 import SupportClasses.ThreadLogger;
 
 public class TestNG_TestListener implements ITestListener{
@@ -62,6 +65,7 @@ public class TestNG_TestListener implements ITestListener{
 
     @Override
     public void onTestFailure(ITestResult arg0) {
+    	//Try and print a screenshot of the failure
     	try {
     		long ThreadID = Thread.currentThread().getId();
     		//ThreadID is added to ensure that the screenshot name will be unique.
@@ -70,8 +74,30 @@ public class TestNG_TestListener implements ITestListener{
 			e.printStackTrace();
 		}
 
+    	//Try and print high level details if the test cases was related to using account data or user data.
+    	//This is added to give better debug starting point in the report.
+    	for (Object parameter: arg0.getParameters()) {
+        	try {
+                Account_Data Account_Info = (Account_Data) parameter;
+                if (Account_Info != null) {
+                	Account_Data.Print_Account_Address(Account_Info);
+                	Account_Data.Print_High_Level_Details(Account_Info);
+                }
+        	} catch (Exception e) {}
+        	try {
+                User_Data User_Info = (User_Data) parameter;
+                if (User_Info != null) {
+                	User_Data.Print_Full_Details(User_Info);
+                }
+        	} catch (Exception e) {}
+    	}
+
+    	
     	Helper_Functions.PrintOut(arg0.getThrowable().getMessage(), false);
     	TestResults(arg0);
+    	
+    	
+    	/////asdfAccount_Data.Print_High_Level_Details(Account_Info);
     }
 
     @Override

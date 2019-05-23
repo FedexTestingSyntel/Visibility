@@ -26,6 +26,7 @@ import java.util.stream.IntStream;
 
 import org.openqa.selenium.By;
 import Data_Structures.Account_Data;
+import Data_Structures.User_Data;
 import jxl.Sheet;
 import jxl.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -285,19 +286,15 @@ public class Helper_Functions{
 	}
 	
 	public static void WriteUserToExcel(String UserID, String Password) {
-		
 		int intLevel = Integer.valueOf(Environment.getInstance().getLevel());
 		String Data[][] = new String[][] {{"SSO_LOGIN_DESC", UserID}, {"USER_PASSWORD_DESC", Password}};
 		WriteToExcel(DataDirectory + "\\TestingData.xls", "L" + intLevel, Data, -1); 
-		/*
-		 * delete this later if above words
-		User_Data User_Info[] =  Environment.Get_UserIds(intLevel);
-		
-		int Row = UD.length;            //////////Fix this later to write the whole line
-		
-		writeExcelData(, "L" + intLevel, UserID, Row, 1);
-		writeExcelData(DataDirectory + "\\TestingData.xls", , Password, Row, 2);
-		*/
+	}
+	
+	public static void WriteUserToExcel(User_Data User_Info) {
+		int intLevel = Integer.valueOf(Environment.getInstance().getLevel());
+		String Data[][] = User_Data.Get_User_Data_String_Array(User_Info);
+		WriteToExcel(DataDirectory + "\\TestingData.xls", "L" + intLevel, Data, -1); 
 	}
 	
 	

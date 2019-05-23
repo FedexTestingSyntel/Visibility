@@ -19,7 +19,7 @@ import SupportClasses.*;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "6";  
+	static String LevelsToTest = "3";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -29,7 +29,7 @@ public class WFCL_New{
 		//CountryList = new String[][]{{"JP", "Japan"}, {"MY", "Malaysia"}, {"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}, {"TW", "Taiwan"}, {"TH", "Thailand"}};
 		//CountryList = new String[][]{{"SG", "Singapore"}, {"AU", "Australia"}, {"NZ", "New Zealand"}, {"HK", "Hong Kong"}};
 		//CountryList = Environment.getCountryList("JP");
-		//CountryList = Environment.getCountryList("GB");
+		//CountryList = Environment.getCountryList("PH");
 		//CountryList = new String[][]{{"US", ""}, {"CA", ""}};
 		//CountryList = Environment.getCountryList("high");
 		Helper_Functions.MyEmail = "accept@fedex.com";
@@ -91,7 +91,7 @@ public class WFCL_New{
 					}
 		    		break;
 		    	case "Password_Reset_Secret":
-		    		User_Data User_Info_Array[] = Environment.Get_UserIds(intLevel);
+		    		User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (User_Data User_Info: User_Info_Array) {
 		    				if (User_Info.Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info.SECRET_ANSWER_DESC.contentEquals("")) {
@@ -102,7 +102,7 @@ public class WFCL_New{
 					}
 		    		break;
 		    	case "Reset_Password_Email":
-		    		User_Info_Array = Environment.Get_UserIds(intLevel);
+		    		User_Info_Array = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info_Array.length; k++) {
 		    				//make sure have your email address set as the Helper_Functions.MyEmail
@@ -114,7 +114,7 @@ public class WFCL_New{
 					}
 		    		break;
 		    	case "FCLA_WADM_Invitaiton":
-		    		User_Info_Array = Environment.Get_UserIds(intLevel);
+		    		User_Info_Array = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info_Array.length; k++) {
 		    				//make sure have your email address set as the Helper_Functions.MyEmail
@@ -126,7 +126,7 @@ public class WFCL_New{
 					}
 		    		break;
 		    	case "Link_Account_To_User":
-		    		User_Info_Array = Environment.Get_UserIds(intLevel);
+		    		User_Info_Array = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 30; k < User_Info_Array.length; k++) {
 		    				if (User_Info_Array[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info_Array[k].PASSKEY.contains("F")) {
@@ -138,7 +138,7 @@ public class WFCL_New{
 					}
 		    		break;
 		    	case "WFCL_GFBO_Registration":
-		    		User_Info_Array = Environment.Get_UserIds(intLevel);
+		    		User_Info_Array = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 30; k < User_Info_Array.length; k++) {
 		    				if (User_Info_Array[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && User_Info_Array[k].PASSKEY.contains("F") && User_Info_Array[k].GFBO_ENABLED.contains("F")) {
@@ -164,7 +164,6 @@ public class WFCL_New{
 			String Result[] = WFCL_Functions_UsingData.CreditCardRegistrationEnroll(Enrollment_Info, Account_Info, Tax_Info);
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
-			Account_Data.Print_High_Level_Details(Account_Info);
 			Assert.fail(e.getMessage());
 		}
 	}

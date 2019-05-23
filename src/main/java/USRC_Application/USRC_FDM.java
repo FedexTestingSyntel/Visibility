@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import Data_Structures.MFAC_Data;
 import Data_Structures.USRC_Data;
+import Data_Structures.User_Data;
 import MFAC_Application.MFAC_API_Endpoints;
 import MFAC_Application.MFAC_Helper_Functions;
 import SupportClasses.Environment;
@@ -22,7 +23,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_FDM {
  
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -35,6 +36,7 @@ public class USRC_FDM {
 	    
 	    for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
 	    	String strLevel = "" + Environment.LevelsToTest.charAt(i);
+	    	int intLevel = Integer.parseInt(strLevel);
 	    	USRC_Data USRC_D = USRC_Data.LoadVariables(strLevel);
 	    	MFAC_Data MFAC_D = MFAC_Data.LoadVariables(strLevel);
 	    	
@@ -54,10 +56,16 @@ public class USRC_FDM {
 				data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, 1});
 				break;
 			case "EndtoEndEnrollment_UserID":
-				
-					data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, "L2FDM012919T124302pm", "Test1234"});
-				
-				
+				User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
+				//data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, "L2FDM012919T124302pm", "Test1234"});
+				for (User_Data User_Info: User_Info_Array){
+	    			if (User_Info.FDM_STATUS.contentEquals("F") && User_Info.EMAIL_ADDRESS.contentEquals("accept@fedex.com")) {
+	    				data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, User_Info.USER_ID, User_Info.PASSWORD});
+	    				if (data.size() > 10) {
+	    					break;
+	    				}
+	    			}
+	    		}
 				break;
 			}//end switch MethodName
 		}

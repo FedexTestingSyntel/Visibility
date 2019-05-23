@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="WCRV_Application.WCRV">
+      <class name="USRC_Application.USRC_FDM">
         <methods>
-          <include name="WCRV_Help_Link" invocation-numbers="0 3"/>
           <include name="beforeClass"/>
+          <include name="EndtoEndEnrollment_UserID" invocation-numbers="5 1 9 7 3 0 10 8 2"/>
         </methods>
-      </class> <!-- WCRV_Application.WCRV -->
+      </class> <!-- USRC_Application.USRC_FDM -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

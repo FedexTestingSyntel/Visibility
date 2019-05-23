@@ -21,7 +21,7 @@ import ADMC_Application.ADMC_API_Endpoints;
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "2367"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -40,39 +40,41 @@ public class USRC_TestData_Update {
 	    	PRDC_Data.LoadVariables(strLevel);
 	    	
 	    	//load user ids since both of the below use that value
-	    	User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+	    	User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.	
 			case "CheckLogin":
-				for (int k = 0; k < User_Info.length; k++) {
-    				if (User_Info[k].UUID_NBR.contentEquals("")) {
-    					data.add(new Object[] {strLevel, User_Info[k]});
-    				}else if (!User_Info[k].ERROR.contentEquals("")) {
-    					data.add(new Object[] {strLevel, User_Info[k]});
+				for (User_Data User_Info: User_Info_Array) {
+    				if (User_Info.UUID_NBR.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info});
+    				}else if (!User_Info.ERROR.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info});
     				}
     				//uncomment if need to run all
-    				//else{data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});}
+    				//else{data.add(new Object[] {strLevel, User_Info});}
 
     			}
 				break;
 			case "CheckMigration":
-				for (int k = 0; k < User_Info.length; k++) {
-    				if (User_Info[k].MIGRATION_STATUS.contentEquals("")) {
-    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
+				for (User_Data User_Info: User_Info_Array){
+    				if (User_Info.MIGRATION_STATUS.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info.USER_ID, User_Info.PASSWORD});
     				}
     			}
 				break;
 			case "UpdateUser":
-				for (int k = 0; k < User_Info.length; k++) {
-					if (User_Info[k].Address_Info.Country_Code.contentEquals("US")) {
-    					data.add(new Object[] {strLevel, User_Info[k]});
+				for (User_Data User_Info: User_Info_Array) {
+					if (User_Info.Address_Info.Country_Code.contentEquals("US")) {
+    					data.add(new Object[] {strLevel, User_Info});
     					break;
     				}
     			}
 				break;
 			case "Check_WCRV_Status":
-				for (int k = 0; k < User_Info.length; k++) {
-    				if (User_Info[k].WCRV_ENABLED.contentEquals("Error")) {
-    					data.add(new Object[] {strLevel, User_Info[k]});
+				for (User_Data User_Info: User_Info_Array) {
+    				if (User_Info.WCRV_ENABLED.contentEquals("Error")) {
+    					data.add(new Object[] {strLevel, User_Info});
+    				}else if (!User_Info.MIGRATION_STATUS.contentEquals("NA")) {
+    					data.add(new Object[] {strLevel, User_Info});
     				}
     			}
 			}//end switch MethodName

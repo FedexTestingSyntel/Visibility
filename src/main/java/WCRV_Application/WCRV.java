@@ -40,7 +40,7 @@ public class WCRV{
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
-			User_Data User_Info_Array[] = Environment.Get_UserIds(intLevel);
+			User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WCRV_CheckPermission":

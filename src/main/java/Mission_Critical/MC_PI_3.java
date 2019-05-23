@@ -63,7 +63,7 @@ public class MC_PI_3{
 					}
 					break;
 				case "WFCL_Alliance_Marketing_CodeRequired":
-					User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+					User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 		    		for (int k = 0; k < User_Info.length; k++) {
 		    			if (User_Info[k].PASSKEY.contentEquals("T")) {
 							ED = Environment.getEnrollmentDetails(intLevel);
@@ -78,7 +78,7 @@ public class MC_PI_3{
 					}
 					break;
 				case "WFCL_Alliance_Marketing":
-					User_Info = Environment.Get_UserIds(intLevel);
+					User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int k = 0; k < User_Info.length; k++) {
 		    			if (User_Info[k].PASSKEY.contentEquals("T")) {
 							Enrollment_Data ED_One[] = Environment.getEnrollmentDetails(intLevel);
@@ -103,7 +103,7 @@ public class MC_PI_3{
 					}
 					break;
 				case "WFCL_Rewards_Login_APAC_AND_LAC":
-					User_Info = Environment.Get_UserIds(intLevel);
+					User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int k = 0; k < User_Info.length; k++) {
 		    			if (User_Info[k].PASSKEY.contentEquals("T")) {
 		    				for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {

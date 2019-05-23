@@ -63,7 +63,7 @@ public class ADAT_Data {
 			DC.AddressVelocityThreshold = 10;
   			break;
   		case "6":
-  			LevelIdentifier = "http://localhost"; 
+  			LevelIdentifier = "http://localhost";
   			DC.PostcardPinVelocityThreshold = 3;
 			DC.PhonePinVelocityThreshold = 3;
 			DC.AddressVelocityThreshold = 10;

@@ -63,7 +63,7 @@ public class WIDM_SOAPClient {
 					}
 					break;
 				case "AAAUserUpdate":
-					User_Info = Environment.Get_UserIds(intLevel);
+					User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("") && User_Info[k].USER_TYPE.contentEquals("NON_MANAGED")) {
@@ -74,7 +74,7 @@ public class WIDM_SOAPClient {
 					}
 		    		break;
 				case "AAAUserUpdate_Email_As_UserId":
-					User_Info = Environment.Get_UserIds(intLevel);
+					User_Info = User_Data.Get_UserIds(intLevel);
 		    		for (int j = 0; j < CountryList.length; j++) {
 		    			for (int k = 0; k < User_Info.length; k++) {
 		    				if (User_Info[k].USER_ID.contains("@") && User_Info[k].Address_Info.Country_Code.contentEquals(CountryList[j][0]) && !User_Info[k].SECRET_ANSWER_DESC.contentEquals("") && User_Info[k].USER_TYPE.contentEquals("NON_MANAGED")) {

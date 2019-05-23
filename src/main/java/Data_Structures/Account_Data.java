@@ -43,15 +43,7 @@ public class Account_Data {
 	public String LanguageCode = "EN";
 	public String Email = "accept@testing.com";
 	
-	/*
-	public String UserId = "";
-	public String Password = "Test1234";
-	public String UUID = "";
-	public String Secret_Question = "SP2Q1"; //"What is your mother's first name?"
-	public String Secret_Answer = "mom";
-	*/
 	public User_Data User_Info = new User_Data();
-	
 	
 	public Account_Data() {
 		//generic constructor
@@ -86,8 +78,12 @@ public class Account_Data {
 	public static Account_Data Set_Dummy_Contact_Name(Account_Data Account_Info) {
 		String ContactName[] = Helper_Functions.LoadDummyName(Account_Info.Billing_Address_Info.Country_Code, Account_Info.Level);
 		Account_Info.FirstName = ContactName[0];
+		Account_Info.User_Info.FIRST_NM = ContactName[0];
 		Account_Info.MiddleName = ContactName[1];
+		Account_Info.User_Info.MIDDLE_NM = ContactName[1];
 		Account_Info.LastName = ContactName[2];
+		Account_Info.User_Info.LAST_NM = ContactName[2];
+
 		return Account_Info;
 	}
 	

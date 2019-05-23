@@ -36,7 +36,7 @@ public class WPRL_SmokeTest2 {
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
-			User_Data User_Info[] = Environment.Get_UserIds(intLevel);
+			User_Data User_Info[] = User_Data.Get_UserIds(intLevel);
 			//Based on the method that is being called the array list will be populated.
 			switch (m.getName()) { 
 		    	case "WPRL_ContactInfo_Admin":
