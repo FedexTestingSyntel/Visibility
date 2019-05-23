@@ -12,8 +12,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-
-import Data_Structures.User_Data;
 import SupportClasses.DriverFactory;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
@@ -63,7 +61,6 @@ public class WCRV_Functions{
  	public static String[] WCRV_Generate(String CountryCode, String User, String Password, String Service, int numServicetoSelect) throws Exception{
  		Service = Service.toUpperCase();
 
-		String Time = Helper_Functions.CurrentDateTime();
 		try {
 			WebDriver_Functions.Login(User, Password);
 				
@@ -166,6 +163,7 @@ public class WCRV_Functions{
 			DriverFactory.getInstance().getDriver().findElement(By.id("rateSheetName")).sendKeys(RateSheetName);
 			if (rand.nextInt(5) > 4){
 				 DriverFactory.getInstance().getDriver().findElement(By.id("rateSheetProfileName")).clear();
+				 String Time = Helper_Functions.CurrentDateTime();
 				 DriverFactory.getInstance().getDriver().findElement(By.id("rateSheetProfileName")).sendKeys(RateSheetName + Time);
 				 Helper_Functions.PrintOut("Profile " + RateSheetName + Time + " has been attempted", true);
 			}

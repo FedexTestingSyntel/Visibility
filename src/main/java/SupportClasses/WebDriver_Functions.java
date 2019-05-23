@@ -678,7 +678,7 @@ public class WebDriver_Functions{
 	}
 	
 	public static boolean Login(String UserName, String Password) throws Exception {
-		return Login(UserName, Password, "WFCLWIDMAEMUSRC");
+		return Login(UserName, Password, "WFCLWIDMUSRC");
 	}
 	
     public static boolean Login(String UserName, String Password, String Application) throws Exception {
@@ -701,7 +701,6 @@ public class WebDriver_Functions{
     			if (GetCookieValue("fcl_uuid") == null) {
         			throw new Exception("Not able to login through USRC call");
         		}
-    			Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
     	    	return true;
     		}catch(Exception e){
     			Helper_Functions.PrintOut(e.getMessage(), true);
@@ -760,27 +759,6 @@ public class WebDriver_Functions{
     		}catch(Exception e3){
     			Helper_Functions.PrintOut("Not able to login through WGTM", true);
     		}
-    	}
-    	
-    	if (Application.contains("AEM")) {
-        	try{
-        		//this will navigate to the home page
-        		ChangeURL("HOME", "US", false);
-        		Click(By.cssSelector("span.fxg-user-options__sign-in-text"));
-                //wait for text box for user id to appear
-        		Type(By.id("NavLoginUserId"), UserName);
-        		Type(By.id("NavLoginPassword"), Password);
-        		Thread.sleep(1000);
-        		Click(By.cssSelector("#HeaderLogin > button.fxg-button.fxg-button--orange"));
-        		Thread.sleep(5000);
-                if (GetCookieValue("fcl_uuid") == null) {
-                 	throw new Exception("Did not login through global header");
-                }
-                Helper_Functions.PrintOut("Login:" + UserName + "/" + Password, true);
-            	return true;
-        	}catch(Exception e){
-        		Helper_Functions.PrintOut("Not able to login through US home page", true);
-        	}//end try catch for logging into home page
     	}
     	
     	Helper_Functions.PrintOut("Not able to login through " + Application + " flows, check user id.", true);

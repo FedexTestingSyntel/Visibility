@@ -57,7 +57,7 @@ public class USRC_API_Endpoints {
   			urlParameters.add(new BasicNameValuePair("data", json));
 
   			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
-  			Helper_Functions.PrintOut("Get cookie from USRC for " + UserID + "/" + Password, true);
+  			Helper_Functions.PrintOut("Get cookie from USRC for [" + UserID + ", " + Password + "]", true);
   			
   			//String Response = General_API_Calls.HTTPCall(httppost, json);	
 			
