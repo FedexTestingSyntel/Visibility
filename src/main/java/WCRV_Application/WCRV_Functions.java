@@ -485,16 +485,20 @@ public class WCRV_Functions{
  			Helper_Functions.PrintOut(svgGroup + " " + servBaseCode  + " has been selected.", true);
  			
 			//populate the location area
-			WebElement FromElement = null, ToElement = null;
+			WebElement FromElement = null, ToElement = null; 
+			By ByFromElement = null, ByToElement = null;
 			if (svgGroup.contentEquals("IMPORT_INBOUND") || svgGroup.contentEquals("LEGACY_THIRD_PARTY")){
 				if (svgGroup.contentEquals("IMPORT_INBOUND")){
 					WebDriver_Functions.WaitForText(By.id("importLoc1"), "");
 					FromElement = DriverFactory.getInstance().getDriver().findElement(By.id("importLoc1"));
+					ByFromElement = By.id("importLoc1");
 				}else if (svgGroup.contentEquals("LEGACY_THIRD_PARTY")){
 					WebDriver_Functions.WaitForText(By.id("thirdpartyFromLoc1"), "");
 					FromElement = DriverFactory.getInstance().getDriver().findElement(By.id("thirdpartyFromLoc1"));
+					ByFromElement = By.id("thirdpartyFromLoc1");
 					WebDriver_Functions.WaitForText(By.id("thirdpartyToLoc1"), "");
 					ToElement = DriverFactory.getInstance().getDriver().findElement(By.id("thirdpartyToLoc1"));
+					ByToElement = By.id("thirdpartyToLoc1");
 				}
 				try{
 					String AccountCountryCode =WebDriver_Functions.GetText(By.xpath("//*[@id='wcrv-address-control']/div/table/tbody[1]/tr[1]/td")); 
@@ -508,7 +512,8 @@ public class WCRV_Functions{
 							Thread.sleep(1000);
 							FromElement.sendKeys(Keys.DOWN);
 							FromElement.sendKeys(Keys.RETURN);
-							DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(FromElement, ZipCode)));
+							WebDriver_Functions.WaitForTextNotPresentIn(ByFromElement, ZipCode);
+							//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(FromElement, ZipCode)));
 							Helper_Functions.PrintOut("From location: " + FromElement.getAttribute("value"), true);
 							if (ToElement== null){
 								break;
@@ -521,8 +526,8 @@ public class WCRV_Functions{
 							Thread.sleep(1000);
 							ToElement.sendKeys(Keys.DOWN);
 							ToElement.sendKeys(Keys.RETURN);
-
-							DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(ToElement, ZipCode)));
+							WebDriver_Functions.WaitForTextNotPresentIn(ByToElement, ZipCode);
+							//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(ToElement, ZipCode)));
 							Helper_Functions.PrintOut("To location: " + ToElement.getAttribute("value"), true);
 							break;
 						}
@@ -542,7 +547,8 @@ public class WCRV_Functions{
 					Thread.sleep(1000);
 					FromElement.sendKeys(Keys.DOWN);
 					FromElement.sendKeys(Keys.RETURN);
-					DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(FromElement, ZipCode)));
+					//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(FromElement, ZipCode)));
+					WebDriver_Functions.WaitForTextNotPresentIn(ByFromElement, ZipCode);
 					Helper_Functions.PrintOut("From location: " + FromElement.getAttribute("value"), true);
 				}
 			}

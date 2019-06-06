@@ -206,14 +206,12 @@ public class WFCL_Functions_UsingData{
 			ContactInfo_Page(Account_Info, true); //enters all of the details
 		}
 
-		String UUID = WebDriver_Functions.GetCookieUUID();
-		
+		Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID(); 
 		//Step 2 Account information
 		Account_Entry_Screen(Account_Info);
 		InvoiceOrCCValidaiton(Account_Info);
 		Verify_Confirmaiton_Page("WFCL_Link", Account_Info);
 
-		Account_Info.User_Info.UUID_NBR = UUID; 
 		Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		return Account_Info;
 	}//end WFCL_AccountLinkage
@@ -245,8 +243,7 @@ public class WFCL_Functions_UsingData{
 		
 		Verify_Confirmaiton_Page("FDDT", Account_Info);
 		
-		String UUID = WebDriver_Functions.GetCookieUUID();
-		Account_Info.User_Info.UUID_NBR = UUID; 
+		Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID(); 
 		//Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		return Account_Info;
 	}//end Account_Linkage_FDDT
@@ -364,9 +361,9 @@ public class WFCL_Functions_UsingData{
 			Helper_Functions.PrintOut("Failure with admin registriaton.", true);
 		};
 		
-		String UUID = WebDriver_Functions.GetCookieUUID();
-		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + Account_Info.User_Info.USER_ID + "/" + Account_Info.User_Info.PASSWORD + "--" + Account_Info.Account_Number + "--" + UUID, true);
-		String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.Account_Number, UUID, "INET:" + InetFlag};
+		Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
+		Helper_Functions.PrintOut("Finished WFCL_AccountRegistration  " + Account_Info.User_Info.USER_ID + "/" + Account_Info.User_Info.PASSWORD + "--" + Account_Info.Account_Number + "--" + Account_Info.User_Info.UUID_NBR, true);
+		String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR, "INET:" + InetFlag};
 		Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		return Arrays.toString(ReturnValue);
 	}//end WFCL_AccountRegistration
@@ -469,19 +466,19 @@ public class WFCL_Functions_UsingData{
 
 			ContactInfo_Page(Account_Info, true); //enters all of the details
 
-			String UUID = WebDriver_Functions.GetCookieUUID();
+			Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
 			
 			if ("US".contains(Account_Info.Billing_Address_Info.Country_Code)) {
 				//Confirmation page
 				Verify_Confirmaiton_Page("WFCL_CREATE", Account_Info);
 			}
 			
-			if (UUID == null) {
+			if (Account_Info.User_Info.UUID_NBR == null) {
 				throw new Exception("Error, user not created.");
 			}
 			
-			Helper_Functions.PrintOut("Finished WFCL_UserRegistration  " + Account_Info.User_Info.USER_ID + "/" + Account_Info.User_Info.PASSWORD + " -- " + UUID, true);
-			String ReturnValue[] = new String[]{Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD,  UUID};
+			Helper_Functions.PrintOut("Finished WFCL_UserRegistration  " + Account_Info.User_Info.USER_ID + "/" + Account_Info.User_Info.PASSWORD + " -- " + Account_Info.User_Info.UUID_NBR, true);
+			String ReturnValue[] = new String[]{Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD,  Account_Info.User_Info.UUID_NBR};
 			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);//Write User to file for later reference
 			return ReturnValue;
 		}catch (Exception e) {
@@ -913,8 +910,8 @@ public class WFCL_Functions_UsingData{
 			WebDriver_Functions.WaitPresent(By.id("mainContentId:accSmyCmdLink"));
 			WebDriver_Functions.takeSnapShot("Page.png");
 			
-			String UUID = WebDriver_Functions.GetCookieUUID();
-		    String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.Account_Number, UUID};
+			Account_Info.User_Info.UUID_NBR = WebDriver_Functions.GetCookieUUID();
+		    String ReturnValue[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.Account_Number, Account_Info.User_Info.UUID_NBR};
 		    Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		    return ReturnValue;
  		}catch (Exception e) {
@@ -1127,9 +1124,8 @@ public class WFCL_Functions_UsingData{
 	
 	public static String[] WFCL_RewardsRegistration(Account_Data Account_Info) throws Exception{
  		try {
- 			
  			WebDriver_Functions.ChangeURL("HOME", Account_Info.Billing_Address_Info.Country_Code, true);
- 			WebDriver_Functions.ChangeURL("WFCLREWARDS", Account_Info.Billing_Address_Info.Country_Code, true);
+ 			WebDriver_Functions.ChangeURL("WFCLREWARDS", Account_Info.Billing_Address_Info.Country_Code, false);
  			
  			//click sign up now and begin registration
  			WebDriver_Functions.WaitClickable(By.name("signupnow"));

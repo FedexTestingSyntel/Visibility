@@ -24,7 +24,7 @@ import Data_Structures.Account_Data;
 //@Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Account_Lookup extends Helper_Functions{
-	static String LevelToTest = "7";
+	static String LevelToTest = "3";
 	static Account_Data AllAddresses[] = Environment.getAddressDetails();
 
 	@BeforeClass
@@ -37,7 +37,7 @@ public class Account_Lookup extends Helper_Functions{
 		AllAddresses = null;
 	}
 	
-	@DataProvider// (parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		
@@ -47,8 +47,7 @@ public class Account_Lookup extends Helper_Functions{
 			Account_Data Existing_Account_Numbers[] = Environment.getAccountDetails(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
     			case "AccountCheck":
-    				String AccountsNumbers[] = ParsedAcconts("627872739, 627872755, 627873131, 627873158, 627873352, 627873379, 627873670, 627873697, 627873816, 627873832, 627874057, 627874073, 627874359, 627874375, 627952899, 627952910, 627954255, 627954271, 627954530, 627954557, 627992190, 627992211, 627992874, 627992890, 627992475, 627992491");
-
+    				String AccountsNumbers[] = ParsedAcconts("610804063");
     				String AccountsAlreadyPresent = "", PendingAdd = "{\"";
     				for (int j = 0; j < Existing_Account_Numbers.length - 1; j++) {
     					AccountsAlreadyPresent+= Existing_Account_Numbers[j].Account_Number + " ";

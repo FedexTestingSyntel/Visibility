@@ -89,6 +89,194 @@ public class WPRL_Functions_Data {
 		}
 	}//end WPRL_Contact_ContactInformatoin
 	
+	public static void WPRL_AccountManagement_EditAccount(User_Data User_Info) throws Exception{
+		// launch the browser and direct it to the Base URL
+		WebDriver_Functions.ChangeURL("WPRL_ACC", User_Info.Address_Info.Country_Code, false);
+			
+		WebDriver_Functions.WaitForText(By.id("accountheader"), "Account Management");
+		//edit a listed account
+		if(WebDriver_Functions.isPresent(By.xpath("//*[@id='alertBar']"))){
+			if (WebDriver_Functions.GetText(By.xpath("//*[@id='alertBar']")).contentEquals("You currently do not have any accounts associated with your fedex.com profile. Click the link below if you would like to add an account")){
+				Helper_Functions.PrintOut("User does not have account numbers", true);
+				throw new Exception("User does not have account numbers");
+			}
+		}
+			
+		//wait for the loading overlay to not be present
+		WebDriver_Functions.WaitNotVisable(By.id("LoadingDiv"));
+		WebDriver_Functions.WaitPresent(By.id("accountsubheader"));
+		WebDriver_Functions.Click(By.xpath("//a[contains(text(),'View/Edit')]"));
+	}
+	
+	public static String[] WPRL_AccountManagement_Nickname(User_Data User_Info) throws Exception{
+		try {
+			WebDriver_Functions.Login(User_Info);
+			
+			//got to the accounts page and click edit button
+			WPRL_AccountManagement_EditAccount(User_Info);
+			
+			//Edit Account Nickname
+			boolean UserPasskey = false;
+			if (User_Info.PASSKEY.contains("T")) {
+				UserPasskey = true;
+			}
+			return WPRL_AccountNickname(UserPasskey, Helper_Functions.CurrentDateTime());
+		}catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public static String[] WPRL_AccountManagement_OnlineSolutions(User_Data User_Info) throws Exception{
+		try {
+			WebDriver_Functions.Login(User_Info);
+
+			//got to the accounts page and click edit button
+			WPRL_AccountManagement_EditAccount(User_Info);
+			
+			//FedEx Online Solutions
+			if (User_Info.PASSKEY.contentEquals("T")){
+				WebDriver_Functions.WaitPresent(By.xpath("(//p[@id='moduleHeader'])[3]"));
+				WebDriver_Functions.ElementMatches(By.xpath("(//p[@id='moduleHeader'])[3]"), "FedEx Online Solutions", 0);
+				WebDriver_Functions.Click(By.cssSelector("#onlinesolutions > #show-hide > div.fx-toggler > #edit"));
+				WebDriver_Functions.takeSnapShot("OnlineSolutionsModel.png");
+				WebDriver_Functions.Click(By.id("os_cancelbtn"));
+				return new String[] {"FedEx Online Solutions", "Working as Expected."};
+			}else {
+				Helper_Functions.PrintOut("No Passkey users will not be able to see FedEx Online Solutions section.", true);
+				if (WebDriver_Functions.isVisable(By.xpath("(//p[@id='moduleHeader'])[3]"))) {
+					throw new Exception("FedEx Online Solutions is visible for non passkey users.");
+				}
+				return new String[] {"FedEx Online Solutions", "Not visible to non admns."};
+			}
+		}catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public static String[] WPRL_AccountManagement_Shipping_Address(User_Data User_Info) throws Exception{
+		try {
+			WebDriver_Functions.Login(User_Info);
+
+			//got to the accounts page and click edit button
+			WPRL_AccountManagement_EditAccount(User_Info);
+
+			//Shipping Address section
+			boolean ShippingAddress = WPRL_Account_ShippingAddress(User_Info);
+ 			
+			if (User_Info.PASSKEY.contentEquals("T") && ShippingAddress){
+				return new String[] {"Shipping Address Validated."};
+			}else if (!User_Info.PASSKEY.contentEquals("T") && !ShippingAddress){
+				return new String[] {"Shipping Address not available for non passkey."};
+			}else {
+				throw new Exception("Error Validating Shipping address.");
+			}
+		}catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	
+	/*
+	public static String[] WPRL_AccountManagement_Billing_information(User_Data User_Info) throws Exception{
+		try {
+			WebDriver_Functions.Login(User_Info);
+
+			//got to the accounts page and click edit button
+			WPRL_AccountManagement_EditAccount(User_Info);
+
+			//Shipping Address section
+			boolean ShippingAddress = WPRL_Account_ShippingAddress(User_Info);
+ 			
+			if (User_Info.PASSKEY.contentEquals("T") && ShippingAddress){
+				return new String[] {"Shipping Address Validated."};
+			}else if (!User_Info.PASSKEY.contentEquals("T") && !ShippingAddress){
+				return new String[] {"Shipping Address not available for non passkey."};
+			}else {
+				throw new Exception("Error Validating Shipping address.");
+			}
+			//Credit Card and Billing Information
+			CreditCard = WPRL_Account_CreditCard(Name, AddressDetails, CardDetails, "WPRL");
+				
+			//Invoice Billing Address
+			Invoice = WPRL_Account_Billing_Address(Name, AddressDetails, CardDetails, "WPRL");
+		}catch (Exception e) {
+			throw e;
+		}
+	}*/
+	
+	public static String[] WPRL_AccountNickname(boolean PasskeyFlag, String Nickname) throws Exception{
+		try{
+			WebDriver_Functions.WaitForText(By.id("nns_moduleHeader"), "Nickname and Security Options");
+			//check if the user has the edit link visible. Administrators will not be able to edit.
+			if (!PasskeyFlag){
+				WebDriver_Functions.Click(By.id("edit"));
+				WebDriver_Functions.Click(By.id("nns_acctnicknm_input"));
+				String Initial_Nickname = WebDriver_Functions.GetText(By.id("nns_acctnicknm_input"));
+				WebDriver_Functions.Type(By.id("nns_acctnicknm_input"), Nickname);
+				WebDriver_Functions.Click(By.id("nns_savebtn"));
+				WebDriver_Functions.WaitForText(By.id("nns_update_msg"), "Your updates have been saved.");
+				WebDriver_Functions.takeSnapShot("NicknameEdit.png");
+				return new String[] {Initial_Nickname, Nickname};
+			}else{
+				Helper_Functions.PrintOut("Cannot update nickname for passkey users.", true);
+				if (WebDriver_Functions.isVisable(By.id("edit"))) {
+					throw new Exception("Passkey users should not be able to edit nickname");
+				}
+				return new String[] {"Edit is hidden", "Cannot update nickname for passkey users."};
+			}
+		}catch(Exception e){
+			Helper_Functions.PrintOut("Not able to edit nickname", true);
+			throw e;
+		}
+	}
+	
+	public static boolean WPRL_Account_ShippingAddress(User_Data User_Info) throws Exception{
+		try{
+			if (WebDriver_Functions.isPresent(By.cssSelector("#shippingaddress > #show-hide > div.fx-toggler > #moduleHeader"))){
+				WebDriver_Functions.WaitForText(By.cssSelector("#shippingaddress > #show-hide > div.fx-toggler > #moduleHeader"), "Shipping Address");
+				WebDriver_Functions.Click(By.cssSelector("#shippingaddress > #show-hide > div.fx-toggler > #edit"));
+				WebDriver_Functions.WaitPresent(By.cssSelector("#sAddrCountrySelect option[value=US]"));
+
+				//if the current postal code is same as new address update to refresh the city field section.
+				WebDriver_Functions.Type(By.id("sAddrZipTxtBox"), "12345");
+				
+				WebDriver_Functions.ElementMatches(By.id("sAddrCountryLbl"), "Country / Territory", 116602);
+				WebDriver_Functions.Type(By.id("sAddrFirstNameTxtBox"), User_Info.FIRST_NM);
+				WebDriver_Functions.Type(By.id("sAddrMiddleInitialTxtBox"), User_Info.MIDDLE_NM);
+				WebDriver_Functions.Type(By.id("sAddrLastNameTxtBox"), User_Info.LAST_NM);
+				WebDriver_Functions.Type(By.id("sAddrZipTxtBox"), User_Info.Address_Info.Zip);
+				WebDriver_Functions.Type(By.id("sAddrLine1TxtBox"), User_Info.Address_Info.Address_Line_1);
+				WebDriver_Functions.Type(By.id("sAddrLine2TxtBox"), User_Info.Address_Info.Address_Line_2);
+		
+				WebDriver_Functions.WaitPresent(By.cssSelector("#sAddrCitySelect option[value=" + User_Info.Address_Info.City.toUpperCase() + "]"));
+				WebDriver_Functions.Click(By.cssSelector("#sAddrCitySelect option[value=" + User_Info.Address_Info.State_Code.toUpperCase() + "]"));
+						
+				if (!User_Info.Address_Info.State_Code.isEmpty()){
+					WebDriver_Functions.WaitPresent(By.cssSelector("#sAddrStateSelect option[value=" + User_Info.Address_Info.State_Code.toUpperCase() + "]"));
+					WebDriver_Functions.Click(By.cssSelector("#sAddrStateSelect option[value=" + User_Info.Address_Info.State_Code.toUpperCase() + "]"));
+				}
+				
+				WebDriver_Functions.Type(By.id("sAddrPrimaryPhoneTxtBox"), User_Info.PHONE);
+				WebDriver_Functions.Type(By.id("sAddrEmailTxtBox"), User_Info.EMAIL_ADDRESS);
+				WebDriver_Functions.Click(By.id("sAddrSaveBtn"));
+				WebDriver_Functions.WaitNotVisable(By.id("LoadingDiv"));//wait for the loading overlay to not be present
+				WebDriver_Functions.WaitForText(By.id("sAddrUpdatedTxt"), "Your updates have been saved.");
+				WebDriver_Functions.takeSnapShot("Shipping Address.png");
+				return true;
+			}else {
+				Helper_Functions.PrintOut("Shipping address section not present.", true);
+				return false;
+			}
+		}catch(Exception e){
+			Helper_Functions.PrintOut("Not able to verify Shipping Address Section", true);
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	
+	
+	
 	/*
 	public static String[] WPRL_Contact(String User, String Password, String AddressDetails[], String Name[], String Phone[][], String Email) throws Exception{
 	 	String CountryCode = AddressDetails[6];
@@ -139,28 +327,7 @@ public class WPRL_Functions_Data {
 		return Contact;
 	}//end WPRL_Contact
 	
-	public static boolean WPRL_AccountNickname(boolean PasskeyFlag, String Nickname, String App) throws Exception{
-		try{
-			WebDriver_Functions.WaitForText(By.id("nns_moduleHeader"), "Nickname and Security Options");
-			//check if the user has the edit link visible. Administrators will not be able to edit.
-			if (!PasskeyFlag){
-				WebDriver_Functions.Click(By.id("edit"));
-				WebDriver_Functions.Click(By.id("nns_acctnicknm_input"));
-				WebDriver_Functions.Type(By.id("nns_acctnicknm_input"), Nickname);
-				WebDriver_Functions.Click(By.id("nns_savebtn"));
-				WebDriver_Functions.WaitForText(By.id("nns_update_msg"), "Your updates have been saved.");
-				WebDriver_Functions.takeSnapShot("NicknameEdit.png");
-				return true;
-			}else{
-				Helper_Functions.PrintOut("Cannot update nickname for passkey users.", true);
-				return true;
-			}
-		}catch(Exception e){
-			Helper_Functions.PrintOut("Not able to edit nickname", true);
-			
-			throw e;
-		}
-	}
+
 	
 	public static boolean WPRL_Account_ShippingAddress(String Name[], String AddressDetails[], String App) throws Exception{
 		try{
@@ -284,61 +451,7 @@ public class WPRL_Functions_Data {
 		}
 	}
 
-	public static String[] WPRL_AccountManagement(String User, String Password, String AddressDetails[], String CardDetails[], String Name[]) throws Exception{
-		//https://wwwdev.idev.fedex.com/apps/myprofile/accountmanagement/?locale=en_US&cntry_code=us
-		boolean Nickname = false, FedExOnlineSolutions = false, ShippingAddress = false, CreditCard = false, Invoice = false;
-		String CountryCode = AddressDetails[6];
-		try {
-
-			WebDriver_Functions.Login(User, Password);
-			boolean UserPasskey = WebDriver_Functions.CheckifPasskey();
-			// launch the browser and direct it to the Base URL
-			
-			WebDriver_Functions.ChangeURL("WPRL_ACC", CountryCode, false);
-			
-			WebDriver_Functions.WaitForText(By.id("accountheader"), "Account Management");
-			//edit a listed account
-			if(WebDriver_Functions.isPresent(By.xpath("//*[@id='alertBar']"))){
-				if (WebDriver_Functions.GetText(By.xpath("//*[@id='alertBar']")).contentEquals("You currently do not have any accounts associated with your fedex.com profile. Click the link below if you would like to add an account")){
-					Helper_Functions.PrintOut("User does not have account numbers", true);
-					return new String[] {"No Account Number", User};
-				}
-			}
-
-			WebDriver_Functions.WaitNotVisable(By.id("LoadingDiv"));//wait for the loading overlay to not be present
-			WebDriver_Functions.WaitPresent(By.id("accountsubheader"));
-			WebDriver_Functions.Click(By.xpath("//a[contains(text(),'View/Edit')]"));
-			//Edit Account Nickname
-			Nickname = WPRL_AccountNickname(UserPasskey, Helper_Functions.CurrentDateTime(), "WPRL");
-
-			//FedEx Online Solutions
-			try{
-				if (WebDriver_Functions.isPresent(By.xpath("(//p[@id='moduleHeader'])[3]"))){
-					WebDriver_Functions.ElementMatches(By.xpath("(//p[@id='moduleHeader'])[3]"), "FedEx Online Solutions", 0);
-					WebDriver_Functions.Click(By.cssSelector("#onlinesolutions > #show-hide > div.fx-toggler > #edit"));
-					WebDriver_Functions.takeSnapShot("OnlineSolutionsModel.png");
-					WebDriver_Functions.Click(By.id("os_cancelbtn"));
-					FedExOnlineSolutions = true;
-				}else {
-					Helper_Functions.PrintOut("FedEx Online Solutions Modal not present", true);
-				}
-			}catch(Exception e){
-				Helper_Functions.PrintOut("Not able to verify Online soluitions section", true);
-			}
-
-			//Shipping Address section
-			ShippingAddress = WPRL_Account_ShippingAddress(Name, AddressDetails, "WPRL");
- 					
-			//Credit Card and Billing Information
-			CreditCard = WPRL_Account_CreditCard(Name, AddressDetails, CardDetails, "WPRL");
-				
-			//Invoice Billing Address
-			Invoice = WPRL_Account_Billing_Address(Name, AddressDetails, CardDetails, "WPRL");
-		}catch (Exception e) {
-			throw e;
-		}
-		return new String[] {"Nickname: " + Nickname, "FedExOnlineSolutions: " + FedExOnlineSolutions, "ShippingAddress: " + ShippingAddress, "CreditCard:" + CreditCard, "Invoice:" + Invoice};
-	}//end WPRL_Contact
+	
 
 	public static boolean WPRL_FDM_RecipientContactInformation(String CountryCode, String AddressDetails[], String Name[]) throws Exception{
 		try{

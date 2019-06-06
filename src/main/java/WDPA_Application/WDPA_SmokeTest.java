@@ -83,7 +83,6 @@ public class WDPA_SmokeTest{
 	
 	@Test(dataProvider = "dp")
 	public static void WDPA_Ground(String Level, String CountryCode, String UserID, String Password){
-		Helper_Functions.PrintOut("Schedule a ground pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String ContactName = Helper_Functions.getRandomString(14);
@@ -96,7 +95,6 @@ public class WDPA_SmokeTest{
 	
 	@Test(dataProvider = "dp")
 	public static void WDPA_Express(String Level, String CountryCode, String UserID, String Password){
-		Helper_Functions.PrintOut("Schedule an express pickup.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String ContactName = Helper_Functions.getRandomString(14);
@@ -109,7 +107,6 @@ public class WDPA_SmokeTest{
 	
 	@Test(dataProvider = "dp")
 	public static void WDPA_ExpressFreight(String Level, String CountryCode, String UserID, String Password){
-		Helper_Functions.PrintOut("Schedule an express freight pickup.", false);
 		try {
 			String ContactName = Helper_Functions.getRandomString(14);
 			String PackageDetails[] = {"1", "444", "L", "1400", "1800", "ExpLTL Attempt", "FedEx 1Day Freight", "ConfFiller", "side of barn", "5", "6", "7"};
@@ -123,7 +120,6 @@ public class WDPA_SmokeTest{
 	
 	@Test(dataProvider = "dp")
 	public static void WDPA_LTLFreight(String Level, String CountryCode, String UserID, String Password){
-		Helper_Functions.PrintOut("Schedule a LTL pickup while logged in.", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String ContactName = Helper_Functions.getRandomString(14);
@@ -136,7 +132,6 @@ public class WDPA_SmokeTest{
 	
 	@Test(dataProvider = "dp")
 	public static void WDPA_LTLFreight_Anonymous(String Level, String CountryCode){
-		Helper_Functions.PrintOut("Schedule a LTL pickup while not logged into FedEx.com", false);
 		try {
 			String Address[] = Helper_Functions.LoadAddress(CountryCode);
 			String ContactName = Helper_Functions.getRandomString(14);

@@ -140,6 +140,7 @@ public class DriverFactory{
 	   for (int i = 0 ; i < BrowserLimit; i++) {
 		   try {
 			   DriverStorage[i].close();
+			   DriverStorage[i].quit();
 			   DriverStorage[i] = null;
 		   }catch (Exception e) {
 			   //e.printStackTrace();

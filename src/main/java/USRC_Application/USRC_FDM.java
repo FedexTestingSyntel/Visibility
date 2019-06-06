@@ -30,7 +30,7 @@ public class USRC_FDM {
 		Environment.SetLevelsToTest(LevelsToTest);
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public Iterator<Object[]> dp(Method m) {
 	    List<Object[]> data = new ArrayList<>();
 	    
@@ -44,16 +44,11 @@ public class USRC_FDM {
 			case "EndtoEndEnrollment":
 				//data.add(new Object[] {USRC_D.Level, USRC_D.REGCCreateNewUserURL, USRC_D.LoginUserURL, USRC_D.EnrollmentURL, USRC_D.OAuth_Token, USRC_Data.ContactDetailsList.get(0), MFAC_D.OrgPhone});
 				
-				String UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
-				String Password = "Test1234";
-				data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, 1});
-				
-				UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
-				data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, 1});
-				UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
-				data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, 1});
-				UserID = "L" + strLevel + "FDM" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
-				data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, 1});
+				for (int j = 0 ; j < 1; j++) {
+					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "FDM");
+					String Password = "Test1234";
+					data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, j});
+				}
 				break;
 			case "EndtoEndEnrollment_UserID":
 				User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
@@ -77,7 +72,7 @@ public class USRC_FDM {
 		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		try {
 			String Response = "";
-			String ContactDetails[] = USRC_Data.ContactDetailsList.get(Contact);
+			String ContactDetails[] = USRC_Data.getContactDetails(Contact);
 			
 			//create the new user
 			Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
@@ -133,7 +128,7 @@ public class USRC_FDM {
 		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		try {
 			String Response = "";
-			String ContactDetails[] = USRC_Data.ContactDetailsList.get(0);
+			String ContactDetails[] = USRC_Data.getContactDetails(0);
 			
 			if (UserID == null) {
 				//create the new user

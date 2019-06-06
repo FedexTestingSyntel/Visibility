@@ -341,7 +341,7 @@ public class WDPA_Functions{
 			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='address.accountCountry.display']/div[1]/div/div[2]/label"), "*\nCountry/Territory", 116632); //Added the "* \n" due to dev has setup
 			WebDriver_Functions.ElementMatches(By.xpath("//*[@id='table.shipmentDetailTable._contents._header._col2']/span"), "*Country/Territory", 116633); 
 			
-			WebDriver_Functions.WaitForTextNot(By.id("freightPickupInfo.readyTime"), "");
+			//WebDriver_Functions.WaitForTextNot(By.id("freightPickupInfo.readyTime"), "");
 		    
 		    WebDriver_Functions.ElementMatches(By.cssSelector("div.pickupInfoRequiredContentLeft.pickupFloatLeft > div > label"), "Over Length (8 feet to < 12 feet)\nOver Length (8 feet to < 12 feet)", 179730); 
 		    WebDriver_Functions.ElementMatches(By.xpath("//div[@id='module.pickupInfo.specialServices']/div[3]/div/div/div[2]/label"), "Extreme Length (12 feet or greater)\nExtreme Length (12 feet or greater)", 179730); 

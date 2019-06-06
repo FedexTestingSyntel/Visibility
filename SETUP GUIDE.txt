@@ -32,6 +32,13 @@ As a confirmation that everything worked fine in the 'Package Explorer' view, yo
 
 clone git repo 7
 
+
+
+go to help the eclipse market place in the eclipse options.
+1. Install TestNG for Eclipse
+
+
+
 After the above
 1. Make sure to have Maven installed within eclipse.
 
@@ -41,6 +48,8 @@ After the above
 
 4. Run tests. 
 
+
+Note: If you see any issues such as "TestNG an internal error has occurred during launching" the something went wrong when installing TestNG. Uninstall and reinstall it. 
 Note : can start with the XML files stored in XMLExectuion package
 
 

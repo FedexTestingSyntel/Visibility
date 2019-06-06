@@ -114,7 +114,8 @@ public class USRC_Data {
 		ArrayList<String[]> ContactList = new ArrayList<String[]>();
 		String Phone = "9011111111", Email = "YouNeedToUpdateThisLater@fedex.com";
 		if (Level.contentEquals("6")) {//need to user real data in L6
-			ContactList.add(new String[] {"PavanKumar", "", "Bindela", Phone, Email, "2717 W Royal Ln", "Apt 315", "Irving", "TX", "75063", "US", ""});
+			//ContactList.add(new String[] {"PavanKumar", "", "Bindela", Phone, Email, "2717 W Royal Ln", "Apt 315", "Irving", "TX", "75063", "US", ""});
+			ContactList.add(new String[] {"Suresh", "", "Dhandapani", Phone, Email, "880 Schilling Farm Road", "Apt 102", "Collierville", "TN", "38017", "US", ""});
 		}else if (Level.contentEquals("7")) {//need to user real data in LP
 			
 		}else {
@@ -182,4 +183,12 @@ public class USRC_Data {
   		}
   		return LevelURL;
   	}
+
+	public static String[] getContactDetails(int con) {
+		if (ContactDetailsList.size() < con){
+			return ContactDetailsList.get(con);
+		}else {
+			return ContactDetailsList.get(con % ContactDetailsList.size());
+		}
+	}
 }

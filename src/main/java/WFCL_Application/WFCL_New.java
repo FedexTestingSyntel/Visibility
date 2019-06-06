@@ -12,14 +12,18 @@ import org.testng.annotations.Listeners;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import SupportClasses.*;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WFCL_New{
-	static String LevelsToTest = "3";  
+	static String LevelsToTest = "6";  
 	static String CountryList[][]; 
 
 	@BeforeClass
@@ -148,6 +152,18 @@ public class WFCL_New{
 		    				}
 		    			}
 					}
+		    		break;
+		    	case "WFCL_Rewards_Registration_APAC_AND_LAC":
+		    		try {
+		    			Account_Info = Account_Lookup.Account_Details("600542974", Level);
+		    			data.add( new Object[] {Level, Account_Info});
+		    			//Account_Info = Account_Lookup.Account_Details("600416294", Level);
+		    			//data.add( new Object[] {Level, Account_Info});
+		    			//Account_Info = Account_Lookup.Account_Details("600416391", Level);
+		    			//data.add( new Object[] {Level, Account_Info});
+		    		} catch (Exception e) {
+		    			e.printStackTrace();
+		    		}
 		    		break;
 			}
 		}	
@@ -321,6 +337,23 @@ public class WFCL_New{
 	public void WFCL_GFBO_Registration(String Level, User_Data User_Info, Account_Data Account_Info) {
 		try {
 			String Result[] = WFCL_Functions_UsingData.WFCL_GFBO_Registration(User_Info, Account_Info);
+			Helper_Functions.PrintOut(Arrays.toString(Result), false);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", description = "518325", enabled = true) ///483863
+	public void WFCL_Rewards_Registration_APAC_AND_LAC(String Level, Account_Data Account_Info) {
+		try {
+			Account_Data.Print_Account_Address(Account_Info);
+			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Address_Info.Country_Code + "Rewards");
+			if (Account_Info.FirstName.contentEquals("")) {
+				Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			}
+			
+			String Result[] = WFCL_Functions_UsingData.WFCL_RewardsRegistration(Account_Info);
+
 			Helper_Functions.PrintOut(Arrays.toString(Result), false);
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());

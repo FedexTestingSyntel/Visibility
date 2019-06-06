@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import SupportClasses.Account_Lookup;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
@@ -46,12 +48,12 @@ public class MC_PI_4{
 			String Rewards_APAC_AND_LAC[] = new String[] {"au", "cn", "hk", "jp", "my", "nz", "ph", "sg", "kr", "tw", "th", "br", "mx"};
 			String Rewards_APAC_AND_LAC_Lang[][] = new String[][] {{"au", "en"}, {"cn", "en"}, {"cn", "zh"}, {"hk", "en"}, {"hk", "zh"}, {"jp", "en"}, {"jp", "ja"}, {"my", "en"}, {"nz", "en"}, {"ph", "en"}, {"sg", "en"}, {"kr", "en"}, {"kr", "ko"}, {"tw", "en"}, {"tw", "zh"}, {"th", "en"}, {"th", "th"}, {"mx", "en"}, {"br", "en"}, {"mx", "es"}, {"br", "pt"}};
 			
-			//Rewards_APAC_AND_LAC = new String[] {"cn", "au", "mx"};
+			Rewards_APAC_AND_LAC = new String[] {"mx"};
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "WFCL_Rewards_Registration_APAC_AND_LAC":
-					if (intLevel == 6) {
+					if (intLevel == 6 && Rewards_APAC_AND_LAC.length > 3) {
 						//load a list with all possible options and shuffle and take first three options.
-						List<Integer> range = IntStream.range(0, Rewards_APAC_AND_LAC.length).boxed().collect(Collectors.toCollection(ArrayList::new));
+						List<Integer> range = IntStream.range(0, Rewards_APAC_AND_LAC.length - 1).boxed().collect(Collectors.toCollection(ArrayList::new));
 						Collections.shuffle(range);
 						//due to captcha in L6 only doing three of the countries randomly. Will need to make sure to enter the captcha manually.
 						Rewards_APAC_AND_LAC = new String[] {Rewards_APAC_AND_LAC[range.get(0)], Rewards_APAC_AND_LAC[range.get(1)], Rewards_APAC_AND_LAC[range.get(2)]};
@@ -121,12 +123,15 @@ public class MC_PI_4{
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", description = "518325", enabled = false) ///483863
+	@Test(dataProvider = "dp", description = "518325", enabled = true) ///483863
 	public void WFCL_Rewards_Registration_APAC_AND_LAC(String Level, Account_Data Account_Info) {
 		try {
+			//Account_Info = Account_Lookup.Account_Details(" 700378950", Level);
 			Account_Data.Print_Account_Address(Account_Info);
 			Account_Data.Set_UserId(Account_Info, "L" + Level + Account_Info.Billing_Address_Info.Country_Code + "Rewards");
-			Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			if (Account_Info.FirstName.contentEquals("")) {
+				Account_Data.Set_Dummy_Contact_Name(Account_Info);
+			}
 			
 			String Result[] = WFCL_Functions_UsingData.WFCL_RewardsRegistration(Account_Info);
 

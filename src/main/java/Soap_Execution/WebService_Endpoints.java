@@ -15,7 +15,9 @@ public class WebService_Endpoints {
 	//will take in the url, organization, and user name
 	//will return the soap message as a string
 	public static String CreateMeterNumber(String soapCreateMeterNumberURL, Account_Data Account_Info) throws Exception {
+		//SOAPMessage message = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
 		SOAPMessage message = GeneralSoapSupport.Soap_Message_Creation(MainNaimspace, MainPrefix);
+		
 		SOAPPart soapPart = message.getSOAPPart();
 		SOAPEnvelope envelope = soapPart.getEnvelope();
 
@@ -28,6 +30,7 @@ public class WebService_Endpoints {
         header.addHeader("Accept-Encoding", "gzip,deflate");
         header.addHeader("Content-Type", "application/soap+xml;charset=UTF-8;action=\"urn:deleteAssociation3012\"");
         String Host = soapCreateMeterNumberURL.replace("http://", "");
+        Host = Host.replace("https://", "");
         Host = Host.substring(0, Host.indexOf("/"));
         header.addHeader("Host", Host);
 	    

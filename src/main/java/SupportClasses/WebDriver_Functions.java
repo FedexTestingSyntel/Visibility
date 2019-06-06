@@ -488,7 +488,14 @@ public class WebDriver_Functions{
 	}
 	
 	public static void WaitForTextNot(By Ele, String Text) throws Exception{
-		DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBe(Ele, Text)));
+		for(int i = 0; i < DriverFactory.WaitTimeOut; i++) {
+			if (!GetText(Ele).contentEquals(Text)) {
+				break;
+			}
+			Thread.sleep(1000);
+		}
+		throw new Exception ("Text still present.  " + Ele.toString() + " - " + Text);
+		//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBe(Ele, Text)));
 	}
 	
 	public static void WaitOr_TextToBe(By Ele1, String Text1, By Ele2, String Text2) throws Exception{
@@ -540,7 +547,15 @@ public class WebDriver_Functions{
 	}
 
     public static void WaitClickable(By Ele) throws Exception{
-    	DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.elementToBeClickable(Ele));
+		for(int i = 0; i < DriverFactory.WaitTimeOut + 1; i++) {
+			if (DriverFactory.getInstance().getDriver().findElement(Ele).isDisplayed()) {
+				break;
+			}
+			Thread.sleep(1000);
+		}
+    	
+    	
+    	//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.elementToBeClickable(Ele));
 	}
     
     public static String getURLByLinkText(String LinkText)throws Exception{
