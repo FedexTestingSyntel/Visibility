@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="1" total="2" passed="1">
+<testng-results skipped="0" failed="0" ignored="4" total="5" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="4859" started-at="2019-06-06T16:14:32Z" finished-at="2019-06-06T16:14:37Z">
+  <suite name="Default suite" duration-ms="84995" started-at="2019-06-09T01:20:59Z" finished-at="2019-06-09T01:22:24Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="4859" started-at="2019-06-06T16:14:32Z" finished-at="2019-06-06T16:14:37Z">
-      <class name="SupportClasses.Account_Lookup">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:SupportClasses.Account_Lookup@ef9296d]" name="beforeClass" is-config="true" duration-ms="15" started-at="2019-06-06T16:14:32Z" finished-at="2019-06-06T16:14:32Z">
+    <test name="Default test" duration-ms="84995" started-at="2019-06-09T01:20:59Z" finished-at="2019-06-09T01:22:24Z">
+      <class name="WDPA_Application.WDPA_SmokeTest">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WDPA_Application.WDPA_SmokeTest@7f77e91b]" name="beforeClass" is-config="true" duration-ms="32" started-at="2019-06-09T01:21:00Z" finished-at="2019-06-09T01:21:00Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="AccountCheck(java.lang.String, java.lang.String)[pri:0, instance:SupportClasses.Account_Lookup@ef9296d]" name="AccountCheck" duration-ms="4379" started-at="2019-06-06T16:14:32Z" data-provider="dp" finished-at="2019-06-06T16:14:37Z">
+        <test-method status="PASS" signature="WDPA_LTLFreight_Anonymous(java.lang.String, java.lang.String)[pri:0, instance:WDPA_Application.WDPA_SmokeTest@7f77e91b]" name="WDPA_LTLFreight_Anonymous" duration-ms="84596" started-at="2019-06-09T01:21:00Z" data-provider="dp" finished-at="2019-06-09T01:22:24Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[3]]>
+                <![CDATA[6]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[610804063]]>
+                <![CDATA[US]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- AccountCheck -->
-      </class> <!-- SupportClasses.Account_Lookup -->
+        </test-method> <!-- WDPA_LTLFreight_Anonymous -->
+      </class> <!-- WDPA_Application.WDPA_SmokeTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

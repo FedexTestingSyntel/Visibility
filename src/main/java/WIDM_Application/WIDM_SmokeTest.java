@@ -93,7 +93,7 @@ public class WIDM_SmokeTest{
 		    			}
 					}
 					break;
-				case "AAAUserCreate_Email_As_UserId":
+				case "WIDM_AAAUserCreate":
 					if (intLevel != 7) {//not valid in production due to connection.
 						for (String Country[]: CountryList) {
 							Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, Country[0]);
@@ -195,7 +195,7 @@ public class WIDM_SmokeTest{
 	
 	//Added for May 19 and July 19 CL
 	@Test(dataProvider = "dp")
-	public void AAAUserCreate_Email_As_UserId(String Level, Account_Data Account_Info, String Email_As_UserId){
+	public void WIDM_AAAUserCreate(String Level, Account_Data Account_Info, String Email_As_UserId){
 		try {
 			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			//Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Country_Code);

@@ -23,7 +23,7 @@ import USRC_Application.USRC_API_Endpoints;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class WIDM_SOAPClient {
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "3";
 	static String CountryList[][];
 	
 	@BeforeClass
@@ -31,7 +31,7 @@ public class WIDM_SOAPClient {
 		Environment.SetLevelsToTest(LevelsToTest);
 		
 		CountryList = Environment.getCountryList("smoke");
-		//CountryList = Environment.getCountryList("JP");
+		//CountryList = Environment.getCountryList("high");
 		Helper_Functions.MyEmail = "OtherEmail@accept.com";
 	}
 	
@@ -50,9 +50,13 @@ public class WIDM_SOAPClient {
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 				case "AAAUserCreate":
 					for (int j = 0; j < CountryList.length; j++) {
+						int asdf = 0;
+						while (asdf < 10){
+							asdf++;
 						Account_Data Account_Info = Helper_Functions.getAddressDetails(Level, CountryList[j][0]);
 						Account_Data.Set_UserId(Account_Info, "L" + Level + "WIDMCreate" + Account_Info.Billing_Address_Info.Country_Code);
 						data.add( new Object[] {Level, Account_Info});
+						}
 					}
 					break;
 				case "AAAUserCreate_Email_As_UserId":
@@ -84,6 +88,16 @@ public class WIDM_SOAPClient {
 		    			}
 					}
 		    		break;
+		    		
+				case "AAAUserCreate_APAC":
+					String Rewards_APAC_AND_LAC[] = new String[] {"au", "cn", "hk", "jp", "my", "nz", "ph", "sg", "kr", "tw", "th", "br", "mx"};
+					for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
+		    			Account_Data Account_Info = Helper_Functions.getFreshAccount(Level, Rewards_APAC_AND_LAC[j]);
+		    			if (Account_Info != null) {
+		    				data.add( new Object[] {Level, Account_Info});
+		    			}
+					}
+					break;
 			}
 		}	
 		return data.iterator();
@@ -92,6 +106,21 @@ public class WIDM_SOAPClient {
 	@Test(dataProvider = "dp")
 	public static void AAAUserCreate(String Level, Account_Data Account_Info){
 		try {
+			String Response = WIDM_Endpoints.AAA_User_Create(Account_Info, null);
+			Account_Data.Print_High_Level_Details(Account_Info);
+			assertThat(Response, CoreMatchers.containsString("<transactionId>"));
+			Helper_Functions.PrintOut(Response);
+			Helper_Functions.WriteUserToExcel(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
+		}catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Test(dataProvider = "dp", enabled = false)
+	public static void AAAUserCreate_APAC(String Level, Account_Data Account_Info){
+		try {
+			Account_Data.Set_UserId(Account_Info, "L"+ Level + Account_Info.Billing_Address_Info.Country_Code);
+			Account_Data.Set_Dummy_Contact_Name(Account_Info);
 			String Response = WIDM_Endpoints.AAA_User_Create(Account_Info, null);
 			Account_Data.Print_High_Level_Details(Account_Info);
 			assertThat(Response, CoreMatchers.containsString("<transactionId>"));

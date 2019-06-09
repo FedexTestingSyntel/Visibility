@@ -488,13 +488,24 @@ public class WebDriver_Functions{
 	}
 	
 	public static void WaitForTextNot(By Ele, String Text) throws Exception{
+		
 		for(int i = 0; i < DriverFactory.WaitTimeOut; i++) {
-			if (!GetText(Ele).contentEquals(Text)) {
-				break;
+			try {
+				//check to see if the text is not present in the element
+				if (!GetText(Ele).contentEquals(Text)) {
+					return;
+				}
+			}catch (Exception e) {
 			}
 			Thread.sleep(1000);
 		}
-		throw new Exception ("Text still present.  " + Ele.toString() + " - " + Text);
+
+		if (isPresent(Ele)) {
+			throw new Exception ("Text still present.  " + Ele.toString() + " - " + Text);
+		}else{
+			throw new Exception ("Element is not present on page.  " + Ele.toString() + " - " + Text);
+		}
+		
 		//DriverFactory.getInstance().getDriverWait().until(ExpectedConditions.not(ExpectedConditions.textToBe(Ele, Text)));
 	}
 	

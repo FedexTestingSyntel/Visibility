@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="WFCL_Application.WFCL_SmokeTest">
+      <class name="WDPA_Application.WDPA_SmokeTest">
         <methods>
-          <include name="WFCL_INETReg" invocation-numbers="0"/>
+          <include name="WDPA_LTLFreight_Anonymous" invocation-numbers="0"/>
           <include name="beforeClass"/>
         </methods>
-      </class> <!-- WFCL_Application.WFCL_SmokeTest -->
+      </class> <!-- WDPA_Application.WDPA_SmokeTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

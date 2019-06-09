@@ -58,6 +58,7 @@ public class MC_PI_4{
 						//due to captcha in L6 only doing three of the countries randomly. Will need to make sure to enter the captcha manually.
 						Rewards_APAC_AND_LAC = new String[] {Rewards_APAC_AND_LAC[range.get(0)], Rewards_APAC_AND_LAC[range.get(1)], Rewards_APAC_AND_LAC[range.get(2)]};
 					}
+					//no breakpoint as expected
 				case "WFCL_Rewards_Registration_APAC_AND_LAC_Existing_User":
 		    		for (int j = 0; j < Rewards_APAC_AND_LAC.length; j++) {
 		    			Account_Data Account_Info = Helper_Functions.getFreshAccount(Level, Rewards_APAC_AND_LAC[j]);

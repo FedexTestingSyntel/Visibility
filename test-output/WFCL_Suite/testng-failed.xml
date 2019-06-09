@@ -5,10 +5,11 @@
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   <test thread-count="8" name="WFCL_Test(failed)" parallel="methods">
-    <parameter name="Level" value="2"/>
+    <parameter name="Level" value="3"/>
     <classes>
       <class name="WFCL_Application.WFCL_SmokeTest">
         <methods>
+          <include name="WFCL_INETReg" invocation-numbers="0"/>
           <include name="beforeClass"/>
           <include name="WFCL_AdminReg" invocation-numbers="0"/>
         </methods>
