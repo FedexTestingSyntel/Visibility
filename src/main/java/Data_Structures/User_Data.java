@@ -3,11 +3,13 @@ package Data_Structures;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
 public class User_Data {
+	public String Level = "";
 	public String UUID_NBR = "";
 	public String USER_ID = "";
 	
@@ -23,6 +25,7 @@ public class User_Data {
 	public Address_Data Address_Info = new Address_Data();
 	
 	public String ACCOUNT_NUMBER = "";
+	public String ATRK_ENABLED = "";
 	public String WCRV_ENABLED = "";
 	public String GFBO_ENABLED = "";
 	public String WGRT_ENABLED = "";
@@ -88,7 +91,7 @@ public class User_Data {
 	public static User_Data Set_Same_Account_Data(User_Data User_Info, Account_Data Account_Info) {
 		User_Info.Address_Info.City = Account_Info.Billing_Address_Info.City;
 		User_Info.Address_Info.Country_Code = Account_Info.Billing_Address_Info.Country_Code;
-		User_Info.Address_Info.Zip = Account_Info.Billing_Address_Info.Zip ;
+		User_Info.Address_Info.PostalCode = Account_Info.Billing_Address_Info.PostalCode ;
 		User_Info.Address_Info.State_Code = Account_Info.Billing_Address_Info.State_Code ;
 		User_Info.Address_Info.Address_Line_1 = Account_Info.Billing_Address_Info.Address_Line_1 ;
 		User_Info.Address_Info.Address_Line_2 = Account_Info.Billing_Address_Info.Address_Line_2 ;	
@@ -97,13 +100,9 @@ public class User_Data {
 	
 	public static User_Data Set_Generic_Address(User_Data User_Info, String Country_Code) {
 		//will load a dummy address from the given country then apply the same to the User_Data.
-		Account_Data Account_Info = Helper_Functions.getAddressDetails(Environment.getInstance().getLevel(), Country_Code);
-		User_Info.Address_Info.City = Account_Info.Billing_Address_Info.City;
-		User_Info.Address_Info.Country_Code = Account_Info.Billing_Address_Info.Country_Code;
-		User_Info.Address_Info.Zip = Account_Info.Billing_Address_Info.Zip ;
-		User_Info.Address_Info.State_Code = Account_Info.Billing_Address_Info.State_Code ;
-		User_Info.Address_Info.Address_Line_1 = Account_Info.Billing_Address_Info.Address_Line_1 ;
-		User_Info.Address_Info.Address_Line_2 = Account_Info.Billing_Address_Info.Address_Line_2 ;	
+		User_Info.Level = Environment.getInstance().getLevel();
+		Address_Data Address_Info = Address_Data.getAddress(User_Info.Level, "US", null);
+		User_Info.Address_Info = Address_Info;
 		return User_Info;
 	}
 	
@@ -125,7 +124,7 @@ public class User_Data {
 			{"STREET_DESC_TWO", User_Info.Address_Info.Address_Line_2}, 
 			{"CITY_NM", User_Info.Address_Info.City}, 
 			{"STATE_CD", User_Info.Address_Info.State_Code}, 
-			{"POSTAL_CD", User_Info.Address_Info.Zip}, 
+			{"POSTAL_CD", User_Info.Address_Info.PostalCode}, 
 			{"COUNTRY_CD", User_Info.Address_Info.Country_Code}, };
 		return Data;	
 	}
@@ -141,6 +140,7 @@ public class User_Data {
 		for (int i = 1; i < FullDataFromExcel.size(); i++) {
 			String Row[] = FullDataFromExcel.get(i);
 			User_Info_Array[i - 1] = new User_Data(); 
+			User_Info_Array[i - 1].Level = Integer.toString(intLevel);
 			for (int j = 0; j <Headers.length; j++) {
 				int pos = i - 1;
 				switch (Headers[j]) {
@@ -181,13 +181,16 @@ public class User_Data {
 		  			User_Info_Array[pos].Address_Info.State_Code = Row[j];
 					break;
 		  		case "POSTAL_CD":
-		  			User_Info_Array[pos].Address_Info.Zip = Row[j];
+		  			User_Info_Array[pos].Address_Info.PostalCode = Row[j];
 					break;
 		  		case "COUNTRY_CD":
 		  			User_Info_Array[pos].Address_Info.Country_Code = Row[j];
 					break;
 		  		case "ACCOUNT_NUMBER":
 		  			User_Info_Array[pos].ACCOUNT_NUMBER = Row[j];
+					break;
+		  		case "ATRK_ENABLED":
+		  			User_Info_Array[pos].ATRK_ENABLED = Row[j];
 					break;
 		  		case "WCRV_ENABLED":
 		  			User_Info_Array[pos].WCRV_ENABLED = Row[j];
@@ -233,7 +236,40 @@ public class User_Data {
 			}
 		}
 		
+		//remove all users that have an error
+		for (int index = 0; index < User_Info_Array.length; index++) {
+			if (!User_Info_Array[index].ERROR.contentEquals("")) {
+				User_Info_Array = removeTheElement(User_Info_Array, index);
+			}
+		}
+		
 		return User_Info_Array;
 	}
+	
+	public static User_Data[] removeTheElement(User_Data[] User_Info_Array,  int index) { 
+
+		// If the array is empty 
+		// or the index is not in array range 
+		// return the original array 
+		if (User_Info_Array == null || index < 0 || index >= User_Info_Array.length) { 
+			return User_Info_Array; 
+		} 
+		
+		 // Create another array of size one less 
+		User_Data[] anotherArray = new User_Data[User_Info_Array.length - 1]; 
+ 
+       // Copy the elements from starting till index 
+       // from original array to the other array 
+       System.arraycopy(User_Info_Array, 0, anotherArray, 0, index); 
+ 
+       // Copy the elements from index + 1 till end 
+       // from original array to the other array 
+       System.arraycopy(User_Info_Array, index + 1, 
+                        anotherArray, index, 
+                        User_Info_Array.length - index - 1);
+
+       // return the resultant array 
+       return anotherArray; 
+       } 
 }
 

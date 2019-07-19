@@ -24,7 +24,7 @@ public class Credit_Card_Data {
 		Credit_Card_Info.Address_Info.State = Address.State;
 		Credit_Card_Info.Address_Info.State_Code = Address.State_Code;
 		Credit_Card_Info.Address_Info.Phone_Number = Address.Phone_Number;
-		Credit_Card_Info.Address_Info.Zip = Address.Zip;
+		Credit_Card_Info.Address_Info.PostalCode = Address.PostalCode;
 		Credit_Card_Info.Address_Info.Country_Code = Address.Country_Code;
 		Credit_Card_Info.Address_Info.Region = Address.Region;
 		Credit_Card_Info.Address_Info.Country = Address.Country;

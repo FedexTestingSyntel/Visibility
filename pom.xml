@@ -2,9 +2,8 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>MissionCritical</groupId>
-  <artifactId>quickstart</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <groupId>Visibility</groupId>
+  <version>1.0</version>
    <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -20,63 +19,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
 <dependencies>
 
-<dependency>
-    <groupId>com.smartbear.soapui</groupId>
-    <artifactId>soapui</artifactId>
-    <version>5.2.1</version>
-    <scope>test</scope>
-</dependency>
-
 	<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java 2.53.0 --> 
  <dependency>
     <groupId>org.seleniumhq.selenium</groupId>
     <artifactId>selenium-java</artifactId>
     <version>2.53.0</version>              
 </dependency>
-
-
-
-
-
-
-
-<!--need to make update
-<dependency>
-    <groupId>org.seleniumhq.selenium</groupId>
-    <artifactId>selenium-java</artifactId>
-    <version>3.141.59</version>
-</dependency>
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-exec</artifactId>
-    <version>1.3</version>
-</dependency>
-<dependency>
-    <groupId>net.bytebuddy</groupId>
-    <artifactId>byte-buddy</artifactId>
-    <version>1.8.15</version>
-</dependency>
-<dependency>
-    <groupId>com.squareup.okio</groupId>
-    <artifactId>okio</artifactId>
-    <version>1.14.0</version>
-</dependency>
-<dependency>
-    <groupId>com.squareup.okhttp3</groupId>
-    <artifactId>okhttp</artifactId>
-    <version>3.11.0</version>
-</dependency>
-<dependency>
-    <groupId>com.google.guava</groupId>
-    <artifactId>guava</artifactId>
-    <version>25.0-jre</version>
-</dependency> -->
- 
-
-
-
-
-
 
 <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
 <dependency>
@@ -240,4 +188,5 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			</plugins>
 		</pluginManagement>
 	</build>
+	<artifactId>VisArtifact</artifactId>
 </project>

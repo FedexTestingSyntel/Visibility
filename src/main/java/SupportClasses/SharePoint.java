@@ -52,7 +52,7 @@ public class SharePoint{
 		
 		//Helper_Functions.PrintOut("breakpoint", false);
 		try {
-			WebDriver_Functions.ChangeURL(ApplicationURL, null, false);
+			WebDriver_Functions.ChangeURL(ApplicationURL, null, null, false);
 			if (WebDriver_Functions.isPresent(By.name("loginfmt"))) {
 				//not logged in, wait for user to enter correct details
 				WebDriver_Functions.Type(By.name("loginfmt"), Helper_Functions.MyEmail);

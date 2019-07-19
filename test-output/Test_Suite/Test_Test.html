@@ -1,0 +1,818 @@
+<html>
+<head>
+<title>TestNG:  Test_Test</title>
+<link href="../testng.css" rel="stylesheet" type="text/css" />
+<link href="../my-testng.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+.log { display: none;} 
+.stack-trace { display: none;} 
+</style>
+<script type="text/javascript">
+<!--
+function flip(e) {
+  current = e.style.display;
+  if (current == 'block') {
+    e.style.display = 'none';
+    return 0;
+  }
+  else {
+    e.style.display = 'block';
+    return 1;
+  }
+}
+
+function toggleBox(szDivId, elem, msg1, msg2)
+{
+  var res = -1;  if (document.getElementById) {
+    res = flip(document.getElementById(szDivId));
+  }
+  else if (document.all) {
+    // this is the way old msie versions work
+    res = flip(document.all[szDivId]);
+  }
+  if(elem) {
+    if(res == 0) elem.innerHTML = msg1; else elem.innerHTML = msg2;
+  }
+
+}
+
+function toggleAllBoxes() {
+  if (document.getElementsByTagName) {
+    d = document.getElementsByTagName('div');
+    for (i = 0; i < d.length; i++) {
+      if (d[i].className == 'log') {
+        flip(d[i]);
+      }
+    }
+  }
+}
+
+// -->
+</script>
+
+</head>
+<body>
+<h2 align='center'>Test_Test</h2><table border='1' align="center">
+<tr>
+<td>Tests passed/Failed/Skipped:</td><td>0/15/0</td>
+</tr><tr>
+<td>Started on:</td><td>Thu Jul 11 11:49:14 CDT 2019</td>
+</tr>
+<tr><td>Total time:</td><td>2136 seconds (2136711 ms)</td>
+</tr><tr>
+<td>Included groups:</td><td></td>
+</tr><tr>
+<td>Excluded groups:</td><td></td>
+</tr>
+</table><p/>
+<small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-failed'>
+<tr><td colspan='4' align='center'><b>FAILED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@233caf70</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace736376425", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace736376425'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>0</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@7f385e17</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1722820049", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1722820049'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>0</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@2d9b678e</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1204747622", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1204747622'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>0</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@606aad2e</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace577466731", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace577466731'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>1</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@5a7be32c</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1293672530", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1293672530'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>1</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@a9b6785</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace87721336", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace87721336'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>1</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@6815b24</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace621798830", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace621798830'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>1</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@7c52018a</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1005832259", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1005832259'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>1</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@39b9add8</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace819999627", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace819999627'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>2</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@2b825ee9</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1021031781", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1021031781'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>2</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@61cf299d</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1901157372", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1901157372'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>1</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@65829c06</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace239940981", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace239940981'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>2</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@20a6463a</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1811905853", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1811905853'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>2</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@4864f780</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1510674484", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1510674484'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>2</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+<tr>
+<td title='SHPC_Application.SHPC_API_Endpoints.Create_Shipment()'><b>Create_Shipment</b><br>Test class: SHPC_Application.SHPC_API_Endpoints<br>Parameters: 3, Data_Structures.Shipment_Data@6b7b9ded</td>
+<td><div><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 9 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace904629503", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace904629503'><pre>java.lang.AssertionError: 
+Expected: a string containing &quot;masterTrackingNumber&quot;
+     but: was &quot;{
+    &quot;error&quot;: &quot;invalid_request&quot;,
+    &quot;error_description&quot;: &quot;validation error&quot;
+}&quot;
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.junit.Assert.assertThat(Assert.java:956)
+	at org.junit.Assert.assertThat(Assert.java:923)
+	at SHPC_Application.SHPC_API_Endpoints.Create_Shipment(SHPC_API_Endpoints.java:108)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)
+	at org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>1</td>
+<td>SHPC_Application.SHPC_API_Endpoints@75f9eccc</td></tr>
+</table><p>
+<table width='100%' border='1' class='invocation-skipped'>
+<tr><td colspan='4' align='center'><b>SKIPPED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='SupportClasses.Environment.SetEvironmentLevel()'><b>SetEvironmentLevel</b><br>Test class: SupportClasses.Environment<br>Parameters: 3</td>
+<td><div><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
+	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:67)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+... Removed 10 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace399144062", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace399144062'><pre>org.testng.SkipException: Forcing skip, will be deleted from report later
+	at SupportClasses.Environment.SetEvironmentLevel(Environment.java:67)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:988)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+</pre></div></td>
+<td>0</td>
+<td>SupportClasses.Environment@525f1e4e</td></tr>
+</table><p>
+</body>
+</html>

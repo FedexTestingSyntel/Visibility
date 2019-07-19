@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="3" guice-stage="DEVELOPMENT" name="Failed suite [Tracking_Generation_Suite]">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="3" name="Tracking_Generation_Test(failed)" parallel="methods">
+    <parameter name="Level" value="2"/>
+    <classes>
+      <class name="Test_Data_Generation.Test_Data_Generation">
+        <methods>
+          <include name="beforeClass"/>
+          <include name="INET_Create_Shipment" invocation-numbers="9 3 8 7 4 6 2 0 16 15 13 14 12 11 10 19 18 17"/>
+        </methods>
+      </class> <!-- Test_Data_Generation.Test_Data_Generation -->
+    </classes>
+  </test> <!-- Tracking_Generation_Test(failed) -->
+</suite> <!-- Failed suite [Tracking_Generation_Suite] -->

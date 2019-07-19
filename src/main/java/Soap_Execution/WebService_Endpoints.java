@@ -132,7 +132,7 @@ public class WebService_Endpoints {
 	    SOAPElement StateOrProvinceCode = Address.addChildElement("StateOrProvinceCode", "v5");
 	    StateOrProvinceCode.addTextNode(Account_Info.Shipping_Address_Info.State_Code);
 	    SOAPElement PostalCode = Address.addChildElement("PostalCode", "v5");
-	    PostalCode.addTextNode(Account_Info.Shipping_Address_Info.Zip);
+	    PostalCode.addTextNode(Account_Info.Shipping_Address_Info.PostalCode);
 	    SOAPElement CountryCode = Address.addChildElement("CountryCode", "v5");
 	    CountryCode.addTextNode(Account_Info.Shipping_Address_Info.Country_Code);
 	    ////Address ends
@@ -148,7 +148,7 @@ public class WebService_Endpoints {
 	    SOAPElement StateOrProvinceCode1 = AccountShippingAddress.addChildElement("StateOrProvinceCode", "v5");
 	    StateOrProvinceCode1.addTextNode(Account_Info.Billing_Address_Info.State_Code);
 	    SOAPElement PostalCode1 = AccountShippingAddress.addChildElement("PostalCode", "v5");
-	    PostalCode1.addTextNode(Account_Info.Billing_Address_Info.Zip);
+	    PostalCode1.addTextNode(Account_Info.Billing_Address_Info.PostalCode);
 	    SOAPElement CountryCode1 = AccountShippingAddress.addChildElement("CountryCode", "v5");
 	    CountryCode1.addTextNode(Account_Info.Billing_Address_Info.Country_Code);
 	    ////AccountShippingAddress ends

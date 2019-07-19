@@ -52,7 +52,7 @@ public class Account_Data {
 
 	public static void Print_Account_Address(Account_Data Account_Info) {
 		if (Account_Info != null) {
-			String Address[] = new String[] {Account_Info.Billing_Address_Info.Address_Line_1, Account_Info.Billing_Address_Info.Address_Line_2, Account_Info.Billing_Address_Info.City, Account_Info.Billing_Address_Info.State_Code, Account_Info.Billing_Address_Info.Zip, Account_Info.Billing_Address_Info.Country_Code, Account_Info.Billing_Address_Info.Region};
+			String Address[] = new String[] {Account_Info.Billing_Address_Info.Address_Line_1, Account_Info.Billing_Address_Info.Address_Line_2, Account_Info.Billing_Address_Info.City, Account_Info.Billing_Address_Info.State_Code, Account_Info.Billing_Address_Info.PostalCode, Account_Info.Billing_Address_Info.Country_Code, Account_Info.Billing_Address_Info.Region};
 			Helper_Functions.PrintOut("Account: " + Account_Info.Account_Number + "   " + Arrays.toString(Address));
 		}else {
 			Helper_Functions.PrintOut("Print_Account_Address recieved null Account_Data");
@@ -118,7 +118,7 @@ public class Account_Data {
 		One.Shipping_Address_Info.City == Two.Shipping_Address_Info.City && 
 		One.Shipping_Address_Info.State == Two.Shipping_Address_Info.State && 
 		One.Shipping_Address_Info.State_Code == Two.Shipping_Address_Info.State_Code && 
-		One.Shipping_Address_Info.Zip == Two.Shipping_Address_Info.Zip && 
+		One.Shipping_Address_Info.PostalCode == Two.Shipping_Address_Info.PostalCode && 
 		One.Shipping_Address_Info.Country_Code == Two.Shipping_Address_Info.Country_Code && 
 		One.Shipping_Address_Info.Region == Two.Shipping_Address_Info.Region && 
 		One.Shipping_Address_Info.Country == Two.Shipping_Address_Info.Country && 
@@ -128,7 +128,7 @@ public class Account_Data {
 		One.Billing_Address_Info.City == Two.Billing_Address_Info.City && 
 		One.Billing_Address_Info.State == Two.Billing_Address_Info.State && 
 		One.Billing_Address_Info.State_Code == Two.Billing_Address_Info.State_Code && 
-		One.Billing_Address_Info.Zip == Two.Billing_Address_Info.Zip && 
+		One.Billing_Address_Info.PostalCode == Two.Billing_Address_Info.PostalCode && 
 		One.Billing_Address_Info.Country_Code == Two.Billing_Address_Info.Country_Code && 
 		One.Billing_Address_Info.Region == Two.Billing_Address_Info.Region && 
 		One.Billing_Address_Info.Country == Two.Billing_Address_Info.Country && 
@@ -168,7 +168,7 @@ public class Account_Data {
 		this.Shipping_Address_Info.City = account_Info.Shipping_Address_Info.City;
 		this.Shipping_Address_Info.State = account_Info.Shipping_Address_Info.State;
 		this.Shipping_Address_Info.State_Code = account_Info.Shipping_Address_Info.State_Code;
-		this.Shipping_Address_Info.Zip = account_Info.Shipping_Address_Info.Zip;
+		this.Shipping_Address_Info.PostalCode = account_Info.Shipping_Address_Info.PostalCode;
 		this.Shipping_Address_Info.Country_Code = account_Info.Shipping_Address_Info.Country_Code;
 		this.Shipping_Address_Info.Region = account_Info.Shipping_Address_Info.Region;
 		this.Shipping_Address_Info.Country = account_Info.Shipping_Address_Info.Country;
@@ -178,7 +178,7 @@ public class Account_Data {
 		this.Billing_Address_Info.City = account_Info.Billing_Address_Info.City;
 		this.Billing_Address_Info.State = account_Info.Billing_Address_Info.State;
 		this.Billing_Address_Info.State_Code = account_Info.Billing_Address_Info.State_Code;
-		this.Billing_Address_Info.Zip = account_Info.Billing_Address_Info.Zip;
+		this.Billing_Address_Info.PostalCode = account_Info.Billing_Address_Info.PostalCode;
 		this.Billing_Address_Info.Country_Code = account_Info.Billing_Address_Info.Country_Code;
 		this.Billing_Address_Info.Region = account_Info.Billing_Address_Info.Region;
 		this.Billing_Address_Info.Country = account_Info.Billing_Address_Info.Country;
@@ -215,7 +215,7 @@ public class Account_Data {
 		this.Shipping_Address_Info.City = account_Info.Shipping_Address_Info.City;
 		this.Shipping_Address_Info.State = account_Info.Shipping_Address_Info.State;
 		this.Shipping_Address_Info.State_Code = account_Info.Shipping_Address_Info.State_Code;
-		this.Shipping_Address_Info.Zip = account_Info.Shipping_Address_Info.Zip;
+		this.Shipping_Address_Info.PostalCode = account_Info.Shipping_Address_Info.PostalCode;
 		this.Shipping_Address_Info.Country_Code = account_Info.Shipping_Address_Info.Country_Code;
 		this.Shipping_Address_Info.Region = account_Info.Shipping_Address_Info.Region;
 		this.Shipping_Address_Info.Country = account_Info.Shipping_Address_Info.Country;
@@ -225,7 +225,7 @@ public class Account_Data {
 		this.Billing_Address_Info.City = account_Info.Billing_Address_Info.City;
 		this.Billing_Address_Info.State = account_Info.Billing_Address_Info.State;
 		this.Billing_Address_Info.State_Code = account_Info.Billing_Address_Info.State_Code;
-		this.Billing_Address_Info.Zip = account_Info.Billing_Address_Info.Zip;
+		this.Billing_Address_Info.PostalCode = account_Info.Billing_Address_Info.PostalCode;
 		this.Billing_Address_Info.Country_Code = account_Info.Billing_Address_Info.Country_Code;
 		this.Billing_Address_Info.Region = account_Info.Billing_Address_Info.Region;
 		this.Billing_Address_Info.Country = account_Info.Billing_Address_Info.Country;
@@ -246,7 +246,7 @@ public class Account_Data {
 				{"Shipping_State", Account_Info[i].Shipping_Address_Info.State} ,
 				{"Shipping_State_Code", Account_Info[i].Shipping_Address_Info.State_Code} ,
 				{"Shipping_Phone_Number", Account_Info[i].Shipping_Address_Info.Phone_Number} ,
-				{"Shipping_Zip", Account_Info[i].Shipping_Address_Info.Zip} ,
+				{"Shipping_Zip", Account_Info[i].Shipping_Address_Info.PostalCode} ,
 				{"Shipping_Country_Code", Account_Info[i].Shipping_Address_Info.Country_Code} ,
 				{"Shipping_Region", Account_Info[i].Shipping_Address_Info.Region} ,
 				{"Shipping_Country", Account_Info[i].Shipping_Address_Info.Country} ,
@@ -257,7 +257,7 @@ public class Account_Data {
 				{"Billing_State", Account_Info[i].Billing_Address_Info.State} ,
 				{"Billing_State_Code", Account_Info[i].Billing_Address_Info.State_Code} ,
 				{"Billing_Phone_Number", Account_Info[i].Billing_Address_Info.Phone_Number} ,
-				{"Billing_Zip", Account_Info[i].Billing_Address_Info.Zip} ,
+				{"Billing_Zip", Account_Info[i].Billing_Address_Info.PostalCode} ,
 				{"Billing_Country_Code", Account_Info[i].Billing_Address_Info.Country_Code} ,
 				{"Billing_Region", Account_Info[i].Billing_Address_Info.Region} ,
 				{"Billing_Country", Account_Info[i].Billing_Address_Info.Country} ,

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" name="ATRK_PI_12__Suite" parallel="methods">
+	<listeners>
+		<listener class-name="SupportClasses.TestNG_ReportListener"/>
+	</listeners>
+	
+  	<test thread-count="8" name="ATRK_PI_12_Test" parallel="methods" group-by-instances="true">
+  		<parameter name="Level" value="3" />
+    	<classes>
+    		<class name="SupportClasses.Environment"/>
+      		<class name="ATRK_Application.pi_12"/>
+		</classes>
+  	</test>
+</suite>

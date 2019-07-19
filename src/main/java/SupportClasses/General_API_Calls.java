@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.net.ssl.HttpsURLConnection;
 import org.apache.http.Header;
 import org.apache.http.HttpRequest;
@@ -22,7 +25,7 @@ public class General_API_Calls {
 	private static HttpClient httpclient = HttpClients.createDefault();//made static to speed up socket execution
 	
 	public static String getAuthToken(String URL, String Client_Iden, String Client_Sec) {
-		System.out.println("OAuth: " + URL + "  Iden: " + Client_Iden + "  Secret: " + Client_Sec);
+		//System.out.println("OAuth: " + URL + "  Iden: " + Client_Iden + "  Secret: " + Client_Sec);
 		//ex https://apidev.idev.fedex.com:8443/auth/oauth/v2/token 
 		String response = "";
 		try {
@@ -53,6 +56,7 @@ public class General_API_Calls {
 					String start = "access_token\":\"";
 					String end = "\",  \"token_type\"";
 					String token = response.substring(response.indexOf(start) + start.length(), response.indexOf(end));
+
 					return token;
 			}
 		} catch (Exception e) {
@@ -75,7 +79,7 @@ public class General_API_Calls {
 			
 			HttpResponse httpresponse = httpclient.execute((HttpUriRequest) Request);
 			Response = EntityUtils.toString(httpresponse.getEntity());
-
+			Response = RemoveUnicode(Response);
 			return Response;
 		}catch (Exception e) {
 			Response = e.getMessage() + e.getCause();
@@ -83,12 +87,17 @@ public class General_API_Calls {
 		}finally {
 			String Response_to_Print = Response.replaceAll("\n", "").replaceAll("\r", "");
 			//print out the URL that was used
-			Helper_Functions.PrintOut(MethodName + " URL: " + Request.toString() + "\n    " + 
-									  MethodName + " Headers: " + RequestHeaders + "\n    " +
-									  MethodName + " Request: " + Request_Body + "\n    " + 
-									  MethodName + " Response: " + Response_to_Print, true); 
+			Print_Out_API_Call(MethodName, Request.toString(), RequestHeaders, Request_Body, Response_to_Print);
+			
 			lock.unlock();
 		} 
+	}
+	
+	public static void Print_Out_API_Call(String MethodName, String URL, String RequestHeaders, String Request_Body, String Response) {
+		Helper_Functions.PrintOut(MethodName + " URL: " + URL + "\n    " + 
+				  MethodName + " Headers: " + RequestHeaders + "\n    " +
+				  MethodName + " Request: " + Request_Body + "\n    " + 
+				  MethodName + " Response: " + Response, true); 
 	}
 
 	//This will return only first value that matches
@@ -121,6 +130,30 @@ public class General_API_Calls {
 			return strArr;
 		}catch (Exception e){
 			System.err.println("Error in General_API_Calls.Parse_API_For_Value " + e.getMessage());
+		}
+		return null;
+	}
+	
+	//remove all the unicode characters and will make them the corresponding special characters.
+	public static String RemoveUnicode(String data) {
+		Pattern p = Pattern.compile("\\\\u(\\p{XDigit}{4})");
+		Matcher m = p.matcher(data);
+		StringBuffer buf = new StringBuffer(data.length());
+		while (m.find()) {
+		  String ch = String.valueOf((char) Integer.parseInt(m.group(1), 16));
+		  m.appendReplacement(buf, Matcher.quoteReplacement(ch));
+		}
+		m.appendTail(buf);
+		return buf.toString();
+	}
+	
+	public static String ParseStringValue(String Main, String Parameter) {
+		if(Main.contains(Parameter)) {
+			//find the parameter and return what reins value stored.
+			// send Foo, will turn into "Foo":". Then will return value such as "Foo":"value"
+			Parameter = "\"" + Parameter + "\":\"";
+			Main = Main.substring(Main.indexOf(Parameter) + Parameter.length(), Main.length());
+			return Main.substring(0, Main.indexOf("\""));
 		}
 		return null;
 	}

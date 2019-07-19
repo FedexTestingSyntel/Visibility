@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [ATRK_PI_12__Suite]" parallel="methods">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="ATRK_PI_12_Test(failed)" parallel="methods">
+    <parameter name="Level" value="3"/>
+    <classes>
+      <class name="ATRK_Application.pi_12">
+        <methods>
+          <include name="beforeClass"/>
+          <include name="ATRK_AVERT_1228244" invocation-numbers="1 0 2 3 4 5"/>
+        </methods>
+      </class> <!-- ATRK_Application.pi_12 -->
+    </classes>
+  </test> <!-- ATRK_PI_12_Test(failed) -->
+</suite> <!-- Failed suite [ATRK_PI_12__Suite] -->

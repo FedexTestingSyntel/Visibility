@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="8" guice-stage="DEVELOPMENT" name="Failed suite [WTRK_PI_12__Suite]" parallel="methods">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="8" name="WTRK_PI_12_Test(failed)" parallel="methods">
+    <parameter name="Level" value="7"/>
+    <classes>
+      <class name="WTRK_Application.pi_12">
+        <methods>
+          <include name="beforeClass"/>
+          <include name="WTRK_Remove_Next_Update" invocation-numbers="1 5 4 0 3 2"/>
+        </methods>
+      </class> <!-- WTRK_Application.pi_12 -->
+    </classes>
+  </test> <!-- WTRK_PI_12_Test(failed) -->
+</suite> <!-- Failed suite [WTRK_PI_12__Suite] -->

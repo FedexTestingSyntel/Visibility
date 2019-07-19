@@ -8,20 +8,22 @@ import java.util.List;
 import org.junit.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import Data_Structures.ADMC_Data;
-import Data_Structures.PRDC_Data;
-import Data_Structures.USRC_Data;
+import org.testng.annotations.Listeners;
+
 import Data_Structures.User_Data;
-import PRDC_Application.PRDC_API_Endpoints;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.General_API_Calls;
 import org.testng.annotations.Test;
-import ADMC_Application.ADMC_API_Endpoints;
+
+import ADMC_Application.ADMC_Data;
+import ADMC_Application.ADMC_Endpoints;
+
+@Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "67"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -37,7 +39,6 @@ public class USRC_TestData_Update {
 	    	int intLevel = Integer.parseInt(strLevel);
 	    	//loading the OAuth token and having all of the variables set.
 	    	USRC_Data.LoadVariables(strLevel);
-	    	PRDC_Data.LoadVariables(strLevel);
 	    	
 	    	//load user ids since both of the below use that value
 	    	User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
@@ -50,7 +51,7 @@ public class USRC_TestData_Update {
     					data.add(new Object[] {strLevel, User_Info});
     				}
     				//uncomment if need to run all
-    				//else{data.add(new Object[] {strLevel, User_Info});}
+    				else{data.add(new Object[] {strLevel, User_Info});}
 
     			}
 				break;
@@ -85,15 +86,14 @@ public class USRC_TestData_Update {
 
 	@Test (dataProvider = "dp", enabled = false)
 	public void UpdateUser(String Level, User_Data User_Info) {
-		Environment.getInstance().setLevel(Level);
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		User_Info.FIRST_NM = "Bob";
 		
 		String fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
+		fdx_login_fcl_uuid = USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
 		
-		String Test = USRC_API_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Info, fdx_login_fcl_uuid[0]);
+		String Test = USRC_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Info, fdx_login_fcl_uuid[0]);
 		
 		Helper_Functions.PrintOut(Test);
 	}
@@ -102,18 +102,14 @@ public class USRC_TestData_Update {
 	public void Check_WCRV_Status(String Level, User_Data User_Info) {
 		boolean updatefile = false;
 		
-		Environment.getInstance().setLevel(Level);
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
-		
 		//get the cookies and the uuid of the user
 		String fdx_login_fcl_uuid[] = null;
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
+		fdx_login_fcl_uuid = USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
 		if (fdx_login_fcl_uuid != null) {
 			String Details[][] = {{"UUID_NBR", User_Info.UUID_NBR},//index 0 and set below
 					{"SSO_LOGIN_DESC", User_Info.USER_ID},
 					{"USER_PASSWORD_DESC", User_Info.PASSWORD},
 					};
-			Details = WCRV_Access(Level, Details, fdx_login_fcl_uuid[0]);
 			
 			String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
 			updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, 0);
@@ -129,7 +125,6 @@ public class USRC_TestData_Update {
 
 	@Test (dataProvider = "dp", enabled = true)
 	public void CheckLogin(String Level, User_Data User_Info) {
-		Environment.getInstance().setLevel(Level);
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
@@ -139,7 +134,7 @@ public class USRC_TestData_Update {
 		for (String TestPassword: GenericPasswords) {
 			if (fdx_login_fcl_uuid == null && !TestPassword.contentEquals("")){
 				User_Info.PASSWORD = TestPassword;
-				fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
+				fdx_login_fcl_uuid = USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
 			}
 		}
 
@@ -170,10 +165,8 @@ public class USRC_TestData_Update {
 
 			Details = FDM_Access(Level, Details, USRC_Details.GenericUSRCURL, Cookies);
 
-			String ContactDetailsResponse = USRC_API_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, Cookies);
-			Details = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, Details);
-			
-			Details = WCRV_Access(Level, Details, Cookies);
+			String ContactDetailsResponse = USRC_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, Cookies);
+			Details = USRC_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, Details);
 			
 			Details = Migration_And_Manage_Check(Level, Details, Cookies);
 		}else {
@@ -192,14 +185,12 @@ public class USRC_TestData_Update {
 		}
 	}
 	
-	@Test (dataProvider = "dp", enabled = true)
+	@Test (dataProvider = "dp", enabled = false)
 	public void CheckMigration(String Level, String UserID, String Password) {
-		Environment.getInstance().setLevel(Level);
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		
 		//this is the default key position to update the user table. Currently set to 1 for user id value.
 		int keyPosition = 1;
@@ -230,7 +221,7 @@ public class USRC_TestData_Update {
 	}
 	
 	public String[][] FDM_Access(String Level, String Details[][], String USRCURL, String Cookies) {
-		String Response = USRC_API_Endpoints.RecipientProfile(USRCURL, Cookies);
+		String Response = USRC_Endpoints.RecipientProfile(USRCURL, Cookies);
 		Details = Arrays.copyOf(Details, Details.length + 1);
 		
 		if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
@@ -241,38 +232,10 @@ public class USRC_TestData_Update {
 		return Details;
 	}
 	
-	public String[][] WCRV_Access(String Level, String Details[][], String Cookies) {
-		PRDC_Data PRDC_D = PRDC_Data.LoadVariables(Level);
-		String AccountDetails = PRDC_API_Endpoints.PRDC_Accounts_Call(PRDC_D.AccountsURL, Cookies);
-		String WCRV_Access = "";
-		if (AccountDetails.contains("displayRateSheetFlag\":true") && AccountDetails.contains("discountPricingFlag\":true") && AccountDetails.contains("accountCountryEnabledFlag\":true")){
-			WCRV_Access = "T";
-		}else if (!AccountDetails.contains("displayRateSheetFlag")){
-			Helper_Functions.PrintOut("PRDC call did not return premission status.", false);
-			WCRV_Access = "Error";
-		}else {
-			if (AccountDetails.contains("displayRateSheetFlag\":false")){
-				//the user does not have the view rate sheet privilege
-				WCRV_Access += "displayRateSheet_False ";
-			}
-			if (AccountDetails.contains("discountPricingFlag\":false")){
-				//no account numbers have a discount applied
-				WCRV_Access += "discountPricingFlag_False ";
-			}
-			if (AccountDetails.contains("accountCountryEnabledFlag\":false")){
-				//no account numbers are from a valid country
-				WCRV_Access += "accountCountryEnabledFlag_False";
-			}
-		}
-		Details = Arrays.copyOf(Details, Details.length + 1);
-		Details[Details.length - 1] = new String[] {"WCRV_ENABLED", WCRV_Access};
-		return Details;
-	}
-
 	public String[][] App_Role_Info_Check(String Level, String Details[][], String Cookies){
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		
-		String AccountRetrievalRequest = USRC_API_Endpoints.AccountRetrievalRequest(USRC_Details.GenericUSRCURL, Cookies);
+		String AccountRetrievalRequest = USRC_Endpoints.AccountRetrievalRequest(USRC_Details.GenericUSRCURL, Cookies);
 		
 		String Parse[][] = {{"GFBO_ENABLED", "appName\":\"fclgfbo\",\"roleCode\":\""},
 							{"WGRT_ENABLED", "appName\":\"fclrates\",\"roleCode\":\""}, 
@@ -289,7 +252,7 @@ public class USRC_TestData_Update {
 			}
 		}
 		Details = Arrays.copyOf(Details, Details.length + 1);
-		Details[Details.length - 1] = new String[] {"ACCOUNT_NUMBER", USRC_API_Endpoints.Parse_AccountRetrievalRequest_AccountNumber(AccountRetrievalRequest)};
+		Details[Details.length - 1] = new String[] {"ACCOUNT_NUMBER", USRC_Endpoints.Parse_AccountRetrievalRequest_AccountNumber(AccountRetrievalRequest)};
 
 		//This will check if the user is the owner of the account
 		String Account_Value = General_API_Calls.Parse_API_For_Value(AccountRetrievalRequest, "value");
@@ -304,7 +267,7 @@ public class USRC_TestData_Update {
 		}
 		String Linage_Indicator = "NOTKNOWN";
 		if (Account_Key != null && !Account_Key.contentEquals("") && Account_Value != null && !Account_Value.contentEquals("") ) {
-			String EnterpriseCustomerRequest = USRC_API_Endpoints.EnterpriseCustomerRequest(USRC_Details.GenericUSRCURL, Cookies, Account_Value, Account_Key);
+			String EnterpriseCustomerRequest = USRC_Endpoints.EnterpriseCustomerRequest(USRC_Details.GenericUSRCURL, Cookies, Account_Value, Account_Key);
 			Linage_Indicator = General_API_Calls.Parse_API_For_Value(EnterpriseCustomerRequest, "linkageIndicator");
 		}
 		Details = Arrays.copyOf(Details, Details.length + 1);
@@ -316,7 +279,7 @@ public class USRC_TestData_Update {
 	public String[][] Migration_And_Manage_Check(String Level, String Details[][], String Cookies){
 		ADMC_Data ADMC_Details = ADMC_Data.LoadVariables(Level);
 		
-		String AccountRetrievalRequest = ADMC_API_Endpoints.RoleAndStatus(ADMC_Details.RoleAndStatusURL, Cookies);
+		String AccountRetrievalRequest = ADMC_Endpoints.RoleAndStatus(ADMC_Details.RoleAndStatusURL, Cookies);
 		
 		//Example: {"successful": true,"output": {"migrationStatus": true,"userType": "COMPANY_ADMIN"}}
 		//         {"output":{"migrationStatus":false,"userType":"NON_MANAGED"},"successful":true}
@@ -349,7 +312,7 @@ public class USRC_TestData_Update {
 	}
 	
 	public String[][] Linkage_Indicator(String Level, String Details[][], String USRCURL, String Cookies, String AccountNumber, String AccountKey) {
-		String Response = USRC_API_Endpoints.RecipientProfile(USRCURL, Cookies);
+		String Response = USRC_Endpoints.RecipientProfile(USRCURL, Cookies);
 		Details = Arrays.copyOf(Details, Details.length + 1);
 		
 		if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {

@@ -3,16 +3,14 @@ package SupportClasses;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-
 import org.testng.SkipException;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import Data_Structures.Account_Data;
 import Data_Structures.Credit_Card_Data;
 import Data_Structures.Enrollment_Data;
+import Data_Structures.Shipment_Data;
 import Data_Structures.Tax_Data;
 import Data_Structures.User_Data;
 
@@ -166,7 +164,7 @@ public class Environment {
 		  			Account_Details[pos].Shipping_Address_Info.Phone_Number = Row[j];
 		  			break;
 		  		case "Shipping_Zip":
-		  			Account_Details[pos].Shipping_Address_Info.Zip = Row[j];
+		  			Account_Details[pos].Shipping_Address_Info.PostalCode = Row[j];
 		  			break;
 		  		case "Shipping_Country_Code":
 		  			Account_Details[pos].Shipping_Address_Info.Country_Code = Row[j];
@@ -199,7 +197,7 @@ public class Environment {
 		  			Account_Details[pos].Billing_Address_Info.Phone_Number = Row[j];
 		  			break;
 		  		case "Billing_Zip":
-		  			Account_Details[pos].Billing_Address_Info.Zip = Row[j];
+		  			Account_Details[pos].Billing_Address_Info.PostalCode = Row[j];
 		  			break;
 		  		case "Billing_Country_Code":
 		  			Account_Details[pos].Billing_Address_Info.Country_Code = Row[j];
@@ -457,18 +455,40 @@ public class Environment {
 		Account_Data AllAddresses[] = getAddressDetails();
 		CountryCode = CountryCode.toUpperCase();
 		
+		if (Type == null) {
+			Type = "";
+		}
+		
 		for (Account_Data AD: AllAddresses) {
 			if (AD != null && AD.Billing_Address_Info.Country_Code.contentEquals(CountryCode)) {
-				if (Level.contentEquals("7") && Type.contentEquals("CreditCard") && AD.Billing_Address_Info.Address_Line_1.contentEquals("10 FED EX PKWY")  && AD.Billing_Address_Info.Address_Line_2.contentEquals("2ND FL")){
+				if (Type.contentEquals("")){
 					//unique to credit card registration.
 					AD.Level = Level;
 					Account_Data.Set_Dummy_Contact_Name(AD);
 					return AD;
-				}else if (!Level.contentEquals("7") || (!Type.contentEquals("CreditCard") && !AD.Billing_Address_Info.Country_Code.contentEquals("US"))){
+				}else if (Type.toUpperCase().contentEquals(AD.Billing_Address_Info.Address_Line_1.toUpperCase())){
 					AD.Level = Level;
 					Account_Data.Set_Dummy_Contact_Name(AD);
 					return AD;
 				}
+			}
+		}
+		System.err.println("Data not loaded for country of " + CountryCode);
+		return null;
+	}
+	
+	public static Account_Data getAddressDetails(String Level, String CountryCode, String AddressLine1, String StateCode) {
+		Account_Data AllAddresses[] = getAddressDetails();
+		CountryCode = CountryCode.toUpperCase();
+		
+		for (Account_Data AD: AllAddresses) {
+			if (AD != null && 
+					AD.Billing_Address_Info.Address_Line_1.contentEquals(AddressLine1) && 
+					AD.Billing_Address_Info.State_Code.contentEquals(StateCode) && 
+					AD.Billing_Address_Info.Country_Code.contentEquals(CountryCode)) {
+				AD.Level = Level;
+				Account_Data.Set_Dummy_Contact_Name(AD);
+				return AD;
 			}
 		}
 		System.err.println("Data not loaded for country of " + CountryCode);
@@ -516,9 +536,9 @@ public class Environment {
 		  			Address_Data[pos].User_Info.Address_Info.State_Code = Row[j];
 		  			break;
 		  		case "Zip":
-		  			Address_Data[pos].Shipping_Address_Info.Zip = Row[j];
-		  			Address_Data[pos].Billing_Address_Info.Zip = Row[j];
-		  			Address_Data[pos].User_Info.Address_Info.Zip = Row[j];
+		  			Address_Data[pos].Shipping_Address_Info.PostalCode = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.PostalCode = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.PostalCode = Row[j];
 		  			break;
 		  		case "Country_Code":
 		  			Address_Data[pos].Shipping_Address_Info.Country_Code = Row[j];
@@ -540,6 +560,11 @@ public class Environment {
 		  			Address_Data[pos].Billing_Address_Info.Share_Id = Row[j];
 		  			Address_Data[pos].User_Info.Address_Info.Share_Id = Row[j];
 		  			break;
+		  		case "LOCATION_CODE":
+		  			Address_Data[pos].Shipping_Address_Info.Location_Code = Row[j];
+		  			Address_Data[pos].Billing_Address_Info.Location_Code = Row[j];
+		  			Address_Data[pos].User_Info.Address_Info.Location_Code = Row[j];
+		  			break;
 				}//end switch
 			}
 			//will load the dummy email address and phone number by default.
@@ -549,4 +574,5 @@ public class Environment {
 		}
   		return Address_Data;
 	}
+	
 }

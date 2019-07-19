@@ -42,10 +42,6 @@ public class TestNG_ReportListener implements IReporter {
 	//the name of the set environment test, this will remove it from being printed in the report
 	//need to come back later and make this better
 
-	
-	//This is the customize email report template file path.
-	private static final String emailableReportTemplateFile = System.getProperty("user.dir") + "/src/main/java/XMLExecution/customize-emailable-report-template.html";
-	
 	@Override
 	public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
 		
@@ -56,7 +52,8 @@ public class TestNG_ReportListener implements IReporter {
 			String Application = xmlSuites.get(0).getName().substring(0, 4);
 			
 			// Get content data in TestNG report template file.
-			String customReportTemplateStr = this.readEmailabelReportTemplate();
+			// Condensed so the file in embedded
+			String customReportTemplateStr = "<!DOCTYPE html><html><head><style>table {    font-family: arial, sans-serif;    border-collapse: collapse;    width: 100%;    font-size: 11px;}td, th {    border: 1px solid #dddddd;    text-align: left;    padding: 8px;}</style></head><body>	<h2>$TestNG_Custom_Report_Title$</h2>	    <table>      <thead>        <tr>          <th>Test Name</th>          <th># Total Methods</th>          <th># Passed</th>          <th># Skipped</th>          <th># Failed</th>          <th>Browser</th>          <th>Start Time</th>          <th>End Time</th>          <th>Execute Time (hh:mm:ss:ms)</th>          <th>Included Groups</th>          <th>Excluded Groups</th>        </tr>       </thead>       $Test_Case_Summary$    </table>		</br></br></br>		<table id=\"overview\">      <thead>        <tr>          <th>Scenarios</th>          <th>Status</th>          <th>Comments</th>        </tr>      </thead>       $Test_Case_Overview$    </table>		</br></br></br>	    <table id=\"summary\">      <thead>        <tr>          <th>Application</th>          <th>Method</th>          <th>Start Time</th>          <th>Execution Time (hh:mm:ss:ms)</th>          <th>Parameter</th>          <th>Reporter Message</th>        </tr>      </thead>       $Test_Case_Detail$    </table>  </body>  </html>";
 			
 			// Create custom report title.
 			String customReportTitle = this.getCustomReportTitle(Application + " TestNG Report");
@@ -115,59 +112,9 @@ public class TestNG_ReportListener implements IReporter {
 				Desktop.getDesktop().browse(htmlFile.toURI());
 			}
 			
-			//CreatePDFReport(outputDirectory, customReportTemplateStr);
-			//Need to work on this, something is most likely wrong with HTML format.    //java.lang.IllegalArgumentException: The number of columns in PdfPTable constructor must be greater than zero.
-		
-	    	//Need to work on this to send out the email report.
-	    	//java.net.URL classUrl = this.getClass().getResource("com.sun.mail.util.TraceInputStream");
-	    	//System.out.println(classUrl.getFile());
-			/*
-			String SenderEamil, SenderPassword, RecipientEmail;
-			ArrayList<String[]> PersonalData = new ArrayList<String[]>();
-			PersonalData = Helper_Functions.getExcelData(".\\Data\\Load_Your_UserIds.xls",  "Data");//create your own file with the specific data
-			for(String s[]: PersonalData) {
-				if (s[0].contentEquals("GMAIL")) {
-					SenderEamil = s[1];
-					SenderPassword = s[2];
-				}else if(s[0].contentEquals("MYEMAIL")){
-					RecipientEmail = s[1];
-				}
-			}
-	    	sendPDFReportByGMail(SenderAddress, SenderPassword, RecipientEmail, ReportTitle, customReportTemplateStr, outputDirectory);
-	    	*/
-			
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-	}
-	
-	/* Read template content. */
-	private String readEmailabelReportTemplate(){
-		StringBuffer retBuf = new StringBuffer();
-		File file = null;
-		FileReader fr = null;
-		BufferedReader br = null;
-		try {
-			file = new File(TestNG_ReportListener.emailableReportTemplateFile);
-			fr = new FileReader(file);
-			br = new BufferedReader(fr);
-			
-			String line = br.readLine();
-			while(line!=null){
-				retBuf.append(line);
-				line = br.readLine();
-			}
-			
-		}catch (Exception ex) {
-			ex.printStackTrace();
-		}finally{
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-		return retBuf.toString();
 	}
 	
 	/* Build custom report title. */
@@ -488,9 +435,9 @@ public class TestNG_ReportListener implements IReporter {
 				}catch (Exception e) {}
 			}
 			
-			//if the error message is to long then reduce to first 200 characters.
-			if (ResponseMessage.length() > 200) {
-				ResponseMessage = ResponseMessage.substring(0, 200) + "...";
+			//if the error message is to long then reduce to first 500 characters.
+			if (ResponseMessage.length() > 500) {
+				ResponseMessage = ResponseMessage.substring(0, 500) + "...";
 			}
 			
 			/* Add test method name. */

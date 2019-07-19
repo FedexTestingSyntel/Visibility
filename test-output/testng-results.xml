@@ -1,33 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="4" total="5" passed="1">
+<testng-results skipped="0" failed="0" ignored="0" total="2" passed="2">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="84995" started-at="2019-06-09T01:20:59Z" finished-at="2019-06-09T01:22:24Z">
+  <suite name="Default suite" duration-ms="88963" started-at="2019-07-18T21:21:55Z" finished-at="2019-07-18T21:23:24Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="84995" started-at="2019-06-09T01:20:59Z" finished-at="2019-06-09T01:22:24Z">
-      <class name="WDPA_Application.WDPA_SmokeTest">
-        <test-method status="PASS" signature="beforeClass()[pri:0, instance:WDPA_Application.WDPA_SmokeTest@7f77e91b]" name="beforeClass" is-config="true" duration-ms="32" started-at="2019-06-09T01:21:00Z" finished-at="2019-06-09T01:21:00Z">
+    <test name="Default test" duration-ms="88963" started-at="2019-07-18T21:21:55Z" finished-at="2019-07-18T21:23:24Z">
+      <class name="INET_Application.eMASS_Scans">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:INET_Application.eMASS_Scans@54a7079e]" name="beforeClass" is-config="true" duration-ms="43" started-at="2019-07-18T21:21:55Z" finished-at="2019-07-18T21:21:55Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method status="PASS" signature="WDPA_LTLFreight_Anonymous(java.lang.String, java.lang.String)[pri:0, instance:WDPA_Application.WDPA_SmokeTest@7f77e91b]" name="WDPA_LTLFreight_Anonymous" duration-ms="84596" started-at="2019-06-09T01:21:00Z" data-provider="dp" finished-at="2019-06-09T01:22:24Z">
+        <test-method status="PASS" signature="eMASSTest(java.lang.String, Data_Structures.Shipment_Data)[pri:0, instance:INET_Application.eMASS_Scans@54a7079e]" name="eMASSTest" duration-ms="81214" started-at="2019-07-18T21:21:55Z" data-provider="dp" finished-at="2019-07-18T21:23:17Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[6]]>
+                <![CDATA[3]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[US]]>
+                <![CDATA[Data_Structures.Shipment_Data@257b5a39]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- WDPA_LTLFreight_Anonymous -->
-      </class> <!-- WDPA_Application.WDPA_SmokeTest -->
+        </test-method> <!-- eMASSTest -->
+        <test-method status="PASS" signature="eMASSTest(java.lang.String, Data_Structures.Shipment_Data)[pri:0, instance:INET_Application.eMASS_Scans@54a7079e]" name="eMASSTest" duration-ms="88232" started-at="2019-07-18T21:21:55Z" data-provider="dp" finished-at="2019-07-18T21:23:24Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.Shipment_Data@3049a8c8]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- eMASSTest -->
+      </class> <!-- INET_Application.eMASS_Scans -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

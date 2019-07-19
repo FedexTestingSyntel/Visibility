@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="3" guice-stage="DEVELOPMENT" name="Failed suite [Test_Suite]">
+  <listeners>
+    <listener class-name="SupportClasses.TestNG_ReportListener"/>
+  </listeners>
+  <test thread-count="3" name="Test_Test(failed)" parallel="methods">
+    <parameter name="Level" value="3"/>
+    <classes>
+      <class name="SHPC_Application.SHPC_API_Endpoints">
+        <methods>
+          <include name="Create_Shipment" invocation-numbers="0 7 9 6 2 5 8 3 4 1 10 11 12 13 14"/>
+          <include name="beforeClass"/>
+        </methods>
+      </class> <!-- SHPC_Application.SHPC_API_Endpoints -->
+    </classes>
+  </test> <!-- Test_Test(failed) -->
+</suite> <!-- Failed suite [Test_Suite] -->

@@ -73,31 +73,9 @@ public class TestNG_TestListener implements ITestListener{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-    	//Try and print high level details if the test cases was related to using account data or user data.
-    	//This is added to give better debug starting point in the report.
-    	for (Object parameter: arg0.getParameters()) {
-        	try {
-                Account_Data Account_Info = (Account_Data) parameter;
-                if (Account_Info != null) {
-                	Account_Data.Print_Account_Address(Account_Info);
-                	Account_Data.Print_High_Level_Details(Account_Info);
-                }
-        	} catch (Exception e) {}
-        	try {
-                User_Data User_Info = (User_Data) parameter;
-                if (User_Info != null) {
-                	User_Data.Print_Full_Details(User_Info);
-                }
-        	} catch (Exception e) {}
-    	}
-
     	
     	Helper_Functions.PrintOut(arg0.getThrowable().getMessage(), false);
     	TestResults(arg0);
-    	
-    	
-    	/////asdfAccount_Data.Print_High_Level_Details(Account_Info);
     }
 
     @Override
@@ -153,12 +131,11 @@ public class TestNG_TestListener implements ITestListener{
         	if (arg0.getStatus() == ITestResult.SUCCESS) {
         		status = Helper_Functions.Passed;
         	}
+        	
         	if (ResultsOverview.size() < SpaceSaver) {
         		ResultsOverview.add(new String[]{arg0.getMethod().getMethodName(), status, ""});
         		arg0.setAttribute("ExecutionLog", AttemptLogs);// this will save the trace to the test
         	}
-        	
-        	//arg0.setAttribute("ExecutionLog", ThreadLogger.getInstance().ReturnLogString());
         	
         	ArrayList<String> CurrentLogs = ThreadLogger.getInstance().ReturnLogs();
         	//reset the logs of the given thread back to blank
@@ -171,12 +148,15 @@ public class TestNG_TestListener implements ITestListener{
         		}
     		}
         	ThreadLogger.ThreadLog.add(TestCompleteData + System.lineSeparator());
-    		
+
+        	//clear out the old attemps
+        	ThreadLogger.getInstance().ResetLogs();
     	}catch (Exception e){
     		Helper_Functions.PrintOut("Warning, unable to save test results. " + e.getLocalizedMessage(), true);
     	}
     	
-    	if (DriverFactory.BrowserCurrent > 0) {//need to add a better way to check if should close browser
+    	//need to add a better way to check if should close browser
+    	if (DriverFactory.BrowserCurrent > 0) {
     		DriverFactory.getInstance().releaseDriver();
     	}
     }

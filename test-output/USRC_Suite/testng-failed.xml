@@ -5,14 +5,14 @@
     <listener class-name="SupportClasses.TestNG_ReportListener"/>
   </listeners>
   <test thread-count="8" name="USRC_Test(failed)" parallel="methods">
-    <parameter name="Level" value="6"/>
+    <parameter name="Level" value="3"/>
     <classes>
-      <class name="USRC_Application.USRC_General">
+      <class name="USRC_Application.USRC_FDM">
         <methods>
           <include name="beforeClass"/>
-          <include name="Create_Users_With_Account" invocation-numbers="8 5 1 9 6 4 2 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 41 32 33 34 35 36 37 38 39 40 42 43 44 45 46 47 48 49 50 51 52 53"/>
+          <include name="EndtoEndEnrollment_EmailaAsUserId" invocation-numbers="7 8 12 13"/>
         </methods>
-      </class> <!-- USRC_Application.USRC_General -->
+      </class> <!-- USRC_Application.USRC_FDM -->
     </classes>
   </test> <!-- USRC_Test(failed) -->
 </suite> <!-- Failed suite [USRC_Suite] -->

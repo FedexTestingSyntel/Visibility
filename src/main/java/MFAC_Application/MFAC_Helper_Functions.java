@@ -17,13 +17,13 @@ public class MFAC_Helper_Functions {
 		String Response = null, UserName = UserName();
 		int ExpiraitonMinutes = -1, PinThreshold = -1;
 		do {
-			Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 			PinThreshold++;
 		}while (Response.contains("pinExpirationDate"));
 		Helper_Functions.PrintOut(OrgName + " " + IssueURL + "  Can request " + PinThreshold + " pins before being lockout out.", true);
 			
 		do {
-			Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 			ExpiraitonMinutes++;
 			Helper_Functions.PrintOut("Sleeping for a minute", true);
 			Helper_Functions.Wait(60);

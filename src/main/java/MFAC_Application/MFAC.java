@@ -1,7 +1,6 @@
 package MFAC_Application;
 
 import org.testng.annotations.Test;
-import Data_Structures.MFAC_Data;
 import org.testng.annotations.BeforeClass;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -145,12 +144,12 @@ public class MFAC{
 		try {
 			for (int i = 0; i < AddressVelocityThreshold; i++){
 				Helper_Functions.PrintOut("  #" + (i + 1) + " Address Request.", false);
-				Response = MFAC_API_Endpoints.AddressVelocityAPI(UserName, OrgName, VelocityURL, OAuth_Token);
+				Response = MFAC_Endpoints.AddressVelocityAPI(UserName, OrgName, VelocityURL, OAuth_Token);
 				assertThat(Response, containsString("ALLOW"));
 			}
 			
 			Helper_Functions.PrintOut("  #" + (AddressVelocityThreshold + 1) + " Address Request.", false);
-			Response = MFAC_API_Endpoints.AddressVelocityAPI(UserName, OrgName, VelocityURL, OAuth_Token);
+			Response = MFAC_Endpoints.AddressVelocityAPI(UserName, OrgName, VelocityURL, OAuth_Token);
 			assertThat(Response, CoreMatchers.allOf(containsString("DENY"), containsString("Unfortunately, too many failed attempts for registration have occurred. Please try again later.")));
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -163,7 +162,7 @@ public class MFAC{
 		String Response = null, UserName = UserName();
 		
 		try {
-			Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 
 			assertThat(Response, CoreMatchers.allOf(containsString("pinOTP"), containsString("pinExpirationDate")));//pin should be generated//pin expiration time should be present.
 			
@@ -182,12 +181,12 @@ public class MFAC{
 		try {
 			for (int i = 0; i < PinVelocityThreshold; i++){
 				Helper_Functions.PrintOut("  #" + (i + 1) + " Pin Request.", false);
-				Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+				Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 				assertThat(Response, CoreMatchers.allOf(containsString("pinOTP"), containsString("pinExpirationDate")));
 			}
 			
 			Helper_Functions.PrintOut("  #" + (PinVelocityThreshold + 1) + " Pin Request.", false);
-			Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 			//033018 - updated value from DENY to 5700, updated to match with what USRC uses.
 			assertThat(Response, CoreMatchers.allOf(containsString("5700"), containsString("Unfortunately, you have exceeded your attempts for verification. Please try again later.")));
 		}catch (Exception e) {
@@ -201,12 +200,12 @@ public class MFAC{
 		String Response = null, UserName = UserName();
 		
 		try {
-			Response =  MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response =  MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 			assertThat(Response, containsString("pinExpirationDate"));
 			String Pin = ParsePIN(Response);
 			
 			//Test verify pin on valid request
-			Response = MFAC_API_Endpoints.VerifyPinAPI(UserName, OrgName, Pin, VerifyURL, OAuth_Token);
+			Response = MFAC_Endpoints.VerifyPinAPI(UserName, OrgName, Pin, VerifyURL, OAuth_Token);
 			assertThat(Response, containsString("Success"));
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -219,11 +218,11 @@ public class MFAC{
 		String Response = null, UserName = UserName();
 		
 		try {
-			Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 			assertThat(Response, containsString("pinExpirationDate"));
 			//Test verify pin on valid request
 			for (int i = 0; i < PinVelocityThreshold + 2; i++) {
-				Response = MFAC_API_Endpoints.VerifyPinAPI(UserName, OrgName, "1111", VerifyURL, OAuth_Token);
+				Response = MFAC_Endpoints.VerifyPinAPI(UserName, OrgName, "1111", VerifyURL, OAuth_Token);
 				assertThat(Response, containsString("PIN.FAILURE"));
 			}
 		}catch (Exception e) {
@@ -237,19 +236,19 @@ public class MFAC{
 		String Response = null, UserName = UserName();
 		
 		try {
-			Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 			assertThat(Response, containsString("pinOTP"));//just to make sure valid response
 			String Pin = ParsePIN(Response);
 			Integer.parseInt(Pin);
-			Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 			assertThat(Response, containsString("pinOTP"));//just to make sure valid response
 			String PinTwo = ParsePIN(Response);
 			Integer.parseInt(PinTwo);
 			//Test that the first pin is no longer valid
-			Response = MFAC_API_Endpoints.VerifyPinAPI(UserName, OrgName, Pin, VerifyURL, OAuth_Token);
+			Response = MFAC_Endpoints.VerifyPinAPI(UserName, OrgName, Pin, VerifyURL, OAuth_Token);
 			assertThat(Response, containsString("PIN.FAILURE"));
 			//Test verify pin on valid request
-			Response = MFAC_API_Endpoints.VerifyPinAPI(UserName, OrgName, PinTwo, VerifyURL, OAuth_Token);
+			Response = MFAC_Endpoints.VerifyPinAPI(UserName, OrgName, PinTwo, VerifyURL, OAuth_Token);
 			assertThat(Response, containsString("Success"));
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -263,7 +262,7 @@ public class MFAC{
 		String Response = null, UserName = UserName();
 		
 		try {
-			Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 			assertThat(Response, containsString("pinExpirationDate")); 
 			
 			Date CurrrentTime = new Date();
@@ -314,7 +313,7 @@ public class MFAC{
 			dateFormat.format(CurrrentTime);
 			Helper_Functions.PrintOut("Attempting to validate after expiraiton time has passed.\nCurrent Time: " + CurrrentTime, true);
 			//Test verify pin on valid request from the different org
-			Response = MFAC_API_Endpoints.VerifyPinAPI(UserName, OrgName, Pin, VerifyURL, OAuth_Token);
+			Response = MFAC_Endpoints.VerifyPinAPI(UserName, OrgName, Pin, VerifyURL, OAuth_Token);
 			assertThat(Response, containsString(Expected));//expected will either be success of pin failure based on scenario.
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -329,7 +328,7 @@ public class MFAC{
 		String Response = null, UserName = UserName(), Pin = null;
 		
 		try {
-			Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 			assertThat(Response, containsString("pinExpirationDate"));
 			
 			Date CurrrentTime = new Date();
@@ -339,7 +338,7 @@ public class MFAC{
 			Date ExpirationTime = GetExpiration(Response);
 			Date SecondExpirationTime = null;
 			if (ExpirationTime.getDate() == CurrrentTime.getDate() && ExpirationTime.getMonth() == CurrrentTime.getMonth()) {
-				Response =  MFAC_API_Endpoints.IssuePinAPI(UserName, SecondOrg, IssueURL, OAuth_Token);
+				Response =  MFAC_Endpoints.IssuePinAPI(UserName, SecondOrg, IssueURL, OAuth_Token);
 				assertThat(Response, containsString("pinExpirationDate"));
 				Pin = ParsePIN(Response);
 				SecondExpirationTime = GetExpiration(Response);
@@ -353,7 +352,7 @@ public class MFAC{
 				ExpirationData.add(Expire);
 			}else {
 				//Test verify pin on valid request from the different org, this will not wait for the old one to have expired.
-				Response = MFAC_API_Endpoints.VerifyPinAPI(UserName, SecondOrg, Pin, VerifyURL, OAuth_Token);
+				Response = MFAC_Endpoints.VerifyPinAPI(UserName, SecondOrg, Pin, VerifyURL, OAuth_Token);
 				assertThat(Response, containsString("Success"));
 			}
 		}catch (Exception e) {
@@ -390,7 +389,7 @@ public class MFAC{
 			dateFormat.format(CurrrentTime);
 			Helper_Functions.PrintOut("Attempting to validate after expiraiton time has passed.\nCurrent Time: " + CurrrentTime, true);
 			//Test verify pin on valid request from the different org
-			Response = MFAC_API_Endpoints.VerifyPinAPI(UserName, OrgName, Pin, VerifyURL, OAuth_Token);
+			Response = MFAC_Endpoints.VerifyPinAPI(UserName, OrgName, Pin, VerifyURL, OAuth_Token);
 			assertThat(Response, containsString(Expected));//expected will either be success of pin failure based on scenario.
 		}catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -442,7 +441,7 @@ public class MFAC{
 		MFAC_Data c = MFAC_Data.LoadVariables(Level);
 		String IssueURL = c.AIssueURL;
 		String OAuth_Token = c.OAuth_Token;
-		String Response = MFAC_API_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+		String Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
 		//pin should be generated//pin expiration time should be present.
 		assertThat(Response, CoreMatchers.allOf(containsString("pinOTP"), containsString("pinExpirationDate")));
 		String Pin = ParsePIN(Response);

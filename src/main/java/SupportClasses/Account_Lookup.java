@@ -47,7 +47,7 @@ public class Account_Lookup extends Helper_Functions{
 			Account_Data Existing_Account_Numbers[] = Environment.getAccountDetails(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
     			case "AccountCheck":
-    				String AccountsNumbers[] = ParsedAcconts("610804063");
+    				String AccountsNumbers[] = ParsedAcconts("600208691, 600208713, 600208730, 600208756, 600208772, 600208799, 600208810, 600208837, 600208853, 600208870");
     				String AccountsAlreadyPresent = "", PendingAdd = "{\"";
     				for (int j = 0; j < Existing_Account_Numbers.length - 1; j++) {
     					AccountsAlreadyPresent+= Existing_Account_Numbers[j].Account_Number + " ";
@@ -212,7 +212,7 @@ public class Account_Lookup extends Helper_Functions{
   					Account_Info.Shipping_Address_Info.Address_Line_2 = AccountDetails[streetline2][2];
   					Account_Info.Shipping_Address_Info.City = AccountDetails[city][2];
   					Account_Info.Shipping_Address_Info.State_Code = AccountDetails[statecode][2];
-  					Account_Info.Shipping_Address_Info.Zip = AccountDetails[postalcode][2];
+  					Account_Info.Shipping_Address_Info.PostalCode = AccountDetails[postalcode][2];
   					Account_Info.Shipping_Address_Info.Country_Code = AccountDetails[countrycode][2];
   					Account_Info.Shipping_Address_Info.Phone_Number = AccountDetails[areacode][2] + AccountDetails[phoneNumber][2];		
   				}else {//billing address
@@ -221,7 +221,7 @@ public class Account_Lookup extends Helper_Functions{
   					Account_Info.Billing_Address_Info.Address_Line_2 = AccountDetails[streetline2][2];
   					Account_Info.Billing_Address_Info.City = AccountDetails[city][2];
   					Account_Info.Billing_Address_Info.State_Code = AccountDetails[statecode][2];
-  					Account_Info.Billing_Address_Info.Zip = AccountDetails[postalcode][2];
+  					Account_Info.Billing_Address_Info.PostalCode = AccountDetails[postalcode][2];
   					Account_Info.Billing_Address_Info.Country_Code = AccountDetails[countrycode][2];
   					Account_Info.Billing_Address_Info.Phone_Number = AccountDetails[areacode][2] + AccountDetails[phoneNumber][2];
   				}

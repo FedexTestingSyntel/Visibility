@@ -10,10 +10,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import Data_Structures.Account_Data;
-import Data_Structures.PRDC_Data;
-import Data_Structures.USRC_Data;
 import Data_Structures.User_Data;
-import PRDC_Application.PRDC_API_Endpoints;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import org.testng.annotations.Test;
@@ -25,7 +22,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_General {
 
-	static String LevelsToTest = "6"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -86,8 +83,6 @@ public class USRC_General {
 				}
 				break;		
 			case "CheckLogin":
-				//loading the OAuth token and having all of the variables set.
-				PRDC_Data.LoadVariables(strLevel);
 				User_Info = User_Data.Get_UserIds(intLevel);
 				for (int k = 0; k < User_Info.length; k++) {
     				if (User_Info[k].EMAIL_ADDRESS.contentEquals("")) {
@@ -107,8 +102,8 @@ public class USRC_General {
 			case "Create_Users_With_Account":
 				String AccountsNumbers[] = new String[] {"267751013", "248337451", "231965173", "610957803", "913640888", "181517042", "341091594", "233986259", "641445983", "642335928", "191500563", "166529131", "231521232", "204180474", "119726441", "215894215", "343914865", "640361069", "194242689", "252289259", "246824118", "222105811", "259846196", "349054205", "126653476", "163277123", "233336513", "261289474", "175428445", "198132543", "181083565", "269480602", "213403788", "741364522", "645686624", "252963669", "131009666", "168477929", "261485095", "641181129", "164136604", "296436062", "154630287", "128420924", "265681735", "207924644", "221572629", "192332605", "429963761", "698000481", "111146730", "193195946", "123589327", "227735325"};
 				Account_Data Account_Info = Environment.getAddressDetails(strLevel, "US");
-				for (int k = 0; k < AccountsNumbers.length; k++) {
-					data.add(new Object[] {strLevel, Account_Info, AccountsNumbers[k]});
+				for (String AccountsNumber : AccountsNumbers) {
+					data.add(new Object[] {strLevel, Account_Info, AccountsNumber});
 					break;
     			}
 				break;
@@ -155,7 +150,7 @@ public class USRC_General {
 	
 	@Test (dataProvider = "dp", enabled = true)
 	public void Testing_API_Login(String Level, User_Data User_Info) {
-		String Response = USRC_API_Endpoints.Login_API_Load_Cookies(User_Info.USER_ID, User_Info.PASSWORD);
+		String Response = USRC_Endpoints.Login_API_Load_Cookies(User_Info.USER_ID, User_Info.PASSWORD);
 		Helper_Functions.PrintOut(Response);
 	}
 	
@@ -168,13 +163,13 @@ public class USRC_General {
 		User_Info.EMAIL_ADDRESS = Helper_Functions.getRandomString(10) + "@accept.com";
 		User_Data.Set_Dummy_Contact_Name(User_Info, User_Info.Address_Info.Country_Code, Level);
 		//create the new user
-		String Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, User_Info);
+		String Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, User_Info);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
+		fdx_login_fcl_uuid = USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
 		UUID = fdx_login_fcl_uuid[1];
 		String Results[] = new String[] {User_Info.USER_ID,  User_Info.PASSWORD, UUID};
 		Helper_Functions.PrintOut(Arrays.toString(Results), false);
@@ -192,13 +187,13 @@ public class USRC_General {
 		//create the new user
 		String ContactDetails[] = USRC_Data.ContactDetailsList.get(ContactPosition % USRC_Data.ContactDetailsList.size());
 		ContactDetails[4] = "Saqqqqwwwweeeerrrr.OSV@FEDEX.COM";
-		String Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
+		String Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID, Password);
+		fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID, Password);
 		UUID = fdx_login_fcl_uuid[1];
 			
 		Helper_Functions.PrintOut(UserID + "/" + Password + "--" + UUID, false);
@@ -214,13 +209,13 @@ public class USRC_General {
 			
 		//create the new user
 
-		String Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
+		String Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID, Password);
+		fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID, Password);
 		UUID = fdx_login_fcl_uuid[1];
 			
 		Helper_Functions.PrintOut(UserID + "/" + Password + "--" + UUID, false);
@@ -236,13 +231,13 @@ public class USRC_General {
 		Account_Info.Email = "accept@fedex.com";
 		User_Data.Set_User_Id(Account_Info.User_Info, "L" + USRC_Details.Level + "Account" + Account_Number);
 		
-		String Response = USRC_API_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, Account_Info);
+		String Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, Account_Info);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
 		
 		//get the cookies and the uuid of the new user
-		String fdx_login_fcl_uuid[] = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
+		String fdx_login_fcl_uuid[] = USRC_Endpoints.Login(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		Account_Info.User_Info.UUID_NBR = fdx_login_fcl_uuid[1];
 		
 		String Results[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD};
@@ -250,15 +245,15 @@ public class USRC_General {
 		Helper_Functions.PrintOut(Arrays.toString(Results), false);
 	}
 	
-	@Test (dataProvider = "dp", enabled = false)
+	@Test (dataProvider = "dp", enabled = true)
 	public void UpdateUserContactInformation(String Level, User_Data User_Info) {
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		String fdx_login_fcl_uuid[] = {"","", ""};
 		//1 - Login, get cookies and uuid
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, User_Info.USER_ID, User_Info.PASSWORD);
+		fdx_login_fcl_uuid = USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
 		
 		User_Info.FIRST_NM = User_Info.FIRST_NM + "Edit";
-		String Response = USRC_API_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Info, fdx_login_fcl_uuid[0]);
+		String Response = USRC_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Info, fdx_login_fcl_uuid[0]);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
@@ -272,16 +267,16 @@ public class USRC_General {
 		
 		String Cookies = null, fdx_login_fcl_uuid[] = null;
 		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+		fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		
 		//in case cannot login will check two of the generic other passwords
 		if (fdx_login_fcl_uuid == null){
 			Password = "Test12345";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+			fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}
 		if(fdx_login_fcl_uuid == null){
 			Password = "Test1234";
-			fdx_login_fcl_uuid = USRC_API_Endpoints.Login(USRC_Details.GenericUSRCURL, UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
+			fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
 		}
 		
 		String Details[][] = {{"UUID_NBR", ""},//index 0 and set below
@@ -306,15 +301,13 @@ public class USRC_General {
 
 			Details = App_Role_Info_Check(Level, Details, Cookies);
 
-			String Response = USRC_API_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookies);
+			String Response = USRC_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookies);
 			if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
 				Details[12][1] = Response;//store all of the FDM details
 			}
 
-			String ContactDetailsResponse = USRC_API_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, Cookies);
-			Details = USRC_API_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, Details);
-			
-			Details = WCRV_Access(Level, Details, Cookies);
+			String ContactDetailsResponse = USRC_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, Cookies);
+			Details = USRC_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, Details);
 		}else {
 			//will save the current time of the failure.
 			Details = new String[][]{{"SSO_LOGIN_DESC", UserID},
@@ -331,38 +324,10 @@ public class USRC_General {
 		}
 	}
 	
-	public String[][] WCRV_Access(String Level, String Details[][], String Cookies) {
-		PRDC_Data PRDC_D = PRDC_Data.LoadVariables(Level);
-		String AccountDetails = PRDC_API_Endpoints.PRDC_Accounts_Call(PRDC_D.AccountsURL, Cookies);
-		String WCRV_Access = "";
-		if (AccountDetails.contains("displayRateSheetFlag\":true") && AccountDetails.contains("discountPricingFlag\":true") && AccountDetails.contains("accountCountryEnabledFlag\":true")){
-			WCRV_Access = "T";
-		}else if (!AccountDetails.contains("displayRateSheetFlag")){
-			Helper_Functions.PrintOut("PRDC call did not return premission status.", false);
-			WCRV_Access = "F";
-		}else {
-			if (AccountDetails.contains("displayRateSheetFlag\":false")){
-				//the user does not have the view rate sheet privilege
-				WCRV_Access += "displayRateSheet_False ";
-			}
-			if (AccountDetails.contains("discountPricingFlag\":false")){
-				//no account numbers have a discount applied
-				WCRV_Access += "discountPricingFlag_False ";
-			}
-			if (AccountDetails.contains("accountCountryEnabledFlag\":false")){
-				//no account numbers are from a valid country
-				WCRV_Access += "accountCountryEnabledFlag_False";
-			}
-		}
-		Details = Arrays.copyOf(Details, Details.length + 1);
-		Details[Details.length - 1] = new String[] {"WCRV_ENABLED", WCRV_Access};
-		return Details;
-	}
-
 	public String[][] App_Role_Info_Check(String Level, String Details[][], String Cookies){
 		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		
-		String AccountRetrievalRequest = USRC_API_Endpoints.AccountRetrievalRequest(USRC_Details.GenericUSRCURL, Cookies);
+		String AccountRetrievalRequest = USRC_Endpoints.AccountRetrievalRequest(USRC_Details.GenericUSRCURL, Cookies);
 		
 		String Parse[][] = {{"GFBO_ENABLED", "appName\":\"fclgfbo\",\"roleCode\":\""},
 				{"WGRT_ENABLED", "appName\":\"fclrates\",\"roleCode\":\""}, 
@@ -379,7 +344,7 @@ public class USRC_General {
 			}
 		}
 		Details = Arrays.copyOf(Details, Details.length + 1);
-		Details[Details.length - 1] = new String[] {"ACCOUNT_NUMBER", USRC_API_Endpoints.Parse_AccountRetrievalRequest_AccountNumber(AccountRetrievalRequest)};
+		Details[Details.length - 1] = new String[] {"ACCOUNT_NUMBER", USRC_Endpoints.Parse_AccountRetrievalRequest_AccountNumber(AccountRetrievalRequest)};
 
 	
 		return Details;
