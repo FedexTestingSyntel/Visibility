@@ -87,7 +87,7 @@ public class INET_Shipment {
 	public static void INET_Create_Shipment(String Level, Shipment_Data Shipment_Info){
 		try {
 			Shipment_Info = INET_Create_Shipment(Shipment_Info);
-			if (Shipment_Info.Service.contains("Ground")) {
+			if (Shipment_Info.Service.toLowerCase().contains("ground")) {
 				String Tracking[] = new String[] {Shipment_Info.Tracking_Number};
 				GroundCorpLoad.ValidateAndProcess(Tracking);
 			}else {

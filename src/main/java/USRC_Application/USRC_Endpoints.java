@@ -24,6 +24,7 @@ import SupportClasses.WebDriver_Functions;
 
 public class USRC_Endpoints {
 	
+	// This is used to set 
 	public static String Login_API_Load_Cookies(String UserID, String Password){
   		try{
   			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
@@ -80,7 +81,7 @@ public class USRC_Endpoints {
 
   			return full_cookies;
   		}catch (Exception e){
-  			//e.printStackTrace();
+  			e.printStackTrace();
   			return null;
   		}
   	}
@@ -260,7 +261,7 @@ public class USRC_Endpoints {
   				return null;
   			}
   			String HeaderArray[] = new String[] {fdx_login, fcl_uuid, full_cookies};
-  			// Helper_Functions.PrintOut("Headers" + Arrays.toString(HeaderArray), true);
+  			Helper_Functions.PrintOut("Headers" + Arrays.toString(HeaderArray), true);
   			return HeaderArray;
   		}catch (Exception e){
   			e.printStackTrace();

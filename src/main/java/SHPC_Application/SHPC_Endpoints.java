@@ -18,7 +18,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
 import Data_Structures.Account_Data;
 import Data_Structures.Address_Data;
 import Data_Structures.Shipment_Data;
@@ -28,19 +27,18 @@ import SupportClasses.Environment;
 import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
 import USRC_Application.USRC_Endpoints;
-import USRC_Application.USRC_Data;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class SHPC_Endpoints {
-	static String LevelsToTest = "7";
+	static String LevelsToTest = "3";
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		
@@ -104,7 +102,7 @@ public class SHPC_Endpoints {
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp")
+	@Test(dataProvider = "dp", enabled =false)
 	public static void CreditCard_Linked(String Level, User_Data User_Info){
 		try {	    				
 			// The cookie is in position 0 of the array.

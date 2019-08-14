@@ -23,7 +23,7 @@ import ADMC_Application.ADMC_Endpoints;
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "67"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -47,9 +47,13 @@ public class USRC_TestData_Update {
 				for (User_Data User_Info: User_Info_Array) {
     				if (User_Info.UUID_NBR.contentEquals("")) {
     					data.add(new Object[] {strLevel, User_Info});
+    				
     				}else if (!User_Info.ERROR.contentEquals("")) {
     					data.add(new Object[] {strLevel, User_Info});
     				}
+    				/*else if (User_Info.Address_Info.Country_Code.contentEquals("US")) {
+    					data.add(new Object[] {strLevel, User_Info});
+    				}*/
     				//uncomment if need to run all
     				else{data.add(new Object[] {strLevel, User_Info});}
 

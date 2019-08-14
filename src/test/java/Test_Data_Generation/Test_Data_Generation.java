@@ -17,16 +17,16 @@ import SupportClasses.Environment;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Test_Data_Generation {
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 	}
 	
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
-		int numberOfAttempts = 150;
+		int numberOfAttempts = 80;
 		List<Object[]> data = new ArrayList<Object[]>();
 		
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
@@ -39,16 +39,23 @@ public class Test_Data_Generation {
 		    		User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 		    		for (User_Data User_Info : User_Info_Array) {
 		    			//check for a WADM users
-		    			if (User_Info.ATRK_ENABLED.contentEquals("T") && User_Info.WDPA_ENABLED.contentEquals("T")) {
+		    			// if (User_Info.ATRK_ENABLED.contentEquals("T") && User_Info.WDPA_ENABLED.contentEquals("T")) {
+		    			if (User_Info.USER_ID.contentEquals("L3FDM171713321")) {
 		    				int loops = 0;
 		    				while (loops < numberOfAttempts) {
 			    				Shipment_Data Shipment_Info = new Shipment_Data();
 			    				Shipment_Info.setUser_Info(User_Info);
-			    				String AddressLineOne = "1721 E BELT LINE RD";
+			    				String AddressLineOne = "71 Bailey Woods Ln";
 			    				Account_Data Account_Info = Environment.getAddressDetails(Level, "US", AddressLineOne);
 			    				Shipment_Info.setOrigin_Address_Info(Account_Info.Billing_Address_Info);
+			    				
+			    				/*AddressLineOne = "3614 Delverne Rd";
+			    				Account_Info = Environment.getAddressDetails(Level, "US", AddressLineOne);
+			    				Shipment_Info.setDestination_Address_Info(Account_Info.Billing_Address_Info);
+			    				*/
 			    				Shipment_Info.setDestination_Address_Info(User_Info.Address_Info);
-			    				//Shipment_Info.setService("FedEx Express Saver");
+			    				// Shipment_Info.setDestination_Address_Info(Account_Info.Billing_Address_Info);
+			    				// Shipment_Info.setService("FedEx Express Saver");
 			    				Shipment_Info.setService("Ground");
 		    					data.add( new Object[] {Level, Shipment_Info});
 		    					loops++;
@@ -60,9 +67,9 @@ public class Test_Data_Generation {
 			}
 		}
 		
-		while(data.size() > numberOfAttempts) {
+		/*while(data.size() > numberOfAttempts) {
 			data.remove(data.size() - 1);
-		}
+		}*/
 		return data.iterator();
 	}
 

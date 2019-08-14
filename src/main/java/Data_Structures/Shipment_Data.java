@@ -9,8 +9,10 @@ import SupportClasses.Helper_Functions;
 public class Shipment_Data {
 
 	public String Ship_Date = "";
+	public String DELIVERY_DATE = "";
 	public String Tracking_Number = "";
-	public String Opco = "";
+	public String TRACKING_CARRIER = "";
+	public String TRACKING_QUALIFIER = "";
 	public String Service = "";
 	public User_Data User_Info = new User_Data();
 	public String Status = "";
@@ -41,6 +43,11 @@ public class Shipment_Data {
 		return true;
 	}
 	
+	public boolean setEstDeliveryDate(String EstDeliveryDate) {
+		this.DELIVERY_DATE = EstDeliveryDate;
+		return true;
+	}
+	
 	public boolean setAccount_Number(String Account_Number) {
 		this.Account_Number = Account_Number;
 		return true;
@@ -66,10 +73,16 @@ public class Shipment_Data {
 		return true;
 	}
 
-	public boolean setOpco(String Opco) {
-		this.Opco = Opco;
+	public boolean setTRACKING_CARRIER(String TRACKING_CARRIER) {
+		this.TRACKING_CARRIER = TRACKING_CARRIER;
 		return true;
 	}
+	
+	public boolean setTRACKING_QUALIFIER(String TRACKING_QUALIFIER) {
+		this.TRACKING_QUALIFIER = TRACKING_QUALIFIER;
+		return true;
+	}
+	
 
 	public boolean setService(String Service) {
 		this.Service = Service;
@@ -88,9 +101,11 @@ public class Shipment_Data {
 	
 	public boolean writeShipment_Data_To_Excel(boolean newShipment) {
 		String Data[][] = new String[][] {
-			{"DATE", this.Ship_Date}, 
+			{"SHIP_DATE", this.Ship_Date}, 
+			{"DELIVERY_DATE", this.DELIVERY_DATE},
 			{"TRACKING_NUMBER", this.Tracking_Number}, // hard coded below
-			{"OPCO", this.Opco}, 
+			{"TRACKING_QUALIFIER", this.TRACKING_QUALIFIER},
+			{"TRACKING_CARRIER", this.TRACKING_CARRIER}, 
 			{"SERVICE", this.Service},
 			{"USER_ID", this.User_Info.USER_ID},
 			{"PASSWORD", this.User_Info.PASSWORD},
@@ -106,7 +121,7 @@ public class Shipment_Data {
 		int IdentifierColumn = -1;
 		if (!newShipment) {
 			//identify by the tracking number 
-			IdentifierColumn = 1;
+			IdentifierColumn = 2;
 		}
 		
 		try {
@@ -139,11 +154,17 @@ public class Shipment_Data {
 				case "SHIP_DATE":
 					Shipment_Info_Array[pos].Ship_Date = Row[j];
 		  			break;
+				case "DELIVERY_DATE":
+					Shipment_Info_Array[pos].DELIVERY_DATE = Row[j];
+		  			break;
 				case "TRACKING_NUMBER":
 					Shipment_Info_Array[pos].Tracking_Number = Row[j];
 		  			break;
-				case "OPCO":
-					Shipment_Info_Array[pos].Opco = Row[j];
+				case "TRACKING_QUALIFIER":
+					Shipment_Info_Array[pos].TRACKING_QUALIFIER = Row[j];
+		  			break;
+				case "TRACKING_CARRIER":
+					Shipment_Info_Array[pos].TRACKING_CARRIER = Row[j];
 		  			break;
 				case "SERVICE":
 					Shipment_Info_Array[pos].Service = Row[j];

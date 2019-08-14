@@ -9,6 +9,7 @@ public class TRKC_Data {
 	public String OAuth_Token_Client_Secret = "";
 	public String OAuth_Token = "";
 	public String TrackingGenericURL = "";
+	public String TrackingWatchListURL = "";
 	public String Level = "";
 
 	//Stores the data for each individual level
@@ -46,6 +47,8 @@ public class TRKC_Data {
 		}
   		
   		DC.TrackingGenericURL = LevelIdentifier[0] + "trackingCal/track";
+  		DC.TrackingWatchListURL = LevelIdentifier[0] + "trackingCal/track/v1/shipmentoptions/watch";
+  		
 		
 		switch (Level) { //Based on the method that is being called the array list will be populated. This will make the TestNG Pass/Fail results more relevant.
 		case "1":

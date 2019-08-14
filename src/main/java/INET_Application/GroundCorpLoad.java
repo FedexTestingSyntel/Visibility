@@ -59,8 +59,10 @@ public class GroundCorpLoad {
 			return e.toString();
 		}
 			/*
-			Sample url:    
-			.....
+			 URL: POST http://corploadsvc.test.cloud.fedex.com/FINAL_FILE/ValidateAndProcess HTTP/1.1
+     		Headers: Content-Type: application/json___Content-Type: application/json___
+     		Request: {"testIds":"794948925776","environment":"L3","allowFlag":"Y","trackIds":"794948925776","delCons":"","choice":"FINALTRKS","referenceId":"mcarnkwkhqkt"}
+     		Response: {"entered":1,"duplicates":0,"errors":0,"valid":1,"uniqueId":"F42175529","finalFile":true,"message":"","random":"F511774"}
 			*/
 	}
 

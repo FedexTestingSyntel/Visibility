@@ -164,7 +164,8 @@ public class DriverFactory{
     	if (SetQuickWait) {
     		this.wait = this.quickwait;
     	}else {
-    		wait.remove();//remove the current status, next time called will be recreated
+    		//remove the current status, next time called will be recreated
+    		wait.remove();
     	}
 		return SetQuickWait;
     	
@@ -181,7 +182,7 @@ public class DriverFactory{
   	   return quickwait.get();
      }
      
-     //This is a thread local reference of teh screenshot directory.
+     //This is a thread local reference of the screenshot directory.
      //need to implement this later
     static  ThreadLocal<String> ScreenshotPath = new ThreadLocal<String>(){
     	   @Override
