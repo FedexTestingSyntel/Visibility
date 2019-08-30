@@ -9,13 +9,12 @@ import org.junit.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
-
 import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
+import Test_Data_Generation.Tracking_Data_Update;
 import SupportClasses.General_API_Calls;
 import org.testng.annotations.Test;
-
 import ADMC_Application.ADMC_Data;
 import ADMC_Application.ADMC_Endpoints;
 
@@ -23,8 +22,9 @@ import ADMC_Application.ADMC_Endpoints;
 
 public class USRC_TestData_Update {
 
-	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
-
+	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	boolean updatedTrackingNumbers = true;
+	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
@@ -45,17 +45,18 @@ public class USRC_TestData_Update {
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.	
 			case "CheckLogin":
 				for (User_Data User_Info: User_Info_Array) {
-    				if (User_Info.UUID_NBR.contentEquals("")) {
+    				if (User_Info.UUID_NBR.contentEquals("") && User_Info.ERROR.contentEquals("")) {
     					data.add(new Object[] {strLevel, User_Info});
     				
-    				}else if (!User_Info.ERROR.contentEquals("")) {
+    				}
+    				else if (!User_Info.ERROR.contentEquals("")) {
     					data.add(new Object[] {strLevel, User_Info});
     				}
     				/*else if (User_Info.Address_Info.Country_Code.contentEquals("US")) {
     					data.add(new Object[] {strLevel, User_Info});
     				}*/
     				//uncomment if need to run all
-    				else{data.add(new Object[] {strLevel, User_Info});}
+    				//else{data.add(new Object[] {strLevel, User_Info});}
 
     			}
 				break;
@@ -84,6 +85,12 @@ public class USRC_TestData_Update {
     			}
 			}//end switch MethodName
 		}
+	    
+	    /*int Max = 600;
+	    while (data.size() > Max) {
+	    	data.remove(Max);
+	    }*/
+	    
 	    System.out.println(data.size() + " scenarios.");
 		return data.iterator();
 	}
@@ -186,6 +193,11 @@ public class USRC_TestData_Update {
 			Assert.fail("Not able to update file.");
 		}else if (fdx_login_fcl_uuid == null) {
 			Assert.fail("Not able to login");
+		}
+		
+		// will try and pull tracking numbers from new users
+		if (updatefile && updatedTrackingNumbers) {
+			Tracking_Data_Update.Pull_Tracking_Numbers(Level, User_Info);
 		}
 	}
 	

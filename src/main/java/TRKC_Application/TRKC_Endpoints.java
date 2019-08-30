@@ -15,15 +15,14 @@ import SupportClasses.WebDriver_Functions;
 
 public class TRKC_Endpoints {
 	
-	public static String TrackingPackagesRequest(String TrackingNumber){
-  		try{
-  			String LevelURL = WebDriver_Functions.LevelUrlReturn();
-  			HttpPost httppost = new HttpPost( LevelURL + "/trackingCal/track");
-
-  			JSONObject processingParameters = new JSONObject();
-  				
-  			//	{"TrackPackagesRequest":{"appType":"WTRK","appDeviceType":"DESKTOP","supportHTML":true,"supportCurrentLocation":true,"uniqueKey":"","processingParameters":{},"trackingInfoList":[{"trackNumberInfo":{"trackingNumber":"794946908060","trackingQualifier":"","trackingCarrier":""}}]}}
-  			JSONObject trackNumberInfo = new JSONObject()
+	
+	public static String TrackingPackagesRequest(String TrackingNumberArray[]){
+		Object trackingInfoListArray[] = new Object[TrackingNumberArray.length];
+		
+		for (int i = 0; i < TrackingNumberArray.length; i++) {
+			String TrackingNumber = TrackingNumberArray[i];
+			
+			JSONObject trackNumberInfo = new JSONObject()
   	  				.put("trackingNumber", TrackingNumber)
   	  				.put("trackingQualifier", "")
   	  				.put("trackingCarrier", "");
@@ -31,7 +30,42 @@ public class TRKC_Endpoints {
   			JSONObject trackingInfoListElement = new JSONObject()
   	  				.put("trackNumberInfo", trackNumberInfo);
   			
-  			Object trackingInfoListArray[] = new Object[] {trackingInfoListElement};
+  			trackingInfoListArray[i] = trackingInfoListElement;
+		}
+		return TrackingPackagesRequest(trackingInfoListArray);
+	}
+	
+	public static String TrackingPackagesRequest(String TrackingNumber){
+		JSONObject trackNumberInfo = new JSONObject()
+	  				.put("trackingNumber", TrackingNumber)
+	  				.put("trackingQualifier", "")
+	  				.put("trackingCarrier", "");
+			
+		JSONObject trackingInfoListElement = new JSONObject()
+	  				.put("trackNumberInfo", trackNumberInfo);
+			
+		Object trackingInfoListArray[] = new Object[] {trackingInfoListElement};
+		
+		return TrackingPackagesRequest(trackingInfoListArray);
+	}
+	
+	public static String TrackingPackagesRequest(Object trackingInfoListArray[]){
+  		try{
+  			String LevelURL = WebDriver_Functions.LevelUrlReturn();
+  			HttpPost httppost = new HttpPost( LevelURL + "/trackingCal/track");
+
+  			JSONObject processingParameters = new JSONObject();
+  				
+  			//	{"TrackPackagesRequest":{"appType":"WTRK","appDeviceType":"DESKTOP","supportHTML":true,"supportCurrentLocation":true,"uniqueKey":"","processingParameters":{},"trackingInfoList":[{"trackNumberInfo":{"trackingNumber":"794946908060","trackingQualifier":"","trackingCarrier":""}}]}}
+  			/*JSONObject trackNumberInfo = new JSONObject()
+  	  				.put("trackingNumber", TrackingNumber)
+  	  				.put("trackingQualifier", "")
+  	  				.put("trackingCarrier", "");
+  			
+  			JSONObject trackingInfoListElement = new JSONObject()
+  	  				.put("trackNumberInfo", trackNumberInfo);
+  			
+  			Object trackingInfoListArray[] = new Object[] {trackingInfoListElement};*/
   			
   			JSONObject TrackPackagesRequest = new JSONObject()
   	  				.put("appType", "WTRK")
@@ -226,6 +260,53 @@ public class TRKC_Endpoints {
   			urlParameters.add(new BasicNameValuePair("format", "json"));
   			urlParameters.add(new BasicNameValuePair("version", "1"));
   			urlParameters.add(new BasicNameValuePair("locale", "en_US"));
+
+  			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
+  			String Response = General_API_Calls.HTTPCall(httppost, json);	
+			
+  			return Response;
+  		}catch (Exception e){
+  			//e.printStackTrace();
+  			return null;
+  		}
+  	}
+
+	public static String ShipmentListRequest(String Cookie, String PageToken){
+  		try{
+  			String LevelURL = WebDriver_Functions.LevelUrlReturn();
+  			HttpPost httppost = new HttpPost( LevelURL + "/trackingCal/track");
+
+  			JSONObject processingParameters = new JSONObject();
+  			String BlankArray[] = {};
+  				
+  			//{"ShipmentListRequest":{"appType":"WTRK","appDeviceType":"DESKTOP","uniqueKey":"","processingParameters":{},"pageSize":"500","pageToken":"1","sort":"PRIORITY","isSummaryCount":false,"updatedSinceTs":"","shipmentFilterList":[]}}
+  			JSONObject ShipmentListRequest = new JSONObject()
+  	  				.put("appType", "WTRK")
+  	  				.put("appDeviceType", "DESKTOP")
+  	  				.put("uniqueKey", "")
+  	  				.put("processingParameters", processingParameters)
+  	  				.put("pageSize", "500") // test making this larger
+  	  				.put("pageToken", PageToken)
+  	  				.put("sort", "PRIORITY")
+  	  				.put("isSummaryCount", false)
+  	  				.put("updatedSinceTs", "")
+  	  				.put("shipmentFilterList", BlankArray);
+  			
+  			JSONObject main = new JSONObject()
+  	  				.put("ShipmentListRequest", ShipmentListRequest);
+
+  			String json = main.toString();
+  				
+  			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  			httppost.addHeader("Content-Type", "charset=UTF-8");
+  			httppost.addHeader("Cookie", Cookie);
+  			
+  			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+  			urlParameters.add(new BasicNameValuePair("action", "getShipmentList"));
+  			urlParameters.add(new BasicNameValuePair("format", "json"));
+  			urlParameters.add(new BasicNameValuePair("version", "1"));
+  			urlParameters.add(new BasicNameValuePair("locale", "en_US"));
+  			urlParameters.add(new BasicNameValuePair("data", json));
 
   			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
   			String Response = General_API_Calls.HTTPCall(httppost, json);	

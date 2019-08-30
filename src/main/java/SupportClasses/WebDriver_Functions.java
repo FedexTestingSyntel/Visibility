@@ -209,7 +209,8 @@ public class WebDriver_Functions{
     				//try and navigate to the url that was passed.
     				AppUrl = Designation;
     			}else{
-    				Helper_Functions.PrintOut("FAILURE, unable to recognise  " + AppDesignation, false);
+    				Helper_Functions.PrintOut("Unable to recognise  " + AppDesignation, false);
+    				AppUrl = AppDesignation;
     			}
 		}//end switch AppDesignation
 		

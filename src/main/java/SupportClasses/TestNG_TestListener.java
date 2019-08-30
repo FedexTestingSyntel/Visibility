@@ -52,8 +52,8 @@ public class TestNG_TestListener implements ITestListener{
         
 		//set the base screenshot name that will be used through the test.
 		DriverFactory.setScreenshotPath(Helper_Functions.ScreenshotBase() + arg0.getName() + " ");
-		Helper_Functions.PrintOut(DriverFactory.getScreenshotPath(), false);
-       // Helper_Functions.PrintOut(Environment.getInstance().getLevel(), true);
+		// Helper_Functions.PrintOut("ScreenshotPath: " + DriverFactory.getScreenshotPath(), false);
+        // Helper_Functions.PrintOut(Environment.getInstance().getLevel(), true);
 		try {Thread.sleep(1);} catch (InterruptedException e) {}
 		lock.unlock();
     }
@@ -73,8 +73,10 @@ public class TestNG_TestListener implements ITestListener{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	
-    	Helper_Functions.PrintOut(arg0.getThrowable().getMessage(), false);
+    	String Message = arg0.getThrowable().getMessage();
+    	if (Message != null && !Message.contentEquals("null")) {
+    		Helper_Functions.PrintOut("onTestFailure: " + arg0.getThrowable().getMessage(), false);
+    	}
     	TestResults(arg0);
     }
 

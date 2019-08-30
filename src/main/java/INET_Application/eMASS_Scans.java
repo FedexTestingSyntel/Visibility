@@ -162,6 +162,7 @@ public class eMASS_Scans {
 			WebDriver_Functions.Click(By.id("massEntryForm:save_confirmation_yesbutton"));
 			
 			// The below should be the final confirmation
+			WaitForInProgressOverlay();
 			WebDriver_Functions.Click(By.id("massEntryForm:alertDialog_okbutton"));
 			
 			Shipment_Info.writeShipment_Data_To_Excel(false);

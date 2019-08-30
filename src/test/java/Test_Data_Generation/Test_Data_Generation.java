@@ -26,7 +26,7 @@ public class Test_Data_Generation {
 	
 	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
-		int numberOfAttempts = 80;
+		int numberOfAttempts = 20;
 		List<Object[]> data = new ArrayList<Object[]>();
 		
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
@@ -45,18 +45,18 @@ public class Test_Data_Generation {
 		    				while (loops < numberOfAttempts) {
 			    				Shipment_Data Shipment_Info = new Shipment_Data();
 			    				Shipment_Info.setUser_Info(User_Info);
-			    				String AddressLineOne = "71 Bailey Woods Ln";
+			    				String AddressLineOne = "58 CABOT ST";
 			    				Account_Data Account_Info = Environment.getAddressDetails(Level, "US", AddressLineOne);
-			    				Shipment_Info.setOrigin_Address_Info(Account_Info.Billing_Address_Info);
-			    				
+			    				//Shipment_Info.setOrigin_Address_Info(Account_Info.Billing_Address_Info);
+			    				Shipment_Info.setOrigin_Address_Info(User_Info.Address_Info);
 			    				/*AddressLineOne = "3614 Delverne Rd";
 			    				Account_Info = Environment.getAddressDetails(Level, "US", AddressLineOne);
 			    				Shipment_Info.setDestination_Address_Info(Account_Info.Billing_Address_Info);
 			    				*/
-			    				Shipment_Info.setDestination_Address_Info(User_Info.Address_Info);
-			    				// Shipment_Info.setDestination_Address_Info(Account_Info.Billing_Address_Info);
-			    				// Shipment_Info.setService("FedEx Express Saver");
-			    				Shipment_Info.setService("Ground");
+			    				//Shipment_Info.setDestination_Address_Info(User_Info.Address_Info);
+			    				Shipment_Info.setDestination_Address_Info(Account_Info.Billing_Address_Info);
+			    				Shipment_Info.setService("FedEx Express Saver");
+			    				//Shipment_Info.setService("Ground");
 		    					data.add( new Object[] {Level, Shipment_Info});
 		    					loops++;
 		    				}

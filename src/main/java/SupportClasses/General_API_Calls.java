@@ -87,13 +87,18 @@ public class General_API_Calls {
 		}finally {
 			String Response_to_Print = Response.replaceAll("\n", "").replaceAll("\r", "");
 			//print out the URL that was used
-			Print_Out_API_Call(MethodName, Request.toString(), RequestHeaders, Request_Body, Response_to_Print);
+//			Print_Out_API_Call(MethodName, Request.toString(), RequestHeaders, Request_Body, Response_to_Print);
 			
 			lock.unlock();
 		} 
 	}
 	
 	public static void Print_Out_API_Call(String MethodName, String URL, String RequestHeaders, String Request_Body, String Response) {
+		if (Response != null && Response.length() > 600) {
+			int length = Response.length();
+			Response = Response.substring(0, 600) + "... (Response full length was " + length + ", Print_Out_API_Call() )";
+		}
+		
 		Helper_Functions.PrintOut(MethodName + " URL: " + URL + "\n    " + 
 				  MethodName + " Headers: " + RequestHeaders + "\n    " +
 				  MethodName + " Request: " + Request_Body + "\n    " + 

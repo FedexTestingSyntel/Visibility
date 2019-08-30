@@ -871,8 +871,9 @@ public class Helper_Functions {
 			int KeyColumn = -1;
 			HSSFRow IdentifierRow = null;
 			IdentifierRow = worksheet.getRow(0);
+			int columns =  IdentifierRow.getLastCellNum();
 			if (KeyPosition != -1) { // Only when making an update
-				for (int i = 0; i < worksheet.getLastRowNum() + 1; i++) {
+				for (int i = 0; i < columns; i++) {
 					if (IdentifierRow.getCell(i) != null) {
 						String Check_Cell = IdentifierRow.getCell(i).getStringCellValue();
 						if (Check_Cell.contentEquals(Data[KeyPosition][0])) {
@@ -887,15 +888,17 @@ public class Helper_Functions {
 				}
 			}
 
+			boolean keyFoundInExcelFlag = false;
 			for (int j = 0; j < worksheet.getLastRowNum() + 1; j++) {
 				// Updating values
 				// System.out.print("j: " + j + " ");//for debug
-				if (worksheet.getRow(j) != null && worksheet.getRow(j).getCell(KeyColumn) != null) { // worksheet.getRow(j).getCell(KeyColumn).getStringCellValue().contentEquals(Data[KeyPosition][1]
+				if (worksheet.getRow(j) != null && worksheet.getRow(j).getCell(KeyColumn) != null) {
 					// format the cell just in case it is not a string.
 					DataFormatter formatter = new DataFormatter();
 					String val = formatter.formatCellValue(worksheet.getRow(j).getCell(KeyColumn));
 
 					if (val.contentEquals(Data[KeyPosition][1])) {
+						keyFoundInExcelFlag = true;
 						for (int k = 0; k < Data.length; k++) {
 							if (worksheet.getRow(j).getCell(k) == null) {// if cell not present create it
 								worksheet.getRow(j).createCell(k);
@@ -931,6 +934,7 @@ public class Helper_Functions {
 								}
 								cell = worksheet.getRow(j).getCell(l);
 								cell.setCellValue(Data[k][1]);
+								keyFoundInExcelFlag = true;
 								break;
 							}
 						}
@@ -940,14 +944,15 @@ public class Helper_Functions {
 			}
 			// Close the InputStream
 			fsIP.close();
-			// Open FileOutputStream to write updates
-			FileOutputStream output_file = new FileOutputStream(new File(FileName));
-			// write changes
-			wb.write(output_file);
-			// close the stream
-			output_file.close();
-
-			FileUpdated = true;
+			if (keyFoundInExcelFlag) {
+				// Open FileOutputStream to write updates
+				FileOutputStream output_file = new FileOutputStream(new File(FileName));
+				// write changes
+				wb.write(output_file);
+				// close the stream
+				output_file.close();
+				FileUpdated = true;
+			}
 		} catch (Exception e) {
 			try {
 				wb.close();

@@ -428,7 +428,7 @@ public class USRC_Endpoints {
 				
 		JSONObject parsedPersonName = new JSONObject()
 			.put("firstName", FirstName)
-			.put("middleName", MiddleName)
+			// .put("middleName", MiddleName)  removed on 8/20
 			.put("lastName", LastName);
 		
 		contact.put("parsedPersonName", parsedPersonName);

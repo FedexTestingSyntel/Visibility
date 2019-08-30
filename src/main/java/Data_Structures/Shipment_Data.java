@@ -104,7 +104,7 @@ public class Shipment_Data {
 			{"SHIP_DATE", this.Ship_Date}, 
 			{"DELIVERY_DATE", this.DELIVERY_DATE},
 			{"TRACKING_NUMBER", this.Tracking_Number}, // hard coded below
-			{"TRACKING_QUALIFIER", this.TRACKING_QUALIFIER},
+			{"TRACKING_QUALIFIER", this.TRACKING_QUALIFIER}, // hard coded below
 			{"TRACKING_CARRIER", this.TRACKING_CARRIER}, 
 			{"SERVICE", this.Service},
 			{"USER_ID", this.User_Info.USER_ID},
@@ -120,14 +120,25 @@ public class Shipment_Data {
 
 		int IdentifierColumn = -1;
 		if (!newShipment) {
-			//identify by the tracking number 
-			IdentifierColumn = 2;
+			if (!this.TRACKING_QUALIFIER.contentEquals("")) {
+				//identify by the tracking qualifier 
+				IdentifierColumn = 3;
+			}else {
+				//identify by the tracking number 
+				IdentifierColumn = 2;
+			}
 		}
 		
 		try {
 			String Level = Environment.getInstance().getLevel();
-			Helper_Functions.WriteToExcel(Helper_Functions.DataDirectory + "\\TrackingNumbers.xls", "L" + Level, Data, IdentifierColumn);
-			return true;
+			boolean File_Updated = Helper_Functions.WriteToExcel(Helper_Functions.DataDirectory + "\\TrackingNumbers.xls", "L" + Level, Data, IdentifierColumn);
+			
+			//if the file could not be updated by tracking qualifier then try updating by tracking number.
+			if(!File_Updated && IdentifierColumn == 3) {
+				File_Updated = Helper_Functions.WriteToExcel(Helper_Functions.DataDirectory + "\\TrackingNumbers.xls", "L" + Level, Data, 2);
+			}
+			
+			return File_Updated;
 		}catch (Exception e) {
 			e.printStackTrace();
 			return false;
