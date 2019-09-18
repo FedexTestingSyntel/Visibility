@@ -1,7 +1,8 @@
 package ADMC_Application;
 
 import org.apache.http.client.methods.HttpGet;
-import SupportClasses.General_API_Calls;
+
+import API_Functions.General_API_Calls;
 
 public class ADMC_Endpoints {
 	

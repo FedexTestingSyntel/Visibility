@@ -18,6 +18,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import API_Functions.General_API_Calls;
 import Data_Structures.Account_Data;
 
 //import org.testng.annotations.Listeners;
@@ -281,6 +283,13 @@ public class Account_Lookup extends Helper_Functions{
   			httppost.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
 
   			String Level = "L" + Account_Info.Level;
+  			if (Account_Info.Level != null) {
+  				Level = "L" + Account_Info.Level;
+  			}else {
+  				// level not sent
+  				Level = "L" + Environment.getInstance().getLevel();
+  			}
+  			
   			if (Level.contains("L6")){
   				PrintOut("Cannot see account numbers directly in L6, attempting in L3.", true);
   				Level = "L3";
@@ -347,7 +356,7 @@ public class Account_Lookup extends Helper_Functions{
 			
   			return Account_Info;
   		}catch (Exception e){
-  			e.printStackTrace();
+  			// e.printStackTrace();
   			throw e;
   		}
   	}

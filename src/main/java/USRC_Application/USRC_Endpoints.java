@@ -15,10 +15,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+
+import API_Functions.General_API_Calls;
 import Data_Structures.Account_Data;
 import Data_Structures.User_Data;
 import SupportClasses.Environment;
-import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
 
@@ -201,7 +202,7 @@ public class USRC_Endpoints {
   	//{fdx_=[cookie], uuid};  0 is the cookie, 1 is the uuid     ex [fdx_login=ssodrt-cos2.97fb.364ddc40, gw0g0h657p]
   	public static String[] Login(String UserID, String Password){
   		try{
-  			USRC_Data USRC_Details = USRC_Data.LoadVariables(Environment.getInstance().getLevel());
+  			USRC_Data USRC_Details = USRC_Data.LoadVariables();
   			HttpClient httpclient = HttpClients.createDefault();
   			
   			HttpPost httppost = new HttpPost(USRC_Details.GenericUSRCURL);

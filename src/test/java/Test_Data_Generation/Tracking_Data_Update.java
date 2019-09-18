@@ -22,24 +22,20 @@ import Data_Structures.User_Data;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Tracking_Data_Update {
-	static String LevelsToTest = "2";
-	private static boolean applyExpressPickupScanFlag = false;
+	static String LevelsToTest = "3";
+	private static boolean applyExpressPickupScanFlag = true;
 	private static boolean applyGroundPickupScanFlag = false;
 	static CopyOnWriteArrayList<String> TrackingList = new CopyOnWriteArrayList<String>();
-	static CopyOnWriteArrayList<Object[]> NewTrackingList = new CopyOnWriteArrayList<Object[]>(); 
 	public final static Lock TrackingNumberListLock = new ReentrantLock();
-	
-	static long interal = 5000L;
-	// static long low = 111111111111L + (interal * 11);
-	//111111255365         
-	static long low = 111111255365L;
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
+		API_Functions.General_API_Calls.PrintOutAPICall = false;
+		API_Functions.General_API_Calls.PrintOutFullResponse = false;
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		
@@ -48,19 +44,30 @@ public class Tracking_Data_Update {
     		Shipment_Data Shipment_Info_Array[] = Data_Structures.Shipment_Data.getTrackingDetails(Level);
 			//Based on the method that is being called the array list will be populated
 			switch (m.getName()) {
+				case "REDO_Tracking_Number_Update":
+					Shipment_Data Tracking_Array[] = new Shipment_Data[30];
+					int pos = 0;
+					for (Shipment_Data Shipment_Info: Shipment_Info_Array) {
+		    			// Add the existing tracking numbers to list.
+		    			if (!Shipment_Info.TRACKING_CARRIER.contentEquals("FDXG")) {
+		    				Tracking_Array[pos] = Shipment_Info;
+							pos++;
+							if (pos == 30) {
+								data.add(new Object[] { Level, Tracking_Array });
+								Tracking_Array = new Shipment_Data[30];
+								pos = 0;
+							}
+		    			}	
+					}
+					break;
 		    	case "Tracking_Number_Update":
-		    		String TrackingNumber = "";
 		    		for (Shipment_Data Shipment_Info: Shipment_Info_Array) {
 		    			// Add the existing tracking numbers to list.
-		    			TrackingList.add(Shipment_Info.Tracking_Number);
 		    			if (Shipment_Info.Ship_Date.contentEquals("") || Shipment_Info.TRACKING_QUALIFIER.contentEquals("") ) {
-		    				data.add(new Object[] {Level, Shipment_Info});
-		    				TrackingNumber += ", " + Shipment_Info.Tracking_Number;
-		    			}
-		    			// uncomment out the below to update for all
-		    			else if (!TrackingNumber.contains(Shipment_Info.Tracking_Number)){
-		    				data.add(new Object[] {Level, Shipment_Info});
-		    				TrackingNumber += ", " + Shipment_Info.Tracking_Number;
+		    				if (Long.valueOf(Shipment_Info.Tracking_Number) > 794951388300L) {
+		    					data.add(new Object[] {Level, Shipment_Info});
+		    				}
+		    				//data.add(new Object[] {Level, Shipment_Info});
 		    			}
 		    		}
 		    	break;
@@ -68,7 +75,7 @@ public class Tracking_Data_Update {
 		    		String UserIds = "";
 		    		for (Shipment_Data Shipment_Info: Shipment_Info_Array) {
 		    			// Add the existing tracking numbers to list.
-		    			TrackingList.add(Shipment_Info.Tracking_Number);
+
 		    			if (!Shipment_Info.User_Info.USER_ID.contentEquals("") ) {
 		    				if (!UserIds.contains("L" + Level + "-" + Shipment_Info.User_Info.USER_ID + ", ")) {
 		    					data.add(new Object[] {Level, Shipment_Info.User_Info});
@@ -85,39 +92,33 @@ public class Tracking_Data_Update {
 		    		} 
 		    		*/
 		    	break;
-		    	case "Tracking_Number_Search":
-		    		// long low = 111111111111L + (5000L * 2);
-		    		// long high = 999999999999L;
-		    		String Tracking_Array[] = new String[30];
-		    		int pos = 0;
-		    		for (long track = low ; track < low + interal; track++) {
-		    			Tracking_Array[pos] = String.valueOf(track);
-		    			pos++;
-						if (pos == 30) {
-							data.add(new Object[] {Level, Tracking_Array});
-							Tracking_Array = new String[30];
-							pos = 0;
-						}
+		    	case "Apply_Scan_To_Tracking_Numbers":
+		    		for (Shipment_Data Shipment_Info: Shipment_Info_Array) {
+		    			// Add the existing tracking numbers to list.
+		    			if (Shipment_Info.Ship_Date.contentEquals("") || Shipment_Info.TRACKING_QUALIFIER.contentEquals("") ) {
+		    				if (Long.valueOf(Shipment_Info.Tracking_Number) > 794951388300L) {
+		    					data.add(new Object[] {Level, Shipment_Info});
+		    				}
+		    				//data.add(new Object[] {Level, Shipment_Info});
+		    			}
 		    		}
-		    		low += interal;
 		    	break;
-
 			}
 		}
 		
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", enabled = false)
+	@Test(dataProvider = "dp", enabled = true)
 	public static void Tracking_Number_Update(String Level, Shipment_Data Shipment_Info){
 		try {
-			String Response_TRKC = TRKC_Application.TRKC_Endpoints.TrackingPackagesRequest(Shipment_Info.Tracking_Number);
-			if (Response_TRKC.contains("This tracking number cannot be found. Please check the number or contact the sender.")) {
+			String TrackPackagesResponse = TRKC.TRKC_Endpoints.TrackingPackagesRequest(Shipment_Info.Tracking_Number);
+			if (TrackPackagesResponse.contains("This tracking number cannot be found. Please check the number or contact the sender.")) {
 				throw new Exception("This tracking number cannot be found");
 			}
 			
 			do {				
-				String Status = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "keyStatus");
+				String Status = API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "keyStatus");
 				if (Status == null || Status.contentEquals("")) {
 					throw new Exception("Error retrieving status.");
 				}
@@ -125,24 +126,30 @@ public class Tracking_Data_Update {
 				Status = Status.replaceAll(" ", "_").toUpperCase();
 				Shipment_Info.setStatus(Status);
 
-				String Service = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "serviceCD");
-				String trackingQualifier = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "trackingQualifier");
+				String Service = API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "serviceCD");
+				String trackingQualifier = API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "trackingQualifier");
 				
 				if (!Service.contentEquals("")) {
 					Shipment_Info.setService(Service);
-					String TRACKING_CARRIER = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "trackingCarrierCd");
+					String TRACKING_CARRIER = API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "trackingCarrierCd");
 					Shipment_Info.setTRACKING_CARRIER(TRACKING_CARRIER);
 					
-					String shipDate = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "shipDt");
+					String shipDate = API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "shipDt");
 					Shipment_Info.setShipDate(shipDate);
 					
-					String estDeliveryDate = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "displayEstDeliveryDateTime");
+					String estDeliveryDate = API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "displayEstDeliveryDateTime");
 					Shipment_Info.setEstDeliveryDate(estDeliveryDate);
 					
-					updateInflightDeliveryOptions(Shipment_Info);
+					String isEstDelTmWindowLabel = API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "isEstDelTmWindowLabel");
+					Shipment_Info.isEstDelTmWindowLabel = Boolean.parseBoolean(isEstDelTmWindowLabel);
 					
-					//// REMOVE LATER
-					Shipment_Info.setTRACKING_QUALIFIER(trackingQualifier);
+					String estDelTmWindowStart = API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "estDelTmWindowStart");
+					Shipment_Info.estDelTmWindowStart = estDelTmWindowStart;
+					
+					String isNonHistoricalEDTW = API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "isNonHistoricalEDTW");
+					Shipment_Info.isNonHistoricalEDTW = Boolean.parseBoolean(isNonHistoricalEDTW);
+					
+					updateInflightDeliveryOptions(Shipment_Info);
 					
 					// if this is updating a tracking number with no qualifier
 					if (Shipment_Info.TRACKING_QUALIFIER.contentEquals("")) {
@@ -179,17 +186,17 @@ public class Tracking_Data_Update {
 					cleared_Shipment_Info.writeShipment_Data_To_Excel(checkAndAddTrackingQualifier(trackingQualifier));
 				}
 
-				if (Response_TRKC.contains("\"trackingNbr\":")) {
+				if (TrackPackagesResponse.contains("\"trackingNbr\":")) {
 					// remove the identifier for the first tracking number in list.
-					Response_TRKC = Response_TRKC.substring(Response_TRKC.indexOf("\"trackingNbr\":") + 20, Response_TRKC.length() - 1);
-					if (Response_TRKC.contains("\"trackingNbr\":")) {
+					TrackPackagesResponse = TrackPackagesResponse.substring(TrackPackagesResponse.indexOf("\"trackingNbr\":") + 20, TrackPackagesResponse.length() - 1);
+					if (TrackPackagesResponse.contains("\"trackingNbr\":")) {
 						//get rid of the everything before the current tracking number.
-						Response_TRKC = Response_TRKC.substring(Response_TRKC.indexOf("\"trackingNbr\":"), Response_TRKC.length() - 1);
+						TrackPackagesResponse = TrackPackagesResponse.substring(TrackPackagesResponse.indexOf("\"trackingNbr\":"), TrackPackagesResponse.length() - 1);
 						Helper_Functions.PrintOut("Douplicate tracking number found: " + Shipment_Info.Tracking_Number, false);
 					}
 				}
 				//if there are multiple shipments with same tracking number
-			}while(Response_TRKC.contains("\"trackingNbr\":"));
+			}while(TrackPackagesResponse.contains("\"trackingNbr\":"));
 			
 			Helper_Functions.PrintOut(Shipment_Info.Tracking_Number + "  " + Shipment_Info.TRACKING_QUALIFIER + "  " + Shipment_Info.DELIVERY_DATE);
 		}catch (Exception e) {
@@ -209,15 +216,15 @@ public class Tracking_Data_Update {
 				boolean getNextPage = true;
 				while (getNextPage) {
 					getNextPage = false;
-					String Response_TRKC = TRKC_Application.TRKC_Endpoints.ShipmentListRequest(User_Cookie, String.valueOf(pageNumber));
+					String Response_TRKC = TRKC.TRKC_Endpoints.ShipmentListRequest(User_Cookie, String.valueOf(pageNumber));
 					if (Response_TRKC == null || Response_TRKC.contentEquals("") || 
-							SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "totalNumberOfShipments") == null) {
+							API_Functions.General_API_Calls.ParseStringValue(Response_TRKC, "totalNumberOfShipments") == null) {
 						// Did not retrieve response, break out of loop.
 						break;
 					}
 					//Check the page number to see if tracking call should be executed for second page.
 					
-					int totalNumberOfShipments = Integer.parseInt(SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "totalNumberOfShipments"));
+					int totalNumberOfShipments = Integer.parseInt(API_Functions.General_API_Calls.ParseStringValue(Response_TRKC, "totalNumberOfShipments"));
 					if (totalNumberOfShipments > (500 * pageNumber)) {
 						getNextPage = true;
 						pageNumber++;
@@ -229,14 +236,14 @@ public class Tracking_Data_Update {
 						Shipment_Info.setUser_Info(User_Info);
 						for(;;) {
 							//reset the tracking number.
-							String TRACKING_NUMBER = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "dispTrkNbr");
+							String TRACKING_NUMBER = API_Functions.General_API_Calls.ParseStringValue(Response_TRKC, "dispTrkNbr");
 							if (TRACKING_NUMBER != null && !TRACKING_NUMBER.contentEquals("")) {
 								Shipment_Info.setTracking_Number(TRACKING_NUMBER);
 
 								String RemovedTrackingNumber = "dispTrkNbr\":\"" + TRACKING_NUMBER;
 								Response_TRKC = Response_TRKC.substring(Response_TRKC.indexOf(RemovedTrackingNumber) + RemovedTrackingNumber.length(), Response_TRKC.length());
 								
-								String trackingQualifier = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "trackingQualifier");
+								String trackingQualifier = API_Functions.General_API_Calls.ParseStringValue(Response_TRKC, "trackingQualifier");
 								Shipment_Info.setTRACKING_QUALIFIER(trackingQualifier);
 								if (checkAndAddTrackingQualifier(trackingQualifier)) {
 									Shipment_Info.writeShipment_Data_To_Excel(true);
@@ -255,67 +262,49 @@ public class Tracking_Data_Update {
  			Assert.fail(e.getCause().toString());
 		}
 	}
-	
-	@Test(dataProvider = "dp", enabled = true, invocationCount = 100)
-	public static void Tracking_Number_Search(String Level, String TrackingArray[]){
+
+	@Test(dataProvider = "dp", enabled = false)
+	public static void REDO_Tracking_Number_Update(String Level, Shipment_Data Shipment_Info_Array[]){
 		try {
-			String Response_TRKC = TRKC_Application.TRKC_Endpoints.TrackingPackagesRequest(TrackingArray);
+			String TrackingArray[] = new String[Shipment_Info_Array.length];
+			for(int cnt = 0; cnt < Shipment_Info_Array.length; cnt++) {
+				TrackingArray[cnt] = Shipment_Info_Array[cnt].Tracking_Number;
+			}
+			String TrackingPackagesResponse = TRKC.TRKC_Endpoints.TrackingPackagesRequest(TrackingArray);
 			
-			do {
-				String Status = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "keyStatus");
-				if (Status == null || Status.contentEquals("")) {
-					throw new Exception("Error retrieving status.");
+			String TrackingStart = "{\"shipperAccountNumber\"";
+			String TrackingEnd = "}]}";
+			
+			//Remove the start of the response and just leave the packageList
+			TrackingPackagesResponse = TrackingPackagesResponse.substring(TrackingPackagesResponse.indexOf("packageList\":") + 13, TrackingPackagesResponse.length());
+			
+			for (int pos = 0; pos < Shipment_Info_Array.length; pos++) {
+				String SingleTrackingResponse = TrackingPackagesResponse.substring(TrackingPackagesResponse.indexOf(TrackingStart), TrackingPackagesResponse.indexOf(TrackingEnd) + TrackingEnd.length());
+				Shipment_Info_Array[pos] = updateTrackingPackagesRequest(Shipment_Info_Array[pos], SingleTrackingResponse);
+				if (SingleTrackingResponse.contains("\"CDOExists\":true")) {
+					Shipment_Info_Array[pos] = updateInflightDeliveryOptions(Shipment_Info_Array[pos]);
 				}
-				Shipment_Data Shipment_Info = new Shipment_Data();
-				String Tracking_Number = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "trackingNbr");
-				Shipment_Info.setTracking_Number(Tracking_Number);
 				
-				Status = Status.replaceAll(" ", "_").toUpperCase();
-				Shipment_Info.setStatus(Status);
-
-				String Service = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "serviceCD");
-				String trackingQualifier = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "trackingQualifier");
-				Shipment_Info.setTRACKING_QUALIFIER(trackingQualifier);
-				
-				if (!Service.contentEquals("")) {
-					Shipment_Info.setService(Service);
-					String TRACKING_CARRIER = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "trackingCarrierCd");
-					Shipment_Info.setTRACKING_CARRIER(TRACKING_CARRIER);
-					
-					String shipDate = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "shipDt");
-					Shipment_Info.setShipDate(shipDate);
-					
-					String estDeliveryDate = SupportClasses.General_API_Calls.ParseStringValue(Response_TRKC, "displayEstDeliveryDateTime");
-					Shipment_Info.setEstDeliveryDate(estDeliveryDate);
-					
-					//updateInflightDeliveryOptions(Shipment_Info);
-					
-					
-					if (checkAndAddTrackingQualifier(trackingQualifier)) {
-						Shipment_Info.writeShipment_Data_To_Excel(true);
-					}
-				}
-
-				if (Response_TRKC.contains("\"trackingNbr\":")) {
-					// remove the identifier for the first tracking number in list.
-					Response_TRKC = Response_TRKC.substring(Response_TRKC.indexOf("\"trackingNbr\":") + 20, Response_TRKC.length() - 1);
-					if (Response_TRKC.contains("\"trackingNbr\":")) {
-						//get rid of the everything before the current tracking number.
-						Response_TRKC = Response_TRKC.substring(Response_TRKC.indexOf("\"trackingNbr\":"), Response_TRKC.length() - 1);
-					}
-				}
-				//if there are multiple shipments with same tracking number
-			}while(Response_TRKC.contains("\"trackingNbr\":"));
+				TrackingPackagesResponse = TrackingPackagesResponse.replace(SingleTrackingResponse, "");
+			}
+			
+			boolean fileUpdated = Data_Structures.Shipment_Data.writeShipments_Data_To_Excel(Shipment_Info_Array);
+			if (!fileUpdated) {
+				Data_Structures.Shipment_Data.writeShipments_Data_To_Excel(Shipment_Info_Array);
+			}
+			Helper_Functions.PrintOut("Completed, ");
+			
 		}catch (Exception e) {
+			e.printStackTrace();
+ 			Assert.fail(e.getCause().toString());
 			Assert.fail();
-			System.out.print("fail, ");
 		}
 	}
-	
+
 	// Will return true if tracking Qualifier is new.
 	public static boolean checkAndAddTrackingQualifier(String trackingQualifier) {
 		boolean newTrackingFlag = false;
-		String LevelIdent = ", L" + Environment.getInstance().getLevel();
+		String LevelIdent = "L" + Environment.getInstance().getLevel() + "-";
 		trackingQualifier = LevelIdent + trackingQualifier;
 		TrackingNumberListLock.lock();
 		if (TrackingList.size() == 0 ) {
@@ -383,6 +372,44 @@ public class Tracking_Data_Update {
 		return Shipment_Info;
 	}
 	
+	public static Shipment_Data updateTrackingPackagesRequest(Shipment_Data Shipment_Info, String TrackingPackagesResponse) throws Exception{		
+		String Status = API_Functions.General_API_Calls.ParseStringValue(TrackingPackagesResponse, "keyStatus");
+		
+		Status = Status.replaceAll(" ", "_").toUpperCase();
+		Shipment_Info.setStatus(Status);
+
+		String Service = API_Functions.General_API_Calls.ParseStringValue(TrackingPackagesResponse, "serviceCD");
+		String trackingQualifier = API_Functions.General_API_Calls.ParseStringValue(TrackingPackagesResponse, "trackingQualifier");
+		Shipment_Info.setTRACKING_QUALIFIER(trackingQualifier);
+		
+		if (!Service.contentEquals("")) {
+			Shipment_Info.setService(Service);
+			
+			String TRACKING_CARRIER = API_Functions.General_API_Calls.ParseStringValue(TrackingPackagesResponse, "trackingCarrierCd");
+			Shipment_Info.setTRACKING_CARRIER(TRACKING_CARRIER);
+				
+			String shipDate = API_Functions.General_API_Calls.ParseStringValue(TrackingPackagesResponse, "shipDt");
+			Shipment_Info.setShipDate(shipDate);
+				
+			String estDeliveryDate = API_Functions.General_API_Calls.ParseStringValue(TrackingPackagesResponse, "displayEstDeliveryDateTime");
+			Shipment_Info.setEstDeliveryDate(estDeliveryDate);
+				
+			String isEstDelTmWindowLabel = API_Functions.General_API_Calls.ParseStringValue(TrackingPackagesResponse, "isEstDelTmWindowLabel");
+			Shipment_Info.isEstDelTmWindowLabel = Boolean.parseBoolean(isEstDelTmWindowLabel);
+				
+			String estDelTmWindowStart = API_Functions.General_API_Calls.ParseStringValue(TrackingPackagesResponse, "estDelTmWindowStart");
+			Shipment_Info.estDelTmWindowStart = estDelTmWindowStart;
+				
+			String isNonHistoricalEDTW = API_Functions.General_API_Calls.ParseStringValue(TrackingPackagesResponse, "isNonHistoricalEDTW");
+			Shipment_Info.isNonHistoricalEDTW = Boolean.parseBoolean(isNonHistoricalEDTW);
+		}
+		return Shipment_Info;
+	}
+	
+	
+
+	
+			
 	
 	
 	/*

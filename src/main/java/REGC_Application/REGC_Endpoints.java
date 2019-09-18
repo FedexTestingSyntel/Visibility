@@ -4,8 +4,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 
+import API_Functions.General_API_Calls;
 import Data_Structures.User_Data;
-import SupportClasses.General_API_Calls;
 
 public class REGC_Endpoints {
 	public static String NewFCLUser(String CreateUserURL, User_Data User_Info){			

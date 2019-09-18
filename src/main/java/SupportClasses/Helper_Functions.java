@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
@@ -1165,6 +1166,123 @@ public class Helper_Functions {
 			}
 		}
 		return null;
+	}
+	
+	// if KeyPosition = -1 then write new line to excel
+	public static boolean WriteMultipleToExcel(String FileName, String SheetName, CopyOnWriteArrayList<String[]> Data, int KeyPosition) {
+		HSSFWorkbook wb = null;
+		boolean FileUpdated = false;
+		try {
+			String Data_Headers[] = Data.get(0);
+			
+			Excellock.lock();
+			// Read the spreadsheet that needs to be updated
+			FileInputStream fsIP = new FileInputStream(new File(FileName));
+			// Access the workbook
+			wb = new HSSFWorkbook(fsIP);
+			// Access the work sheet, so that we can update / modify it.
+			HSSFSheet worksheet = wb.getSheetAt(0);
+			for (int i = 1; i < wb.getNumberOfSheets() + 1; i++) {
+				// PrintOut("CurrentSheet: " + worksheet.getSheetName(), false); //for debugging
+				// if getting errors with sheet not found
+				if (worksheet.getSheetName().contentEquals(SheetName)) {
+					break;
+				}
+				worksheet = wb.getSheetAt(i);
+			}
+
+			// Check the column headers for the key position
+			int KeyColumn = -1;
+			HSSFRow IdentifierRow = null;
+			IdentifierRow = worksheet.getRow(0);
+			int columns =  IdentifierRow.getLastCellNum();
+			if (KeyPosition != -1) { // Only when making an update
+				for (int i = 0; i < columns; i++) {
+					if (IdentifierRow.getCell(i) != null) {
+						String Check_Cell = IdentifierRow.getCell(i).getStringCellValue();
+						if (Check_Cell.contentEquals(Data_Headers[KeyPosition])) {
+							KeyColumn = i;
+							break;
+						}
+					}
+				}
+				// header not found
+				if (KeyColumn == -1) {
+					throw new Exception("Key Not Found");
+				}
+			}
+			
+			for (int numUpdates = 1; numUpdates < Data.size(); numUpdates++) {
+				String Data_Row[] = Data.get(numUpdates);
+				for (int j = 0; j < worksheet.getLastRowNum() + 1; j++) {
+					// Updating values
+					// System.out.print("j: " + j + " ");//for debug
+					if (worksheet.getRow(j) != null && worksheet.getRow(j).getCell(KeyColumn) != null) {
+						// format the cell just in case it is not a string.
+						DataFormatter formatter = new DataFormatter();
+						String val = formatter.formatCellValue(worksheet.getRow(j).getCell(KeyColumn));
+
+						if (val.contentEquals(Data_Row[KeyPosition])) {
+							for (int k = 0; k < Data_Row.length; k++) {
+								if (worksheet.getRow(j).getCell(k) == null) {// if cell not present create it
+									worksheet.getRow(j).createCell(k);
+								}
+								for (int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
+									if (IdentifierRow.getCell(l) != null && IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data_Headers[k])) {
+										Cell cell = null;
+										if (worksheet.getRow(j).getCell(l) == null) {// if cell not present create it
+											worksheet.getRow(j).createCell(l);
+										}
+										cell = worksheet.getRow(j).getCell(l);
+										cell.setCellValue(Data_Row[k]);
+										// break;
+									}
+								}
+							}
+						}
+					}
+					
+					// if not found add to end of sheet
+					if (j == worksheet.getLastRowNum()) {
+						j++;
+						worksheet.createRow(j);
+						for (int k = 0; k < Data_Row.length; k++) {
+							for (int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
+								Cell IdentCell = IdentifierRow.getCell(l);
+								if (IdentCell != null && IdentCell.getStringCellValue().contentEquals(Data_Headers[k])) {
+									worksheet.getRow(j).createCell(l);
+									Cell cell = worksheet.getRow(j).getCell(l);
+									cell.setCellValue(Data_Row[k]);
+								}
+							}
+						}
+						
+						/*		for debugging new lines being added				
+						for (int l = 0; l < worksheet.getRow(j).getPhysicalNumberOfCells(); l++) {
+							System.out.print(worksheet.getRow(j).getCell(l).getStringCellValue() + ", ");
+						}*/
+					}
+				}
+			}
+			// Close the InputStream
+			fsIP.close();
+			// Open FileOutputStream to write updates
+			FileOutputStream output_file = new FileOutputStream(new File(FileName));
+			// write changes
+			wb.write(output_file);
+			// close the stream
+			output_file.close();
+			FileUpdated = true;
+		} catch (Exception e) {
+			try {
+				wb.close();
+			} catch (IOException e1) {
+			}
+			e.printStackTrace();
+		} finally {
+			Excellock.unlock();
+		}
+		return FileUpdated;
 	}
 
 }// End Class

@@ -1,6 +1,10 @@
 package SHPC_Application;
 
-import SupportClasses.General_API_Calls;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import API_Functions.General_API_Calls;
+import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
 public class SHPC_Data {
@@ -10,17 +14,25 @@ public class SHPC_Data {
 	public String OAuth_Token = "";
 	public String AShipmentURL = "";
 	public String Level = "";
-
+	public final static Lock OAuth_Token_Lock = new ReentrantLock();// prevents multiple bearer token calls
+	
 	//Stores the data for each individual level
 	public static SHPC_Data DataClass[] = new SHPC_Data[8];
 	
+	public static SHPC_Data LoadVariables(){
+		return LoadVariables(Environment.getInstance().getLevel());
+	}
 	public static SHPC_Data LoadVariables(String Level){
 		int intLevel = Integer.parseInt(Level);
 		//if the level details were already loaded then return detail.
 		if (DataClass[intLevel] != null) {
 			return DataClass[intLevel];
 		}
-		
+		OAuth_Token_Lock.lock();
+		// internal to lock for any any requests in que.
+		if (DataClass[intLevel] != null) {
+			return DataClass[intLevel];
+		}
 		//since the level details have not been loaded load them.
 		SHPC_Data DC = new SHPC_Data();
 		DC.Level = Level;
@@ -87,7 +99,7 @@ public class SHPC_Data {
 		}
 		
 		DataClass[intLevel] = DC;
-		
+		OAuth_Token_Lock.unlock();
 		return DC;
 	}
 

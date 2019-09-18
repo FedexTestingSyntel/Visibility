@@ -1,4 +1,4 @@
-package TRKC_Application;
+package TRKC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-import SupportClasses.General_API_Calls;
+
+import API_Functions.General_API_Calls;
 import SupportClasses.WebDriver_Functions;
 
 public class TRKC_Endpoints {
@@ -55,17 +56,6 @@ public class TRKC_Endpoints {
   			HttpPost httppost = new HttpPost( LevelURL + "/trackingCal/track");
 
   			JSONObject processingParameters = new JSONObject();
-  				
-  			//	{"TrackPackagesRequest":{"appType":"WTRK","appDeviceType":"DESKTOP","supportHTML":true,"supportCurrentLocation":true,"uniqueKey":"","processingParameters":{},"trackingInfoList":[{"trackNumberInfo":{"trackingNumber":"794946908060","trackingQualifier":"","trackingCarrier":""}}]}}
-  			/*JSONObject trackNumberInfo = new JSONObject()
-  	  				.put("trackingNumber", TrackingNumber)
-  	  				.put("trackingQualifier", "")
-  	  				.put("trackingCarrier", "");
-  			
-  			JSONObject trackingInfoListElement = new JSONObject()
-  	  				.put("trackNumberInfo", trackNumberInfo);
-  			
-  			Object trackingInfoListArray[] = new Object[] {trackingInfoListElement};*/
   			
   			JSONObject TrackPackagesRequest = new JSONObject()
   	  				.put("appType", "WTRK")

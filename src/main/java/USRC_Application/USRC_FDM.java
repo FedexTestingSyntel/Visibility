@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_FDM {
  
-	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -93,6 +93,7 @@ public class USRC_FDM {
 			String Response = "";
 
 			//create the new user
+			//UserID = "L2ATRK13k";
 			Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
 			
 			//check to make sure that the userid was created.

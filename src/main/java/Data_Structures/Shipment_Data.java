@@ -2,6 +2,7 @@ package Data_Structures;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
@@ -28,6 +29,11 @@ public class Shipment_Data {
 	public boolean SIGNATURE_RELEASE = false;	
 	public boolean DELIVERY_INSTRUCTIONS = false;	
 	public boolean DELIVERY_SUSPENSIONS = false;
+	
+	// Tracking Flags
+	public boolean isEstDelTmWindowLabel = false;
+	public String estDelTmWindowStart = "";
+	public boolean isNonHistoricalEDTW = false;
 	
 	public Shipment_Data() {
 	}
@@ -82,7 +88,6 @@ public class Shipment_Data {
 		this.TRACKING_QUALIFIER = TRACKING_QUALIFIER;
 		return true;
 	}
-	
 
 	public boolean setService(String Service) {
 		this.Service = Service;
@@ -115,7 +120,10 @@ public class Shipment_Data {
 			{"REDIRECT_HOLD_AT_LOCATION", Boolean.toString(this.REDIRECT_HOLD_AT_LOCATION)},
 			{"SIGNATURE_RELEASE", Boolean.toString(this.SIGNATURE_RELEASE)},
 			{"DELIVERY_INSTRUCTIONS", Boolean.toString(this.DELIVERY_INSTRUCTIONS)},
-			{"DELIVERY_SUSPENSIONS", Boolean.toString(this.DELIVERY_SUSPENSIONS)}
+			{"DELIVERY_SUSPENSIONS", Boolean.toString(this.DELIVERY_SUSPENSIONS)},
+			{"isEstDelTmWindowLabel", Boolean.toString(this.isEstDelTmWindowLabel)},
+			{"estDelTmWindowStart", this.estDelTmWindowStart},
+			{"isNonHistoricalEDTW", Boolean.toString(this.isNonHistoricalEDTW)}
 		};
 
 		int IdentifierColumn = -1;
@@ -137,6 +145,32 @@ public class Shipment_Data {
 			if(!File_Updated && IdentifierColumn == 3) {
 				File_Updated = Helper_Functions.WriteToExcel(Helper_Functions.DataDirectory + "\\TrackingNumbers.xls", "L" + Level, Data, 2);
 			}
+			
+			return File_Updated;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public static boolean writeShipments_Data_To_Excel(Shipment_Data Shipment_Info_Array[]) {
+		CopyOnWriteArrayList<String[]> ShipmentList = new CopyOnWriteArrayList<String[]>();
+		
+		String Headers[] = new String[] {"SHIP_DATE", "DELIVERY_DATE", "TRACKING_NUMBER", "TRACKING_QUALIFIER", "TRACKING_CARRIER", "SERVICE", "USER_ID", "PASSWORD", "STATUS", "RESCHEDULE", "REROUTE", "REDIRECT_HOLD_AT_LOCATION", "SIGNATURE_RELEASE", "DELIVERY_INSTRUCTIONS", "DELIVERY_SUSPENSIONS", "isEstDelTmWindowLabel", "estDelTmWindowStart", "isNonHistoricalEDTW"};
+		ShipmentList.add(Headers);
+		for (Shipment_Data Shipment_Info: Shipment_Info_Array) {
+			if (Shipment_Info != null) {
+				String Data[] = new String[] { Shipment_Info.Ship_Date,  Shipment_Info.DELIVERY_DATE, Shipment_Info.Tracking_Number, Shipment_Info.TRACKING_QUALIFIER, Shipment_Info.TRACKING_CARRIER, Shipment_Info.Service, Shipment_Info.User_Info.USER_ID, Shipment_Info.User_Info.PASSWORD, Shipment_Info.Status, Boolean.toString(Shipment_Info.RESCHEDULE), Boolean.toString(Shipment_Info.REROUTE), Boolean.toString(Shipment_Info.REDIRECT_HOLD_AT_LOCATION), Boolean.toString(Shipment_Info.SIGNATURE_RELEASE), Boolean.toString(Shipment_Info.DELIVERY_INSTRUCTIONS), Boolean.toString(Shipment_Info.DELIVERY_SUSPENSIONS), Boolean.toString(Shipment_Info.isEstDelTmWindowLabel), Shipment_Info.estDelTmWindowStart,  Boolean.toString(Shipment_Info.isNonHistoricalEDTW)};
+				ShipmentList.add(Data);
+			}
+		}
+		
+		//identify by the tracking number 
+		int IdentifierColumn = 2;
+
+		try {
+			String Level = Environment.getInstance().getLevel();
+			boolean File_Updated = Helper_Functions.WriteMultipleToExcel(Helper_Functions.DataDirectory + "\\TrackingNumbers.xls", "L" + Level, ShipmentList, IdentifierColumn);
 			
 			return File_Updated;
 		}catch (Exception e) {
@@ -206,6 +240,15 @@ public class Shipment_Data {
 		  			break;
 		  		case "DELIVERY_SUSPENSIONS":
 		  			Shipment_Info_Array[pos].DELIVERY_SUSPENSIONS = Boolean.parseBoolean(Row[j]);
+		  			break;
+		  		case "isEstDelTmWindowLabel":
+		  			Shipment_Info_Array[pos].isEstDelTmWindowLabel = Boolean.parseBoolean(Row[j]);
+		  			break;
+		  		case "estDelTmWindowStart":
+		  			Shipment_Info_Array[pos].estDelTmWindowStart = Row[j];
+		  			break;
+		  		case "isNonHistoricalEDTW":
+		  			Shipment_Info_Array[pos].isNonHistoricalEDTW = Boolean.parseBoolean(Row[j]);
 		  			break;
 				}//end switch
 			}

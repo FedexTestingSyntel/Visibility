@@ -1,7 +1,4 @@
-package TRKC_Application;
-
-import SupportClasses.General_API_Calls;
-import SupportClasses.Helper_Functions;
+package TRKC;
 
 public class TRKC_Data {
 	public String OAuth_Token_URL = "";

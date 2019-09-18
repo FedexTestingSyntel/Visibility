@@ -2,7 +2,8 @@ package USRC_Application;
 
 import java.util.ArrayList;
 
-import SupportClasses.General_API_Calls;
+import API_Functions.General_API_Calls;
+import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
 public class USRC_Data {
@@ -29,6 +30,10 @@ public class USRC_Data {
 
 	//Stores the data for each individual level
 	private static USRC_Data DataClass[] = new USRC_Data[8];
+	
+	public static USRC_Data LoadVariables(){
+		return LoadVariables(Environment.getInstance().getLevel());
+	}
 	
 	public static USRC_Data LoadVariables(String Level){
 		int intLevel = Integer.parseInt(Level);

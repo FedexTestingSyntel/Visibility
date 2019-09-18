@@ -216,9 +216,15 @@ public class INET_Shipment {
 			}
 
 			// Select indirect signature required.
-			WebDriver_Functions.WaitClickable(By.id("module.ss._headerEdit"));
-			WebDriver_Functions.Wait(2);
-			WebDriver_Functions.Click(By.id("module.ss._headerEdit"));
+			if (WebDriver_Functions.isPresent(By.id("module.ss._headerEdit"))) {
+				// click the edit button for special services
+				WebDriver_Functions.WaitClickable(By.id("module.ss._headerEdit"));
+				// Need to fix to make dynamic, issue where 
+				WebDriver_Functions.Wait(2);
+				WebDriver_Functions.Click(By.id("module.ss._headerEdit"));
+			}
+
+			WebDriver_Functions.WaitPresent(By.id("ss.signature.sel"));
 			WebDriver_Functions.WaitForTextPresentIn(By.id("ss.signature.sel"), "Indirect signature required");
 			WebDriver_Functions.Select(By.id("ss.signature.sel"), "Indirect signature required", "t");
 

@@ -17,7 +17,7 @@ import SupportClasses.Environment;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Test_Data_Generation {
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -26,7 +26,7 @@ public class Test_Data_Generation {
 	
 	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
-		int numberOfAttempts = 20;
+		int numberOfAttempts = 2;
 		List<Object[]> data = new ArrayList<Object[]>();
 		
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
@@ -39,8 +39,8 @@ public class Test_Data_Generation {
 		    		User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 		    		for (User_Data User_Info : User_Info_Array) {
 		    			//check for a WADM users
-		    			// if (User_Info.ATRK_ENABLED.contentEquals("T") && User_Info.WDPA_ENABLED.contentEquals("T")) {
-		    			if (User_Info.USER_ID.contentEquals("L3FDM171713321")) {
+		    			if (User_Info.MIGRATION_STATUS.contains("WADM")) {
+		    			//if (User_Info.USER_ID.contentEquals("L3ATRK")) {
 		    				int loops = 0;
 		    				while (loops < numberOfAttempts) {
 			    				Shipment_Data Shipment_Info = new Shipment_Data();

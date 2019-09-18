@@ -18,7 +18,7 @@ import SupportClasses.Environment;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Add_Tracking_Numbers_To_User {
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -38,7 +38,7 @@ public class Add_Tracking_Numbers_To_User {
 			User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 			String User_Cookies = "";
     		for (User_Data User_Info : User_Info_Array) {
-    			if (User_Info.USER_ID.contentEquals("L2ATRKLARGE")) {
+    			if (User_Info.USER_ID.contentEquals("L3ATRK")) {
     				String Results[] = USRC_Application.USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
     				User_Cookies = Results[0];
     				break;
@@ -57,7 +57,11 @@ public class Add_Tracking_Numbers_To_User {
 		    	break;
     			}
     		}
-
+		}
+		
+		int last = 1700;
+		while (last < data.size()) {
+			data.remove(0);
 		}
 		return data.iterator();
 	}
@@ -65,7 +69,14 @@ public class Add_Tracking_Numbers_To_User {
 	@Test(dataProvider = "dp")
 	public static void Add_Tracking_Number(String Level, String Cookie, Shipment_Data Shipment_Info){
 		try {
-			String Response_TRKC = TRKC_Application.TRKC_Endpoints.ShipmentOptionAddRequest(Cookie, Shipment_Info.Tracking_Number, Shipment_Info.TRACKING_QUALIFIER, Shipment_Info.TRACKING_CARRIER);
+			String Response_TRKC = "";
+			int number_of_attempts = 5;
+			for (int i = 0 ; i < number_of_attempts ; i ++) {
+				Response_TRKC = TRKC.TRKC_Endpoints.ShipmentOptionAddRequest(Cookie, Shipment_Info.Tracking_Number, Shipment_Info.TRACKING_QUALIFIER, Shipment_Info.TRACKING_CARRIER);
+				if (!Response_TRKC.contains("TRAQS connection/request problem")) {
+					i = number_of_attempts;
+				}
+			}
 			assertThat(Response_TRKC, containsString("{\"successful\":true"));
 			//Response_TRKC = TRKC_Application.TRKC_Endpoints.ShipmentOptionWatchListRequest(Cookie, Shipment_Info.Tracking_Number, Shipment_Info.TRACKING_QUALIFIER, Shipment_Info.TRACKING_CARRIER);
 			//assertThat(Response_TRKC, containsString("{\"successful\":true"));					

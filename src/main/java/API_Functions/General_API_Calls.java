@@ -1,4 +1,4 @@
-package SupportClasses;
+package API_Functions;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -6,11 +6,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.net.ssl.HttpsURLConnection;
 import org.apache.http.Header;
 import org.apache.http.HttpRequest;
@@ -20,9 +21,18 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import SupportClasses.Helper_Functions;
+
 public class General_API_Calls {
+	// flag will determine if the url, request, and response will be printed to the console.
+	public static boolean PrintOutAPICall = true;
+	public static boolean PrintOutFullResponse = false;
+	
 	private final static Lock lock = new ReentrantLock();//to make sure the httpclient works with the parallel execution
 	private static HttpClient httpclient = HttpClients.createDefault();//made static to speed up socket execution
+	
+	// Have one (or more) threads ready to do the async tasks. Do this during startup of your app.
+	static ExecutorService executor = Executors.newFixedThreadPool(4); 
 	
 	public static String getAuthToken(String URL, String Client_Iden, String Client_Sec) {
 		//System.out.println("OAuth: " + URL + "  Iden: " + Client_Iden + "  Secret: " + Client_Sec);
@@ -87,14 +97,15 @@ public class General_API_Calls {
 		}finally {
 			String Response_to_Print = Response.replaceAll("\n", "").replaceAll("\r", "");
 			//print out the URL that was used
-//			Print_Out_API_Call(MethodName, Request.toString(), RequestHeaders, Request_Body, Response_to_Print);
-			
+			if (PrintOutAPICall) {
+				Print_Out_API_Call(MethodName, Request.toString(), RequestHeaders, Request_Body, Response_to_Print);
+			}
 			lock.unlock();
 		} 
 	}
 	
 	public static void Print_Out_API_Call(String MethodName, String URL, String RequestHeaders, String Request_Body, String Response) {
-		if (Response != null && Response.length() > 600) {
+		if (Response != null && Response.length() > 600 && !PrintOutFullResponse) {
 			int length = Response.length();
 			Response = Response.substring(0, 600) + "... (Response full length was " + length + ", Print_Out_API_Call() )";
 		}
@@ -156,10 +167,29 @@ public class General_API_Calls {
 		if(Main.contains(Parameter)) {
 			//find the parameter and return what reins value stored.
 			// send Foo, will turn into "Foo":". Then will return value such as "Foo":"value"
-			Parameter = "\"" + Parameter + "\":\"";
-			Main = Main.substring(Main.indexOf(Parameter) + Parameter.length(), Main.length());
-			return Main.substring(0, Main.indexOf("\""));
+			String StringParameter = "\"" + Parameter + "\":\"";
+			String BooleanParameter = "\"" + Parameter + "\":";
+			if(Main.contains(StringParameter)) {
+				Main = Main.substring(Main.indexOf(StringParameter) + StringParameter.length(), Main.length());
+				return Main.substring(0, Main.indexOf("\""));
+			}else if(Main.contains(BooleanParameter)) {
+				Main = Main.substring(Main.indexOf(BooleanParameter) + BooleanParameter.length(), Main.length());
+				return Main.substring(0, Main.indexOf(",\""));
+			}
 		}
 		return null;
 	}
+
+	public static void setPrintOutAPICallFlag(boolean flag) {
+		PrintOutAPICall = flag;
+	}
+	
+	public static void setPrintOutFullResponseFlag(boolean flag) {
+		PrintOutFullResponse = flag;
+	}
+
 }
+
+
+
+

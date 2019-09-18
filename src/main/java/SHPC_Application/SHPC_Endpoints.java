@@ -18,27 +18,28 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import API_Functions.General_API_Calls;
 import Data_Structures.Account_Data;
 import Data_Structures.Address_Data;
 import Data_Structures.Shipment_Data;
 import Data_Structures.User_Data;
 import SupportClasses.Account_Lookup;
 import SupportClasses.Environment;
-import SupportClasses.General_API_Calls;
 import SupportClasses.Helper_Functions;
 import USRC_Application.USRC_Endpoints;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class SHPC_Endpoints {
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "6";
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 	}
 	
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		
@@ -56,9 +57,10 @@ public class SHPC_Endpoints {
 	    			}
 	    		break;
 		    	case "Create_Shipment":
+		    		API_Functions.General_API_Calls.setPrintOutAPICallFlag(false);
 		    		for (User_Data User_Info : User_Info_Array) {
 		    			//check for a WADM users
-		    			if (!User_Info.ACCOUNT_NUMBER.contentEquals("")) {
+		    			if (!User_Info.ACCOUNT_NUMBER.contentEquals("") && User_Info.Address_Info.Country_Code.contentEquals("US")) {
 		    			//if (User_Info.USER_ID.contentEquals("MAGICJP")) {
 		    				
 		    				// The cookie is in position 0 of the array.
@@ -85,12 +87,12 @@ public class SHPC_Endpoints {
 								Helper_Functions.PrintOut("Not able to retrieve address for account " + Shipment_Info.Account_Number);
 								e.printStackTrace();
 							}
-		    				
-		    				if (data.size() > 20) {
+		    				if (data.size() > 1) {
 		    					break;
 		    				}
 		    			}
 		    		}
+		    		API_Functions.General_API_Calls.setPrintOutAPICallFlag(true);
 		    	break;
 			}
 		}
@@ -174,9 +176,13 @@ public class SHPC_Endpoints {
 				.put("value", "7")
 				.put("units", "KG");
 		
+		String nullString = null;
 		JSONObject customsValue = new JSONObject()
-				.put("amount", "0")
+				.put("amount", nullString)
 				.put("currency", "JYE");
+		/*JSONObject customsValue = new JSONObject()
+				.put("amount", "0")
+				.put("currency", "JYE");*/
 		
 		JSONObject dimensions = new JSONObject()
 				.put("length", "5")
@@ -227,7 +233,7 @@ public class SHPC_Endpoints {
 				.put("payor", responsibleParty);
 		
 		JSONObject dutiesPayment = new JSONObject()
-				.put("paymentType", "SENDER")   //RECIPIENT   SENDER
+				.put("paymentType", "RECIPIENT")   //RECIPIENT   SENDER
 				.put("payor", responsibleParty);
 		
 		JSONObject commercialInvoice = new JSONObject()
@@ -259,7 +265,7 @@ public class SHPC_Endpoints {
 				.put("groupPackageCount", 1)
 				.put("insuredValue", customsValue)
 				.put("weight", weight)
-				//.put("customerReferences", null)
+				.put("customerReferences", nullString)
 				.put("dimensions", dimensions)
 				.put("packageSpecialServices", packageSpecialServices);
 		

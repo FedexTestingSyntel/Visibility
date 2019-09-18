@@ -132,7 +132,10 @@ public class eMASS_Scans {
 			
 	// Due to EMASS glitch     Enter first digit of city       Enter country
 			WaitForInProgressOverlay();
-			WebDriver_Functions.Type(By.id(MT + ":formCd_inputtext"), Form_ID);
+			if (!WebDriver_Functions.GetText(By.id(MT + ":formCd_inputtext")).contentEquals(Form_ID)){
+				WebDriver_Functions.Type(By.id(MT + ":formCd_inputtext"), Form_ID);
+			}
+			
 			WebDriver_Functions.Type(By.id(MT + ":destCityCd_inputtext"), Shipment_Info.Destination_Address_Info.City.substring(0, 1).toUpperCase()); 
 			WebDriver_Functions.Type(By.id(MT + ":destCountryCd_inputtext"), Shipment_Info.Destination_Address_Info.Country_Code);
 			WebDriver_Functions.Click(By.id(MT + ":baseSvc_selectonemenu"));
