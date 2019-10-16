@@ -1,4 +1,4 @@
-package SHPC_Application;
+package SHPC;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -13,30 +13,26 @@ public class SHPC_Data {
 	public String OAuth_Token_Client_Secret = "";
 	public String OAuth_Token = "";
 	public String AShipmentURL = "";
-	public String Level = "";
-	public final static Lock OAuth_Token_Lock = new ReentrantLock();// prevents multiple bearer token calls
+	public final static Lock SHPC_Lock = new ReentrantLock();// prevents multiple bearer token calls
 	
 	//Stores the data for each individual level
 	public static SHPC_Data DataClass[] = new SHPC_Data[8];
 	
-	public static SHPC_Data LoadVariables(){
-		return LoadVariables(Environment.getInstance().getLevel());
-	}
-	public static SHPC_Data LoadVariables(String Level){
+	public static SHPC_Data SHPC_Load(){
+		String Level = Environment.getInstance().getLevel();
 		int intLevel = Integer.parseInt(Level);
 		//if the level details were already loaded then return detail.
 		if (DataClass[intLevel] != null) {
 			return DataClass[intLevel];
 		}
-		OAuth_Token_Lock.lock();
+		SHPC_Lock.lock();
 		// internal to lock for any any requests in que.
 		if (DataClass[intLevel] != null) {
 			return DataClass[intLevel];
 		}
 		//since the level details have not been loaded load them.
 		SHPC_Data DC = new SHPC_Data();
-		DC.Level = Level;
-		
+
 		String LevelIdentifier[] = null;
   		switch (Level) {
   		case "1":
@@ -44,7 +40,7 @@ public class SHPC_Data {
   		case "2":
   			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com", ""}; break;
   		case "3":
-  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com:8443", ""}; break;
+  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com", ""}; break;
   		case "4":
   			LevelIdentifier = new String[] {"https://apistress.idev.fedex.com", ""}; break;
   		case "5":
@@ -99,8 +95,24 @@ public class SHPC_Data {
 		}
 		
 		DataClass[intLevel] = DC;
-		OAuth_Token_Lock.unlock();
+		SHPC_Lock.unlock();
 		return DC;
+	}
+	
+	public String getOAuthToken() {
+		String Level = Environment.getInstance().getLevel();
+		int intLevel = Integer.parseInt(Level);
+		if (DataClass[intLevel] == null) {
+			SHPC_Load();
+		}
+		if (DataClass[intLevel].OAuth_Token == null) {
+			// Generate a new OAuth_Token
+			DataClass[intLevel].OAuth_Token = General_API_Calls.getAuthToken(DataClass[intLevel].OAuth_Token_URL, 
+					DataClass[intLevel].OAuth_Token_Client_ID, 
+					DataClass[intLevel].OAuth_Token_Client_Secret);
+		}
+		
+		return DataClass[intLevel].OAuth_Token;
 	}
 
 }

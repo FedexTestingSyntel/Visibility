@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
@@ -30,8 +31,10 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
-public class Helper_Functions {
-	public static String MyEmail = "accept@gmail.com", myPhone = "9011111111", myPassword = "Test1234";
+public class Helper_Functions{
+	public static String MyEmail = "accept@gmail.com";
+	public static String myPhone = "9011111111";
+	public static String myPassword = "Test1234";
 	public static String MyFakeEmail = "accept@fedex.com";
 	public static String BaseDirectory = System.getProperty("user.dir").substring(0,
 			System.getProperty("user.dir").lastIndexOf("\\") + 1);
@@ -45,6 +48,8 @@ public class Helper_Functions {
 			CreditCardList = new ArrayList<String[]>(), EnrollmentList = new ArrayList<String[]>(),
 			TaxInfoList = new ArrayList<String[]>();
 
+			
+			
 	public static String getCallerClassName() {
 		StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
 		for (int i = 1; i < stElements.length; i++) {
@@ -55,6 +60,10 @@ public class Helper_Functions {
 			}
 		}
 		return null;
+	}
+	
+	public static String getMethodName() {
+		return Thread.currentThread().getStackTrace()[2].getMethodName();
 	}
 
 	public static void WriteToFile(String Text, String Path) {
@@ -872,14 +881,24 @@ public class Helper_Functions {
 			int KeyColumn = -1;
 			HSSFRow IdentifierRow = null;
 			IdentifierRow = worksheet.getRow(0);
+			String Data_Headers[] = new String[Data.length];
+			for (int addHeadersCnt = 0; addHeadersCnt < Data.length; addHeadersCnt++) {
+				Data_Headers[addHeadersCnt] = Data[addHeadersCnt][0];
+			}
 			int columns =  IdentifierRow.getLastCellNum();
 			if (KeyPosition != -1) { // Only when making an update
 				for (int i = 0; i < columns; i++) {
 					if (IdentifierRow.getCell(i) != null) {
 						String Check_Cell = IdentifierRow.getCell(i).getStringCellValue();
+						// Check and make sure the excel sheet has all of the same headers as those being passed.
+						for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
+							if (Data_Headers[headerCnt] != null && Check_Cell.contentEquals(Data_Headers[headerCnt])) {
+								Data_Headers[headerCnt] = null;
+							}
+						}
+						
 						if (Check_Cell.contentEquals(Data[KeyPosition][0])) {
 							KeyColumn = i;
-							break;
 						}
 					}
 				}
@@ -887,6 +906,16 @@ public class Helper_Functions {
 				if (KeyColumn == -1) {
 					throw new Exception("Key Not Found");
 				}
+				for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
+					if (Data_Headers[headerCnt] != null) {
+						int newEndCell = worksheet.getRow(0).getLastCellNum();
+						worksheet.getRow(0).createCell(newEndCell);
+						worksheet.getRow(0).getCell(newEndCell).setCellValue(Data_Headers[headerCnt]);
+						IdentifierRow = worksheet.getRow(0);
+						Helper_Functions.PrintOut(Data_Headers[headerCnt] + "--- Header was not found.");
+					}
+				}
+				
 			}
 
 			boolean keyFoundInExcelFlag = false;
@@ -1182,7 +1211,7 @@ public class Helper_Functions {
 			wb = new HSSFWorkbook(fsIP);
 			// Access the work sheet, so that we can update / modify it.
 			HSSFSheet worksheet = wb.getSheetAt(0);
-			for (int i = 1; i < wb.getNumberOfSheets() + 1; i++) {
+			for (int i = 1; i < wb.getNumberOfSheets(); i++) {
 				// PrintOut("CurrentSheet: " + worksheet.getSheetName(), false); //for debugging
 				// if getting errors with sheet not found
 				if (worksheet.getSheetName().contentEquals(SheetName)) {
@@ -1285,6 +1314,24 @@ public class Helper_Functions {
 		return FileUpdated;
 	}
 
+	public static void LimitDataProvider(String methodName, int testLimit, List<Object[]> data) {
+		if (testLimit > 0 && data.size() > testLimit) {
+			System.out.println(methodName + "-- total scenarios " + data.size());
+		    while (data.size() > testLimit) {
+		    	data.remove(0);
+		    }
+		}
+		System.out.println(methodName + "-- " + data.size() + " scenarios.");
+	}
+	
+	public static boolean isNullOrUndefined(Object obj) {
+		if ( obj == null || obj.toString().contentEquals("")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 }// End Class
 
 /*

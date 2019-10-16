@@ -17,7 +17,7 @@ public class Address_Data {
 	public String Country = "";
 	//only applicable for US currently 5-17-19
 	public String Share_Id = "";
-	
+	public String Residential = "";
 	public String Location_Code = "";
 	
 	public static String Address_String(Address_Data Address_Info) {

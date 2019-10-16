@@ -1,11 +1,10 @@
-package USRC_Application;
+package USRC;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import org.junit.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
@@ -37,8 +36,6 @@ public class USRC_General {
 	    for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
 	    	String strLevel = "" + Environment.LevelsToTest.charAt(i);
 	    	int intLevel = Integer.parseInt(strLevel);
-	    	//loading the OAuth token and having all of the variables set.
-	    	USRC_Data.LoadVariables(strLevel);
 	    	User_Data User_Info[];
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 			case "CreateUsers":
@@ -107,16 +104,6 @@ public class USRC_General {
 					break;
     			}
 				break;
-			case  "UpdateValue":
-			case "Check_WCRV_Status":
-				//loading the OAuth token and having all of the variables set.
-				User_Info = User_Data.Get_UserIds(intLevel);
-				for (int k = 0; k < User_Info.length; k++) {
-					if(User_Info[k].WCRV_ENABLED.contentEquals("Enabled")) {
-    					data.add(new Object[] {strLevel, User_Info[k].USER_ID, User_Info[k].PASSWORD});
-    				}
-    			}
-				break;
 			case "CheckIfUserInvalidLogin":
 				User_Info = User_Data.Get_UserIds(intLevel);
 				for (int k = 0; k < User_Info.length; k++) {
@@ -135,9 +122,6 @@ public class USRC_General {
     				}
     			}
 				break;
-			case "Testing_API_Login":
-				User_Info = User_Data.Get_UserIds(intLevel);
-				data.add(new Object[] {strLevel, User_Info[0]});
 			}//end switch MethodName
 		}
 	    
@@ -149,27 +133,20 @@ public class USRC_General {
 	}
 	
 	@Test (dataProvider = "dp", enabled = true)
-	public void Testing_API_Login(String Level, User_Data User_Info) {
-		String Response = USRC_Endpoints.Login_API_Load_Cookies(User_Info.USER_ID, User_Info.PASSWORD);
-		Helper_Functions.PrintOut(Response);
-	}
-	
-	@Test (dataProvider = "dp", enabled = true)
 	public void CreateUsers_User_Data(String Level, User_Data User_Info) {
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		String UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		//1 - Login, get cookies and uuid
 		User_Info.USER_ID = Helper_Functions.LoadUserID("L" + Level + User_Info.Address_Info.Country_Code);
 		User_Info.EMAIL_ADDRESS = Helper_Functions.getRandomString(10) + "@accept.com";
 		User_Data.Set_Dummy_Contact_Name(User_Info, User_Info.Address_Info.Country_Code, Level);
 		//create the new user
-		String Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, User_Info);
+		String Response = REGC.create_new_user.NewFCLUser(User_Info);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
+		fdx_login_fcl_uuid = login.Login(User_Info.USER_ID, User_Info.PASSWORD);
 		UUID = fdx_login_fcl_uuid[1];
 		String Results[] = new String[] {User_Info.USER_ID,  User_Info.PASSWORD, UUID};
 		Helper_Functions.PrintOut(Arrays.toString(Results), false);
@@ -178,7 +155,7 @@ public class USRC_General {
 	
 	@Test (dataProvider = "dp", enabled = false)
 	public void CreateUsers(String Level, int ContactPosition) {
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
+		USRC_Data USRC_Details = USRC_Data.USRC_Load();
 		String UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		//1 - Login, get cookies and uuid
 		String UserID = "L" + USRC_Details.Level + "UpdatePassword" + Helper_Functions.CurrentDateTime() + Helper_Functions.getRandomString(2);
@@ -187,13 +164,13 @@ public class USRC_General {
 		//create the new user
 		String ContactDetails[] = USRC_Data.ContactDetailsList.get(ContactPosition % USRC_Data.ContactDetailsList.size());
 		ContactDetails[4] = "Saqqqqwwwweeeerrrr.OSV@FEDEX.COM";
-		String Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
+		String Response = REGC.create_new_user.NewFCLUser(ContactDetails, UserID, Password);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID, Password);
+		fdx_login_fcl_uuid = login.Login(UserID, Password);
 		UUID = fdx_login_fcl_uuid[1];
 			
 		Helper_Functions.PrintOut(UserID + "/" + Password + "--" + UUID, false);
@@ -201,7 +178,6 @@ public class USRC_General {
 	
 	@Test (dataProvider = "dp", enabled = false)
 	public void CreateUsers_AddressDetails(String Level, String ContactDetails[]) {
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		String UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		//1 - Login, get cookies and uuid
 		String UserID = Helper_Functions.LoadUserID("L" + Level + ContactDetails[10]);
@@ -209,13 +185,13 @@ public class USRC_General {
 			
 		//create the new user
 
-		String Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
+		String Response = REGC.create_new_user.NewFCLUser(ContactDetails, UserID, Password);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
 			
 		//get the cookies and the uuid of the new user
-		fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID, Password);
+		fdx_login_fcl_uuid = login.Login(UserID, Password);
 		UUID = fdx_login_fcl_uuid[1];
 			
 		Helper_Functions.PrintOut(UserID + "/" + Password + "--" + UUID, false);
@@ -224,20 +200,18 @@ public class USRC_General {
 		
 	@Test (dataProvider = "dp", enabled = true)
 	public void Create_Users_With_Account(String Level, Account_Data Account_Info, String Account_Number) {
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
-		
 		//Account_Data Account_Info = Account_Lookup.Account_DataAccountDetails("642893505", Level, "FX");
 		//1 - Login, get cookies and uuid
 		Account_Info.Email = "accept@fedex.com";
-		User_Data.Set_User_Id(Account_Info.User_Info, "L" + USRC_Details.Level + "Account" + Account_Number);
+		User_Data.Set_User_Id(Account_Info.User_Info, "L" + Level + "Account" + Account_Number);
 		
-		String Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, Account_Info);
+		String Response = REGC.create_new_user.NewFCLUser(Account_Info);
 			
 		//check to make sure that the userid was created.
 		assertThat(Response, containsString("successful\":true"));
 		
 		//get the cookies and the uuid of the new user
-		String fdx_login_fcl_uuid[] = USRC_Endpoints.Login(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
+		String fdx_login_fcl_uuid[] = login.Login(Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD);
 		Account_Info.User_Info.UUID_NBR = fdx_login_fcl_uuid[1];
 		
 		String Results[] = new String[] {Account_Info.User_Info.USER_ID, Account_Info.User_Info.PASSWORD};
@@ -247,10 +221,10 @@ public class USRC_General {
 	
 	@Test (dataProvider = "dp", enabled = true)
 	public void UpdateUserContactInformation(String Level, User_Data User_Info) {
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
+		USRC_Data USRC_Details = USRC_Data.USRC_Load();
 		String fdx_login_fcl_uuid[] = {"","", ""};
 		//1 - Login, get cookies and uuid
-		fdx_login_fcl_uuid = USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
+		fdx_login_fcl_uuid = login.Login(User_Info.USER_ID, User_Info.PASSWORD);
 		
 		User_Info.FIRST_NM = User_Info.FIRST_NM + "Edit";
 		String Response = USRC_Endpoints.UpdateUserContactInformationWIDM(USRC_Details.UpdateUserContactInformationWIDMURL, User_Info, fdx_login_fcl_uuid[0]);
@@ -259,75 +233,10 @@ public class USRC_General {
 		assertThat(Response, containsString("successful\":true"));
 			
 	}
-	
-	@Test (dataProvider = "dp", enabled = false)
-	public void CheckLogin(String Level, String UserID, String Password) {
-		Environment.getInstance().setLevel(Level);
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
-		
-		String Cookies = null, fdx_login_fcl_uuid[] = null;
-		//get the cookies and the uuid of the user
-		fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		
-		//in case cannot login will check two of the generic other passwords
-		if (fdx_login_fcl_uuid == null){
-			Password = "Test12345";
-			fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		}
-		if(fdx_login_fcl_uuid == null){
-			Password = "Test1234";
-			fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID.replaceAll(" ", ""), Password.replaceAll(" ", ""));
-		}
-		
-		String Details[][] = {{"UUID_NBR", ""},//index 0 and set below
-				{"SSO_LOGIN_DESC", UserID},
-				{"USER_PASSWORD_DESC", Password},
-				{"SECRET_QUESTION_DESC", ""}, 
-				{"SECRET_ANSWER_DESC", ""},
-				{"FIRST_NM", ""}, 
-				{"LAST_NM", ""}, 
-				{"STREET_DESC", ""}, 
-				{"CITY_NM", ""}, 
-				{"STATE_CD", ""}, 
-				{"POSTAL_CD", ""}, 
-				{"COUNTRY_CD", ""}, 
-				{"FDM_STATUS", "F"}, //index 12 below
-				{"EMAIL_ADDRESS", ""}
-				};
-		
-		if (fdx_login_fcl_uuid != null){
-			Cookies = fdx_login_fcl_uuid[0];
-			Details[0][1] = fdx_login_fcl_uuid[1];//save the uuid
 
-			Details = App_Role_Info_Check(Level, Details, Cookies);
-
-			String Response = USRC_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookies);
-			if (Response.contains("recipientProfileEnrollmentStatus\":\"ENROLLED")) {
-				Details[12][1] = Response;//store all of the FDM details
-			}
-
-			String ContactDetailsResponse = USRC_Endpoints.ViewUserProfileWIDM(USRC_Details.ViewUserProfileWIDMURL, Cookies);
-			Details = USRC_Endpoints.Parse_ViewUserProfileWIDM(ContactDetailsResponse, Details);
-		}else {
-			//will save the current time of the failure.
-			Details = new String[][]{{"SSO_LOGIN_DESC", UserID},
-					{"ERROR", Helper_Functions.CurrentDateTime(true)}};
-		}
-		
-		String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
-		boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, 1);
-		Helper_Functions.PrintOut("Contact Details: " + Arrays.toString(Details), true);
-		if (!updatefile) {
-			Assert.fail("Not able to update file.");
-		}else if (fdx_login_fcl_uuid == null) {
-			Assert.fail("Not able to login");
-		}
-	}
-	
 	public String[][] App_Role_Info_Check(String Level, String Details[][], String Cookies){
-		USRC_Data USRC_Details = USRC_Data.LoadVariables(Level);
 		
-		String AccountRetrievalRequest = USRC_Endpoints.AccountRetrievalRequest(USRC_Details.GenericUSRCURL, Cookies);
+		String AccountRetrievalRequest = USRC_Endpoints.AccountRetrievalRequest(Cookies);
 		
 		String Parse[][] = {{"GFBO_ENABLED", "appName\":\"fclgfbo\",\"roleCode\":\""},
 				{"WGRT_ENABLED", "appName\":\"fclrates\",\"roleCode\":\""}, 

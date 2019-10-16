@@ -2,6 +2,7 @@ package Test_Data_Generation;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -9,6 +10,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -21,77 +23,63 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Tracking_Number_Systematic_Search {
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "4";
 	static CopyOnWriteArrayList<String> TrackingList = new CopyOnWriteArrayList<String>();
 	static CopyOnWriteArrayList<Shipment_Data> TrackingListForFileWrite = new CopyOnWriteArrayList<Shipment_Data>();
 	public final static Lock TrackingNumberListLock = new ReentrantLock();
-
-	// 111111365885L                   L2    
-	// 111111258699L   794950870011L   L3
-	//  794809944267L
-	// static long low = 794948139575L;
-	static long High = 794809941268L;  
-	static int interval = 3000;
+/*	L1  123456789012
+	L2 111111365885L                      
+	L3 111111258998L   794950870011L  794809941268L 
+	 794809944267L 
+	 L4    111111117498L
+	L7  111112563080L    776084983604L
+*/	
+	static long Low = 111111120681L;
+	static int interval = 30;
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		API_Functions.General_API_Calls.PrintOutAPICall = false;
-		API_Functions.General_API_Calls.PrintOutFullResponse = false;
-	}
-	
-	@AfterMethod
-	public void UpdateExcelAfterMethod() {
-		if (TrackingListForFileWrite.size() > 10) {
-			int size = TrackingListForFileWrite.size();
-			Shipment_Data S_D_A[] = new Shipment_Data [size];
-			for (int i = 0; i < size; i++) {
-				S_D_A[i] = TrackingListForFileWrite.get(0);
-				TrackingListForFileWrite.remove(0);
-			}
-			Data_Structures.Shipment_Data.writeShipments_Data_To_Excel(S_D_A);
-		}
+		API_Functions.General_API_Calls.setPrintOutAPICallFlag(true);
+		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(true);
 	}
 
-
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
 		for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			switch (m.getName()) {
-			case "Tracking_Number_Search_V2":
-				Shipment_Data Shipment_Data_Array[] = new Shipment_Data[30];
+			case "Tracking_Number_Search":
+				String Tracking_List_Array[] = new String[interval];
 				int pos = 0;
-				for (long track = High; track > High - interval; track--) {
-					Shipment_Data_Array[pos] = new Shipment_Data();
-					Shipment_Data_Array[pos].Tracking_Number = String.valueOf(track);
+				long lastIteration = Low + (interval * 30000);
+				for (long track = Low; track < lastIteration; track++) {
+					Tracking_List_Array[pos] = String.valueOf(track);
 					pos++;
-					if (pos == 30) {
-						data.add(new Object[] { Level, Shipment_Data_Array });
-						Shipment_Data_Array = new Shipment_Data[30];
+					if (pos == interval) {
+						data.add(new Object[] { Level, Tracking_List_Array });
+						Tracking_List_Array = new String[interval];
 						pos = 0;
 					}
+					Low++;
 				}
 				break;
 
 			}
 		}
 
+		SupportClasses.Helper_Functions.LimitDataProvider(m.getName(), -1, data);
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp", enabled = true)
-	public static void Tracking_Number_Search_V2(String Level, Shipment_Data Shipment_Info_Array[]){
-		String Range = Shipment_Info_Array[0].Tracking_Number + "-" + Shipment_Info_Array[Shipment_Info_Array.length - 1].Tracking_Number;
-		String TrackingFound = Range + "-- New Tracking Numbers: ";
+	@Test(dataProvider = "dp", enabled = true, invocationCount = 100)
+	public static void Tracking_Number_Search(String Level, String Tracking_List_Array[]){
+		String Range = Tracking_List_Array[0] + "-" + Tracking_List_Array[Tracking_List_Array.length - 1];
+		int TrackingNumbersFound = 0;
 		try {
-			String TrackingArray[] = new String[Shipment_Info_Array.length];
-			for(int cnt = 0; cnt < Shipment_Info_Array.length; cnt++) {
-				TrackingArray[cnt] = Shipment_Info_Array[cnt].Tracking_Number;
-			}
-			String TrackingPackagesResponse = TRKC.TRKC_Endpoints.TrackingPackagesRequest(TrackingArray);
+			String TrackingPackagesResponse = TRKC.tracking_packages.TrackingPackagesRequest(Tracking_List_Array);
 			
 			String TrackingPackageList = "packageList\":";
 			String TrackingStart = "{\"shipperAccountNumber\"";
@@ -106,9 +94,9 @@ public class Tracking_Number_Systematic_Search {
 			//Remove the start of the response and just leave the packageList
 			TrackingPackagesResponse = TrackingPackagesResponse.substring(TrackingPackagesResponse.indexOf(TrackingPackageList) + TrackingPackageList.length(), TrackingPackagesResponse.length());
 			
-			for (int pos = 0; pos < Shipment_Info_Array.length; pos++) {
+			for (int pos = 0; pos < Tracking_List_Array.length; pos++) {
 				String SingleTrackingResponse = TrackingPackagesResponse.substring(TrackingPackagesResponse.indexOf(TrackingStart), TrackingPackagesResponse.indexOf(TrackingEnd) + TrackingEnd.length());
-				Shipment_Info_Array[pos] = updateTrackingPackagesRequest(Shipment_Info_Array[pos], SingleTrackingResponse);
+				/*Shipment_Info_Array[pos] = updateTrackingPackagesRequest(Shipment_Info_Array[pos], SingleTrackingResponse);
 				if (SingleTrackingResponse.contains("\"CDOExists\":true")) {
 					Shipment_Info_Array[pos] = updateInflightDeliveryOptions(Shipment_Info_Array[pos]);
 				}
@@ -121,17 +109,45 @@ public class Tracking_Number_Systematic_Search {
 					TrackingListForFileWrite.add(Shipment_Info_Array[pos]);
 				}else {
 					Shipment_Info_Array[pos] = null;
+				}*/
+				
+				String trackingQualifier = API_Functions.General_API_Calls.ParseStringValue(SingleTrackingResponse, "trackingQualifier");
+				if (!Helper_Functions.isNullOrUndefined(trackingQualifier)) {
+					String trackingNumber = API_Functions.General_API_Calls.ParseStringValue(SingleTrackingResponse, "trackingNbr");
+					//Test_Data_Update.Tracking_Data_Update.Tracking_Number_Update(Level, trackingNumber, trackingQualifier, "", "");
+					int keyPosition = -1;
+					String Details[][] = new String[][] {
+						{"TRACKING_NUMBER", trackingNumber}, 
+						{"TRACKING_QUALIFIER", trackingQualifier}
+					};
+					String FileName = Shipment_Data.getTrackingFilePath(Level);
+					Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, keyPosition);
+					TrackingNumbersFound++;
 				}
 				
 				TrackingPackagesResponse = TrackingPackagesResponse.replace(SingleTrackingResponse, "");
 			}
-			
-			Helper_Functions.PrintOut(TrackingFound, false);
+			Helper_Functions.PrintOut(Range + ":  " + TrackingNumbersFound);
 		}catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
  			Assert.fail(e.getCause().toString());
-			Assert.fail();
 		}
+	}
+	
+	@Test (priority = 10)
+	public void WriteRemainder() {
+		int size = TrackingListForFileWrite.size();
+		if (size > 0) {
+			Shipment_Data S_D_A[] = new Shipment_Data[0];
+			for (Shipment_Data SD: TrackingListForFileWrite) {
+				S_D_A = Arrays.copyOf( S_D_A,  S_D_A.length + 1);
+				S_D_A[ S_D_A.length - 1] = SD;
+				TrackingListForFileWrite.remove(SD);
+			}
+			
+			Data_Structures.Shipment_Data.writeShipments_Data_To_Excel(S_D_A);
+		}
+
 	}
 	
 	public static Shipment_Data updateTrackingPackagesRequest(Shipment_Data Shipment_Info, String TrackingPackagesResponse) throws Exception{		
@@ -234,6 +250,29 @@ public class Tracking_Number_Systematic_Search {
 		}
 
 		return Shipment_Info;
+	}
+	
+	@AfterMethod
+	public void UpdateExcelAfterMethod() {
+		if (TrackingListForFileWrite.size() > 15) {
+			UpdateFile();
+		}
+	}
+	
+	@AfterClass
+	public void afterClass() {
+		UpdateFile();
+	}
+	
+	private void UpdateFile() {
+		Shipment_Data S_D_A_1[] = new Shipment_Data[0];
+		for (Shipment_Data SD: TrackingListForFileWrite) {
+			S_D_A_1 = Arrays.copyOf( S_D_A_1,  S_D_A_1.length + 1);
+			S_D_A_1[ S_D_A_1.length - 1] = SD;
+			TrackingListForFileWrite.remove(SD);
+		}
+		
+		Data_Structures.Shipment_Data.writeShipments_Data_To_Excel(S_D_A_1);
 	}
 
 	

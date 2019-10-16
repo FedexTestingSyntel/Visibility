@@ -19,7 +19,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import Data_Structures.Enrollment_Data;
 import Data_Structures.User_Data;
-import USRC_Application.USRC_Endpoints;
+import USRC.USRC_Endpoints;
 
 public class WebDriver_Functions{
 
@@ -670,6 +670,7 @@ public class WebDriver_Functions{
 	public static void SetCookieValue(String Name, String Value){
 		org.openqa.selenium.Cookie cookie;
 		cookie = new org.openqa.selenium.Cookie(Name , Value);
+		DriverFactory.getInstance().getDriver().manage().deleteCookieNamed(Name);
 		DriverFactory.getInstance().getDriver().manage().addCookie(cookie);
 	}
 	
@@ -748,7 +749,7 @@ public class WebDriver_Functions{
     	
     	try{
     		//try to login from the USRC API call
-    		USRC_Endpoints.Login_API_Load_Cookies(User_Info.USER_ID, User_Info.PASSWORD);
+    		USRC.login.Login_API_Load_Cookies(User_Info.USER_ID, User_Info.PASSWORD);
     		if (GetCookieValue("fcl_uuid") == null) {
         		throw new Exception("Not able to login through USRC call");
         	}

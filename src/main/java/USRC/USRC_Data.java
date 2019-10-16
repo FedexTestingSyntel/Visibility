@@ -1,27 +1,25 @@
-package USRC_Application;
+package USRC;
 
 import java.util.ArrayList;
-
 import API_Functions.General_API_Calls;
 import SupportClasses.Environment;
-import SupportClasses.Helper_Functions;
 
 public class USRC_Data {
-	public String OAuth_Token_URL = "";
-	public String OAuth_Token_Client_ID = "";
-	public String OAuth_Token_Client_Secret = "";
-	public String OAuth_Token = "";
-	public String Level = "";
+	public String OAuth_Token_URL;
+	public String OAuth_Token_Client_ID;
+	public String OAuth_Token_Client_Secret;
+	public String OAuth_Token;
+	public String Level;
 	
-	public String EnrollmentURL = "";
-	public String CreatePinURL = "";
-	public String PendingAddressURL = "";
-	public String VerifyPinURL = "";
-	public String CancelEnrollmentURL = "";
-	public String GenericUSRCURL = ""; 
-	public String REGCCreateNewUserURL = "";
-	public String ViewUserProfileWIDMURL = "";
-	public String UpdateUserContactInformationWIDMURL ="";
+	public String EnrollmentURL;
+	public String CreatePinURL;
+	public String PendingAddressURL;
+	public String VerifyPinURL;
+	public String CancelEnrollmentURL;
+	public String GenericUSRCURL; 
+	public String REGCCreateNewUserURL;
+	public String ViewUserProfileWIDMURL;
+	public String UpdateUserContactInformationWIDMURL;
 	
 	public String FDMSMS_PinType = "SMS";
 	public String FDMPostcard_PinType = "POSTAL";
@@ -31,11 +29,8 @@ public class USRC_Data {
 	//Stores the data for each individual level
 	private static USRC_Data DataClass[] = new USRC_Data[8];
 	
-	public static USRC_Data LoadVariables(){
-		return LoadVariables(Environment.getInstance().getLevel());
-	}
-	
-	public static USRC_Data LoadVariables(String Level){
+	public static USRC_Data USRC_Load(){
+		String Level = Environment.getInstance().getLevel();
 		int intLevel = Integer.parseInt(Level);
 		//if the level details were already loaded then return detail.
 		if (DataClass[intLevel] != null) {
@@ -49,21 +44,44 @@ public class USRC_Data {
 		String LevelIdentifier[] = null;
   		switch (Level) {
   		case "1":		//expand to user direct endpoints later as needed
-  			LevelIdentifier = new String[] {"", ""}; break;
+  			LevelIdentifier = new String[] {"", ""};
+			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
+			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
+  			break;
   		case "2":
-  			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com:8443", ""}; break;
+  			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com:8443", ""};
+			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
+			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
+  			break;
   		case "3":
-  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com:8443", ""}; break;
+  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com:8443", ""};
+			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
+			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
+  			break;
   		case "4":
-  			LevelIdentifier = new String[] {"https://apistress.idev.fedex.com", ""}; break;
+  			LevelIdentifier = new String[] {"https://apistress.idev.fedex.com", ""};
+			/*DC.OAuth_Token_Client_ID = "l7xx4a86a91576b14d4bb7ba81f52470e48d";
+			DC.OAuth_Token_Client_Secret ="bb0bc6e8fcba4813989ff50895590f30";*/
+			DC.OAuth_Token_Client_ID = "l7xx1841f44a800f4a509aa630b3c009a83d"; // updated on 10-11-19
+			DC.OAuth_Token_Client_Secret ="e8e41ab3d70b47eab59e01240772df62";
+  			break;
   		case "5":
-  			LevelIdentifier = new String[] {"https://apibit.idev.fedex.com:8443", ""}; break;
+  			LevelIdentifier = new String[] {"https://apibit.idev.fedex.com:8443", ""};
+			DC.OAuth_Token_Client_ID = "";
+			DC.OAuth_Token_Client_Secret ="";
+  			break;
   		case "6":
   			//L6 is not valid for direct URL
-  			LevelIdentifier = new String[] {"https://apitest.fedex.com", ""}; break;
+  			LevelIdentifier = new String[] {"https://apitest.fedex.com", ""};
+			DC.OAuth_Token_Client_ID = "l7xx13465335b1224abb88e4587bed90eb40";
+			DC.OAuth_Token_Client_Secret = "dd4ece74e7b04d8f991d4264efdf5100";
+  			break;
   		case "7":
   			//L7 is not valid for direct URL
-  			LevelIdentifier = new String[] {"https://api.fedex.com", ""}; break;
+  			LevelIdentifier = new String[] {"https://api.fedex.com", ""};
+			DC.OAuth_Token_Client_ID = "l7xxdd1a6d120ab84667b653bd99cd25a033";
+			DC.OAuth_Token_Client_Secret ="b24b83e86c5640cf9f25baab30e99208";
+  			break;
 		}
   		
   		DC.OAuth_Token_URL = LevelIdentifier[0] + "/auth/oauth/v2/token";
@@ -83,44 +101,6 @@ public class USRC_Data {
   		DC.REGCCreateNewUserURL = GenericLevel + "/regcal/registration/newfcluser";
   		DC.ViewUserProfileWIDMURL = GenericLevel + "/userCal/rest/v2/ViewUserProfileWIDM";
   		DC.UpdateUserContactInformationWIDMURL = GenericLevel + "/userCal/rest/v2/UpdateUserContactInformationWIDM";
-  		
-		switch (Level) { //Based on the method that is being called the array list will be populated. This will make the TestNG Pass/Fail results more relevant.
-		case "1":
-			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
-			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
-			break;
-		case "2":
-			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
-			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
-			break;
-		case "3":
-			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
-			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
-			break;
-		case "4":
-			DC.OAuth_Token_Client_ID = "l7xx4a86a91576b14d4bb7ba81f52470e48d";
-			DC.OAuth_Token_Client_Secret ="bb0bc6e8fcba4813989ff50895590f30";
-			break;
-		case "5"://havn't used L5
-			DC.OAuth_Token_Client_ID = "";
-			DC.OAuth_Token_Client_Secret ="";
-			break;
-		case "6":
-			// updated on 6/26/19
-			DC.OAuth_Token_Client_ID = "l7xx13465335b1224abb88e4587bed90eb40";
-			DC.OAuth_Token_Client_Secret = "dd4ece74e7b04d8f991d4264efdf5100";
-			break;
-		case "7":
-			DC.OAuth_Token_Client_ID = "l7xxdd1a6d120ab84667b653bd99cd25a033";
-			DC.OAuth_Token_Client_Secret ="b24b83e86c5640cf9f25baab30e99208";
-			break;
-		}
-		
-		if (!DC.Level.contentEquals("1")) {
-			DC.OAuth_Token = General_API_Calls.getAuthToken(DC.OAuth_Token_URL, DC.OAuth_Token_Client_ID , DC.OAuth_Token_Client_Secret);
-			Helper_Functions.PrintOut("L" + Level + " USRC BearerToken generated: " + DC.OAuth_Token);
-
-		}
 
 		ArrayList<String[]> ContactList = new ArrayList<String[]>();
 		String Phone = "9011111111", Email = "YouNeedToUpdateThisLater@fedex.com";
@@ -200,4 +180,21 @@ public class USRC_Data {
 			return getContactDetails(con % ContactDetailsList.size());
 		}
 	}
+
+	public String getOAuthToken() {
+		String Level = Environment.getInstance().getLevel();
+		int intLevel = Integer.parseInt(Level);
+		if (DataClass[intLevel] == null) {
+			USRC_Load();
+		}
+		if (DataClass[intLevel].OAuth_Token == null) {
+			// Generate a new OAuth_Token
+			DataClass[intLevel].OAuth_Token = General_API_Calls.getAuthToken(DataClass[intLevel].OAuth_Token_URL, 
+					DataClass[intLevel].OAuth_Token_Client_ID, 
+					DataClass[intLevel].OAuth_Token_Client_Secret);
+		}
+		
+		return DataClass[intLevel].OAuth_Token;
+	}
+
 }

@@ -20,7 +20,7 @@ import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
-import Test_Data_Generation.Tracking_Data_Update;
+import Test_Data_Update.Tracking_Data_Update;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
@@ -46,7 +46,7 @@ public class INET_Shipment {
 				User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 				for (User_Data User_Info : User_Info_Array) {
 					// check for a WADM users
-					if (User_Info.ATRK_ENABLED.contentEquals("T") && User_Info.WDPA_ENABLED.contentEquals("T")) {
+					if (User_Info.getATRKStatus() && User_Info.getCanScheduleShipment()) {
 						int loops = 0;
 						while (loops < 10) {
 							Shipment_Data Shipment_Info = new Shipment_Data();
@@ -87,14 +87,15 @@ public class INET_Shipment {
 	public static void INET_Create_Shipment(String Level, Shipment_Data Shipment_Info) {
 		try {
 			Shipment_Info = INET_Create_Shipment(Shipment_Info);
+			eMASS_Scans.eMASS_Pickup_Scan(Shipment_Info);
+		
 			if (Shipment_Info.Service.toLowerCase().contains("ground")) {
 				String Tracking[] = new String[] { Shipment_Info.Tracking_Number };
 				GroundCorpLoad.ValidateAndProcess(Tracking);
-			} else {
-				eMASS_Scans.eMASS_Pickup_Scan(Shipment_Info);
 			}
 
-			Tracking_Data_Update.Tracking_Number_Update(Level, Shipment_Info);
+			Tracking_Data_Update.Tracking_Number_Update(Level, Shipment_Info.Tracking_Number, Shipment_Info.TRACKING_QUALIFIER, Shipment_Info.User_Info.USER_ID, Shipment_Info.User_Info.PASSWORD);
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getCause().toString());
@@ -271,7 +272,7 @@ public class INET_Shipment {
 						true);
 			}
 
-			Shipment_Info.writeShipment_Data_To_Excel(true);
+			/*Shipment_Info.writeShipment_Data_To_Excel(true);*/
 			return Shipment_Info;
 		} catch (Exception e) {
 			throw e;

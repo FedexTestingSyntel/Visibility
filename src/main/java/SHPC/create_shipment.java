@@ -1,150 +1,37 @@
-package SHPC_Application;
+package SHPC;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
-import java.lang.reflect.Method;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
-
 import API_Functions.General_API_Calls;
-import Data_Structures.Account_Data;
 import Data_Structures.Address_Data;
 import Data_Structures.Shipment_Data;
 import Data_Structures.User_Data;
-import SupportClasses.Account_Lookup;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
-import USRC_Application.USRC_Endpoints;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
-public class SHPC_Endpoints {
-	static String LevelsToTest = "6";
-	
-	@BeforeClass
-	public void beforeClass() {
-		Environment.SetLevelsToTest(LevelsToTest);
-	}
-	
-	@DataProvider (parallel = true)
-	public static Iterator<Object[]> dp(Method m) {
-		List<Object[]> data = new ArrayList<Object[]>();
-		
-		for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
-			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-			int intLevel = Integer.parseInt(Level);
-			Environment.getInstance().setLevel(Level);
-			//Based on the method that is being called the array list will be populated
-			User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
-			
-			switch (m.getName()) {
-	    		case "CreditCard_Linked":
-	    			for (User_Data User_Info : User_Info_Array) {
-	    				data.add( new Object[] {Level, User_Info});
-	    			}
-	    		break;
-		    	case "Create_Shipment":
-		    		API_Functions.General_API_Calls.setPrintOutAPICallFlag(false);
-		    		for (User_Data User_Info : User_Info_Array) {
-		    			//check for a WADM users
-		    			if (!User_Info.ACCOUNT_NUMBER.contentEquals("") && User_Info.Address_Info.Country_Code.contentEquals("US")) {
-		    			//if (User_Info.USER_ID.contentEquals("MAGICJP")) {
-		    				
-		    				// The cookie is in position 0 of the array.
-		    				String Cookie[] = USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
-
-		    				Shipment_Data Shipment_Info = new Shipment_Data();
-
-		    				Address_Data Address_Info = Address_Data.getAddress(Level, "US", null);
-		    				//Origin address will be overwritten below if valid account address returned.
-		    				Shipment_Info.Origin_Address_Info = Address_Info;
-		    				Shipment_Info.Destination_Address_Info = Address_Info;
-		    				
-		    				try {
-			    				String Account_Details[] = USRC_Endpoints.Account_Key_and_Value(Cookie[0]);
-			    				Shipment_Info.setAccount_Key(Account_Details[0]);
-			    				Shipment_Info.setAccount_Number(Account_Details[1]);
-			    				
-								Account_Data Account_Info = Account_Lookup.Account_Details(Account_Details[1], Level);
-								Shipment_Info.setOrigin_Address_Info(Account_Info.Billing_Address_Info);
-								Shipment_Info.User_Info = User_Info;
-		    				
-								data.add( new Object[] {Level, Shipment_Info});
-		    				} catch (Exception e) {
-								Helper_Functions.PrintOut("Not able to retrieve address for account " + Shipment_Info.Account_Number);
-								e.printStackTrace();
-							}
-		    				if (data.size() > 1) {
-		    					break;
-		    				}
-		    			}
-		    		}
-		    		API_Functions.General_API_Calls.setPrintOutAPICallFlag(true);
-		    	break;
-			}
-		}
-		
-		// Remove until less that X tests
-		//while (data.size() > 50) {
-		//	data.remove(data.size() - 1);
-		//}
-		return data.iterator();
-	}
-	
-	@Test(dataProvider = "dp", enabled =false)
-	public static void CreditCard_Linked(String Level, User_Data User_Info){
-		try {	    				
-			// The cookie is in position 0 of the array.
-			String Cookie[] = USRC_Endpoints.Login(User_Info.USER_ID, User_Info.PASSWORD);
-
-			String CreditCard_Number = USRC_Endpoints.AccountRetrieval_Then_EnterpriseCustomer(Cookie[0]);
-			if (!CreditCard_Number.contentEquals("")) {
-				Helper_Functions.PrintOut(User_Info.USER_ID);
-			}else {
-				throw new Exception("User not linked.");
-			}
-		}catch (Exception e) {
-			Assert.fail(e.getCause().toString());
-		}
-	}
-	
-	@Test(dataProvider = "dp")
-	public static void Create_Shipment(String Level, Shipment_Data Shipment_Info){
-		try {
-			String Response = SHPC_Create_Shipment(Shipment_Info);
-
-			assertThat(Response, containsString("masterTrackingNumber"));
-			Helper_Functions.PrintOut(Response);
-		}catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail(e.getCause().toString());
-		}
-	}
-	
-	public static String SHPC_Create_Shipment(Shipment_Data Shipment_Info){
+public class create_shipment {
+	public static String SHPC_Create_Shipment(Shipment_Data Shipment_Info, String Cookies){
 		User_Data User_Info = Shipment_Info.User_Info;
 		Address_Data Origin_Address_Info = Shipment_Info.Origin_Address_Info;
 		Address_Data Destination_Address_Info = Shipment_Info.Destination_Address_Info;
 		
-		SHPC_Data DC = SHPC_Data.LoadVariables(Environment.getInstance().getLevel());
-		String URL = DC.AShipmentURL;
+		SHPC_Data DC = SHPC_Data.SHPC_Load();
+		
+		if (!Shipment_Info.User_Info.getHasValidAccountNumber()) {
+			Helper_Functions.PrintOut("User does not have valid accounts");
+		}
 		
 		JSONObject accountNumber = new JSONObject()
-				.put("key", Shipment_Info.Account_Key)
-				.put("value", Shipment_Info.Account_Number);
+				.put("key", Shipment_Info.User_Info.ACCOUNT_NUMBER_DETAILS[0][0])
+				.put("value", Shipment_Info.User_Info.ACCOUNT_NUMBER_DETAILS[0][1]);
 		
 		JSONObject OriginAddress = new JSONObject()
 				.put("countryCode", Origin_Address_Info.Country_Code)
@@ -169,7 +56,7 @@ public class SHPC_Endpoints {
 		JSONObject contact = new JSONObject()
 				.put("companyName", "")
 				.put("personName", User_Info.FIRST_NM + " " + User_Info.LAST_NM)
-				.put("phoneNumber", User_Info.PHONE)
+				.put("phoneNumber", User_Info.PHONE_NUMBER)
 				.put("emailAddress", User_Info.EMAIL_ADDRESS);
 		
 		JSONObject weight = new JSONObject()
@@ -271,12 +158,16 @@ public class SHPC_Endpoints {
 		
 		Object requestedPackageLineItems_Array[] = new Object[] {requestedPackageLineItemsElement};
 		
-		Format formatter = new SimpleDateFormat("MMM-dd-yyyy"); // "Jul-5-2019", "Jul-11-2019"
+		Format formatter = new SimpleDateFormat("MMM-d-yyyy"); // "Jul-5-2019", "Jul-11-2019"
 		Date dt = new Date();
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(dt); 
 		c.add(Calendar.DATE, 1);
 		dt = c.getTime();
+		// if the day of the month is two digits
+		if (dt.getDate() > 9) {
+			formatter = new SimpleDateFormat("MMM-dd-yyyy");
+		}
 	    String TomorrowDateFormatted = formatter.format(dt);
 	    
 		JSONObject requestedShipment = new JSONObject()
@@ -292,7 +183,7 @@ public class SHPC_Endpoints {
 				.put("shippingDocumentSpecification", shippingDocumentSpecification)
 				.put("requestedPackageLineItems", requestedPackageLineItems_Array);
 		
-		HttpPut httpput = new HttpPut(URL);
+		HttpPut httpput = new HttpPut(DC.AShipmentURL);
 		JSONObject main = new JSONObject()
 			.put("openShipmentAction", "CONFIRM")
 			.put("accountNumber", accountNumber)
@@ -301,7 +192,8 @@ public class SHPC_Endpoints {
 		String json = main.toString();
 			
 		httpput.addHeader("Content-Type", "application/json");
-		httpput.addHeader("Authorization", "Bearer " + DC.OAuth_Token);
+		httpput.addHeader("Authorization", "Bearer " + DC.getOAuthToken());
+		httpput.addHeader("Cookie", Cookies);
 				
 		StringEntity params;
 		String Response;

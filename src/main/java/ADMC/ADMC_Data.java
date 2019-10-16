@@ -1,4 +1,6 @@
-package ADMC_Application;
+package ADMC;
+
+import SupportClasses.Environment;
 
 public class ADMC_Data {
 	public String Level = "";
@@ -8,7 +10,8 @@ public class ADMC_Data {
 	//Stores the data for each individual level
 	private static ADMC_Data DataClass[] = new ADMC_Data[8];
 	
-	public static ADMC_Data LoadVariables(String Level){
+	public static ADMC_Data LoadVariables(){
+		String Level = Environment.getInstance().getLevel();
 		int intLevel = Integer.parseInt(Level);
 		//if the level details were already loaded then return detail.
 		if (DataClass[intLevel] != null) {

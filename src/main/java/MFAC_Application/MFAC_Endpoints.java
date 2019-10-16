@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import API_Functions.General_API_Calls;
 import SupportClasses.Environment;
+import USRC.USRC_Data;
 
 public class MFAC_Endpoints {
 	
@@ -41,18 +42,25 @@ public class MFAC_Endpoints {
 	//used as an external helper function when a pin is needed.
 	// will take in either the OrgName that MFAC uses of the POSTAL/PHONE identifier.
 	public static String IssuePinAPI_External(String UserName, String OrgName){
-		MFAC_Data MFAC_Info = MFAC_Data.LoadVariables(Environment.getInstance().getLevel());
+		MFAC_Data MFAC_Info = MFAC_Data.LoadVariables();
 		if (OrgName.contentEquals("POSTAL")) {
 			OrgName = MFAC_Info.OrgPostcard;
 		}else if (OrgName.contentEquals("PHONE")) {
 			OrgName = MFAC_Info.OrgPhone;
 		}
-		String Response = IssuePinAPI(UserName, OrgName, MFAC_Info.AIssueURL, MFAC_Info.OAuth_Token);
+		String Response = IssuePinAPI(UserName, OrgName);
 		return MFAC_Helper_Functions.ParsePIN(Response);
 	}
 	
-	public static String IssuePinAPI(String UserName, String OrgName, String URL, String OAuth_Token){
+	public static String IssuePinAPI(String UserName, String OrgName){
+		MFAC_Data MFAC_Details = MFAC_Data.LoadVariables();
+		String URL = MFAC_Details.AIssueURL;
+		String Token = MFAC_Details.OAuth_Token;
+		return IssuePinAPI(UserName, OrgName, URL, Token);
+	}
+	public static String IssuePinAPI(String UserName, String OrgName, String URL, String OAuth){
 		String Request = "";
+		
 		try{
 			HttpPost httppost = new HttpPost(URL);
 
@@ -61,7 +69,7 @@ public class MFAC_Endpoints {
 		        .put("orgName", OrgName).toString();
 			
 			httppost.addHeader("Content-Type", "application/json");
-			httppost.addHeader("Authorization", "Bearer " + OAuth_Token);
+			httppost.addHeader("Authorization", "Bearer " + OAuth);
 			StringEntity params = new StringEntity(Request.toString());
 			httppost.setEntity(params);
 			String Response = General_API_Calls.HTTPCall(httppost, Request);

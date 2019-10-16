@@ -33,7 +33,7 @@ public class WERL_Functions {
 				WebDriver_Functions.Type(EnrollmentPageElements.CityField, Address.City);
 			}
 			
-			WebDriver_Functions.Type(EnrollmentPageElements.PhoneField, User_Info.PHONE);
+			WebDriver_Functions.Type(EnrollmentPageElements.PhoneField, User_Info.PHONE_NUMBER);
 			WebDriver_Functions.Type(EnrollmentPageElements.EmailField, User_Info.EMAIL_ADDRESS);
 			
 			if (ClickContinue) {

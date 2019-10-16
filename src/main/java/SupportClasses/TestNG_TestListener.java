@@ -4,14 +4,10 @@ import java.util.ArrayList;    //The below needed for tracking the status of the
 import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
-
-import Data_Structures.Account_Data;
-import Data_Structures.User_Data;
 import SupportClasses.ThreadLogger;
 
 public class TestNG_TestListener implements ITestListener{
@@ -37,6 +33,7 @@ public class TestNG_TestListener implements ITestListener{
 		} catch (Exception e) {}
     }
 	
+	// if the first parameter of the test is an integer set the environment level.
 	@Override
 	public void onTestStart(ITestResult arg0) {
 		//lock has been added to make the screenshot path unique
@@ -119,44 +116,49 @@ public class TestNG_TestListener implements ITestListener{
     }
     
     private void TestResults(ITestResult arg0) {
-    	int SpaceSaver = 150;//added due to this taking up an infinite amount memory.
-    	try {
-    		String AttemptLogs = ThreadLogger.getInstance().ReturnLogString();
-        	//save the results of given test locally
-    		if (ResultsLog.size() < SpaceSaver) {
-    			ResultsLog.add(AttemptLogs);
-    		}
-        	
-        	
-        	//save the summary of the issue.
-        	String status = Helper_Functions.Failed;
-        	if (arg0.getStatus() == ITestResult.SUCCESS) {
-        		status = Helper_Functions.Passed;
-        	}
-        	
-        	if (ResultsOverview.size() < SpaceSaver) {
-        		ResultsOverview.add(new String[]{arg0.getMethod().getMethodName(), status, ""});
-        		arg0.setAttribute("ExecutionLog", AttemptLogs);// this will save the trace to the test
-        	}
-        	
-        	ArrayList<String> CurrentLogs = ThreadLogger.getInstance().ReturnLogs();
-        	//reset the logs of the given thread back to blank
-        	String TestCompleteData = "";		
-        	for (int i = 0; i < CurrentLogs.size(); i++){
-        		if (TestCompleteData.contentEquals("")) {
-        			TestCompleteData = CurrentLogs.get(i);
-        		}else {
-        			TestCompleteData += System.lineSeparator() + CurrentLogs.get(i);
+    	boolean SaveStatusFlag = false;
+    	if (SaveStatusFlag) {
+        	int SpaceSaver = 150;//added due to this taking up an infinite amount memory.
+        	try {
+        		String AttemptLogs = ThreadLogger.getInstance().ReturnLogString();
+            	//save the results of given test locally
+        		if (ResultsLog.size() < SpaceSaver) {
+        			ResultsLog.add(AttemptLogs);
         		}
-    		}
-        	ThreadLogger.ThreadLog.add(TestCompleteData + System.lineSeparator());
+            	
+            	
+            	//save the summary of the issue.
+            	String status = Helper_Functions.Failed;
+            	if (arg0.getStatus() == ITestResult.SUCCESS) {
+            		status = Helper_Functions.Passed;
+            	}
+            	
+            	if (ResultsOverview.size() < SpaceSaver) {
+            		ResultsOverview.add(new String[]{arg0.getMethod().getMethodName(), status, ""});
+            		arg0.setAttribute("ExecutionLog", AttemptLogs);// this will save the trace to the test
+            	}
+            	
+            	ArrayList<String> CurrentLogs = ThreadLogger.getInstance().ReturnLogs();
+            	//reset the logs of the given thread back to blank
+            	String TestCompleteData = "";		
+            	for (int i = 0; i < CurrentLogs.size(); i++){
+            		if (TestCompleteData.contentEquals("")) {
+            			TestCompleteData = CurrentLogs.get(i);
+            		}else {
+            			TestCompleteData += System.lineSeparator() + CurrentLogs.get(i);
+            		}
+        		}
+            	ThreadLogger.ThreadLog.add(TestCompleteData + System.lineSeparator());
 
-        	//clear out the old attemps
-        	ThreadLogger.getInstance().ResetLogs();
-    	}catch (Exception e){
-    		Helper_Functions.PrintOut("Warning, unable to save test results. " + e.getLocalizedMessage(), true);
+            	//clear out the old attempts
+            	ThreadLogger.getInstance().ResetLogs();
+        	}catch (Exception e){
+        		Helper_Functions.PrintOut("Warning, unable to save test results. " + e.getLocalizedMessage(), true);
+        	}
+    	}else {
+    		ThreadLogger.getInstance().ResetLogs();
     	}
-    	
+
     	//need to add a better way to check if should close browser
     	if (DriverFactory.BrowserCurrent > 0) {
     		DriverFactory.getInstance().releaseDriver();

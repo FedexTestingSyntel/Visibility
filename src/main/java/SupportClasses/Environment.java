@@ -54,7 +54,8 @@ public class Environment {
 	}
 	
 	public String getLevel() {
-		if (Level.get() == null) {
+		if (Level.get() == null || Level.get() == "" 
+				|| Integer.parseInt(Level.get()) < 1 || Integer.parseInt(Level.get()) > 7) {
 			System.err.print("Environment level not set: Please check Environment class" );
 		}
 		return Level.get();

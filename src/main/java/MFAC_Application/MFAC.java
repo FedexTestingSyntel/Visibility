@@ -41,7 +41,7 @@ public class MFAC{
 	    
 	    for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
-			MFAC_Data c = MFAC_Data.LoadVariables(Level);
+			MFAC_Data c = MFAC_Data.LoadVariables();
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated. This will make the TestNG Pass/Fail results more relevant.
 			case "AddressVelocity":
 				if (!c.Level.contentEquals("1")){
@@ -434,11 +434,11 @@ public class MFAC{
 	public static int IssuePinExternal(String UserName, String OrgName){
 		if (OrgName.contentEquals("SMS")) {
 			OrgName = "FDM-PHONE-PIN";
-		}else if (OrgName.contentEquals("POSTAL")) {
+		} else if (OrgName.contentEquals("POSTAL")) {
 			OrgName = "FDM-POSTCARD-PIN";
 		}
-		String Level = Environment.getInstance().getLevel();
-		MFAC_Data c = MFAC_Data.LoadVariables(Level);
+
+		MFAC_Data c = MFAC_Data.LoadVariables();
 		String IssueURL = c.AIssueURL;
 		String OAuth_Token = c.OAuth_Token;
 		String Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);

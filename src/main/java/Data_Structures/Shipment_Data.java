@@ -9,6 +9,8 @@ import SupportClasses.Helper_Functions;
 
 public class Shipment_Data {
 
+	public String TrackingFileName;
+	
 	public String Ship_Date = "";
 	public String DELIVERY_DATE = "";
 	public String Tracking_Number = "";
@@ -17,11 +19,11 @@ public class Shipment_Data {
 	public String Service = "";
 	public User_Data User_Info = new User_Data();
 	public String Status = "";
-	public String Account_Number = "";
-	public String Account_Key = "";
 	public Address_Data Origin_Address_Info = new Address_Data();
 	public Address_Data Destination_Address_Info = new Address_Data();
 	
+	//Directly related to a shipment. Used in shipment creation
+	public String NumberOfPackages = "1";
 	//The WCDO options
 	public boolean RESCHEDULE = false;	
 	public boolean REROUTE = false;	
@@ -34,12 +36,17 @@ public class Shipment_Data {
 	public boolean isEstDelTmWindowLabel = false;
 	public String estDelTmWindowStart = "";
 	public boolean isNonHistoricalEDTW = false;
-	
+	//packageListResponse is only used to update excel sheet for later reference.
+	public String TrackPackagesResponse = "";
+	public String inflightDeliveryOptionsResponse = "";
+	public String associatedShipmentResponse = "";
+	public boolean MultiPieceShipment = false;
+
 	public Shipment_Data() {
 	}
 	
 	public boolean PrintOutShipmentDetails() {
-		String Output[] = new String[] {this.Tracking_Number, this.User_Info.USER_ID, this.Service, Address_Data.Address_String(Origin_Address_Info), Address_Data.Address_String(Destination_Address_Info)};
+		String Output[] = new String[] {this.Tracking_Number, this.User_Info.USER_ID, this.Service, this.User_Info.ACCOUNT_NUMBERS, Address_Data.Address_String(Origin_Address_Info), Address_Data.Address_String(Destination_Address_Info)};
 		Helper_Functions.PrintOut(Arrays.toString(Output));
 		return true;
 	}
@@ -51,16 +58,6 @@ public class Shipment_Data {
 	
 	public boolean setEstDeliveryDate(String EstDeliveryDate) {
 		this.DELIVERY_DATE = EstDeliveryDate;
-		return true;
-	}
-	
-	public boolean setAccount_Number(String Account_Number) {
-		this.Account_Number = Account_Number;
-		return true;
-	}
-
-	public boolean setAccount_Key(String Account_Key) {
-		this.Account_Key = Account_Key;
 		return true;
 	}
 
@@ -98,13 +95,20 @@ public class Shipment_Data {
 		this.Status = Status;
 		return true;
 	}
+	
+	public boolean getValidStatus(){
+		if (this.Status== null || this.Status.contentEquals("")) {
+			return false;
+		}
+		return true;
+	}
 
 	public boolean setTracking_Number(String Tracking_Number) {
 		this.Tracking_Number = Tracking_Number;
 		return true;
 	}
 	
-	public boolean writeShipment_Data_To_Excel(boolean newShipment) {
+/*	public boolean writeShipment_Data_To_Excel(boolean newShipment) {
 		String Data[][] = new String[][] {
 			{"SHIP_DATE", this.Ship_Date}, 
 			{"DELIVERY_DATE", this.DELIVERY_DATE},
@@ -114,16 +118,7 @@ public class Shipment_Data {
 			{"SERVICE", this.Service},
 			{"USER_ID", this.User_Info.USER_ID},
 			{"PASSWORD", this.User_Info.PASSWORD},
-			{"STATUS", this.Status},
-			{"RESCHEDULE", Boolean.toString(this.RESCHEDULE)},
-			{"REROUTE", Boolean.toString(this.REROUTE)},
-			{"REDIRECT_HOLD_AT_LOCATION", Boolean.toString(this.REDIRECT_HOLD_AT_LOCATION)},
-			{"SIGNATURE_RELEASE", Boolean.toString(this.SIGNATURE_RELEASE)},
-			{"DELIVERY_INSTRUCTIONS", Boolean.toString(this.DELIVERY_INSTRUCTIONS)},
-			{"DELIVERY_SUSPENSIONS", Boolean.toString(this.DELIVERY_SUSPENSIONS)},
-			{"isEstDelTmWindowLabel", Boolean.toString(this.isEstDelTmWindowLabel)},
-			{"estDelTmWindowStart", this.estDelTmWindowStart},
-			{"isNonHistoricalEDTW", Boolean.toString(this.isNonHistoricalEDTW)}
+			{"STATUS", this.Status}
 		};
 
 		int IdentifierColumn = -1;
@@ -139,11 +134,11 @@ public class Shipment_Data {
 		
 		try {
 			String Level = Environment.getInstance().getLevel();
-			boolean File_Updated = Helper_Functions.WriteToExcel(Helper_Functions.DataDirectory + "\\TrackingNumbers.xls", "L" + Level, Data, IdentifierColumn);
+			boolean File_Updated = Helper_Functions.WriteToExcel(getTrackingFilePath(Level), "L" + Level, Data, IdentifierColumn);
 			
 			//if the file could not be updated by tracking qualifier then try updating by tracking number.
 			if(!File_Updated && IdentifierColumn == 3) {
-				File_Updated = Helper_Functions.WriteToExcel(Helper_Functions.DataDirectory + "\\TrackingNumbers.xls", "L" + Level, Data, 2);
+				File_Updated = Helper_Functions.WriteToExcel(getTrackingFilePath(Level), "L" + Level, Data, 2);
 			}
 			
 			return File_Updated;
@@ -151,7 +146,7 @@ public class Shipment_Data {
 			e.printStackTrace();
 			return false;
 		}
-	}
+	}*/
 	
 	public static boolean writeShipments_Data_To_Excel(Shipment_Data Shipment_Info_Array[]) {
 		CopyOnWriteArrayList<String[]> ShipmentList = new CopyOnWriteArrayList<String[]>();
@@ -170,7 +165,7 @@ public class Shipment_Data {
 
 		try {
 			String Level = Environment.getInstance().getLevel();
-			boolean File_Updated = Helper_Functions.WriteMultipleToExcel(Helper_Functions.DataDirectory + "\\TrackingNumbers.xls", "L" + Level, ShipmentList, IdentifierColumn);
+			boolean File_Updated = Helper_Functions.WriteMultipleToExcel(getTrackingFilePath(Level), "L" + Level, ShipmentList, IdentifierColumn);
 			
 			return File_Updated;
 		}catch (Exception e) {
@@ -183,8 +178,7 @@ public class Shipment_Data {
 	public static Shipment_Data[] getTrackingDetails(String Level) {
 		//if the data is already loaded then return the values
 		ArrayList<String[]> Tracking_Details = new ArrayList<String[]>();
-		
-		Tracking_Details = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TrackingNumbers.xls",  "L" + Level);//load the relevant information from excel file.
+		Tracking_Details = Helper_Functions.getExcelData(getTrackingFilePath(Level),  "L" + Level);//load the relevant information from excel file.
 		
 		Shipment_Data Shipment_Info_Array[] = new Shipment_Data[Tracking_Details.size() - 1];
 		String Headers[] = Tracking_Details.get(0);
@@ -250,10 +244,38 @@ public class Shipment_Data {
 		  		case "isNonHistoricalEDTW":
 		  			Shipment_Info_Array[pos].isNonHistoricalEDTW = Boolean.parseBoolean(Row[j]);
 		  			break;
+		  		case "TrackPackagesResponse":
+		  			Shipment_Info_Array[pos].TrackPackagesResponse = Row[j];
+		  			break;
+		  		case "inflightDeliveryOptionsResponse":
+		  			Shipment_Info_Array[pos].inflightDeliveryOptionsResponse = Row[j];
+		  			break;	
+		  		case "associatedShipmentResponse":
+		  			Shipment_Info_Array[pos].associatedShipmentResponse = Row[j];
+		  			break;	
 				}//end switch
+			}
+			
+			// After all of the date has been updated remove the full request responses from the memory due to the size associated with each.
+			if(Shipment_Info_Array[i - 1].inflightDeliveryOptionsResponse != "") {
+				Shipment_Info_Array[i - 1].inflightDeliveryOptionsResponse = "true";
+			}
+			if (Shipment_Info_Array[i - 1].TrackPackagesResponse != "") {
+				Shipment_Info_Array[i - 1].TrackPackagesResponse = "true";
+			}
+			if (Shipment_Info_Array[i - 1].associatedShipmentResponse != "") {
+				if (! Shipment_Info_Array[i - 1].associatedShipmentResponse.contentEquals("false")) {
+					Shipment_Info_Array[i - 1].MultiPieceShipment = true;
+				}
+				Shipment_Info_Array[i - 1].associatedShipmentResponse = "true";
 			}
 		}
 		
   		return Shipment_Info_Array;
+	}
+	
+	public static String getTrackingFilePath (String Level) {
+		String strLevel = "L" + Level;
+		return Helper_Functions.DataDirectory + "\\TrackingNumbers" + strLevel + ".xls";
 	}
 }

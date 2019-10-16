@@ -13,22 +13,22 @@ import SupportClasses.Helper_Functions;
 public class MFAC_Helper_Functions {
 	
 	@Test(dataProvider = "dp", enabled = false)
-	public void DetermineLockoutTime(String OrgName, String OAuth_Token, String IssueURL){
+	public void DetermineLockoutTime(String OrgName){
 		String Response = null, UserName = UserName();
 		int ExpiraitonMinutes = -1, PinThreshold = -1;
 		do {
-			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName);
 			PinThreshold++;
 		}while (Response.contains("pinExpirationDate"));
-		Helper_Functions.PrintOut(OrgName + " " + IssueURL + "  Can request " + PinThreshold + " pins before being lockout out.", true);
+		Helper_Functions.PrintOut(OrgName + "  Can request " + PinThreshold + " pins before being lockout out.", true);
 			
 		do {
-			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName, IssueURL, OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, OrgName);
 			ExpiraitonMinutes++;
 			Helper_Functions.PrintOut("Sleeping for a minute", true);
 			Helper_Functions.Wait(60);
 		}while (!Response.contains("pinExpirationDate"));
-		Helper_Functions.PrintOut(OrgName + " " + IssueURL + "Can request additional pins after " + ExpiraitonMinutes + " minutes. ", true);
+		Helper_Functions.PrintOut(OrgName + "Can request additional pins after " + ExpiraitonMinutes + " minutes. ", true);
 	}
 	
 	///////////////////////////////////METHODS//////////////////////////////////

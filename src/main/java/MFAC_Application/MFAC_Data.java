@@ -31,7 +31,8 @@ public class MFAC_Data {
 	//Stores the data for each individual level
 	public static MFAC_Data DataClass[] = new MFAC_Data[8];
 	
-	public static MFAC_Data LoadVariables(String Level){
+	public static MFAC_Data LoadVariables(){
+		String Level  = Environment.getInstance().getLevel();
 		int intLevel = Integer.parseInt(Level);
 		//if the level details were already loaded then return detail.
 		if (DataClass[intLevel] != null) {

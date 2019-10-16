@@ -168,7 +168,7 @@ public class eMASS_Scans {
 			WaitForInProgressOverlay();
 			WebDriver_Functions.Click(By.id("massEntryForm:alertDialog_okbutton"));
 			
-			Shipment_Info.writeShipment_Data_To_Excel(false);
+			/*Shipment_Info.writeShipment_Data_To_Excel(false);*/
 			
 			return true;
 		}catch (Exception e){
@@ -272,7 +272,7 @@ public class eMASS_Scans {
 			// The below should be the final confirmation
 			WebDriver_Functions.Click(By.id("massEntryForm:alertDialog_okbutton"));
 			
-			Shipment_Info.writeShipment_Data_To_Excel(false);
+			/*Shipment_Info.writeShipment_Data_To_Excel(false);*/
 			
 			return true;
 		}catch (Exception e){
@@ -281,7 +281,7 @@ public class eMASS_Scans {
 	}
 	
 	public static void WaitForInProgressOverlay() throws Exception {
-		WebDriver_Functions.Wait(1);
+		WebDriver_Functions.Wait(3);
 		//WebDriver_Functions.WaitPresent(By.className("ice-sub-mon-txt"));
 		WebDriver_Functions.WaitNotVisable(By.className("massEntryForm:submitMonitor_clone"));
 		//Helper_Functions.PrintOut("ele not present");

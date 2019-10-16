@@ -1,4 +1,4 @@
-package USRC_Application;
+package USRC;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -34,19 +34,21 @@ public class USRC_FDM {
 	    List<Object[]> data = new ArrayList<>();
 	    
 	    for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
-	    	String strLevel = "" + Environment.LevelsToTest.charAt(i);
-	    	int intLevel = Integer.parseInt(strLevel);
-	    	USRC_Data USRC_D = USRC_Data.LoadVariables(strLevel);
-	    	MFAC_Data MFAC_D = MFAC_Data.LoadVariables(strLevel);
+	    	String strLevel = String.valueOf(Environment.LevelsToTest.charAt(i));
+			int intLevel = Integer.parseInt(strLevel);
+			Environment.getInstance().setLevel(strLevel);
+	    	USRC_Data USRC_D = USRC_Data.USRC_Load();
+	    	MFAC_Data MFAC_D = MFAC_Data.LoadVariables();
 	    	
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 			case "EndtoEndEnrollment":
-				for (int j = 0 ; j < 1; j++) {
-					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "FDM");
+				for (int j = 0 ; j < 10; j++) {
+					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
+					//UserID = "L3ATRK5K";
 					String Password = "Test1234";
 					String ContactDetails[] = USRC_Data.getContactDetails(j);
 					
-					data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, ContactDetails});
+					data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D.OrgPostcard, UserID, Password, ContactDetails});
 				}
 				break;
 				/*
@@ -63,8 +65,10 @@ public class USRC_FDM {
 				User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 				//data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, "L2FDM012919T124302pm", "Test1234"});
 				for (User_Data User_Info: User_Info_Array){
-	    			if (User_Info.FDM_STATUS.contentEquals("F") && User_Info.EMAIL_ADDRESS.contentEquals("accept@fedex.com")) {
-	    				data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, User_Info.USER_ID, User_Info.PASSWORD});
+	    			if (User_Info.FDM_STATUS.contentEquals("false") 
+	    					&& User_Info.getHasValidAccountNumber() 
+	    					&& User_Info.getCanScheduleShipment()) {
+	    				data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, User_Info.USER_ID, User_Info.PASSWORD});
 	    				if (data.size() > 10) {
 	    					break;
 	    				}
@@ -78,7 +82,7 @@ public class USRC_FDM {
 					String Password = "Test1234";
 					String ContactDetails[] = USRC_Data.getContactDetails(j);
 					ContactDetails[4] = UserID;
-					data.add(new Object[] {strLevel, USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, ContactDetails});
+					data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, UserID, Password, ContactDetails});
 				}
 				break;
 			}//end switch MethodName
@@ -87,103 +91,113 @@ public class USRC_FDM {
 	}
 	
 	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = true)
-	public void EndtoEndEnrollment(String Level, USRC_Data USRC_Details, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password, String[] ContactDetails) {
-		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
+	public void EndtoEndEnrollment(String Level, String USRC_Org, String MFAC_Org, String UserID, String Password, String[] ContactDetails) {
+		String Cookie = null;
+		String UUID = null;
+		String fdx_login_fcl_uuid[] = {"","", ""};
+		boolean UserCreated = false;
 		try {
 			String Response = "";
 
 			//create the new user
-			//UserID = "L2ATRK13k";
-			Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
+			Response = REGC.create_new_user.NewFCLUser(ContactDetails, UserID, Password);
 			
 			//check to make sure that the userid was created.
 			assertThat(Response, containsString("successful\":true"));
+			UserCreated = true;
 			
 			//get the cookies and the uuid of the new user
-			fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID, Password);
+			fdx_login_fcl_uuid = login.Login(UserID, Password);
 			Cookie = fdx_login_fcl_uuid[0];
 			UUID = fdx_login_fcl_uuid[1];
 				
 			//2 - do the enrollment call. Note that the enrollment call will store the ShareID
 			Helper_Functions.PrintOut("Enrollment call", false);
-			Response = USRC_Endpoints.Enrollment(USRC_Details.EnrollmentURL, USRC_Details.OAuth_Token, ContactDetails, Cookie);
+			Response = USRC_Endpoints.Enrollment(ContactDetails, Cookie);
 
 			assertThat(Response, containsString("enrollmentOptionsList"));
 			
 			//3 - request a pin
 			Helper_Functions.PrintOut("Request pin through USRC", false);
 			String ShareID = ParseShareID(Response);
-			Response = USRC_Endpoints.CreatePin(USRC_Details.CreatePinURL, USRC_Details.OAuth_Token, Cookie, ShareID, USRC_Org);
+			Response = USRC_Endpoints.CreatePin(Cookie, ShareID, USRC_Org);
 			assertThat(Response, containsString("successful\":true"));
 		
 			//4 - request a pin through MFAC as cannot see the pin generated from the above
 			Helper_Functions.PrintOut("Requesting pin through MFAC", false);
 			String UserName = UUID + "-" + ShareID;
-			Response = MFAC_Endpoints.IssuePinAPI(UserName, MFAC_Org, MFAC_Details.AIssueURL, MFAC_Details.OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, MFAC_Org);
 			//get the pin from the MFAC call
 			String Pin = MFAC_Helper_Functions.ParsePIN(Response);
 			
 			//5 - enroll the above pin through USRC
 			Helper_Functions.PrintOut("Verify pin through USRC", true);
-			Response = USRC_Endpoints.VerifyPin(USRC_Details.VerifyPinURL, USRC_Details.OAuth_Token, Cookie, ShareID, Pin, USRC_Org);
+			Response = USRC_Endpoints.VerifyPin(Cookie, ShareID, Pin, USRC_Org);
 			assertThat(Response, containsString("responseMessage\":\"Success"));
 
 			//6 - Verify the above enrollment completed succsessfully.
 			Helper_Functions.PrintOut("Check recipient profile for new FDM user through USRC", false);
-			Response = USRC_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookie);
+			Response = recipient_profile.RecipientProfile(Cookie);
 			
 			String Results[] = new String[] {UserID, Password, fdx_login_fcl_uuid[1], USRC_Org};
 			Helper_Functions.PrintOut(Arrays.toString(Results), false);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (UserCreated) {
+				User_Data UD = new User_Data();
+				UD.USER_ID = UserID;
+				UD.PASSWORD = Password;
+				UD.writeUserToExcel();
+			}
 		}
 	}
 	
-	@Test (dataProvider = "dp", priority = 1, description = "380527")
-	public void EndtoEndEnrollment_EmailaAsUserId(String Level, USRC_Data USRC_Details, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password, String[] ContactDetails) {
+	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = false)
+	public void EndtoEndEnrollment_EmailaAsUserId(String Level, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password, String[] ContactDetails) {
 		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		try {
 			String Response = "";
 			
 			//create the new user
-			Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
+			Response = REGC.create_new_user.NewFCLUser(ContactDetails, UserID, Password);
 			
 			//check to make sure that the userid was created.
 			assertThat(Response, containsString("successful\":true"));
 			
 			//get the cookies and the uuid of the new user
-			fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID, Password);
+			fdx_login_fcl_uuid = login.Login(UserID, Password);
 			Cookie = fdx_login_fcl_uuid[0];
 			UUID = fdx_login_fcl_uuid[1];
 				
 			//2 - do the enrollment call. Note that the enrollment call will store the ShareID
 			Helper_Functions.PrintOut("Enrollment call", false);
-			Response = USRC_Endpoints.Enrollment(USRC_Details.EnrollmentURL, USRC_Details.OAuth_Token, ContactDetails, Cookie);
+			Response = USRC_Endpoints.Enrollment(ContactDetails, Cookie);
 
 			assertThat(Response, containsString("enrollmentOptionsList"));
 			
 			//3 - request a pin
 			Helper_Functions.PrintOut("Request pin through USRC", false);
 			String ShareID = ParseShareID(Response);
-			Response = USRC_Endpoints.CreatePin(USRC_Details.CreatePinURL, USRC_Details.OAuth_Token, Cookie, ShareID, USRC_Org);
+			Response = USRC_Endpoints.CreatePin(Cookie, ShareID, USRC_Org);
 			assertThat(Response, containsString("successful\":true"));
 		
 			//4 - request a pin through MFAC as cannot see the pin generated from the above
 			Helper_Functions.PrintOut("Requesting pin through MFAC", false);
 			String UserName = UUID + "-" + ShareID;
-			Response = MFAC_Endpoints.IssuePinAPI(UserName, MFAC_Org, MFAC_Details.AIssueURL, MFAC_Details.OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, MFAC_Org);
 			//get the pin from the MFAC call
 			String Pin = MFAC_Helper_Functions.ParsePIN(Response);
 			
 			//5 - enroll the above pin through USRC
 			Helper_Functions.PrintOut("Verify pin through USRC", true);
-			Response = USRC_Endpoints.VerifyPin(USRC_Details.VerifyPinURL, USRC_Details.OAuth_Token, Cookie, ShareID, Pin, USRC_Org);
+			Response = USRC_Endpoints.VerifyPin(Cookie, ShareID, Pin, USRC_Org);
 			assertThat(Response, containsString("responseMessage\":\"Success"));
 
 			//6 - Verify the above enrollment completed succsessfully.
 			Helper_Functions.PrintOut("Check recipient profile for new FDM user through USRC", false);
-			Response = USRC_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookie);
+			Response = recipient_profile.RecipientProfile(Cookie);
 			
 			String Results[] = new String[] {UserID, Password, fdx_login_fcl_uuid[1], USRC_Org};
 			Helper_Functions.PrintOut(Arrays.toString(Results), false);
@@ -194,7 +208,7 @@ public class USRC_FDM {
 	}
 	
 	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = false)
-	public void EndtoEndEnrollment_UserID(USRC_Data USRC_Details, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password) {
+	public void EndtoEndEnrollment_UserID(String Level, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password) {
 		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		try {
 			String Response = "";
@@ -202,44 +216,44 @@ public class USRC_FDM {
 			
 			if (UserID == null) {
 				//create the new user
-				Response = USRC_Endpoints.NewFCLUser(USRC_Details.REGCCreateNewUserURL, ContactDetails, UserID, Password);
+				Response = REGC.create_new_user.NewFCLUser(ContactDetails, UserID, Password);
 			
 				//check to make sure that the userid was created.
 				assertThat(Response, containsString("successful\":true"));
 			}
 			
 			//get the cookies and the uuid of the new user
-			fdx_login_fcl_uuid = USRC_Endpoints.Login(UserID, Password);
+			fdx_login_fcl_uuid = login.Login(UserID, Password);
 			Cookie = fdx_login_fcl_uuid[0];
 			UUID = fdx_login_fcl_uuid[1];
 				
 			//2 - do the enrollment call. Note that the enrollment call will store the ShareID
 			Helper_Functions.PrintOut("Enrollment call", false);
-			Response = USRC_Endpoints.Enrollment(USRC_Details.EnrollmentURL, USRC_Details.OAuth_Token, ContactDetails, Cookie);
+			Response = USRC_Endpoints.Enrollment(ContactDetails, Cookie);
 
 			assertThat(Response, containsString("enrollmentOptionsList"));
 			
 			//3 - request a pin
 			Helper_Functions.PrintOut("Request pin through USRC", false);
 			String ShareID = ParseShareID(Response);
-			Response = USRC_Endpoints.CreatePin(USRC_Details.CreatePinURL, USRC_Details.OAuth_Token, Cookie, ShareID, USRC_Org);
+			Response = USRC_Endpoints.CreatePin(Cookie, ShareID, USRC_Org);
 			assertThat(Response, containsString("successful\":true"));
 		
 			//4 - request a pin through MFAC as cannot see the pin generated from the above
 			Helper_Functions.PrintOut("Requesting pin through MFAC", false);
 			String UserName = UUID + "-" + ShareID;
-			Response = MFAC_Endpoints.IssuePinAPI(UserName, MFAC_Org, MFAC_Details.AIssueURL, MFAC_Details.OAuth_Token);
+			Response = MFAC_Endpoints.IssuePinAPI(UserName, MFAC_Org);
 			//get the pin from the MFAC call
 			String Pin = MFAC_Helper_Functions.ParsePIN(Response);
 			
 			//5 - enroll the above pin through USRC
 			Helper_Functions.PrintOut("Verify pin through USRC", true);
-			Response = USRC_Endpoints.VerifyPin(USRC_Details.VerifyPinURL, USRC_Details.OAuth_Token, Cookie, ShareID, Pin, USRC_Org);
+			Response = USRC_Endpoints.VerifyPin(Cookie, ShareID, Pin, USRC_Org);
 			assertThat(Response, containsString("responseMessage\":\"Success"));
 
 			//6 - Verify the above enrollment completed successfully.
 			Helper_Functions.PrintOut("Check recipient profile for new FDM user through USRC", false);
-			Response = USRC_Endpoints.RecipientProfile(USRC_Details.GenericUSRCURL, Cookie);
+			Response = recipient_profile.RecipientProfile(Cookie);
 			
 			Helper_Functions.PrintOut(UserID + "/" + Password + "--" + fdx_login_fcl_uuid[1] + "--" + USRC_Org, false);
 			

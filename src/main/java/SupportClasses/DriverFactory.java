@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class DriverFactory{
 	
 	private static DriverFactory instance = new DriverFactory();
-	public static int BrowserCurrent = 0, BrowserLimit = 3;
+	public static int BrowserCurrent = 0, BrowserLimit = 2;
 	public static int WaitTimeOut = 30;
 	private static WebDriver DriverStorage[] = new WebDriver[BrowserLimit];
 	private static boolean DriverInUse[] = new boolean[BrowserLimit];

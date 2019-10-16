@@ -53,7 +53,6 @@ public class SmokeTest{
 			User_Data.Set_Generic_Address(User_Info, "US");
 			User_Data.Set_Dummy_Contact_Name(User_Info, "FDM", Level);
 			User_Data.Set_User_Id(User_Info, "L" + Level + "FDM");
-			User_Data.Set_Dummy_Phone_Number(User_Info);
 			User_Info.EMAIL_ADDRESS = "otherasdfa@fedex.com";
 			
 	 		WebDriver_Functions.ChangeURL("WERL", User_Info.Address_Info.Country_Code, "en", true);

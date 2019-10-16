@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="SHPC_Application.SHPC_Endpoints">
+      <class name="Test_Data_Generation.Tracking_Number_Generation">
         <methods>
-          <include name="Create_Shipment" invocation-numbers="1 0"/>
           <include name="beforeClass"/>
+          <include name="INET_Create_Shipment" invocation-numbers="0 4"/>
         </methods>
-      </class> <!-- SHPC_Application.SHPC_Endpoints -->
+      </class> <!-- Test_Data_Generation.Tracking_Number_Generation -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
