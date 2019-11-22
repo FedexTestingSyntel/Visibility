@@ -4,7 +4,9 @@ import SupportClasses.Environment;
 import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class Address_Data {
-
+	
+	public String First_Name;
+	public String Last_Name;
 	public String Address_Line_1 = "";
 	public String Address_Line_2 = "";
 	public String City = "";

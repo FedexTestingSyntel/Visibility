@@ -65,8 +65,12 @@ public class SHPC_Data {
 			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
 			break;
 		case "3":
+			/* updated on 11/5/19
 			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
-			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
+			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";*/
+			
+			DC.OAuth_Token_Client_ID = "l7xx3122c52e6f3648d3a21825210aad5c24";
+			DC.OAuth_Token_Client_Secret ="a399e3f1513a484788ce0b7773ee2e6e";
 			break;
 		case "4":
 			DC.OAuth_Token_Client_ID = "l7xx4a86a91576b14d4bb7ba81f52470e48d";
@@ -77,8 +81,12 @@ public class SHPC_Data {
 			DC.OAuth_Token_Client_Secret ="";
 			break;
 		case "6":
+			/* updated on 11/5/19
 			DC.OAuth_Token_Client_ID = "l7xxa01b9cda982d40d1abe22f4433a9abb3";
-			DC.OAuth_Token_Client_Secret ="86c6b1eb63f1430e90de7c7d05f61f30";
+			DC.OAuth_Token_Client_Secret ="86c6b1eb63f1430e90de7c7d05f61f30";*/
+			
+			DC.OAuth_Token_Client_ID = "l7xx7a6a4540432a4fd3bdd4cc747be24e50";
+			DC.OAuth_Token_Client_Secret ="ad3599ff60564101823d46aa1bdbdc0a";
 			break;
 		case "7":
 			DC.OAuth_Token_Client_ID = "";

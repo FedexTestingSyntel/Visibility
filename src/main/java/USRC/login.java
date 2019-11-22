@@ -28,7 +28,7 @@ public class login {
 
   			JSONObject processingParameters = new JSONObject()
   				.put("anonymousTransaction", true)
-  				.put("clientId", "WCDO")
+  				.put("clientId", "WCON")  //WCDO
   				.put("clientVersion", "3")
   				.put("returnDetailedErrors", false)
   				.put("returnLocalizedDateTime", false);
@@ -40,12 +40,14 @@ public class login {
   				
   			JSONObject main = new JSONObject()
   				.put("LogInRequest", LogInRequest);
-
+  		
   			String json = main.toString();
   				
   			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
   			httppost.addHeader("Accept", "application/json");
-  			httppost.addHeader("Content-Type", "application/json");
+  			/*httppost.addHeader("Content-Type", "application/json");*/
+  			httppost.addHeader("Content-Type", "charset=UTF-8");
+  			
 
   			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
   			urlParameters.add(new BasicNameValuePair("action", "LogIn"));

@@ -9,7 +9,7 @@ import SupportClasses.Helper_Functions;
 
 public class Shipment_Data {
 
-	public String TrackingFileName;
+	public static String TrackingFileName = "TrackingNumbers$LVL$.xls";
 	
 	public String Ship_Date = "";
 	public String DELIVERY_DATE = "";
@@ -21,6 +21,9 @@ public class Shipment_Data {
 	public String Status = "";
 	public Address_Data Origin_Address_Info = new Address_Data();
 	public Address_Data Destination_Address_Info = new Address_Data();
+	
+	//Used for INET flow to determine if should do regular shipment or return shipment etc.
+	public String Shipment_Method;
 	
 	//Directly related to a shipment. Used in shipment creation
 	public String NumberOfPackages = "1";
@@ -42,6 +45,24 @@ public class Shipment_Data {
 	public String associatedShipmentResponse = "";
 	public boolean MultiPieceShipment = false;
 
+	
+	// Constants that are used in the Tracking Numbers testing data sheet.
+	public String ERROR_IDENTIFIER = "ERROR";
+	public String UUID_IDENTIFIER  = "UUID_NBR";
+	public String USER_ID_IDENTIFIER  = "USER_ID";
+	public String PASSWORD_IDENTIFIER  = "PASSWORD";
+	public String SECRET_QUESTION_IDENTIFIER  = "SECRET_QUESTION_DESC";
+	public String SECRET_ANSWER_IDENTIFIER  = "SECRET_ANSWER_DESC";
+	public String FIRST_NAME_IDENTIFIER  = "FIRST_NM";
+	public String MIDDLE_NAME_IDENTIFIER  = "MIDDLE_NM";
+	public String LAST_NAME_IDENTIFIER  = "LAST_NM";
+	public String PHONE_NUMBER_IDENTIFIER  = "PHONE_NUMBER";
+	public String EMAIL_ADDRESS_IDENTIFIER  = "EMAIL_ADDRESS";	
+	public String STREET_DESC_IDENTIFIER  = "STREET_DESC";
+	public String STREET_DESC_TWO_IDENTIFIER  = "STREET_DESC_TWO";/*
+			STATE_CD	POSTAL_CD	COUNTRY_CD	RESIDENTIAL	USER_PROFILE	FSM_ENABLED	WDPA_ENABLED	GFBO_ENABLED	WGRT_ENABLED	PASSKEY	ACCOUNT_NUMBERS	AccountRetrievalResponse	FDM_STATUS	IS_LARGE_USER_TYPE	NEEDS_TO_ACCEPT_TERMS	TRACKING_PROFILE	REQUEST_RUN_DATE	TOTAL_NUMBER_OF_SHIPMENTS	MIGRATION_STATUS	USER_TYPE	RoleAndStatus
+*/
+	
 	public Shipment_Data() {
 	}
 	
@@ -256,18 +277,9 @@ public class Shipment_Data {
 				}//end switch
 			}
 			
-			// After all of the date has been updated remove the full request responses from the memory due to the size associated with each.
-			if(Shipment_Info_Array[i - 1].inflightDeliveryOptionsResponse != "") {
-				Shipment_Info_Array[i - 1].inflightDeliveryOptionsResponse = "true";
-			}
-			if (Shipment_Info_Array[i - 1].TrackPackagesResponse != "") {
-				Shipment_Info_Array[i - 1].TrackPackagesResponse = "true";
-			}
-			if (Shipment_Info_Array[i - 1].associatedShipmentResponse != "") {
-				if (! Shipment_Info_Array[i - 1].associatedShipmentResponse.contentEquals("false")) {
-					Shipment_Info_Array[i - 1].MultiPieceShipment = true;
-				}
-				Shipment_Info_Array[i - 1].associatedShipmentResponse = "true";
+			if (!Helper_Functions.isNullOrUndefined(Shipment_Info_Array[i - 1].associatedShipmentResponse) 
+					&& Shipment_Info_Array[i - 1].associatedShipmentResponse.contains("AssociatedShipmentsResponse") ) {
+				Shipment_Info_Array[i - 1].MultiPieceShipment = true;
 			}
 		}
 		
@@ -276,6 +288,11 @@ public class Shipment_Data {
 	
 	public static String getTrackingFilePath (String Level) {
 		String strLevel = "L" + Level;
-		return Helper_Functions.DataDirectory + "\\TrackingNumbers" + strLevel + ".xls";
+		String FileName = TrackingFileName.replace("$LVL$", strLevel);
+		return Helper_Functions.DataDirectory + "\\TrackingNumbers\\" + FileName;
 	}
+	public static void setTrackingFilePathName (String FileName) {
+		TrackingFileName = FileName;
+	}
+	
 }

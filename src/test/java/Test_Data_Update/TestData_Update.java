@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 public class TestData_Update {
 
 	//Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
-	static String LevelsToTest = "2"; 
+	static String LevelsToTest = "1234567"; 
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -37,18 +37,20 @@ public class TestData_Update {
 	    	int intLevel = Integer.parseInt(strLevel);
 	    	
 	    	//load user ids since both of the below use that value
-	User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel, true	);
+	    	User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel, true);
+	    	
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.	
 			case "Update_Login_Information":
 				for (User_Data User_Info: User_Info_Array) {
-						if (User_Info.UUID_NBR.contentEquals("") || !User_Info.ERROR.contentEquals("")) {
+					if (User_Info.UUID_NBR.contentEquals("") || !User_Info.ERROR.contentEquals("")) {
+    					data.add(new Object[] {strLevel, User_Info});
+    				} else if (User_Info.EMAIL_ADDRESS == null || User_Info.EMAIL_ADDRESS.contentEquals("")){
     					data.add(new Object[] {strLevel, User_Info});
     				}
-    				else if (User_Info.EMAIL_ADDRESS == null || User_Info.EMAIL_ADDRESS.contentEquals("")){
-    					data.add(new Object[] {strLevel, User_Info});
-    				}
+					//single specific user.
+    				// else if (User_Info.USER_ID.contains("L211220181114")){data.add(new Object[] {strLevel, User_Info});}
     				//uncomment if need to run all
-    				else{data.add(new Object[] {strLevel, User_Info});}
+    				 else{data.add(new Object[] {strLevel, User_Info});}
 
     			}
 				break;

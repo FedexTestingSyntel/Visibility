@@ -51,18 +51,22 @@ public class SHPC_Test {
 		    		for (User_Data User_Info : User_Info_Array) {
 		    			//check for a WADM users
 		    			if (User_Info.getHasValidAccountNumber() 
-		    					&& User_Info.getCanScheduleShipment()
-		    					&& User_Info.getFDMregisteredAddress() != null) {
+		    					&& User_Info.getCanScheduleShipment()) {
+		    				/*if (User_Info.getHasValidAccountNumber() 
+			    					&& User_Info.getCanScheduleShipment()
+			    					&& User_Info.getFDMregisteredAddress() != null) {*/
 		    				
 		    				Shipment_Data Shipment_Info = new Shipment_Data();
 
 		    				Address_Data Address_Info = Address_Data.getAddress(Level, "US", null);
 		    				Shipment_Info.Origin_Address_Info = Address_Info;
-		    				Shipment_Info.Destination_Address_Info = User_Info.getFDMregisteredAddress();
+		    				Address_Data Address_Info2 = Address_Data.getAddress(Level, "CA", null);
+		    				Shipment_Info.Destination_Address_Info = Address_Info2;
+		    				// Shipment_Info.Destination_Address_Info = User_Info.getFDMregisteredAddress();
 							Shipment_Info.User_Info = User_Info;
 		    				
 							data.add( new Object[] {Level, Shipment_Info});
-							break;
+							// break;
 		    			}
 		    		}
 		    	break;
@@ -76,7 +80,7 @@ public class SHPC_Test {
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", enabled =false)
+	@Test(dataProvider = "dp", enabled = true)
 	public static void CreditCard_Linked(String Level, User_Data User_Info){
 		try {	    				
 			// The cookie is in position 0 of the array.

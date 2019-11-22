@@ -20,12 +20,11 @@ import SupportClasses.DriverFactory;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 import SupportClasses.WebDriver_Functions;
-import Test_Data_Update.Tracking_Data_Update;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class INET_Shipment {
-	static String LevelsToTest = "2";
+	static String LevelsToTest = "3";
 
 	@BeforeClass
 	public void beforeClass() {
@@ -87,15 +86,6 @@ public class INET_Shipment {
 	public static void INET_Create_Shipment(String Level, Shipment_Data Shipment_Info) {
 		try {
 			Shipment_Info = INET_Create_Shipment(Shipment_Info);
-			eMASS_Scans.eMASS_Pickup_Scan(Shipment_Info);
-		
-			if (Shipment_Info.Service.toLowerCase().contains("ground")) {
-				String Tracking[] = new String[] { Shipment_Info.Tracking_Number };
-				GroundCorpLoad.ValidateAndProcess(Tracking);
-			}
-
-			Tracking_Data_Update.Tracking_Number_Update(Level, Shipment_Info.Tracking_Number, Shipment_Info.TRACKING_QUALIFIER, Shipment_Info.User_Info.USER_ID, Shipment_Info.User_Info.PASSWORD);
-		
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getCause().toString());
@@ -107,6 +97,12 @@ public class INET_Shipment {
 			// launch the browser and direct it to the Base URL
 			WebDriver_Functions.Login(Shipment_Info.User_Info);
 			WebDriver_Functions.ChangeURL("INET", Shipment_Info.Origin_Address_Info.Country_Code, null, false);
+			
+			if (!Helper_Functions.isNullOrUndefined(Shipment_Info.Shipment_Method)
+					&& Shipment_Info.Shipment_Method.contentEquals("doNewReturnShipment")) {
+				// When doing return shipment go to INET page first then use the return shipment url.
+				WebDriver_Functions.ChangeURL("INET_RETURN", Shipment_Info.Origin_Address_Info.Country_Code, null, false);
+			}
 
 			// Click edit on the from address
 			if (WebDriver_Functions.isVisable(By.id("module.from._headerEdit"))) {
@@ -127,7 +123,8 @@ public class INET_Shipment {
 				WebDriver_Functions.Select(By.id(Loc + "Data.countryCode"), Address_Info.Country_Code, "v");
 
 				WebDriver_Functions.WaitPresent(By.id(Loc + "Data.contactName"));
-				WebDriver_Functions.Type(By.id(Loc + "Data.contactName"), Shipment_Info.User_Info.USER_ID);
+				String UserName = Shipment_Info.User_Info.FIRST_NM + " " + Shipment_Info.User_Info.LAST_NM;
+				WebDriver_Functions.Type(By.id(Loc + "Data.contactName"), UserName);
 
 				WebDriver_Functions.Type(By.id(Loc + "Data.companyName"), "Automated");
 				WebDriver_Functions.Type(By.id(Loc + "Data.addressLine1"), Address_Info.Address_Line_1);
@@ -155,22 +152,38 @@ public class INET_Shipment {
 
 			// Service type
 			WebDriver_Functions.WaitClickable(By.id("psdData.serviceType"));
-			WebElement dropdown = DriverFactory.getInstance().getDriver().findElement(By.id("psdData.serviceType"));
-			// dropdown.click();
-			List<WebElement> options = dropdown.findElements(By.tagName("option"));
 			String optTxt = null;
-			for (WebElement option : options) {
-				optTxt = option.getText();
-				if (optTxt.contains(Shipment_Info.Service)) {
-					break;
+			try {
+				WebElement dropdown = DriverFactory.getInstance().getDriver().findElement(By.id("psdData.serviceType"));
+				// dropdown.click();
+				List<WebElement> options = dropdown.findElements(By.tagName("option"));
+				for (WebElement option : options) {
+					optTxt = option.getText();
+					if (optTxt.contains(Shipment_Info.Service)) {
+						break;
+					}
 				}
+			} catch (Exception e) {
+				Helper_Functions.PrintOut("Error when checking Service Type dropdown. Attempting to direcly use service. " + Shipment_Info.Service);
+				optTxt = Shipment_Info.Service;
 			}
+
 
 			WebDriver_Functions.WaitPresent(By.id("psd.mps.row.weight.0"));
 			WebDriver_Functions.Type(By.id("psd.mps.row.weight.0"), "120");
 
 			WebDriver_Functions.WaitPresent(By.id("psdData.serviceType"));
-			WebDriver_Functions.Select(By.id("psdData.serviceType"), optTxt, "t");
+			
+			try {
+				WebDriver_Functions.Select(By.id("psdData.serviceType"), optTxt, "t");
+			} catch (Exception e) {
+				Helper_Functions.PrintOut("Service not found. --" + Shipment_Info.Service + ". Attempting with new service.");
+				WebDriver_Functions.Select(By.id("psdData.serviceType"), "3", "i");
+				Shipment_Info.Service = WebDriver_Functions.GetValue(By.id("psdData.serviceType"));
+				optTxt = Shipment_Info.Service;
+				Helper_Functions.PrintOut("Attempting with new service. --" + Shipment_Info.Service);
+			}
+			
 
 			if (optTxt.contentEquals("First Overnight") || optTxt.contentEquals("Priority Overnight")
 					|| optTxt.contentEquals("Standard Overnight") || optTxt.contentEquals("FedEx 2Day AM")

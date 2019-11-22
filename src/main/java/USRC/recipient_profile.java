@@ -74,6 +74,8 @@ public class recipient_profile {
 			Address.Address_Line_2 = "";
 		}
 		
+		Address.First_Name = API_Functions.General_API_Calls.ParseStringValue(contactAndAddress, "firstName");
+		Address.Last_Name = API_Functions.General_API_Calls.ParseStringValue(contactAndAddress, "lastName");
 		Address.City = API_Functions.General_API_Calls.ParseStringValue(contactAndAddress, "city");
 		Address.State_Code = API_Functions.General_API_Calls.ParseStringValue(contactAndAddress, "stateOrProvinceCode");
 		Address.Phone_Number = API_Functions.General_API_Calls.ParseStringValue(contactAndAddress, "phoneNumber");

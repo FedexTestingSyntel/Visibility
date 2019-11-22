@@ -248,7 +248,7 @@ public class User_Data {
 					String value = API_Functions.General_API_Calls.ParseStringValue(tempACCOUNT_NUMBERS, "value");
 					tempACCOUNT_NUMBERS = tempACCOUNT_NUMBERS.replaceFirst(key, "");
 					tempACCOUNT_NUMBERS = tempACCOUNT_NUMBERS.replaceFirst(value, "");
-					tempACCOUNT_NUMBERS = tempACCOUNT_NUMBERS.replace("{\"key\":\"\",\"value\":\"\"}", "");
+					tempACCOUNT_NUMBERS = tempACCOUNT_NUMBERS.replace("{\"key\":\"\",\"value\":\"\"", "");
 					
 					if (!value.contentEquals("")) {
 						if (User_Info_Array[pos].ACCOUNT_NUMBER_DETAILS == null) {

@@ -19,7 +19,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import Data_Structures.Enrollment_Data;
 import Data_Structures.User_Data;
-import USRC.USRC_Endpoints;
 
 public class WebDriver_Functions{
 
@@ -115,10 +114,14 @@ public class WebDriver_Functions{
     			AppUrl = "https://www.fedex.com/en-us/home.html";
     			break;
     		case "INET":		
-    			AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=" + LCL + "";
+    			AppUrl = LevelURL + "/cgi-bin/ship_it/interNetShip?origincountry=" + CCL + "&locallang=" + LCL;
     			break;
     		case "INET_ADD_ACCOUNT":		
     			AppUrl = LevelURL + "/fcl/web/jsp/accountInfo1.jsp?step3URL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoRegistration%26link%3D1%26locale%3D" + LCL + "_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF&afterwardsURL=" + LevelURL + "%2Fshipping%2FshipEntryAction.do%3Fmethod%3DdoEntry%26link%3D1%26locale%3D" + LCL + "_" + CCU + "%26urlparams%3D" + CCL + "%26sType%3DF%26programIndicator%3D0&appName=fclfsm&countryCode=" + CCL + "&languageCode=" + LCL + "&programIndicator=1&rp=fclmyprofile";
+    			break;
+    		case "INET_RETURN":
+    			// TODO: May need to update this for the language code or country code.
+    			AppUrl = LevelURL + "/shipping/navigationHeaderAction.do?method=doNewReturnShipment";
     			break;
     		case "JSP":  		
     			AppUrl = "http://vjb00030.ute.fedex.com:7085/cfCDSTestApp/contact.jsp";

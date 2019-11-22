@@ -27,6 +27,8 @@ public class USRC_FDM {
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
+		API_Functions.General_API_Calls.setPrintOutAPICallFlag(true);
+		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(true);
 	}
 	
 	@DataProvider (parallel = true)
@@ -44,11 +46,22 @@ public class USRC_FDM {
 			case "EndtoEndEnrollment":
 				for (int j = 0 ; j < 10; j++) {
 					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
-					//UserID = "L3ATRK5K";
 					String Password = "Test1234";
 					String ContactDetails[] = USRC_Data.getContactDetails(j);
 					
 					data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D.OrgPostcard, UserID, Password, ContactDetails});
+				}
+				break;
+			case "CreateNewUsers":
+				for (int j = 0 ; j < 1; j++) {
+					//String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
+					// Warning, may not be unique so could be some failures. Updated to make smaller user id
+					String UserID = "L" + strLevel + "ATRK" + Helper_Functions.getRandomString(5);
+					UserID = "L3ATRKExceptions";
+					String Password = "Test1234";
+					String ContactDetails[] = USRC_Data.getContactDetails(j);
+					
+					data.add(new Object[] {strLevel, UserID, Password, ContactDetails});
 				}
 				break;
 				/*
@@ -65,13 +78,16 @@ public class USRC_FDM {
 				User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 				//data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, "L2FDM012919T124302pm", "Test1234"});
 				for (User_Data User_Info: User_Info_Array){
-	    			if (User_Info.FDM_STATUS.contentEquals("false") 
+/*	    			if (User_Info.FDM_STATUS.contentEquals("false") 
 	    					&& User_Info.getHasValidAccountNumber() 
 	    					&& User_Info.getCanScheduleShipment()) {
 	    				data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, User_Info.USER_ID, User_Info.PASSWORD});
-	    				if (data.size() > 10) {
-	    					break;
-	    				}
+	    				if (data.size() > 1) {break;}
+	    			}*/
+					
+	    			if (User_Info.USER_ID.contentEquals("L3642210386US112018T225716ym")) {
+	    				data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, User_Info.USER_ID, User_Info.PASSWORD});
+	    				if (data.size() > 1) {break;}
 	    			}
 	    		}
 				break;
@@ -87,6 +103,8 @@ public class USRC_FDM {
 				break;
 			}//end switch MethodName
 		}
+	    
+	    SupportClasses.Helper_Functions.LimitDataProvider(m.getName(), -1, data);
 		return data.iterator();
 	}
 	
@@ -113,7 +131,7 @@ public class USRC_FDM {
 				
 			//2 - do the enrollment call. Note that the enrollment call will store the ShareID
 			Helper_Functions.PrintOut("Enrollment call", false);
-			Response = USRC_Endpoints.Enrollment(ContactDetails, Cookie);
+			Response = fdm_enrollment.Enrollment(ContactDetails, Cookie);
 
 			assertThat(Response, containsString("enrollmentOptionsList"));
 			
@@ -154,6 +172,23 @@ public class USRC_FDM {
 		}
 	}
 	
+	@Test (dataProvider = "dp", enabled = true)
+	public void CreateNewUsers(String Level, String UserID, String Password, String[] ContactDetails) {
+
+		try {
+			String Response = "";
+
+			//create the new user
+			Response = REGC.create_new_user.NewFCLUser(ContactDetails, UserID, Password);
+			
+			//check to make sure that the userid was created.
+			assertThat(Response, containsString("successful\":true"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = false)
 	public void EndtoEndEnrollment_EmailaAsUserId(String Level, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password, String[] ContactDetails) {
 		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
@@ -173,7 +208,7 @@ public class USRC_FDM {
 				
 			//2 - do the enrollment call. Note that the enrollment call will store the ShareID
 			Helper_Functions.PrintOut("Enrollment call", false);
-			Response = USRC_Endpoints.Enrollment(ContactDetails, Cookie);
+			Response = fdm_enrollment.Enrollment(ContactDetails, Cookie);
 
 			assertThat(Response, containsString("enrollmentOptionsList"));
 			
@@ -207,7 +242,7 @@ public class USRC_FDM {
 		}
 	}
 	
-	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = false)
+	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = true)
 	public void EndtoEndEnrollment_UserID(String Level, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password) {
 		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		try {
@@ -229,7 +264,7 @@ public class USRC_FDM {
 				
 			//2 - do the enrollment call. Note that the enrollment call will store the ShareID
 			Helper_Functions.PrintOut("Enrollment call", false);
-			Response = USRC_Endpoints.Enrollment(ContactDetails, Cookie);
+			Response = fdm_enrollment.Enrollment(ContactDetails, Cookie);
 
 			assertThat(Response, containsString("enrollmentOptionsList"));
 			

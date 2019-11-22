@@ -23,7 +23,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Tracking_Number_Systematic_Search {
-	static String LevelsToTest = "4";
+	static String LevelsToTest = "7";
 	static CopyOnWriteArrayList<String> TrackingList = new CopyOnWriteArrayList<String>();
 	static CopyOnWriteArrayList<Shipment_Data> TrackingListForFileWrite = new CopyOnWriteArrayList<Shipment_Data>();
 	public final static Lock TrackingNumberListLock = new ReentrantLock();
@@ -31,20 +31,20 @@ public class Tracking_Number_Systematic_Search {
 	L2 111111365885L                      
 	L3 111111258998L   794950870011L  794809941268L 
 	 794809944267L 
-	 L4    111111117498L
+	 L4    111111120681L
 	L7  111112563080L    776084983604L
 */	
-	static long Low = 111111120681L;
+	static long Low = 776084990120L; 
 	static int interval = 30;
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		API_Functions.General_API_Calls.setPrintOutAPICallFlag(true);
-		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(true);
+		API_Functions.General_API_Calls.setPrintOutAPICallFlag(false);
+		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(false);
 	}
 
-	@DataProvider //(parallel = true)
+	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 
@@ -54,7 +54,7 @@ public class Tracking_Number_Systematic_Search {
 			case "Tracking_Number_Search":
 				String Tracking_List_Array[] = new String[interval];
 				int pos = 0;
-				long lastIteration = Low + (interval * 30000);
+				long lastIteration = Low + (interval * 30);
 				for (long track = Low; track < lastIteration; track++) {
 					Tracking_List_Array[pos] = String.valueOf(track);
 					pos++;
@@ -70,11 +70,11 @@ public class Tracking_Number_Systematic_Search {
 			}
 		}
 
-		SupportClasses.Helper_Functions.LimitDataProvider(m.getName(), -1, data);
-		return data.iterator();
+		SupportClasses.Helper_Functions.LimitDataProvider(m.getName(), -1, data);		
+		return data.iterator();	
 	}
 
-	@Test(dataProvider = "dp", enabled = true, invocationCount = 100)
+	@Test(dataProvider = "dp", enabled = true, invocationCount = 300)
 	public static void Tracking_Number_Search(String Level, String Tracking_List_Array[]){
 		String Range = Tracking_List_Array[0] + "-" + Tracking_List_Array[Tracking_List_Array.length - 1];
 		int TrackingNumbersFound = 0;
@@ -114,12 +114,15 @@ public class Tracking_Number_Systematic_Search {
 				String trackingQualifier = API_Functions.General_API_Calls.ParseStringValue(SingleTrackingResponse, "trackingQualifier");
 				if (!Helper_Functions.isNullOrUndefined(trackingQualifier)) {
 					String trackingNumber = API_Functions.General_API_Calls.ParseStringValue(SingleTrackingResponse, "trackingNbr");
+					String trackingCarrierCd = API_Functions.General_API_Calls.ParseStringValue(SingleTrackingResponse, "trackingCarrierCd");
 					//Test_Data_Update.Tracking_Data_Update.Tracking_Number_Update(Level, trackingNumber, trackingQualifier, "", "");
 					int keyPosition = -1;
 					String Details[][] = new String[][] {
 						{"TRACKING_NUMBER", trackingNumber}, 
-						{"TRACKING_QUALIFIER", trackingQualifier}
+						{"TRACKING_QUALIFIER", trackingQualifier}, 
+						{"TRACKING_CARRIER", trackingCarrierCd}
 					};
+					// Helper_Functions.PrintOut(Arrays.deepToString(Details));
 					String FileName = Shipment_Data.getTrackingFilePath(Level);
 					Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, keyPosition);
 					TrackingNumbersFound++;
@@ -129,7 +132,7 @@ public class Tracking_Number_Systematic_Search {
 			}
 			Helper_Functions.PrintOut(Range + ":  " + TrackingNumbersFound);
 		}catch (Exception e) {
-			// e.printStackTrace();
+			e.printStackTrace();
  			Assert.fail(e.getCause().toString());
 		}
 	}

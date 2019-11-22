@@ -13,7 +13,7 @@ import API_Functions.General_API_Calls;
 
 public class shipment_option_add_request {
 	
-	public static String ShipmentOptionAddRequest(String Cookie,String trackingNumber, String trackingQualifier, String trackingCarrier){
+	public static String ShipmentOptionAddRequest(String Cookie, String trackingNumber, String trackingQualifier, String trackingCarrier){
   		try{
   			TRKC_Data TRKC_Details = TRKC_Data.LoadVariables();
   			HttpPost httppost = new HttpPost(TRKC_Details.TrackingGenericURL);
@@ -60,4 +60,5 @@ public class shipment_option_add_request {
   			return null;
   		}
   	}
+
 }

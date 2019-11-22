@@ -23,6 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import org.openqa.selenium.By;
 import Data_Structures.Account_Data;
+import Data_Structures.Shipment_Data;
 import Data_Structures.User_Data;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -313,14 +314,15 @@ public class Helper_Functions{
 
 	public static void WriteUserToExcel(String UserID, String Password) {
 		int intLevel = Integer.valueOf(Environment.getInstance().getLevel());
-		String Data[][] = new String[][] { { "SSO_LOGIN_DESC", UserID }, { "USER_PASSWORD_DESC", Password } };
-		WriteToExcel(DataDirectory + "\\TestingData.xls", "L" + intLevel, Data, -1);
+		Shipment_Data Shipment_Info_Ref = new Shipment_Data();
+		String Data[][] = new String[][] { { Shipment_Info_Ref.USER_ID_IDENTIFIER, UserID }, { Shipment_Info_Ref.PASSWORD_IDENTIFIER, Password } };
+		WriteToExcel(DataDirectory + "\\TestingData.xls", "L" + intLevel, Data, 0);
 	}
 
 	public static void WriteUserToExcel(User_Data User_Info) {
 		int intLevel = Integer.valueOf(Environment.getInstance().getLevel());
 		String Data[][] = User_Data.Get_User_Data_String_Array(User_Info);
-		WriteToExcel(DataDirectory + "\\TestingData.xls", "L" + intLevel, Data, -1);
+		WriteToExcel(DataDirectory + "\\TestingData.xls", "L" + intLevel, Data, 1);
 	}
 
 	// {Card Type - 0, Card Number - 1, CVV - 2, Expiration Month - 3, Expiration
@@ -886,91 +888,92 @@ public class Helper_Functions{
 				Data_Headers[addHeadersCnt] = Data[addHeadersCnt][0];
 			}
 			int columns =  IdentifierRow.getLastCellNum();
-			if (KeyPosition != -1) { // Only when making an update
-				for (int i = 0; i < columns; i++) {
-					if (IdentifierRow.getCell(i) != null) {
-						String Check_Cell = IdentifierRow.getCell(i).getStringCellValue();
-						// Check and make sure the excel sheet has all of the same headers as those being passed.
-						for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
-							if (Data_Headers[headerCnt] != null && Check_Cell.contentEquals(Data_Headers[headerCnt])) {
-								Data_Headers[headerCnt] = null;
-							}
+			
+			for (int i = 0; i < columns; i++) {
+				if (IdentifierRow.getCell(i) != null) {
+					String Check_Cell = IdentifierRow.getCell(i).getStringCellValue();
+					// Check and make sure the excel sheet has all of the same headers as those being passed.
+					for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
+						if (Data_Headers[headerCnt] != null && Check_Cell.contentEquals(Data_Headers[headerCnt])) {
+							Data_Headers[headerCnt] = null;
 						}
+					}
 						
-						if (Check_Cell.contentEquals(Data[KeyPosition][0])) {
-							KeyColumn = i;
-						}
+					if (Check_Cell.contentEquals(Data[KeyPosition][0])) {
+						KeyColumn = i;
 					}
 				}
-				// header not found
-				if (KeyColumn == -1) {
-					throw new Exception("Key Not Found");
+			}
+			
+			// header not found
+			if (KeyColumn == -1) {
+				throw new Exception("Key Not Found");
+			}
+			for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
+				if (Data_Headers[headerCnt] != null) {
+					int newEndCell = worksheet.getRow(0).getLastCellNum();
+					worksheet.getRow(0).createCell(newEndCell);
+					worksheet.getRow(0).getCell(newEndCell).setCellValue(Data_Headers[headerCnt]);
+					IdentifierRow = worksheet.getRow(0);
+					Helper_Functions.PrintOut(Data_Headers[headerCnt] + "--- Header was not found.");
 				}
-				for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
-					if (Data_Headers[headerCnt] != null) {
-						int newEndCell = worksheet.getRow(0).getLastCellNum();
-						worksheet.getRow(0).createCell(newEndCell);
-						worksheet.getRow(0).getCell(newEndCell).setCellValue(Data_Headers[headerCnt]);
-						IdentifierRow = worksheet.getRow(0);
-						Helper_Functions.PrintOut(Data_Headers[headerCnt] + "--- Header was not found.");
-					}
-				}
-				
 			}
 
 			boolean keyFoundInExcelFlag = false;
-			for (int j = 0; j < worksheet.getLastRowNum() + 1; j++) {
-				// Updating values
-				// System.out.print("j: " + j + " ");//for debug
-				if (worksheet.getRow(j) != null && worksheet.getRow(j).getCell(KeyColumn) != null) {
+			for (int worksheetRow = 0; worksheetRow <= worksheet.getLastRowNum() + 1; worksheetRow++) {
+				// when making an addition or havn't found place to update.
+				if (worksheetRow == worksheet.getLastRowNum() + 1) {
+						worksheetRow = worksheet.getLastRowNum() + 1;
+						for (int newRow = 0; newRow < Data.length; newRow++) {
+							if (worksheet.getRow(worksheetRow) == null) {// if cell not present create it
+								worksheet.createRow(worksheetRow);
+							}
+							if (worksheet.getRow(worksheetRow).getCell(newRow) == null) {// if cell not present create it
+								worksheet.getRow(worksheetRow).createCell(newRow);
+							}
+							for (int newColumn = 0; newColumn < IdentifierRow.getPhysicalNumberOfCells(); newColumn++) {
+								if (IdentifierRow.getCell(newColumn) != null
+										&& IdentifierRow.getCell(newColumn).getStringCellValue().contentEquals(Data[newRow][0])) {
+									Cell cell = null;
+									if (worksheet.getRow(worksheetRow).getCell(newColumn) == null) {// if cell not present create it
+										worksheet.getRow(worksheetRow).createCell(newColumn);
+									}
+									cell = worksheet.getRow(worksheetRow).getCell(newColumn);
+									cell.setCellValue(Data[newRow][1]);
+									keyFoundInExcelFlag = true;
+									break;
+								}
+							}
+						}
+						// break from worksheetRow loop after addition
+						break;
+					} else if (worksheet.getRow(worksheetRow) != null &&
+							worksheet.getRow(worksheetRow).getCell(KeyColumn) != null) {
 					// format the cell just in case it is not a string.
 					DataFormatter formatter = new DataFormatter();
-					String val = formatter.formatCellValue(worksheet.getRow(j).getCell(KeyColumn));
+					String val = formatter.formatCellValue(worksheet.getRow(worksheetRow).getCell(KeyColumn));
 
 					if (val.contentEquals(Data[KeyPosition][1])) {
 						keyFoundInExcelFlag = true;
 						for (int k = 0; k < Data.length; k++) {
-							if (worksheet.getRow(j).getCell(k) == null) {// if cell not present create it
-								worksheet.getRow(j).createCell(k);
+							if (worksheet.getRow(worksheetRow).getCell(k) == null) {// if cell not present create it
+								worksheet.getRow(worksheetRow).createCell(k);
 							}
 							for (int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
 								if (IdentifierRow.getCell(l) != null && IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
 									Cell cell = null;
-									if (worksheet.getRow(j).getCell(l) == null) {// if cell not present create it
-										worksheet.getRow(j).createCell(l);
+									if (worksheet.getRow(worksheetRow).getCell(l) == null) {// if cell not present create it
+										worksheet.getRow(worksheetRow).createCell(l);
 									}
-									cell = worksheet.getRow(j).getCell(l);
+									cell = worksheet.getRow(worksheetRow).getCell(l);
 									cell.setCellValue(Data[k][1]);
 									// break;
 								}
 							}
 						}
-					}
-				} else if (KeyPosition == -1) {// when making an addition
-					j = worksheet.getLastRowNum() + 1;
-					for (int k = 0; k < Data.length; k++) {
-						if (worksheet.getRow(j) == null) {// if cell not present create it
-							worksheet.createRow(j);
-						}
-						if (worksheet.getRow(j).getCell(k) == null) {// if cell not present create it
-							worksheet.getRow(j).createCell(k);
-						}
-						for (int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
-							if (IdentifierRow.getCell(l) != null
-									&& IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
-								Cell cell = null;
-								if (worksheet.getRow(j).getCell(l) == null) {// if cell not present create it
-									worksheet.getRow(j).createCell(l);
-								}
-								cell = worksheet.getRow(j).getCell(l);
-								cell.setCellValue(Data[k][1]);
-								keyFoundInExcelFlag = true;
-								break;
-							}
-						}
+						break;
 					}
 				}
-
 			}
 			// Close the InputStream
 			fsIP.close();
@@ -982,6 +985,8 @@ public class Helper_Functions{
 				// close the stream
 				output_file.close();
 				FileUpdated = true;
+			} else {
+				Helper_Functions.PrintOut("Key " + Data[KeyPosition][0] + " not found.");
 			}
 		} catch (Exception e) {
 			try {

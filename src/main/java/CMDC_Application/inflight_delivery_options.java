@@ -70,44 +70,14 @@ public class inflight_delivery_options {
 	public static String[][] getInflightDeliveryOptions(String Details[][], String trackingNumber, String Ship_Date, String trackingQualifier) throws Exception {
 		String inflightDeliveryOptionsResponse = CMDC_Application.CMDC_Endpoints.inflightDeliveryOptions(trackingNumber, Ship_Date, trackingQualifier);
 		
-		if (Helper_Functions.isNullOrUndefined(inflightDeliveryOptionsResponse) || !inflightDeliveryOptionsResponse.contains("\"successful\":true")) {
+		if (Helper_Functions.isNullOrUndefined(inflightDeliveryOptionsResponse) 
+				|| !inflightDeliveryOptionsResponse.contains("\"successful\":true")
+				|| !inflightDeliveryOptionsResponse.contains("RESCHEDULE")) {
 			// call did not complete successfully
 			return Details;
 		}
 		
-/*		String RESCHEDULE = "false";
-		String REROUTE = "false";
-		String REDIRECT_HOLD_AT_LOCATION = "false";
-		String SIGNATURE_RELEASE = "false";
-		String DELIVERY_INSTRUCTIONS = "false";
-		String DELIVERY_SUSPENSIONS = "false";
-		
-		if (inflightDeliveryOptionsResponse.contains("\"status\":\"ENABLED\",\"type\":\"RESCHEDULE\"")) {
-			RESCHEDULE = "true";
-		}
-		
-		if (inflightDeliveryOptionsResponse.contains("\"status\":\"ENABLED\",\"type\":\"REROUTE\"")) {
-			REROUTE = "true";
-		}
-		
-		if (inflightDeliveryOptionsResponse.contains("\"status\":\"ENABLED\",\"type\":\"REDIRECT_HOLD_AT_LOCATION\"")) {
-			REDIRECT_HOLD_AT_LOCATION = "true";
-		}
-		
-		if (inflightDeliveryOptionsResponse.contains("\"status\":\"ENABLED\",\"type\":\"SIGNATURE_RELEASE\"")) {
-			SIGNATURE_RELEASE = "true";
-		}
-		
-		if (inflightDeliveryOptionsResponse.contains("\"status\":\"ENABLED\",\"type\":\"DELIVERY_INSTRUCTIONS\"")) {
-			DELIVERY_INSTRUCTIONS = "true";
-		}
-		
-		if (inflightDeliveryOptionsResponse.contains("\"status\":\"ENABLED\",\"type\":\"DELIVERY_SUSPENSIONS\"")) {
-			DELIVERY_SUSPENSIONS = "true";
-		}*/
-		
 		String Tracking_Details[][] = {
-				{"inflightDeliveryOptionsResponse", inflightDeliveryOptionsResponse},
 				{"RESCHEDULE", "\"status\":\"ENABLED\",\"type\":\"RESCHEDULE\""},
 				{"REROUTE", "\"status\":\"ENABLED\",\"type\":\"REROUTE\""},
 				{"REDIRECT_HOLD_AT_LOCATION", "\"status\":\"ENABLED\",\"type\":\"REDIRECT_HOLD_AT_LOCATION\""},
@@ -125,6 +95,9 @@ public class inflight_delivery_options {
 			Details = Arrays.copyOf(Details, Details.length + 1);
 			Details[Details.length - 1] = NewElement;
 		}
+		
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		Details[Details.length - 1] = new String[] {"inflightDeliveryOptionsResponse", inflightDeliveryOptionsResponse};
 
 		return Details;
 	}

@@ -12,7 +12,6 @@ import API_Functions.General_API_Calls;
 import Data_Structures.Address_Data;
 import Data_Structures.Shipment_Data;
 import Data_Structures.User_Data;
-import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
@@ -22,6 +21,17 @@ public class create_shipment {
 		User_Data User_Info = Shipment_Info.User_Info;
 		Address_Data Origin_Address_Info = Shipment_Info.Origin_Address_Info;
 		Address_Data Destination_Address_Info = Shipment_Info.Destination_Address_Info;
+		
+		// update the email address to ignore spam notifications.
+		Shipment_Info.User_Info.EMAIL_ADDRESS = "accept@fedex.com";
+		
+		/// MAY NEED TO REMOVE THIS LATER. Seeing validation from MAGIC where spaces are not valid
+		if (Origin_Address_Info.PostalCode.contains(" ")) {
+			Origin_Address_Info.PostalCode = Origin_Address_Info.PostalCode.replaceAll(" ", "");
+		}
+		if (Destination_Address_Info.PostalCode.contains(" ")) {
+			Destination_Address_Info.PostalCode = Destination_Address_Info.PostalCode.replaceAll(" ", "");
+		}
 		
 		SHPC_Data DC = SHPC_Data.SHPC_Load();
 		
@@ -63,13 +73,9 @@ public class create_shipment {
 				.put("value", "7")
 				.put("units", "KG");
 		
-		String nullString = null;
 		JSONObject customsValue = new JSONObject()
-				.put("amount", nullString)
-				.put("currency", "JYE");
-		/*JSONObject customsValue = new JSONObject()
-				.put("amount", "0")
-				.put("currency", "JYE");*/
+				.put("amount", "12")
+				.put("currency", "USD");
 		
 		JSONObject dimensions = new JSONObject()
 				.put("length", "5")
@@ -84,9 +90,9 @@ public class create_shipment {
 		String specialServiceTypes[] = new String[] {"SIGNATURE_OPTION"};
 		
 		JSONObject commoditiesElement = new JSONObject()
-				.put("name", "CORRESPONDENCE_NO_COMMERCIAL_VALUE")
-				.put("description", "CORRESPONDENCE_NO_COMMERCIAL_VALUE")
-				.put("countryOfManufacture", "JP")
+				.put("name", "PERSONAL_DOCUMENT") //PERSONAL_DOCUMENT   CORRESPONDENCE_NO_COMMERCIAL_VALUE
+				.put("description", "PERSONAL_DOCUMENT") //PERSONAL_DOCUMENT  CORRESPONDENCE_NO_COMMERCIAL_VALUE
+				.put("countryOfManufacture", "US")
 				.put("weight", weight)
 				.put("customsValue", customsValue)
 				.put("quantity", "1")
@@ -110,10 +116,20 @@ public class create_shipment {
 		Object recipients_Array[] = new Object[] {recipientsElement};
 		
 		JSONObject accountNumberElement = new JSONObject()
-				.put("accountNumber",accountNumber);
+				.put("accountNumber", accountNumber);
 		
 		JSONObject responsibleParty = new JSONObject()
-				.put("responsibleParty",accountNumberElement);
+				.put("responsibleParty", accountNumberElement);
+		
+		JSONObject payorAccountNumber = new JSONObject()
+				.put("key", "")
+				.put("value", "");
+		
+		JSONObject payorAccountNumberElement = new JSONObject()
+				.put("accountNumber", payorAccountNumber);
+		
+		JSONObject payorResponsibleParty = new JSONObject()
+				.put("responsibleParty",payorAccountNumberElement);
 		
 		JSONObject shippingChargesPayment = new JSONObject()
 				.put("paymentType", "SENDER")
@@ -121,10 +137,11 @@ public class create_shipment {
 		
 		JSONObject dutiesPayment = new JSONObject()
 				.put("paymentType", "RECIPIENT")   //RECIPIENT   SENDER
-				.put("payor", responsibleParty);
+				.put("payor", payorResponsibleParty);
 		
 		JSONObject commercialInvoice = new JSONObject()
 				.put("shipmentPurpose", "NOT_SOLD")
+				.put("specialInstructions", "") //added on 11/5/19
 				.put("termsOfSale", "");
 
 		JSONObject customsClearanceDetail = new JSONObject()
@@ -138,7 +155,24 @@ public class create_shipment {
 				.put("paperType", "LETTER")
 				.put("autoPrint", false);
 		
-		JSONObject documentFormat = new JSONObject()
+		JSONObject Email_recipients_Element = new JSONObject()
+				.put("emailAddress", Shipment_Info.User_Info.EMAIL_ADDRESS)
+				.put("emailNotificationRecipientType", "RECIPIENT")
+				.put("locale", "en")
+				.put("notificationEventType", new String[] {"ON_DELIVERY",
+				        "ON_EXCEPTION",
+				        "ON_SHIPMENT",
+				        "ON_ESTIMATED_DELIVERY",
+				        "ON_TENDER"})
+				.put("notificationFormatType", "HTML")
+				.put("notificationType", "EMAIL");
+		
+		Object Email_recipients_Array[] = new Object[] {Email_recipients_Element};
+		
+		JSONObject emailNotificationDetail = new JSONObject()
+				.put("recipients", Email_recipients_Array);
+		
+		/*JSONObject documentFormat = new JSONObject()
 				.put("imageType", "PDF")
 				.put("stockType", "PAPER_LETTER");
 		
@@ -146,13 +180,13 @@ public class create_shipment {
 				.put("documentFormat", documentFormat);
 		
 		JSONObject shippingDocumentSpecification = new JSONObject()
-				.put("commercialInvoiceDetail", commercialInvoiceDetail);
+				.put("commercialInvoiceDetail", commercialInvoiceDetail);*/
 		
 		JSONObject requestedPackageLineItemsElement = new JSONObject()
 				.put("groupPackageCount", 1)
 				.put("insuredValue", customsValue)
 				.put("weight", weight)
-				.put("customerReferences", nullString)
+				.put("customerReferences", JSONObject.NULL)
 				.put("dimensions", dimensions)
 				.put("packageSpecialServices", packageSpecialServices);
 		
@@ -162,7 +196,7 @@ public class create_shipment {
 		Date dt = new Date();
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(dt); 
-		c.add(Calendar.DATE, 1);
+		// c.add(Calendar.DATE, 1);
 		dt = c.getTime();
 		// if the day of the month is two digits
 		if (dt.getDate() > 9) {
@@ -180,7 +214,8 @@ public class create_shipment {
 				.put("shippingChargesPayment", shippingChargesPayment)
 				.put("customsClearanceDetail", customsClearanceDetail)
 				.put("labelSpecification", labelSpecification)
-				.put("shippingDocumentSpecification", shippingDocumentSpecification)
+				.put("emailNotificationDetail", emailNotificationDetail)
+				// .put("shippingDocumentSpecification", shippingDocumentSpecification)
 				.put("requestedPackageLineItems", requestedPackageLineItems_Array);
 		
 		HttpPut httpput = new HttpPut(DC.AShipmentURL);

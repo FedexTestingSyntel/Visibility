@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Test_Data_Generation.Tracking_Number_Generation">
+      <class name="Test_Data_Update.TestData_Update">
         <methods>
           <include name="beforeClass"/>
-          <include name="INET_Create_Shipment" invocation-numbers="0 4"/>
+          <include name="Update_Login_Information" invocation-numbers="83 84 92 80 82 103 108 121 159 171 174 175 178 180 207 208 381 452 458"/>
         </methods>
-      </class> <!-- Test_Data_Generation.Tracking_Number_Generation -->
+      </class> <!-- Test_Data_Update.TestData_Update -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

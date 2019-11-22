@@ -49,12 +49,12 @@ public class USRC_Data {
 			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
   			break;
   		case "2":
-  			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com:8443", ""};
+  			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com", ""};
 			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
 			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
   			break;
   		case "3":
-  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com:8443", ""};
+  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com", ""};
 			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
 			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
   			break;
@@ -66,7 +66,7 @@ public class USRC_Data {
 			DC.OAuth_Token_Client_Secret ="e8e41ab3d70b47eab59e01240772df62";
   			break;
   		case "5":
-  			LevelIdentifier = new String[] {"https://apibit.idev.fedex.com:8443", ""};
+  			LevelIdentifier = new String[] {"https://apibit.idev.fedex.com", ""};
 			DC.OAuth_Token_Client_ID = "";
 			DC.OAuth_Token_Client_Secret ="";
   			break;
