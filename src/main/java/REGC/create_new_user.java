@@ -57,7 +57,7 @@ public class create_new_user {
 	//c[] = 0 - First name, 1 - middle name, 2 - last name, 3 - phone number, 4 - email address, 5 - address line 1, 6 - address line 2, 7 - city, 8 - state code, 9 - zip code, 10 - country
 	//User = the UserID that is being created
 	public static String NewFCLUser(String C[], String User, String Password){
-		REGC_Data REGC_Details = REGC_Data.REGC_Load();
+		REGC_Data REGC_Details = REGC_Data.LoadVariables();
 		HttpPost httppost = new HttpPost(REGC_Details.CreateNewUserURL);
 		
 		// Will default to sending correct flag when attempting email as user id. --6/28/19

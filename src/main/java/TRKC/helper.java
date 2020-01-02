@@ -1,5 +1,7 @@
 package TRKC;
 
+import SupportClasses.Helper_Functions;
+
 public class helper {
 
 	public static boolean checkValidResponse(String response){
@@ -11,10 +13,12 @@ public class helper {
 				if (response.contains("{\"code\":\"0\"")) {
 					return true;
 				}
+				Helper_Functions.PrintOut("Response does not containt error code of 0. Error most likely present. \n" + response);
 				return false;
 			}
 			return true;
 		}
+		Helper_Functions.PrintOut("Response does not contain successful true. \n" + response);
 		return false;
 	}
 	

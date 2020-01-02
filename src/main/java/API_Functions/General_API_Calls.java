@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
@@ -22,7 +20,6 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
@@ -30,6 +27,7 @@ public class General_API_Calls {
 	// flag will determine if the url, request, and response will be printed to the console.
 	private static boolean PrintOutAPICall = true;
 	private static boolean PrintOutFullResponse = false;
+	private static int HTTPCallTimeout = 15; // in seconds
 	
 	private final static Lock lock = new ReentrantLock();//to make sure the httpclient works with the parallel execution
 	// private static HttpClient httpclient = HttpClients.createDefault();//made static to speed up socket execution
@@ -37,10 +35,11 @@ public class General_API_Calls {
 	// Have one (or more) threads ready to do the async tasks. Do this during startup of your app.
 	static ExecutorService executor = Executors.newFixedThreadPool(4); 
 	
-	public static String getAuthToken(String URL, String Client_Iden, String Client_Sec) {
+	public static String getAuthToken(String Client_Iden, String Client_Sec) {
 		String CallingMethod = Thread.currentThread().getStackTrace()[2].getMethodName();
 		String CallingIdentifier = "L" + Environment.getInstance().getLevel() + " " + CallingMethod;
-		//ex https://apidev.idev.fedex.com:8443/auth/oauth/v2/token 
+		//ex https://apidev.idev.fedex.com/auth/oauth/v2/token 
+		String URL = General_API_Calls.getAPILevelIedntifier(Environment.getInstance().getLevel(), false) + "/auth/oauth/v2/token";
 		String response = "";
 		try {
 			String queryParam = "grant_type=client_credentials" + "&client_id=" + Client_Iden + "&client_secret=" + Client_Sec + "&scope=oob";
@@ -49,7 +48,7 @@ public class General_API_Calls {
 
 			HttpsURLConnection con = (HttpsURLConnection) serviceUrl.openConnection();
 			con.setRequestMethod(method);
-
+			
 			String urlParameters = queryParam;
 			StringBuffer response_buff = new StringBuffer();
 			con.setDoOutput(true);
@@ -65,14 +64,11 @@ public class General_API_Calls {
 			in.close();
 			response = response_buff.toString();
 			
-			if (response.contains("access_token") && response.contains("token_type")) {
-					//{  "access_token":"ddea4340-d1e1-46bf-94b0-1271c49aa1a0",  "token_type":"Bearer",  "expires_in":3600,  "scope":"oob"}
-					String start = "access_token\":\"";
-					String end = "\",  \"token_type\"";
-					String token = response.substring(response.indexOf(start) + start.length(), response.indexOf(end));
-
-					Helper_Functions.PrintOut(CallingIdentifier + " BearerToken: " + token);
-					return token;
+			if (response.contains("access_token")) {
+				//{  "access_token":"ddea4340-d1e1-46bf-94b0-1271c49aa1a0",  "token_type":"Bearer",  "expires_in":3600,  "scope":"oob"}
+				String token = API_Functions.General_API_Calls.ParseStringValue(response, "access_token");	
+				Helper_Functions.PrintOut(CallingIdentifier + " BearerToken: " + token);
+				return token;
 			}
 		} catch (Exception e) {
 			Helper_Functions.PrintOut("Unable to generate BearerToken -- " + CallingIdentifier);
@@ -85,13 +81,11 @@ public class General_API_Calls {
 		String RequestHeaders = "", Response = "";
 
 		lock.lock();
-		// httpclient = HttpClients.createDefault();//create new connection. This is used to remove static cookies.
-		
-		int timeout = 15;
 		RequestConfig config = RequestConfig.custom()
-		  .setConnectTimeout(timeout * 1000)
-		  .setConnectionRequestTimeout(timeout * 1000)
-		  .setSocketTimeout(timeout * 1000).build();
+		  .setConnectTimeout(HTTPCallTimeout * 1000)
+		  .setConnectionRequestTimeout(HTTPCallTimeout * 1000)
+		  .setSocketTimeout(HTTPCallTimeout * 1000).build();
+		
 		CloseableHttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 		
 		String MethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
@@ -102,7 +96,6 @@ public class General_API_Calls {
   				RequestHeaders += header + "___";
   			}
 			
-			//HttpResponse httpresponse = httpclient.execute((HttpUriRequest) Request);
   			HttpResponse httpresponse = client.execute((HttpUriRequest) Request);
 			Response = EntityUtils.toString(httpresponse.getEntity());
 			Response = RemoveUnicode(Response);
@@ -121,6 +114,7 @@ public class General_API_Calls {
 	
 	public static void Print_Out_API_Call(String MethodName, String URL, String RequestHeaders, String Request_Body, String Response) {
 		if (PrintOutAPICall) {
+			// used to save space when writing to console.
 			if (Response != null && Response.length() > 600 && !PrintOutFullResponse) {
 				int length = Response.length();
 				Response = Response.substring(0, 600) + "... (Response full length was " + length + ", Print_Out_API_Call() )";
@@ -148,7 +142,7 @@ public class General_API_Calls {
 	
 	public static String ParseStringValue(String Main, String Parameter) {
 		if(Main != null && Parameter != null && Main.contains(Parameter)) {
-			//find the parameter and return what reins value stored.
+			// find the parameter and return what the value is.
 			// send Foo, will turn into "Foo":". Then will return value such as "Foo":"value"
 			Parameter = "\"" + Parameter + "\":";
 			if( Main.contains(Parameter) ) {
@@ -195,18 +189,75 @@ public class General_API_Calls {
 		PrintOutFullResponse = flag;
 	}
 	
-	public static String[][] coptToTwoDimArray(String BaseArray[][], String Addition[]) {
-		String TwoDAddition[][] = new String[1][];
-		TwoDAddition[0] = Addition;
-		return coptToTwoDimArray(BaseArray, TwoDAddition);
+	public static void setHTTPCallTimeout(int secondsValue) {
+		HTTPCallTimeout = secondsValue;
 	}
 	
-	public static String[][] coptToTwoDimArray(String BaseArray[][], String Addition[][]) {
+	public static String[][] copyToTwoDimArray(String BaseArray[][], String Addition[]) {
+		String TwoDAddition[][] = new String[1][];
+		TwoDAddition[0] = Addition;
+		return copyToTwoDimArray(BaseArray, TwoDAddition);
+	}
+	
+	public static String[][] copyToTwoDimArray(String BaseArray[][], String Addition[][]) {
 		for (String Add[]: Addition) {
 			BaseArray = Arrays.copyOf(BaseArray, BaseArray.length + 1);
 			BaseArray[BaseArray.length - 1] = Add;
 		}
 		return BaseArray;
+	}
+	
+	public static String getAPILevelIedntifier (String Level, boolean genericURLFlag) {
+		String LevelIdentifier = null;
+		if (genericURLFlag) {
+	  		switch (Level) {
+	  		case "1":
+	  			LevelIdentifier = "NotSetForLevelOne";
+	  		case "2":
+	  			LevelIdentifier = "https://wwwdev.idev.fedex.com";
+	  			break;
+	  		case "3":
+	  			LevelIdentifier = "https://wwwdrt.idev.fedex.com";
+	  			break;
+	  		case "4":
+	  			LevelIdentifier = "https://wwwstress.idev.fedex.com";
+	  			break;
+	  		case "5":
+	  			LevelIdentifier = "https://wwwbit.fedex.com";
+	  			break;
+	  		case "6":
+	  			LevelIdentifier = "https://wwwtest.fedex.com";
+	  			break;
+	  		case "7":
+	  			LevelIdentifier = "https://www.fedex.com";
+	  			break;
+	  		}
+		} else {
+	  		switch (Level) {
+	  		case "1":
+	  			LevelIdentifier = "NotSetForLevelOne";
+	  		case "2":
+	  			LevelIdentifier = "https://apidev.idev.fedex.com";
+	  			break;
+	  		case "3":
+	  			LevelIdentifier = "https://apidrt.idev.fedex.com";
+	  			break;
+	  		case "4":
+	  			LevelIdentifier = "https://apistress.idev.fedex.com";
+	  			break;
+	  		case "5":
+	  			LevelIdentifier = "https://apibit.fedex.com";
+	  			break;
+	  		case "6":
+	  			LevelIdentifier = "https://apitest.fedex.com";
+	  			break;
+	  		case "7":
+	  			LevelIdentifier = "https://api.fedex.com";
+	  			break;
+	  		}
+		}
+
+  		return LevelIdentifier;
 	}
 
 

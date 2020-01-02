@@ -5,6 +5,7 @@ import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 
 import API_Functions.General_API_Calls;
+import Data_Structures.User_Data;
 
 public class fdm_enrollment {
 	
@@ -62,6 +63,57 @@ public class fdm_enrollment {
 			e.printStackTrace();
 		}
 				
+		return Response;
+	}
+
+	public static String Enrollment(User_Data User_Info, String Cookie){
+		USRC_Data USRC_Details = USRC_Data.USRC_Load();
+			
+		HttpPost httppost = new HttpPost(USRC_Details.EnrollmentURL);
+
+		JSONObject contact = new JSONObject()
+			.put("phoneNumber", User_Info.PHONE_NUMBER)
+			.put("emailAddress", User_Info.EMAIL_ADDRESS);
+					
+		JSONObject parsedPersonName = new JSONObject()
+			.put("firstName", User_Info.FIRST_NM)
+			// .put("middleName", MiddleName)  removed on 8/20
+			.put("lastName", User_Info.LAST_NM);
+			
+		contact.put("parsedPersonName", parsedPersonName);
+					
+		String streetLines[] = {User_Info.Address_Info.Address_Line_1, User_Info.Address_Info.Address_Line_2};
+					
+		JSONObject address = new JSONObject()
+			.put("streetLines", streetLines)
+			.put("city", User_Info.Address_Info.City)
+			.put("stateOrProvinceCode", User_Info.Address_Info.State_Code)
+			.put("postalCode", User_Info.Address_Info.PostalCode)
+			.put("countryCode", User_Info.Address_Info.Country_Code);
+					
+		JSONObject main = new JSONObject()
+			.put("address", address)
+			.put("contact", contact);
+					
+		String json = main.toString();
+			
+		httppost.addHeader("Content-Type", "application/json");
+		httppost.addHeader("Authorization", "Bearer " + USRC_Details.getOAuthToken());
+		httppost.addHeader("X-clientid", "WERL");
+		httppost.addHeader("X-locale", "en_US");
+		httppost.addHeader("X-version", "1.0");
+		httppost.addHeader("Cookie", Cookie);
+					
+		StringEntity params;
+		String Response = null;
+		try {
+			params = new StringEntity(json.toString());
+			httppost.setEntity(params);
+			Response = General_API_Calls.HTTPCall(httppost, json);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+					
 		return Response;
 	}
 }

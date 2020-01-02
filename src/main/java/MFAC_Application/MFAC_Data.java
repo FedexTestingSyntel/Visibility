@@ -8,7 +8,6 @@ import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
 public class MFAC_Data {
-	public String OAuth_Token_URL = "";
 	public String OAuth_Token_Client_ID = "";
 	public String OAuth_Token_Client_Secret = "";
 	public String OAuth_Token = "";
@@ -48,22 +47,21 @@ public class MFAC_Data {
   		case "1":
   			LevelIdentifier = new String[] {"", "http://mfacbase-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "2":
-  			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com", "http://mfacdev-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
+  			LevelIdentifier = new String[] {"", "http://mfacdev-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "3":
-  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com", "http://mfacdrt-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
+  			LevelIdentifier = new String[] {"", "http://mfacdrt-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "4":
-  			LevelIdentifier = new String[] {"https://apistress.idev.fedex.com", "http://mfacstress-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
+  			LevelIdentifier = new String[] {"", "http://mfacstress-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "5":
-  			LevelIdentifier = new String[] {"https://apibit.idev.fedex.com", "http://mfacbit-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
+  			LevelIdentifier = new String[] {"", "http://mfacbit-cos-vip.test.cloUser_Info.fedex.com:9090"}; break;
   		case "6":
   			//L6 is not valid for direct URL
-  			LevelIdentifier = new String[] {"https://apitest.fedex.com", ""}; break;
+  			LevelIdentifier = new String[] {"", ""}; break;
   		case "7":
   			//L7 is not valid for direct URL
-  			LevelIdentifier = new String[] {"https://api.fedex.com", ""}; break;
+  			LevelIdentifier = new String[] {"", ""}; break;
 		}
-  		
-  		DC.OAuth_Token_URL = LevelIdentifier[0] + "/auth/oauth/v2/token";
+  		LevelIdentifier[0] = General_API_Calls.getAPILevelIedntifier(Level, false);
   		
   		//Load the API URLs
   		if (Level != "1") {//API not applicable to L1
@@ -133,7 +131,7 @@ public class MFAC_Data {
 		}
 		//generate the OAuthToken, please note that this is not valid on L1 as API calls cannot be used on that level
 		if (!Level.contentEquals("1")) {
-			DC.OAuth_Token = General_API_Calls.getAuthToken(DC.OAuth_Token_URL, DC.OAuth_Token_Client_ID , DC.OAuth_Token_Client_Secret);
+			DC.OAuth_Token = General_API_Calls.getAuthToken(DC.OAuth_Token_Client_ID , DC.OAuth_Token_Client_Secret);
 			Helper_Functions.PrintOut("L" + Level + " MFAC BearerToken generated: " + DC.OAuth_Token);
 			
 		}

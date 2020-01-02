@@ -5,7 +5,6 @@ import API_Functions.General_API_Calls;
 import SupportClasses.Environment;
 
 public class USRC_Data {
-	public String OAuth_Token_URL;
 	public String OAuth_Token_Client_ID;
 	public String OAuth_Token_Client_Secret;
 	public String OAuth_Token;
@@ -41,66 +40,54 @@ public class USRC_Data {
 		USRC_Data DC = new USRC_Data();
 		DC.Level = Level;
 		
-		String LevelIdentifier[] = null;
+		String LevelIdentifier = General_API_Calls.getAPILevelIedntifier(Level, true);
+		String APILevelIdentifier = General_API_Calls.getAPILevelIedntifier(Level, false);
   		switch (Level) {
   		case "1":		//expand to user direct endpoints later as needed
-  			LevelIdentifier = new String[] {"", ""};
 			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
 			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
   			break;
   		case "2":
-  			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com", ""};
 			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
 			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
   			break;
   		case "3":
-  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com", ""};
 			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
 			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
   			break;
   		case "4":
-  			LevelIdentifier = new String[] {"https://apistress.idev.fedex.com", ""};
 			/*DC.OAuth_Token_Client_ID = "l7xx4a86a91576b14d4bb7ba81f52470e48d";
 			DC.OAuth_Token_Client_Secret ="bb0bc6e8fcba4813989ff50895590f30";*/
 			DC.OAuth_Token_Client_ID = "l7xx1841f44a800f4a509aa630b3c009a83d"; // updated on 10-11-19
 			DC.OAuth_Token_Client_Secret ="e8e41ab3d70b47eab59e01240772df62";
   			break;
   		case "5":
-  			LevelIdentifier = new String[] {"https://apibit.idev.fedex.com", ""};
 			DC.OAuth_Token_Client_ID = "";
 			DC.OAuth_Token_Client_Secret ="";
   			break;
   		case "6":
-  			//L6 is not valid for direct URL
-  			LevelIdentifier = new String[] {"https://apitest.fedex.com", ""};
 			DC.OAuth_Token_Client_ID = "l7xx13465335b1224abb88e4587bed90eb40";
 			DC.OAuth_Token_Client_Secret = "dd4ece74e7b04d8f991d4264efdf5100";
   			break;
   		case "7":
-  			//L7 is not valid for direct URL
-  			LevelIdentifier = new String[] {"https://api.fedex.com", ""};
 			DC.OAuth_Token_Client_ID = "l7xxdd1a6d120ab84667b653bd99cd25a033";
 			DC.OAuth_Token_Client_Secret ="b24b83e86c5640cf9f25baab30e99208";
   			break;
 		}
   		
-  		DC.OAuth_Token_URL = LevelIdentifier[0] + "/auth/oauth/v2/token";
-  		
   		//Load the API URLs
   		if (Level != "1") {//API not applicable to L1
-  			DC.EnrollmentURL = LevelIdentifier[0] + "/deliverymanager/v1/enrollment";
-  			DC.CreatePinURL = LevelIdentifier[0] + "/deliverymanager/v1/pin";
-  			DC.PendingAddressURL = LevelIdentifier[0] + "/deliverymanager/v1/addresses/pending";
-  			DC.VerifyPinURL = LevelIdentifier[0] + "/deliverymanager/v2/enrollment/pin";
-  			DC.CancelEnrollmentURL = LevelIdentifier[0] + "/deliverymanager/v1/deliveryoptions/cancel";
+  			DC.EnrollmentURL = APILevelIdentifier + "/deliverymanager/v1/enrollment";
+  			DC.CreatePinURL = APILevelIdentifier + "/deliverymanager/v1/pin";
+  			DC.PendingAddressURL = APILevelIdentifier + "/deliverymanager/v1/addresses/pending";
+  			DC.VerifyPinURL = APILevelIdentifier + "/deliverymanager/v2/enrollment/pin";
+  			DC.CancelEnrollmentURL = APILevelIdentifier + "/deliverymanager/v1/deliveryoptions/cancel";
   		}
   		
-  		//currently uses a generic URL.
-  		String GenericLevel = LevelUrlReturn(Level);
-  		DC.GenericUSRCURL = GenericLevel + "/userCal/user";	
-  		DC.REGCCreateNewUserURL = GenericLevel + "/regcal/registration/newfcluser";
-  		DC.ViewUserProfileWIDMURL = GenericLevel + "/userCal/rest/v2/ViewUserProfileWIDM";
-  		DC.UpdateUserContactInformationWIDMURL = GenericLevel + "/userCal/rest/v2/UpdateUserContactInformationWIDM";
+  		DC.GenericUSRCURL = LevelIdentifier + "/userCal/user";	
+  		DC.REGCCreateNewUserURL = LevelIdentifier + "/regcal/registration/newfcluser";
+  		DC.ViewUserProfileWIDMURL = LevelIdentifier + "/userCal/rest/v2/ViewUserProfileWIDM";
+  		DC.UpdateUserContactInformationWIDMURL = LevelIdentifier + "/userCal/rest/v2/UpdateUserContactInformationWIDM";
 
 		ArrayList<String[]> ContactList = new ArrayList<String[]>();
 		String Phone = "9011111111", Email = "YouNeedToUpdateThisLater@fedex.com";
@@ -151,27 +138,6 @@ public class USRC_Data {
 		
 		return DC;
 	}
-	
-	public static String LevelUrlReturn(String level) {
-  		String LevelURL = null;
-  		switch (level) {
-      		case "1":
-      			LevelURL = "https://wwwbase.idev.fedex.com"; break;
-      		case "2":
-      			LevelURL = "https://wwwdev.idev.fedex.com";  break;
-      		case "3":
-      			LevelURL = "https://wwwdrt.idev.fedex.com"; break;
-      		case "4":
-      			LevelURL = "https://wwwstress.dmz.idev.fedex.com"; break;
-      		case "5":
-      			LevelURL = "https://wwwbit.idev.fedex.com"; break;
-      		case "6":
-      			LevelURL = "https://wwwtest.fedex.com"; break;
-      		case "7":
-      			LevelURL = "https://www.fedex.com"; break;
-  		}
-  		return LevelURL;
-  	}
 
 	public static String[] getContactDetails(int con) {
 		if (ContactDetailsList.size() > con){
@@ -189,9 +155,7 @@ public class USRC_Data {
 		}
 		if (DataClass[intLevel].OAuth_Token == null) {
 			// Generate a new OAuth_Token
-			DataClass[intLevel].OAuth_Token = General_API_Calls.getAuthToken(DataClass[intLevel].OAuth_Token_URL, 
-					DataClass[intLevel].OAuth_Token_Client_ID, 
-					DataClass[intLevel].OAuth_Token_Client_Secret);
+			DataClass[intLevel].OAuth_Token = General_API_Calls.getAuthToken(DataClass[intLevel].OAuth_Token_Client_ID, DataClass[intLevel].OAuth_Token_Client_Secret);
 		}
 		
 		return DataClass[intLevel].OAuth_Token;

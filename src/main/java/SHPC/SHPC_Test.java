@@ -16,7 +16,7 @@ import Data_Structures.Shipment_Data;
 import Data_Structures.User_Data;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
-import USRC.USRC_Endpoints;
+// import USRC.USRC_Endpoints;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
@@ -42,11 +42,11 @@ public class SHPC_Test {
 			User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 			
 			switch (m.getName()) {
-	    		case "CreditCard_Linked":
+	    		/*case "CreditCard_Linked":
 	    			for (User_Data User_Info : User_Info_Array) {
 	    				data.add( new Object[] {Level, User_Info});
 	    			}
-	    		break;
+	    		break;*/
 		    	case "Create_Shipment":
 		    		for (User_Data User_Info : User_Info_Array) {
 		    			//check for a WADM users
@@ -62,25 +62,40 @@ public class SHPC_Test {
 		    				Shipment_Info.Origin_Address_Info = Address_Info;
 		    				Address_Data Address_Info2 = Address_Data.getAddress(Level, "CA", null);
 		    				Shipment_Info.Destination_Address_Info = Address_Info2;
+		    				// Shipment_Info.PrintOutShipmentDetails();
 		    				// Shipment_Info.Destination_Address_Info = User_Info.getFDMregisteredAddress();
 							Shipment_Info.User_Info = User_Info;
 		    				
 							data.add( new Object[] {Level, Shipment_Info});
-							// break;
 		    			}
 		    		}
 		    	break;
 			}
 		}
 		
-		// Remove until less that X tests
-		//while (data.size() > 50) {
-		//	data.remove(data.size() - 1);
-		//}
+		SupportClasses.Helper_Functions.LimitDataProvider(m.getName(), -1, data);
+		
 		return data.iterator();
 	}
 	
-	@Test(dataProvider = "dp", enabled = true)
+	@Test(dataProvider = "dp")
+	public static void Create_Shipment(String Level, Shipment_Data Shipment_Info){
+		try {
+			String LoginValues[] = USRC.login.Login(Shipment_Info.User_Info.USER_ID, Shipment_Info.User_Info.PASSWORD);
+			String Cookies = LoginValues[0];
+			String Response = create_shipment.SHPC_Create_Shipment(Shipment_Info, Cookies);
+
+			assertThat(Response, containsString("masterTrackingNumber"));
+			Helper_Functions.PrintOut(Response);
+			String TrackingNumber = API_Functions.General_API_Calls.ParseStringValue(Response, "masterTrackingNumber");
+			Helper_Functions.PrintOut("User: " + Shipment_Info.User_Info.USER_ID + "   TrackingNumber: " + TrackingNumber);
+		}catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getCause().toString());
+		}
+	}
+	
+	/*	@Test(dataProvider = "dp", enabled = true)
 	public static void CreditCard_Linked(String Level, User_Data User_Info){
 		try {	    				
 			// The cookie is in position 0 of the array.
@@ -95,20 +110,5 @@ public class SHPC_Test {
 		}catch (Exception e) {
 			Assert.fail(e.getCause().toString());
 		}
-	}
-	
-	@Test(dataProvider = "dp")
-	public static void Create_Shipment(String Level, Shipment_Data Shipment_Info){
-		try {
-			String LoginValues[] = USRC.login.Login(Shipment_Info.User_Info.USER_ID, Shipment_Info.User_Info.PASSWORD);
-			String Cookies = LoginValues[0];
-			String Response = create_shipment.SHPC_Create_Shipment(Shipment_Info, Cookies);
-
-			assertThat(Response, containsString("masterTrackingNumber"));
-			Helper_Functions.PrintOut(Response);
-		}catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail(e.getCause().toString());
-		}
-	}
+	}*/
 }

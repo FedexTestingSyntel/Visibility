@@ -19,7 +19,7 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Add_Tracking_Numbers_To_User {
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "2";
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -27,7 +27,7 @@ public class Add_Tracking_Numbers_To_User {
 		API_Functions.General_API_Calls.setPrintOutAPICallFlag(false);
 		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(false);
 		
-		// Data_Structures.Shipment_Data.setTrackingFilePathName("TrackingNumbersL3FullList.xls");
+		// Data_Structures.Shipment_Data.setTrackingFilePathName("TrackingNumbersL" + LevelsToTest + "FullList.xls");
 	}
 
 	@DataProvider (parallel = true)
@@ -42,7 +42,7 @@ public class Add_Tracking_Numbers_To_User {
 			User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 			String User_Cookies = "";
     		for (User_Data User_Info : User_Info_Array) {
-    			if (User_Info.USER_ID.contentEquals("L3ATRKExceptions")) {
+    			if (User_Info.USER_ID.contentEquals("L2ATRKLARGE")) {
     				String Results[] = USRC.login.Login(User_Info.USER_ID, User_Info.PASSWORD);
     				User_Cookies = Results[0];
     				break;
@@ -89,12 +89,8 @@ public class Add_Tracking_Numbers_To_User {
 			}
 			boolean validResponse = TRKC.helper.checkValidResponse(Response_TRKC);
 			Assert.assertTrue(validResponse);
-/*			assertThat(Response_TRKC, containsString("{\"successful\":true"));
-			if (Response_TRKC.contains("\"code\"")) {
-				assertThat(Response_TRKC, containsString("{\"code\":\"0\""));
-			}*/
 					
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
  			Assert.fail(e.getCause().toString());
  			Helper_Functions.PrintOut(Shipment_Info.Tracking_Number + ", ", true);

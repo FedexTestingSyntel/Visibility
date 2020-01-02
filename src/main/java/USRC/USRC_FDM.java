@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_FDM {
  
-	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -31,7 +31,7 @@ public class USRC_FDM {
 		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(true);
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider //(parallel = true)
 	public Iterator<Object[]> dp(Method m) {
 	    List<Object[]> data = new ArrayList<>();
 	    
@@ -44,20 +44,18 @@ public class USRC_FDM {
 	    	
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 			case "EndtoEndEnrollment":
-				for (int j = 0 ; j < 10; j++) {
+				for (int j = 0 ; j < 1; j++) {
 					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
 					String Password = "Test1234";
 					String ContactDetails[] = USRC_Data.getContactDetails(j);
-					
+					/*ContactDetails[4] = "mei.fang@fedex.com";*/
 					data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D.OrgPostcard, UserID, Password, ContactDetails});
 				}
 				break;
 			case "CreateNewUsers":
-				for (int j = 0 ; j < 1; j++) {
-					//String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
-					// Warning, may not be unique so could be some failures. Updated to make smaller user id
-					String UserID = "L" + strLevel + "ATRK" + Helper_Functions.getRandomString(5);
-					UserID = "L3ATRKExceptions";
+				for (int j = 0 ; j < 5; j++) {
+					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
+					// UserID = "L3ATRKExceptions";
 					String Password = "Test1234";
 					String ContactDetails[] = USRC_Data.getContactDetails(j);
 					
@@ -78,17 +76,18 @@ public class USRC_FDM {
 				User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 				//data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, "L2FDM012919T124302pm", "Test1234"});
 				for (User_Data User_Info: User_Info_Array){
-/*	    			if (User_Info.FDM_STATUS.contentEquals("false") 
+	    			if (User_Info.FDM_STATUS.contentEquals("false") 
 	    					&& User_Info.getHasValidAccountNumber() 
 	    					&& User_Info.getCanScheduleShipment()) {
+	    				User_Info.EMAIL_ADDRESS = "accept@fedex.com";
+	    				User_Info.PHONE_NUMBER = "9012223333";
+	    				data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, User_Info});
+	    			}
+					
+	    			/*if (User_Info.USER_ID.contentEquals("L3642210386US112018T225716ym")) {
 	    				data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, User_Info.USER_ID, User_Info.PASSWORD});
 	    				if (data.size() > 1) {break;}
 	    			}*/
-					
-	    			if (User_Info.USER_ID.contentEquals("L3642210386US112018T225716ym")) {
-	    				data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, User_Info.USER_ID, User_Info.PASSWORD});
-	    				if (data.size() > 1) {break;}
-	    			}
 	    		}
 				break;
 			case "EndtoEndEnrollment_EmailaAsUserId":
@@ -183,7 +182,12 @@ public class USRC_FDM {
 			
 			//check to make sure that the userid was created.
 			assertThat(Response, containsString("successful\":true"));
-
+			
+			User_Data UD = new User_Data();
+			UD.USER_ID = UserID;
+			UD.PASSWORD = Password;
+			UD.writeUserToExcel();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -243,34 +247,29 @@ public class USRC_FDM {
 	}
 	
 	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = true)
-	public void EndtoEndEnrollment_UserID(String Level, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, String UserID, String Password) {
+	public void EndtoEndEnrollment_UserID(String Level, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, User_Data User_Info) {
 		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		try {
 			String Response = "";
-			String ContactDetails[] = USRC_Data.getContactDetails(0);
-			
-			if (UserID == null) {
-				//create the new user
-				Response = REGC.create_new_user.NewFCLUser(ContactDetails, UserID, Password);
-			
-				//check to make sure that the userid was created.
-				assertThat(Response, containsString("successful\":true"));
-			}
-			
-			//get the cookies and the uuid of the new user
-			fdx_login_fcl_uuid = login.Login(UserID, Password);
+
+			//1- get the cookies and the uuid of the new user
+			fdx_login_fcl_uuid = login.Login(User_Info.USER_ID, User_Info.PASSWORD);
 			Cookie = fdx_login_fcl_uuid[0];
 			UUID = fdx_login_fcl_uuid[1];
-				
+			
+			if (fdx_login_fcl_uuid == null || UUID == null ) {
+				throw new Exception("Not able to login with " + User_Info.USER_ID);
+			}
+			
 			//2 - do the enrollment call. Note that the enrollment call will store the ShareID
 			Helper_Functions.PrintOut("Enrollment call", false);
-			Response = fdm_enrollment.Enrollment(ContactDetails, Cookie);
+			Response = fdm_enrollment.Enrollment(User_Info, Cookie);
 
 			assertThat(Response, containsString("enrollmentOptionsList"));
 			
 			//3 - request a pin
 			Helper_Functions.PrintOut("Request pin through USRC", false);
-			String ShareID = ParseShareID(Response);
+			String ShareID = API_Functions.General_API_Calls.ParseStringValue(Response, "addressVerificationId");
 			Response = USRC_Endpoints.CreatePin(Cookie, ShareID, USRC_Org);
 			assertThat(Response, containsString("successful\":true"));
 		
@@ -290,7 +289,7 @@ public class USRC_FDM {
 			Helper_Functions.PrintOut("Check recipient profile for new FDM user through USRC", false);
 			Response = recipient_profile.RecipientProfile(Cookie);
 			
-			Helper_Functions.PrintOut(UserID + "/" + Password + "--" + fdx_login_fcl_uuid[1] + "--" + USRC_Org, false);
+			Helper_Functions.PrintOut(User_Info.USER_ID + "/" + User_Info.PASSWORD + "--" + fdx_login_fcl_uuid[1] + "--" + USRC_Org, false);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -3,16 +3,12 @@ package CMDC_Application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-
 import API_Functions.General_API_Calls;
-import Data_Structures.Shipment_Data;
-import INET_Application.eMASS_Scans;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
@@ -70,6 +66,9 @@ public class inflight_delivery_options {
 	public static String[][] getInflightDeliveryOptions(String Details[][], String trackingNumber, String Ship_Date, String trackingQualifier) throws Exception {
 		String inflightDeliveryOptionsResponse = CMDC_Application.CMDC_Endpoints.inflightDeliveryOptions(trackingNumber, Ship_Date, trackingQualifier);
 		
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		Details[Details.length - 1] = new String[] {"inflightDeliveryOptionsResponse", inflightDeliveryOptionsResponse};
+		
 		if (Helper_Functions.isNullOrUndefined(inflightDeliveryOptionsResponse) 
 				|| !inflightDeliveryOptionsResponse.contains("\"successful\":true")
 				|| !inflightDeliveryOptionsResponse.contains("RESCHEDULE")) {
@@ -85,10 +84,13 @@ public class inflight_delivery_options {
 				{"DELIVERY_INSTRUCTIONS", "\"status\":\"ENABLED\",\"type\":\"DELIVERY_INSTRUCTIONS\""},
 				{"DELIVERY_SUSPENSIONS", "\"status\":\"ENABLED\",\"type\":\"DELIVERY_SUSPENSIONS\""}};
 		
+		int CDOCounter = 0;
+		
 		// Add the new element to the details array
 		for (String[] NewElement: Tracking_Details) {
 			if (inflightDeliveryOptionsResponse.contains(NewElement[1])) {
 				NewElement[1] = "true";
+				CDOCounter++;
 			}else {
 				NewElement[1] = "false";
 			}
@@ -96,8 +98,9 @@ public class inflight_delivery_options {
 			Details[Details.length - 1] = NewElement;
 		}
 		
-		Details = Arrays.copyOf(Details, Details.length + 1);
-		Details[Details.length - 1] = new String[] {"inflightDeliveryOptionsResponse", inflightDeliveryOptionsResponse};
+		if (CDOCounter > 3) {
+			Helper_Functions.PrintOut("CDO's Present: " + trackingNumber);
+		}
 
 		return Details;
 	}

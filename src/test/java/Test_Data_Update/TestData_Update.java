@@ -19,15 +19,15 @@ import org.testng.annotations.Test;
 public class TestData_Update {
 
 	//Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
-	static String LevelsToTest = "1234567"; 
-	
+	static String LevelsToTest = "2"; 
+
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
-		API_Functions.General_API_Calls.setPrintOutAPICallFlag(false);
+		API_Functions.General_API_Calls.setPrintOutAPICallFlag(false);//  false    true
 		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(false);
 	}
-	
+
 	@DataProvider (parallel = true)
 	public Iterator<Object[]> dp(Method m) {
 	    List<Object[]> data = new ArrayList<>();
@@ -48,9 +48,9 @@ public class TestData_Update {
     					data.add(new Object[] {strLevel, User_Info});
     				}
 					//single specific user.
-    				// else if (User_Info.USER_ID.contains("L211220181114")){data.add(new Object[] {strLevel, User_Info});}
+    				//else if (User_Info.USER_ID.contains("L2ATRKLARGE")){data.add(new Object[] {strLevel, User_Info});}
     				//uncomment if need to run all
-    				 else{data.add(new Object[] {strLevel, User_Info});}
+    				else{data.add(new Object[] {strLevel, User_Info});}
 
     			}
 				break;
@@ -103,6 +103,8 @@ public class TestData_Update {
 				Details = TRKC.tracking_profile.getATRK_Profile(Details, Cookies);
 				
 				Details = ADMC.role_and_status.getRoleAndStatus(Details, Cookies);
+				
+				Details = ADMC.customviews.getCustomViews(Details, Cookies);
 			}else {
 				//will save the current time of the failure.
 				Details = new String[][]{{"ERROR", Helper_Functions.CurrentDateTime(true)}, {"USER_ID", User_Info.USER_ID}};
@@ -112,11 +114,11 @@ public class TestData_Update {
 			String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
 			boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, keyPosition);
 			//Helper_Functions.PrintOut("Contact Details: " + Arrays.deepToString(Details), true);
-			Helper_Functions.PrintOut("Contact Details Attempt: " + Details[0][1] + "  " + Details[1][1], true);
+			Helper_Functions.PrintOut("Contact Details Attempt: " + User_Info.USER_ID + "  " + Details[0][1] + "  " + Details[1][1], true);
 			if (!updatefile) {
 				Assert.fail("Not able to update file.");
 			}else if (fdx_login_fcl_uuid == null) {
-				Assert.fail("Not able to login");
+				Assert.fail("Not able to login with " + User_Info.USER_ID);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();

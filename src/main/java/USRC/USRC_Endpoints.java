@@ -114,14 +114,15 @@ public class USRC_Endpoints {
 			httppost.addHeader("X-version", "1.0");
 			httppost.addHeader("Cookie", Cookie);
 			
-			StringEntity params = new StringEntity(json.toString());
+/*			StringEntity params = new StringEntity(json.toString());
 			httppost.setEntity(params);
 			HttpResponse response = httpclient.execute(httppost);
-			String result = EntityUtils.toString(response.getEntity());
+			String result = EntityUtils.toString(response.getEntity());*/
+			String Response = General_API_Calls.HTTPCall(httppost, json);
 
 			//Example, if the response does not contain success check that the correct cookies are being sent as a broken response may only have transaction id.
 			//{"transactionId":"ae1816b4-0738-4849-bd2f-fca1df32837b","output":{"successful":true}} 
-			return result;
+			return Response;
 		}catch (Exception e){
 			return e.toString();
 		}
@@ -421,8 +422,8 @@ public class USRC_Endpoints {
 		} while (customerAccountList.contains("customerAccountInfo"));
 		Account[0][1] = AllAcountInfo;
 		
-		Details = API_Functions.General_API_Calls.coptToTwoDimArray(Details, Contact_Details);
-		Details = API_Functions.General_API_Calls.coptToTwoDimArray(Details, Account);
+		Details = API_Functions.General_API_Calls.copyToTwoDimArray(Details, Contact_Details);
+		Details = API_Functions.General_API_Calls.copyToTwoDimArray(Details, Account);
 
 		
 /*		//This will check if the user is the owner of the account

@@ -80,13 +80,13 @@ public class login {
   			General_API_Calls.Print_Out_API_Call(MethodName, httppost.toString(), RequestHeaders, json, Response.toString());
 					  
   			if (fdx_login == null) {
-  				return null;
+  				throw new Exception("Unable to login");
   			}
   			String HeaderArray[] = new String[] {fdx_login, fcl_uuid, full_cookies};
-  			// Helper_Functions.PrintOut("Headers" + Arrays.toString(HeaderArray), true);
   			return HeaderArray;
   		}catch (Exception e){
-  			e.printStackTrace();
+  			System.err.println("USRC.login() - Unable to login - " + UserID + " / " + Password);
+  			// e.printStackTrace();
   			return null;
   		}
   	}

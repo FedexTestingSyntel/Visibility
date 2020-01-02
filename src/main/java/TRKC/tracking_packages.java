@@ -3,15 +3,13 @@ package TRKC;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-
 import API_Functions.General_API_Calls;
-import INET_Application.GroundCorpLoad;
+import SupportClasses.Helper_Functions;
 
 public class tracking_packages {
 
@@ -95,6 +93,15 @@ public class tracking_packages {
 	public static String[][] getTrackpackages(String[][] Details, String trackingNumber, String trackingQualifier, String trackingCarrier) throws Exception {
 		String TrackPackagesResponse = TrackingPackagesRequest(trackingNumber, trackingQualifier, trackingCarrier);
 		
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		Details[Details.length - 1] = new String[] {"TrackPackagesResponse", TrackPackagesResponse};
+		
+		if (Helper_Functions.isNullOrUndefined(TrackPackagesResponse) 
+				|| !TrackPackagesResponse.contains("\"successful\":true")) {
+			// call did not complete successfully
+			return Details;
+		}
+		
 		String Tracking_Details[][] = new String[][] {
 			{"SHIP_DATE", "shipDt"}, // The "SHIP_DATE" value is hard coded to be used in calling method.
 			{"DELIVERY_DATE", "displayEstDeliveryDateTime"},
@@ -121,10 +128,6 @@ public class tracking_packages {
 			String[] NewElement = {"TRACKING_QUALIFIER", API_Functions.General_API_Calls.ParseStringValue(TrackPackagesResponse, "trackingQualifier")};
 			Details[Details.length - 1] = NewElement;
 		}
-		
-		Details = Arrays.copyOf(Details, Details.length + 1);
-		String[] NewElement = {"TrackPackagesResponse", TrackPackagesResponse};
-		Details[Details.length - 1] = NewElement;
 		
 		return Details;
 	}

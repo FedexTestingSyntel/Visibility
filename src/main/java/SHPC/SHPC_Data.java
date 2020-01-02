@@ -8,7 +8,6 @@ import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
 public class SHPC_Data {
-	public String OAuth_Token_URL = "";
 	public String OAuth_Token_Client_ID = "";
 	public String OAuth_Token_Client_Secret = "";
 	public String OAuth_Token = "";
@@ -33,27 +32,9 @@ public class SHPC_Data {
 		//since the level details have not been loaded load them.
 		SHPC_Data DC = new SHPC_Data();
 
-		String LevelIdentifier[] = null;
-  		switch (Level) {
-  		case "1":
-  			LevelIdentifier = new String[] {"", ""}; break;
-  		case "2":
-  			LevelIdentifier = new String[] {"https://apidev.idev.fedex.com", ""}; break;
-  		case "3":
-  			LevelIdentifier = new String[] {"https://apidrt.idev.fedex.com", ""}; break;
-  		case "4":
-  			LevelIdentifier = new String[] {"https://apistress.idev.fedex.com", ""}; break;
-  		case "5":
-  			LevelIdentifier = new String[] {"https://apibit.fedex.com", ""}; break;
-  		case "6":
-  			//L6 is not valid for direct URL
-  			LevelIdentifier = new String[] {"https://apitest.fedex.com", ""}; break;
-  		case "7":
-  			//L7 is not valid for direct URL
-  			LevelIdentifier = new String[] {"https://api.fedex.com", ""}; break;
-		}
+		String LevelIdentifier = General_API_Calls.getAPILevelIedntifier(Level, false);
   		
-  		DC.AShipmentURL = LevelIdentifier[0] + "/ship/v3/shipments/";
+  		DC.AShipmentURL = LevelIdentifier + "/ship/v3/shipments/";
 		
 		switch (Level) { //Based on the method that is being called the array list will be populated. This will make the TestNG Pass/Fail results more relevant.
 		case "1":
@@ -61,16 +42,16 @@ public class SHPC_Data {
 			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
 			break;
 		case "2":
-			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
-			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";
+			DC.OAuth_Token_Client_ID = "l7xxfa6e963315b14c8eb3f490c0a3437096";
+			DC.OAuth_Token_Client_Secret ="725f5798300f44428a0e1ddca74568e2";
 			break;
 		case "3":
-			/* updated on 11/5/19
-			DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
+			/* updated on 11/5/19*/
+			/* DC.OAuth_Token_Client_ID = "l7xx1892f99a6f88470ba29abc141cd7bd8d";
 			DC.OAuth_Token_Client_Secret ="a4325d011acf4876b3fe3206931b8f5a";*/
 			
-			DC.OAuth_Token_Client_ID = "l7xx3122c52e6f3648d3a21825210aad5c24";
-			DC.OAuth_Token_Client_Secret ="a399e3f1513a484788ce0b7773ee2e6e";
+			DC.OAuth_Token_Client_ID = "l7xxfa6e963315b14c8eb3f490c0a3437096";
+			DC.OAuth_Token_Client_Secret ="725f5798300f44428a0e1ddca74568e2";
 			break;
 		case "4":
 			DC.OAuth_Token_Client_ID = "l7xx4a86a91576b14d4bb7ba81f52470e48d";
@@ -96,10 +77,8 @@ public class SHPC_Data {
 		
 		//generate the OAuthToken, please note that this is not valid on L1 as API calls cannot be used on that level
 		if (!Level.contentEquals("1")) {
-	  		DC.OAuth_Token_URL = LevelIdentifier[0] + "/auth/oauth/v2/token";
-			DC.OAuth_Token = General_API_Calls.getAuthToken(DC.OAuth_Token_URL, DC.OAuth_Token_Client_ID , DC.OAuth_Token_Client_Secret);
+			DC.OAuth_Token = General_API_Calls.getAuthToken(DC.OAuth_Token_Client_ID , DC.OAuth_Token_Client_Secret);
 			Helper_Functions.PrintOut("L" + Level + " SHPC BearerToken generated: " + DC.OAuth_Token);
-			
 		}
 		
 		DataClass[intLevel] = DC;
@@ -115,9 +94,7 @@ public class SHPC_Data {
 		}
 		if (DataClass[intLevel].OAuth_Token == null) {
 			// Generate a new OAuth_Token
-			DataClass[intLevel].OAuth_Token = General_API_Calls.getAuthToken(DataClass[intLevel].OAuth_Token_URL, 
-					DataClass[intLevel].OAuth_Token_Client_ID, 
-					DataClass[intLevel].OAuth_Token_Client_Secret);
+			DataClass[intLevel].OAuth_Token = General_API_Calls.getAuthToken(DataClass[intLevel].OAuth_Token_Client_ID, DataClass[intLevel].OAuth_Token_Client_Secret);
 		}
 		
 		return DataClass[intLevel].OAuth_Token;
