@@ -2,6 +2,7 @@ package Test_Data_Generation;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.testng.Assert;
@@ -22,27 +23,25 @@ import Test_Data_Update.Tracking_Data_Update;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Tracking_Number_Generation {
-	static String LevelsToTest = "3";
-	static int numberOfAttempts = 10;
+	static String LevelsToTest = "2";
+	static int numberOfAttempts = 3;
 	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 	}
 	
-	@DataProvider (parallel = true)
+	@DataProvider // (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
 		
 		for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
-			User_Data User_Info_Array[];
+			User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
 			//Based on the method that is being called the array list will be populated
 			switch (m.getName()) {
 		    	case "INET_Create_Shipment":
-		    		User_Info_Array = User_Data.Get_UserIds(intLevel);
-		    		
 		    		for (User_Data User_Info : User_Info_Array) {
 		    			//check for a WADM users
 		    			if (User_Info.getHasValidAccountNumber() 
@@ -72,15 +71,14 @@ public class Tracking_Number_Generation {
 			    			
 			    			// Shipment_Info.setService("Ground");
 			    			while (numberOfAttempts > 0) {
-			    				data.add( new Object[] {Level, Shipment_Info});
+			    				Shipment_Data Cloned_Shipment = (Shipment_Data) Shipment_Info.clone();
+			    				data.add( new Object[] {Level, Cloned_Shipment});
 			    				numberOfAttempts--;
 			    			}
 		    			}
 		    		}
 		    	break;
 		    	case "SHPC_Create_Shipment":
-		    		User_Info_Array = User_Data.Get_UserIds(intLevel);
-		    		
 		    		for (User_Data User_Info : User_Info_Array) {
 		    			if (User_Info.getHasValidAccountNumber() 
 		    				&& User_Info.getCanScheduleShipment() 
@@ -121,7 +119,7 @@ public class Tracking_Number_Generation {
 		return data.iterator();
 	}
 
-	@Test(dataProvider = "dp", enabled = false)
+	@Test(dataProvider = "dp", enabled = false)   // true  false
 	public static void INET_Create_Shipment(String Level, Shipment_Data Shipment_Info){
 		try {
 			Shipment_Info.PrintOutShipmentDetails();
@@ -144,41 +142,34 @@ public class Tracking_Number_Generation {
 		}
 	}
 	
-	@Test(dataProvider = "dp", enabled=true)
+	@Test(dataProvider = "dp", enabled=true)   // true  false
 	public static void SHPC_Create_Shipment(String Level, Shipment_Data Shipment_Info, int Attempts){
 		try {
 			Shipment_Info.PrintOutShipmentDetails();
 			String LoginValues[] = USRC.login.Login(Shipment_Info.User_Info.USER_ID, Shipment_Info.User_Info.PASSWORD);
 			String Cookies = LoginValues[0];
-			int TrackingNumbersCreated = 0;
-			Shipment_Data Shipment_Info_Array[] = new Shipment_Data[Attempts];
+			
+			String TrackingNumbers[] = {};
+			
 			while(Attempts > 0) {
 				Shipment_Info.Tracking_Number = SHPC.create_shipment.createTrackingNumber(Shipment_Info, Cookies);
 				
 				if (Shipment_Info.Tracking_Number != null) {
-					Shipment_Info_Array[TrackingNumbersCreated] = Shipment_Info;
 					// update the tracking number.
 					Tracking_Data_Update.Tracking_Number_To_File(Level, Shipment_Info.Tracking_Number, Shipment_Info.User_Info.USER_ID, Shipment_Info.User_Info.PASSWORD);
-					TrackingNumbersCreated++;
-					// reset the tracking number
-					Shipment_Info.Tracking_Number = null;
+					TrackingNumbers = Arrays.copyOf(TrackingNumbers, TrackingNumbers.length + 1);
+					TrackingNumbers[TrackingNumbers.length - 1] = Shipment_Info.Tracking_Number;
 				} else {
 					Helper_Functions.PrintOut("Unable to create tracking number.");
 				}
 				Attempts--;
 			}
 			
-			if (TrackingNumbersCreated == 0) {
+			if (TrackingNumbers.length == 0) {
 				Assert.fail("Unable to create any shipments.");
 			} else {
-				String TrackingNumbers = "";
-				for(Shipment_Data Shipment : Shipment_Info_Array) {
-					if (Shipment != null) {
-						TrackingNumbers += Shipment.Tracking_Number + "  ";
-					}
-				}
-				Helper_Functions.PrintOut(String.format("%s tracking numbers have been created. %s - %s", TrackingNumbersCreated, Shipment_Info_Array[0].User_Info.USER_ID, TrackingNumbers));
-				// eMASS_Scans.eMASS_Pickup_Scan(Shipment_Info_Array);
+				Helper_Functions.PrintOut(String.format("%s tracking numbers have been created. %s", Arrays.toString(TrackingNumbers), Shipment_Info.User_Info.USER_ID));
+				eMASS_Scans.eMASS_Multiple_Pickup_Scan(Shipment_Info, TrackingNumbers);
 			}
 			
 		}catch (Exception e) {

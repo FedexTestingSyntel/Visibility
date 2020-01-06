@@ -78,7 +78,6 @@ public class SHPC_Data {
 		//generate the OAuthToken, please note that this is not valid on L1 as API calls cannot be used on that level
 		if (!Level.contentEquals("1")) {
 			DC.OAuth_Token = General_API_Calls.getAuthToken(DC.OAuth_Token_Client_ID , DC.OAuth_Token_Client_Secret);
-			Helper_Functions.PrintOut("L" + Level + " SHPC BearerToken generated: " + DC.OAuth_Token);
 		}
 		
 		DataClass[intLevel] = DC;

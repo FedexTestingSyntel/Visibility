@@ -18,14 +18,13 @@ import SupportClasses.Helper_Functions;
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
 public class Tracking_Data_Update {
-	static String LevelsToTest = "3";
+	static String LevelsToTest = "23";
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		API_Functions.General_API_Calls.setPrintOutAPICallFlag(false); // true false
 		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(false);// true false
-		// Data_Structures.Shipment_Data.setTrackingFilePathName("TrackingNumbersL3FullList.xls");
 	}
 
 	@DataProvider (parallel = true)
@@ -34,6 +33,10 @@ public class Tracking_Data_Update {
 
 		for (int i = 0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
+			
+			// Only when updating the full list
+			// Data_Structures.Shipment_Data.setTrackingFilePathName("TrackingNumbersL" + Level + "FullList.xls");
+			
 			Shipment_Data Shipment_Info_Array[] = Data_Structures.Shipment_Data.getTrackingDetails(Level);
 			// Based on the method that is being called the array list will be populated
 			switch (m.getName()) {
@@ -53,10 +56,10 @@ public class Tracking_Data_Update {
 					} else if (Helper_Functions.isNullOrUndefined(Shipment_Info.Ship_Date)) {
 						data.add(new Object[] { Level, Shipment_Info.Tracking_Number, Shipment_Info.TRACKING_QUALIFIER,
 								Shipment_Info.User_Info.USER_ID, Shipment_Info.User_Info.PASSWORD });
-					} else {
+					} /*else {
 						data.add(new Object[] { Level, Shipment_Info.Tracking_Number, Shipment_Info.TRACKING_QUALIFIER,
 								Shipment_Info.User_Info.USER_ID, Shipment_Info.User_Info.PASSWORD });
-					}
+					}*/
 
 					/*
 					 * if (!Helper_Functions.isNullOrUndefined(Shipment_Info.TRACKING_QUALIFIER) &&
@@ -103,7 +106,7 @@ public class Tracking_Data_Update {
 			}
 		}
 
-		SupportClasses.Helper_Functions.LimitDataProvider(m.getName(), -1, data);
+		SupportClasses.Helper_Functions.LimitDataProvider(m.getName(), 200, data);
 		return data.iterator();
 	}
 

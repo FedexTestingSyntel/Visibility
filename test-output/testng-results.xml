@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="3" total="3" passed="0">
+<testng-results skipped="0" failed="0" ignored="1" total="2" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="386" started-at="2019-12-30T20:17:11Z" finished-at="2019-12-30T20:17:11Z">
+  <suite name="Default suite" duration-ms="107431" started-at="2020-01-06T20:37:33Z" finished-at="2020-01-06T20:39:21Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="386" started-at="2019-12-30T20:17:11Z" finished-at="2019-12-30T20:17:11Z">
+    <test name="Default test" duration-ms="107431" started-at="2020-01-06T20:37:33Z" finished-at="2020-01-06T20:39:21Z">
+      <class name="Test_Data_Generation.Tracking_Number_Generation">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:Test_Data_Generation.Tracking_Number_Generation@105fece7]" name="beforeClass" is-config="true" duration-ms="37" started-at="2020-01-06T20:37:34Z" finished-at="2020-01-06T20:37:34Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeClass -->
+        <test-method status="PASS" signature="SHPC_Create_Shipment(java.lang.String, Data_Structures.Shipment_Data, int)[pri:0, instance:Test_Data_Generation.Tracking_Number_Generation@105fece7]" name="SHPC_Create_Shipment" duration-ms="106633" started-at="2020-01-06T20:37:34Z" data-provider="dp" finished-at="2020-01-06T20:39:21Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[2]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Data_Structures.Shipment_Data@4562e04d]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- SHPC_Create_Shipment -->
+      </class> <!-- Test_Data_Generation.Tracking_Number_Generation -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

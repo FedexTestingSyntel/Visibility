@@ -5,8 +5,8 @@
     <classes>
       <class name="Test_Data_Generation.Tracking_Number_Generation">
         <methods>
+          <include name="SHPC_Create_Shipment" invocation-numbers="0"/>
           <include name="beforeClass"/>
-          <include name="INET_Create_Shipment" invocation-numbers="0 1 2 7 8 9"/>
         </methods>
       </class> <!-- Test_Data_Generation.Tracking_Number_Generation -->
     </classes>

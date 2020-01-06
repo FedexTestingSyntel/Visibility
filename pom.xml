@@ -1,13 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>Visibility</groupId>
-  <version>1.0</version>
-   <properties>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
-  </properties>
+<modelVersion>4.0.0</modelVersion>
+<groupId>Visibility</groupId>
+<version>1.0</version>
+<packaging>jar</packaging>
+<properties>
+	<maven.compiler.target>1.8</maven.compiler.target>
+	<maven.compiler.source>1.8</maven.compiler.source>
+</properties>
   
 <repositories>
     <repository>
@@ -20,92 +21,104 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <dependencies>
 
 	<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java 2.53.0 --> 
- <dependency>
-    <groupId>org.seleniumhq.selenium</groupId>
-    <artifactId>selenium-java</artifactId>
-    <version>2.53.0</version>              
-</dependency>
+ 	<dependency>
+    	<groupId>org.seleniumhq.selenium</groupId>
+		<artifactId>selenium-java</artifactId>
+    	<version>2.53.0</version>              
+	</dependency>
 
-<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
-<dependency>
-    <groupId>org.apache.httpcomponents</groupId>
-    <artifactId>httpcore</artifactId>
-    <version>4.4.11</version>
-</dependency>
-<dependency>
-  <groupId>org.apache.httpcomponents</groupId>
-  <artifactId>httpclient</artifactId>
-  <version>4.3.6</version>
-</dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
+	<dependency>
+    	<groupId>org.apache.httpcomponents</groupId>
+    	<artifactId>httpcore</artifactId>
+    	<version>4.4.11</version>
+	</dependency>
 
-<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
-<dependency>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-dependency-plugin</artifactId>
-    <version>3.1.1</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/net.sourceforge.jexcelapi/jxl -->
-<dependency>
-    <groupId>net.sourceforge.jexcelapi</groupId>
-    <artifactId>jxl</artifactId>
-    <version>2.6</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.testng/testng -->
-<dependency>
-    <groupId>org.testng</groupId>
-    <artifactId>testng</artifactId>
-    <version>6.14.3</version>
-    <scope>test</scope>
-</dependency>
-<!-- https://mvnrepository.com/artifact/uk.gov.gchq.gaffer/array-list-store -->
-<dependency>
-    <groupId>uk.gov.gchq.gaffer</groupId>
-    <artifactId>array-list-store</artifactId>
-    <version>0.6.3</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/junit/junit -->
-<dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
-    <version>4.12</version>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.apache.poi</groupId>
-    <artifactId>poi-ooxml</artifactId>
-    <version>3.11</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.json/json -->
-<dependency>
-    <groupId>org.json</groupId>
-    <artifactId>json</artifactId>
-    <version>20180813</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf https://www.guru99.com/pdf-emails-and-screenshot-of-test-reports-in-selenium.html   -->
-<dependency>
-    <groupId>com.itextpdf</groupId>
-    <artifactId>itextpdf</artifactId>
-    <version>5.0.6</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-<dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>javax.servlet-api</artifactId>
-    <version>4.0.1</version>
-    <scope>provided</scope>
-</dependency>
-<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
-<dependency>
-    <groupId>javax.mail</groupId>
-    <artifactId>javax.mail-api</artifactId>
-    <version>1.6.2</version>
-</dependency>
-<dependency>
-    <groupId>javax.mail</groupId>
-    <artifactId>mail</artifactId>
-    <version>1.5.0-b01</version>
-</dependency>
-<dependency>
+	<dependency>
+  		<groupId>org.apache.httpcomponents</groupId>
+  		<artifactId>httpclient</artifactId>
+  		<version>4.3.6</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
+	<dependency>
+    	<groupId>org.apache.maven.plugins</groupId>
+    	<artifactId>maven-dependency-plugin</artifactId>
+    	<version>3.1.1</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/net.sourceforge.jexcelapi/jxl -->
+	<dependency>
+    	<groupId>net.sourceforge.jexcelapi</groupId>
+    	<artifactId>jxl</artifactId>
+		<version>2.6</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+	<dependency>
+    	<groupId>org.testng</groupId>
+    	<artifactId>testng</artifactId>
+    	<version>6.14.3</version>
+    	<scope>test</scope>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/uk.gov.gchq.gaffer/array-list-store -->
+	<dependency>
+    	<groupId>uk.gov.gchq.gaffer</groupId>
+    	<artifactId>array-list-store</artifactId>
+    	<version>0.6.3</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/junit/junit -->
+	<dependency>
+    	<groupId>junit</groupId>
+    	<artifactId>junit</artifactId>
+    	<version>4.12</version>
+    	<scope>test</scope>
+	</dependency>
+
+	<dependency>
+    	<groupId>org.apache.poi</groupId>
+    	<artifactId>poi-ooxml</artifactId>
+    	<version>3.11</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.json/json -->
+	<dependency>
+    	<groupId>org.json</groupId>
+    	<artifactId>json</artifactId>
+    	<version>20180813</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf https://www.guru99.com/pdf-emails-and-screenshot-of-test-reports-in-selenium.html   -->
+	<dependency>
+    	<groupId>com.itextpdf</groupId>
+    	<artifactId>itextpdf</artifactId>
+    	<version>5.0.6</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+	<dependency>
+    	<groupId>javax.servlet</groupId>
+    	<artifactId>javax.servlet-api</artifactId>
+    	<version>4.0.1</version>
+    	<scope>provided</scope>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
+	<dependency>
+    	<groupId>javax.mail</groupId>
+    	<artifactId>javax.mail-api</artifactId>
+    	<version>1.6.2</version>
+	</dependency>
+
+	<dependency>
+    	<groupId>javax.mail</groupId>
+		<artifactId>mail</artifactId>
+    	<version>1.5.0-b01</version>
+	</dependency>
+
+	<dependency>
         <groupId>com.sun.mail</groupId>
         <artifactId>javax.mail</artifactId>
         <version>1.5.3</version>
@@ -113,14 +126,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     </dependency>
     
     <!-- https://mvnrepository.com/artifact/com.sun.mail/smtp -->
-<dependency>
-    <groupId>com.sun.mail</groupId>
-    <artifactId>smtp</artifactId>
-    <version>1.5.1</version>
-</dependency>
+	<dependency>
+    	<groupId>com.sun.mail</groupId>
+    	<artifactId>smtp</artifactId>
+    	<version>1.5.1</version>
+	</dependency>
 
-<!-- added for SOAP testing,  all of the below 4-->
-<dependency>
+	<!-- added for SOAP testing,  all of the below 4-->
+	<dependency>
         <groupId>com.github.redfish4ktc.soapui</groupId>
         <artifactId>maven-soapui-extension-plugin</artifactId>
         <version>4.6.4.0</version>
@@ -140,7 +153,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <artifactId>org.apache.commons.collections</artifactId>
         <version>3.2.1</version>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>com.smartbear.soapui</groupId>
       <artifactId>soapui</artifactId>
       <version>5.2.1</version>
@@ -155,50 +168,80 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     </dependency>
     
     <!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
-<dependency>
-    <groupId>com.google.api-client</groupId>
-    <artifactId>google-api-client</artifactId>
-    <version>1.30.1</version>
-</dependency>
-    
-  </dependencies>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-compiler-plugin
-										</artifactId>
-										<versionRange>
-											[2.5.1,)
-										</versionRange>
-										<goals>
-											<goal>testCompile</goal>
-											<goal>compile</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-	<artifactId>VisArtifact</artifactId>
+	<dependency>
+    	<groupId>com.google.api-client</groupId>
+    	<artifactId>google-api-client</artifactId>
+    	<version>1.30.1</version>
+	</dependency>
+	
+</dependencies>
+
+<build>
+	<pluginManagement>
+		<plugins>
+			<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+			<plugin>
+				<groupId>org.eclipse.m2e</groupId>
+				<artifactId>lifecycle-mapping</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<lifecycleMappingMetadata>
+						<pluginExecutions>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-compiler-plugin</artifactId>
+									<versionRange>[2.5.1,)</versionRange>
+									<goals>
+										<goal>testCompile</goal>
+										<goal>compile</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<ignore></ignore>
+								</action>
+							</pluginExecution>
+						</pluginExecutions>
+					</lifecycleMappingMetadata>
+				</configuration>
+			</plugin>
+			
+			<!--Used for creating jar executables. 1 of 2 -->
+			<plugin>
+    			<groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-dependency-plugin</artifactId>
+    			<executions>
+        			<execution>
+            			<id>copy-dependencies</id>
+            			<phase>prepare-package</phase>
+            			<goals>
+                			<goal>copy-dependencies</goal>
+            			</goals>
+            			<configuration>
+                			<outputDirectory>${project.build.directory}/libs</outputDirectory>
+            			</configuration>
+        			</execution>
+    			</executions>
+			</plugin>
+			<!--Used for creating jar executables. 2 of 2 -->
+			<plugin>
+    			<groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-jar-plugin</artifactId>
+    			<configuration>
+        			<archive>
+            			<manifest>
+                			<addClasspath>true</addClasspath>
+                			<classpathPrefix>libs/</classpathPrefix>
+                			<mainClass>org.baeldung.executable.ExecutableMavenJar</mainClass>
+            			</manifest>
+        			</archive>
+    			</configuration>
+			</plugin>
+			
+		</plugins>
+	</pluginManagement>
+</build>
+
+<artifactId>VisArtifact</artifactId>
+
 </project>

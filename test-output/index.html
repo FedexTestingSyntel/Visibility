@@ -49,7 +49,7 @@
               <ul>
                 <li>
                   <a href="#" class="navigator-link " panel-name="test-xml-Default_suite">
-                    <span>C:\Users\5159473\AppData\Local\Temp\testng-eclipse--1813914082\testng-customsuite.xml</span>
+                    <span>C:\Users\5159473\AppData\Local\Temp\testng-eclipse--9515065\testng-customsuite.xml</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
@@ -91,7 +91,21 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">0 methods,   </span>
+                    <span class="method-stats">1 method,   1 passed</span>
+                  </li>
+                  <li>
+                    <span class="method-list-title passed">Passed methods</span>
+                    <span class="show-or-hide-methods passed">
+                      <a href="#" panel-name="suite-Default_suite" class="hide-methods passed suite-Default_suite"> (hide)</a> <!-- hide-methods passed suite-Default_suite -->
+                      <a href="#" panel-name="suite-Default_suite" class="show-methods passed suite-Default_suite"> (show)</a> <!-- show-methods passed suite-Default_suite -->
+                    </span>
+                    <div class="method-list-content passed suite-Default_suite">
+                      <span>
+                        <img width="3%" src="passed.png"/>
+                        <a href="#" class="method navigator-link" panel-name="suite-Default_suite" title="Test_Data_Generation.Tracking_Number_Generation" hash-for-method="SHPC_Create_Shipment(2, Data_Structures.Shipment_Data@4562e04d, 3)">SHPC_Create_Shipment(2, Data_Structures.Shipment_Data@4562e04d, 3)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content passed suite-Default_suite -->
                   </li>
                 </ul>
               </div> <!-- suite-section-content -->
@@ -103,10 +117,26 @@
     <div class="wrapper">
       <div class="main-panel-root">
         <div panel-name="suite-Default_suite" class="panel Default_suite">
+          <div class="suite-Default_suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">Test_Data_Generation.Tracking_Number_Generation</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="SHPC_Create_Shipment(2, Data_Structures.Shipment_Data@4562e04d, 3)">
+                  </a> <!-- SHPC_Create_Shipment(2, Data_Structures.Shipment_Data@4562e04d, 3) -->
+                  <span class="method-name">SHPC_Create_Shipment</span>
+                  <span class="parameters">(2, Data_Structures.Shipment_Data@4562e04d, 3)</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Default_suite-class-passed -->
         </div> <!-- panel Default_suite -->
         <div panel-name="test-xml-Default_suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">C:\Users\5159473\AppData\Local\Temp\testng-eclipse--1813914082\testng-customsuite.xml</span>
+            <span class="header-content">C:\Users\5159473\AppData\Local\Temp\testng-eclipse--9515065\testng-customsuite.xml</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <pre>
@@ -115,11 +145,7 @@
 &lt;suite guice-stage=&quot;DEVELOPMENT&quot; name=&quot;Default suite&quot;&gt;
   &lt;test thread-count=&quot;5&quot; verbose=&quot;2&quot; name=&quot;Default test&quot;&gt;
     &lt;classes&gt;
-      &lt;class name=&quot;INET_Application.eMASS_Scans&quot;&gt;
-        &lt;methods&gt;
-          &lt;include name=&quot;eMASS_Multiple_Pickup_Scan&quot;/&gt;
-        &lt;/methods&gt;
-      &lt;/class&gt; &lt;!-- INET_Application.eMASS_Scans --&gt;
+      &lt;class name=&quot;Test_Data_Generation.Tracking_Number_Generation&quot;/&gt;
     &lt;/classes&gt;
   &lt;/test&gt; &lt;!-- Default test --&gt;
 &lt;/suite&gt; &lt;!-- Default suite --&gt;
@@ -159,11 +185,16 @@ data.addColumn('number', 'Number');
 data.addColumn('string', 'Method');
 data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
-data.addRows(0);
+data.addRows(1);
+data.setCell(0, 0, 0)
+data.setCell(0, 1, 'SHPC_Create_Shipment')
+data.setCell(0, 2, 'Test_Data_Generation.Tracking_Number_Generation')
+data.setCell(0, 3, 106633);
 window.suiteTableData['Default_suite']= { tableData: data, tableDiv: 'times-div-Default_suite'}
 return data;
 }
               </script>
+              <span class="suite-total-time">Total running time: 1 minutes</span>
               <div id="times-div-Default_suite">
               </div> <!-- times-div-Default_suite -->
             </div> <!-- times-div -->
@@ -178,17 +209,13 @@ return data;
         </div> <!-- panel -->
         <div panel-name="ignored-methods-Default_suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">3 ignored methods</span>
+            <span class="header-content">1 ignored method</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <div class="ignored-class-div">
-              <span class="ignored-class-name">INET_Application.eMASS_Scans</span>
+              <span class="ignored-class-name">Test_Data_Generation.Tracking_Number_Generation</span>
               <div class="ignored-methods-div">
-                <span class="ignored-method-name">eMASSTest</span>
-                <br/>
-                <span class="ignored-method-name">eMASSAPITest</span>
-                <br/>
-                <span class="ignored-method-name">eMASSFullUpdate</span>
+                <span class="ignored-method-name">INET_Create_Shipment</span>
                 <br/>
               </div> <!-- ignored-methods-div -->
             </div> <!-- ignored-class-div -->
@@ -199,6 +226,16 @@ return data;
             <span class="header-content">Methods in chronological order</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
+            <div class="chronological-class">
+              <div class="chronological-class-name">Test_Data_Generation.Tracking_Number_Generation</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <span class="method-name">beforeClass</span>
+                <span class="method-start">0 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="test-method">
+                <span class="method-name">SHPC_Create_Shipment(2, Data_Structures.Shipment_Data@4562e04d, 3)</span>
+                <span class="method-start">433 ms</span>
+              </div> <!-- test-method -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
       </div> <!-- main-panel-root -->

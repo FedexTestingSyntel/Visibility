@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
-public class Shipment_Data {
+public class Shipment_Data implements Cloneable {
 
 	public static String TrackingFileName = "TrackingNumbers$LVL$.xls";
 	
@@ -294,5 +294,14 @@ public class Shipment_Data {
 	public static void setTrackingFilePathName (String FileName) {
 		TrackingFileName = FileName;
 	}
+	
+	public Object clone() { 
+		try {
+			return super.clone();
+		} catch (Exception e){
+			Helper_Functions.PrintOut("Unable to close shipment data.");
+			return new Shipment_Data();
+		}
+	} 
 	
 }
