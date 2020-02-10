@@ -189,7 +189,7 @@ public class create_shipment {
 				.put("recipients", recipients_Array)
 				.put("shipTimestamp", TomorrowDateFormatted)
 				.put("pickupType", "DROPOFF_AT_FEDEX_LOCATION") // DROPOFF_AT_FEDEX_LOCATION  CONTACT_FEDEX_TO_SCHEDULE
-				.put("serviceType", "INTERNATIONAL_ECONOMY")
+				.put("serviceType", "INTERNATIONAL_ECONOMY") //   INTERNATIONAL_ECONOMY
 				.put("packagingType", "YOUR_PACKAGING")
 				.put("shippingChargesPayment", shippingChargesPayment)
 				.put("customsClearanceDetail", customsClearanceDetail)

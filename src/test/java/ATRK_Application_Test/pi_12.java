@@ -35,16 +35,16 @@ public class pi_12{
 	@DataProvider (parallel = true)
 	public static Iterator<Object[]> dp(Method m) {
 		List<Object[]> data = new ArrayList<Object[]>();
-		User_Data User_Info_Array[];
+		User_Data userInfoArray[];
 		
 		for (int i=0; i < Environment.LevelsToTest.length(); i++) {
 			String Level = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(Level);
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 		    	case "ATRK_AVERT_1228244":
-		    		User_Info_Array = User_Data.Get_UserIds(intLevel);
+		    		userInfoArray = User_Data.Get_UserIds(intLevel);
 		    		for (String CountryCode: CountryList) {
-		    			for (User_Data User_Info: User_Info_Array) {
+		    			for (User_Data User_Info: userInfoArray) {
 		    				//if (User_Info.MIGRATION_STATUS.contentEquals("WADM")) { ////just first user for now until get WTRK access added
 		    					data.add( new Object[] {Level, User_Info, CountryCode});
 		    					break;

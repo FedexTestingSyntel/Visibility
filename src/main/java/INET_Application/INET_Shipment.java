@@ -42,8 +42,8 @@ public class INET_Shipment {
 			// Based on the method that is being called the array list will be populated
 			switch (m.getName()) {
 			case "INET_Create_Shipment":
-				User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
-				for (User_Data User_Info : User_Info_Array) {
+				User_Data userInfoArray[] = User_Data.Get_UserIds(intLevel);
+				for (User_Data User_Info : userInfoArray) {
 					// check for a WADM users
 					if (User_Info.getATRKStatus() && User_Info.getCanScheduleShipment()) {
 						int loops = 0;

@@ -1,6 +1,9 @@
 package SupportClasses;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;    //The below needed for tracking the status of the tests.
+import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -15,9 +18,13 @@ public class TestNG_TestListener implements ITestListener{
 	private static ArrayList<String> ResultsLog = new ArrayList<String>();//the results of all test cases
 	private static ArrayList<String[]> ResultsOverview = new ArrayList<String[]>();
 	private final static Lock lock = new ReentrantLock();//to make sure the httpclient works with the parallel execution
+	Date startTime;
+	Date endTime;
+	
 	
 	@Override
     public void onStart(ITestContext arg0) {
+		startTime = new Date();
 		ArrayList<String[]> PersonalData = new ArrayList<String[]>();
 		PersonalData = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\Load_Your_UserIds.xls",  "Data");//create your own file with the specific data
 		for(String s[]: PersonalData) {
@@ -84,6 +91,7 @@ public class TestNG_TestListener implements ITestListener{
 
     @Override
     public void onFinish(ITestContext arg0) {
+    	endTime = new Date();
         //remove all skipped tests from the results.
     	Iterator<ITestResult> skippedTestCases = arg0.getSkippedTests().getAllResults().iterator();
         while (skippedTestCases.hasNext()) {
@@ -109,6 +117,10 @@ public class TestNG_TestListener implements ITestListener{
 			Helper_Functions.PrintOut("ChromeDriver.exe Cleanup Executed", true);
 			Helper_Functions.MoveOldLogs();
 		} catch (Exception e) {}
+		
+		// Print out when the execution started and when ended.
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Helper_Functions.PrintOut("Start Time: " + dateFormat.format(startTime) + " - End Time: " + dateFormat.format(endTime), true);
     }
 
     @Override

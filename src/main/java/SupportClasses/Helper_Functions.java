@@ -32,7 +32,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
-public class Helper_Functions{
+public class Helper_Functions {
 	public static String MyEmail = "accept@gmail.com";
 	public static String myPhone = "9011111111";
 	public static String myPassword = "Test1234";
@@ -42,6 +42,7 @@ public class Helper_Functions{
 	public static String FileSaveDirectory = BaseDirectory + "EclipseScreenshots";
 	public static String DataDirectory = BaseDirectory + "Data";
 	public static String TestingData = DataDirectory + "\\TestingData.xls";
+
 	public final static Lock Excellock = new ReentrantLock();// prevent excel ready clashes
 	public static String Passed = "Passed", Failed = "Fail", Skipped = "Skipped";
 
@@ -49,8 +50,6 @@ public class Helper_Functions{
 			CreditCardList = new ArrayList<String[]>(), EnrollmentList = new ArrayList<String[]>(),
 			TaxInfoList = new ArrayList<String[]>();
 
-			
-			
 	public static String getCallerClassName() {
 		StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
 		for (int i = 1; i < stElements.length; i++) {
@@ -62,7 +61,7 @@ public class Helper_Functions{
 		}
 		return null;
 	}
-	
+
 	public static String getMethodName() {
 		return Thread.currentThread().getStackTrace()[2].getMethodName();
 	}
@@ -315,7 +314,8 @@ public class Helper_Functions{
 	public static void WriteUserToExcel(String UserID, String Password) {
 		int intLevel = Integer.valueOf(Environment.getInstance().getLevel());
 		Shipment_Data Shipment_Info_Ref = new Shipment_Data();
-		String Data[][] = new String[][] { { Shipment_Info_Ref.USER_ID_IDENTIFIER, UserID }, { Shipment_Info_Ref.PASSWORD_IDENTIFIER, Password } };
+		String Data[][] = new String[][] { { Shipment_Info_Ref.USER_ID_IDENTIFIER, UserID },
+				{ Shipment_Info_Ref.PASSWORD_IDENTIFIER, Password } };
 		WriteToExcel(DataDirectory + "\\TestingData.xls", "L" + intLevel, Data, 0);
 	}
 
@@ -481,7 +481,7 @@ public class Helper_Functions{
 		final String[] numNames = { "", "one", "two", "three", "four", "five", "six", "seven" };
 		String DummyName[] = { "F" + numNames[Integer.valueOf(Level)] + Base + getRandomString(7), "M",
 				"L" + getRandomString(7) };
-		//PrintOut("Full Name: " + Arrays.toString(DummyName), false);
+		// PrintOut("Full Name: " + Arrays.toString(DummyName), false);
 		return DummyName;
 	}
 
@@ -860,10 +860,11 @@ public class Helper_Functions{
 
 	// if KeyPosition = -1 then write new line to excel
 	public static boolean WriteToExcel(String FileName, String SheetName, String Data[][], int KeyPosition) {
+		Excellock.lock();
 		HSSFWorkbook wb = null;
 		boolean FileUpdated = false;
+
 		try {
-			Excellock.lock();
 			// Read the spreadsheet that needs to be updated
 			FileInputStream fsIP = new FileInputStream(new File(FileName));
 			// Access the workbook
@@ -871,7 +872,6 @@ public class Helper_Functions{
 			// Access the work sheet, so that we can update / modify it.
 			HSSFSheet worksheet = wb.getSheetAt(0);
 			for (int i = 1; i < wb.getNumberOfSheets() + 1; i++) {
-				// PrintOut("CurrentSheet: " + worksheet.getSheetName(), false); //for debugging
 				// if getting errors with sheet not found
 				if (worksheet.getSheetName().contentEquals(SheetName)) {
 					break;
@@ -882,102 +882,91 @@ public class Helper_Functions{
 			// Check the column headers for the key position
 			int KeyColumn = -1;
 			HSSFRow IdentifierRow = null;
-			IdentifierRow = worksheet.getRow(0);
-			String Data_Headers[] = new String[Data.length];
-			for (int addHeadersCnt = 0; addHeadersCnt < Data.length; addHeadersCnt++) {
-				Data_Headers[addHeadersCnt] = Data[addHeadersCnt][0];
-			}
-			int columns =  IdentifierRow.getLastCellNum();
+			Object results[] = getKeyHeaderPosition(worksheet, Data, KeyPosition);
+			KeyColumn = (int) results[0];
+			IdentifierRow = (HSSFRow) results[1];
 			
-			for (int i = 0; i < columns; i++) {
-				if (IdentifierRow.getCell(i) != null) {
-					String Check_Cell = IdentifierRow.getCell(i).getStringCellValue();
-					// Check and make sure the excel sheet has all of the same headers as those being passed.
-					for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
-						if (Data_Headers[headerCnt] != null && Check_Cell.contentEquals(Data_Headers[headerCnt])) {
-							Data_Headers[headerCnt] = null;
-						}
-					}
+			boolean fileShouldBeUpdated = false;
+			int dataLength = Data[0].length;
+			for(int writeDataPosition = 1; writeDataPosition < Data[0].length; writeDataPosition++) {
+				for (int worksheetRow = 0; worksheetRow < worksheet.getLastRowNum() + 1; worksheetRow++) {
+					
+					// when making an addition or haven't found place to update.
+					if (worksheetRow == worksheet.getLastRowNum() + 1) {
 						
-					if (Check_Cell.contentEquals(Data[KeyPosition][0])) {
-						KeyColumn = i;
-					}
-				}
-			}
-			
-			// header not found
-			if (KeyColumn == -1) {
-				throw new Exception("Key Not Found");
-			}
-			for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
-				if (Data_Headers[headerCnt] != null) {
-					int newEndCell = worksheet.getRow(0).getLastCellNum();
-					worksheet.getRow(0).createCell(newEndCell);
-					worksheet.getRow(0).getCell(newEndCell).setCellValue(Data_Headers[headerCnt]);
-					IdentifierRow = worksheet.getRow(0);
-					Helper_Functions.PrintOut(Data_Headers[headerCnt] + "--- Header was not found.");
-				}
-			}
-
-			boolean keyFoundInExcelFlag = false;
-			for (int worksheetRow = 0; worksheetRow <= worksheet.getLastRowNum() + 1; worksheetRow++) {
-				// when making an addition or havn't found place to update.
-				if (worksheetRow == worksheet.getLastRowNum() + 1) {
-						worksheetRow = worksheet.getLastRowNum() + 1;
 						for (int newRow = 0; newRow < Data.length; newRow++) {
-							if (worksheet.getRow(worksheetRow) == null) {// if cell not present create it
+							// if row not present create it
+							if (worksheet.getRow(worksheetRow) == null) {
 								worksheet.createRow(worksheetRow);
 							}
-							if (worksheet.getRow(worksheetRow).getCell(newRow) == null) {// if cell not present create it
+							// if cell not present create it
+							if (worksheet.getRow(worksheetRow).getCell(newRow) == null) {
 								worksheet.getRow(worksheetRow).createCell(newRow);
 							}
 							for (int newColumn = 0; newColumn < IdentifierRow.getPhysicalNumberOfCells(); newColumn++) {
-								if (IdentifierRow.getCell(newColumn) != null
-										&& IdentifierRow.getCell(newColumn).getStringCellValue().contentEquals(Data[newRow][0])) {
-									Cell cell = null;
-									if (worksheet.getRow(worksheetRow).getCell(newColumn) == null) {// if cell not present create it
+								if (IdentifierRow.getCell(newColumn) != null && IdentifierRow.getCell(newColumn)
+										.getStringCellValue().contentEquals(Data[newRow][0])) {
+									// if cell not present create it
+									if (worksheet.getRow(worksheetRow).getCell(newColumn) == null) {
 										worksheet.getRow(worksheetRow).createCell(newColumn);
 									}
-									cell = worksheet.getRow(worksheetRow).getCell(newColumn);
-									cell.setCellValue(Data[newRow][1]);
-									keyFoundInExcelFlag = true;
+									Cell cell = worksheet.getRow(worksheetRow).getCell(newColumn);
+									cell.setCellValue(Data[newRow][writeDataPosition]);
+									fileShouldBeUpdated = true;
 									break;
 								}
 							}
 						}
 						// break from worksheetRow loop after addition
 						break;
-					} else if (worksheet.getRow(worksheetRow) != null &&
-							worksheet.getRow(worksheetRow).getCell(KeyColumn) != null) {
-					// format the cell just in case it is not a string.
-					DataFormatter formatter = new DataFormatter();
-					String val = formatter.formatCellValue(worksheet.getRow(worksheetRow).getCell(KeyColumn));
+					} else if (worksheet.getRow(worksheetRow) != null
+							&& worksheet.getRow(worksheetRow).getCell(KeyColumn) != null) {
+						// format the cell just in case it is not a string.
+						DataFormatter formatter = new DataFormatter();
+						String val = formatter.formatCellValue(worksheet.getRow(worksheetRow).getCell(KeyColumn));
 
-					if (val.contentEquals(Data[KeyPosition][1])) {
-						keyFoundInExcelFlag = true;
-						for (int k = 0; k < Data.length; k++) {
-							if (worksheet.getRow(worksheetRow).getCell(k) == null) {// if cell not present create it
-								worksheet.getRow(worksheetRow).createCell(k);
-							}
-							for (int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
-								if (IdentifierRow.getCell(l) != null && IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
-									Cell cell = null;
-									if (worksheet.getRow(worksheetRow).getCell(l) == null) {// if cell not present create it
-										worksheet.getRow(worksheetRow).createCell(l);
+						// if the row should be updated.
+						if (val.contentEquals(Data[KeyPosition][writeDataPosition])) {
+							for (int k = 0; k < Data.length; k++) {
+								// if cell is not present create it.
+								if (worksheet.getRow(worksheetRow).getCell(k) == null) {
+									worksheet.getRow(worksheetRow).createCell(k);
+								}
+								// loop through all values of row to see that column should be updated.
+								for (int l = 0; l <  IdentifierRow.getPhysicalNumberOfCells(); l++) {
+									if (IdentifierRow.getCell(l) != null
+											&& IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data[k][0])) {
+										Cell cell = null;
+										if (worksheet.getRow(worksheetRow).getCell(l) == null) {
+											worksheet.getRow(worksheetRow).createCell(l);
+										}
+										cell = worksheet.getRow(worksheetRow).getCell(l);
+										
+										String value = formatter.formatCellValue(cell);
+										    
+										// only update the cell if the values differ
+										if (Data[k][writeDataPosition] != null
+												&& value.contentEquals(Data[k][writeDataPosition])) {
+											fileShouldBeUpdated = true;
+											cell.setCellValue(Data[k][writeDataPosition]);
+										}
+										
+										// column value found and updated. break from IdentifierRow
+										break;
 									}
-									cell = worksheet.getRow(worksheetRow).getCell(l);
-									cell.setCellValue(Data[k][1]);
-									// break;
 								}
 							}
+							
+							// break from worksheetRow loop as data has been updated.
+							break;
 						}
-						break;
 					}
 				}
 			}
+			
 			// Close the InputStream
 			fsIP.close();
-			if (keyFoundInExcelFlag) {
+			if (fileShouldBeUpdated) {
 				// Open FileOutputStream to write updates
 				FileOutputStream output_file = new FileOutputStream(new File(FileName));
 				// write changes
@@ -985,28 +974,76 @@ public class Helper_Functions{
 				// close the stream
 				output_file.close();
 				FileUpdated = true;
-			} else {
+			} else if (KeyColumn == -1) {
 				Helper_Functions.PrintOut("Key " + Data[KeyPosition][0] + " not found.");
 			}
 		} catch (Exception e) {
 			try {
 				wb.close();
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 			}
 			e.printStackTrace();
-		} finally {
-			Excellock.unlock();
 		}
+
+		Excellock.unlock();
 		return FileUpdated;
 	}
+	
+	public static Object[] getKeyHeaderPosition(HSSFSheet worksheet, String data[][], int keyPosition) throws Exception{
+		HSSFRow IdentifierRow = worksheet.getRow(0);
+		int keyColumn = -1;
+		String Data_Headers[] = new String[data.length];
+		for (int addHeadersCnt = 0; addHeadersCnt < data.length; addHeadersCnt++) {
+			Data_Headers[addHeadersCnt] = data[addHeadersCnt][0];
+		}
+		int columns = IdentifierRow.getLastCellNum();
 
+		for (int i = 0; i < columns; i++) {
+			if (IdentifierRow.getCell(i) != null) {
+				String Check_Cell = IdentifierRow.getCell(i).getStringCellValue();
+				// Check and make sure the excel sheet has all of the same headers as those
+				// being passed.
+				for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
+					if (Data_Headers[headerCnt] != null && Check_Cell.contentEquals(Data_Headers[headerCnt])) {
+						Data_Headers[headerCnt] = null;
+					}
+				}
+
+				if (Check_Cell.contentEquals(data[keyPosition][0])) {
+					keyColumn = i;
+				}
+			}
+		}
+
+		// header not found
+		if (keyColumn == -1) {
+			throw new Exception("Key Not Found");
+		}
+		
+		// Add header if not present in excel
+		for (int headerCnt = 0; headerCnt < Data_Headers.length; headerCnt++) {
+			if (Data_Headers[headerCnt] != null) {
+				int newEndCell = worksheet.getRow(0).getLastCellNum();
+				worksheet.getRow(0).createCell(newEndCell);
+				worksheet.getRow(0).getCell(newEndCell).setCellValue(Data_Headers[headerCnt]);
+				IdentifierRow = worksheet.getRow(0);
+				Helper_Functions.PrintOut(Data_Headers[headerCnt] + "--- Header was not found.");
+			}
+		}
+		return new Object[] {keyColumn, IdentifierRow};
+	}
+
+	// KeyPosition array will try to match multiple columns
 	public static boolean WriteToExcel(String FileName, String SheetName, String Data[][], int KeyPosition[]) {
 		HSSFWorkbook wb = null;
+		FileInputStream fsIP = null;
+		FileOutputStream output_file = null;
+		
 		boolean FileUpdated = false;
 		try {
 			Excellock.lock();
 			// Read the spreadsheet that needs to be updated
-			FileInputStream fsIP = new FileInputStream(new File(FileName));
+			fsIP = new FileInputStream(new File(FileName));
 			// Access the workbook
 			wb = new HSSFWorkbook(fsIP);
 			// Access the work sheet, so that we can update / modify it.
@@ -1110,7 +1147,7 @@ public class Helper_Functions{
 			// Close the InputStream
 			fsIP.close();
 			// Open FileOutputStream to write updates
-			FileOutputStream output_file = new FileOutputStream(new File(FileName));
+			output_file = new FileOutputStream(new File(FileName));
 			// write changes
 			wb.write(output_file);
 			// close the stream
@@ -1118,12 +1155,13 @@ public class Helper_Functions{
 
 			FileUpdated = true;
 		} catch (Exception e) {
-			try {
-				wb.close();
-			} catch (IOException e1) {
-			}
 			e.printStackTrace();
 		} finally {
+			try {
+				fsIP.close();
+				wb.close();
+				output_file.close();
+			} catch (IOException e1) {}
 			Excellock.unlock();
 		}
 		return FileUpdated;
@@ -1201,14 +1239,15 @@ public class Helper_Functions{
 		}
 		return null;
 	}
-	
+
 	// if KeyPosition = -1 then write new line to excel
-	public static boolean WriteMultipleToExcel(String FileName, String SheetName, CopyOnWriteArrayList<String[]> Data, int KeyPosition) {
+	public static boolean WriteMultipleToExcel(String FileName, String SheetName, CopyOnWriteArrayList<String[]> Data,
+			int KeyPosition) {
 		HSSFWorkbook wb = null;
 		boolean FileUpdated = false;
 		try {
 			String Data_Headers[] = Data.get(0);
-			
+
 			Excellock.lock();
 			// Read the spreadsheet that needs to be updated
 			FileInputStream fsIP = new FileInputStream(new File(FileName));
@@ -1229,7 +1268,7 @@ public class Helper_Functions{
 			int KeyColumn = -1;
 			HSSFRow IdentifierRow = null;
 			IdentifierRow = worksheet.getRow(0);
-			int columns =  IdentifierRow.getLastCellNum();
+			int columns = IdentifierRow.getLastCellNum();
 			if (KeyPosition != -1) { // Only when making an update
 				for (int i = 0; i < columns; i++) {
 					if (IdentifierRow.getCell(i) != null) {
@@ -1245,7 +1284,7 @@ public class Helper_Functions{
 					throw new Exception("Key Not Found");
 				}
 			}
-			
+
 			for (int numUpdates = 1; numUpdates < Data.size(); numUpdates++) {
 				String Data_Row[] = Data.get(numUpdates);
 				for (int j = 0; j < worksheet.getLastRowNum() + 1; j++) {
@@ -1262,7 +1301,8 @@ public class Helper_Functions{
 									worksheet.getRow(j).createCell(k);
 								}
 								for (int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
-									if (IdentifierRow.getCell(l) != null && IdentifierRow.getCell(l).getStringCellValue().contentEquals(Data_Headers[k])) {
+									if (IdentifierRow.getCell(l) != null && IdentifierRow.getCell(l)
+											.getStringCellValue().contentEquals(Data_Headers[k])) {
 										Cell cell = null;
 										if (worksheet.getRow(j).getCell(l) == null) {// if cell not present create it
 											worksheet.getRow(j).createCell(l);
@@ -1275,7 +1315,7 @@ public class Helper_Functions{
 							}
 						}
 					}
-					
+
 					// if not found add to end of sheet
 					if (j == worksheet.getLastRowNum()) {
 						j++;
@@ -1283,18 +1323,21 @@ public class Helper_Functions{
 						for (int k = 0; k < Data_Row.length; k++) {
 							for (int l = 0; l < IdentifierRow.getPhysicalNumberOfCells(); l++) {
 								Cell IdentCell = IdentifierRow.getCell(l);
-								if (IdentCell != null && IdentCell.getStringCellValue().contentEquals(Data_Headers[k])) {
+								if (IdentCell != null
+										&& IdentCell.getStringCellValue().contentEquals(Data_Headers[k])) {
 									worksheet.getRow(j).createCell(l);
 									Cell cell = worksheet.getRow(j).getCell(l);
 									cell.setCellValue(Data_Row[k]);
 								}
 							}
 						}
-						
-						/*		for debugging new lines being added				
-						for (int l = 0; l < worksheet.getRow(j).getPhysicalNumberOfCells(); l++) {
-							System.out.print(worksheet.getRow(j).getCell(l).getStringCellValue() + ", ");
-						}*/
+
+						/*
+						 * for debugging new lines being added for (int l = 0; l <
+						 * worksheet.getRow(j).getPhysicalNumberOfCells(); l++) {
+						 * System.out.print(worksheet.getRow(j).getCell(l).getStringCellValue() + ", ");
+						 * }
+						 */
 					}
 				}
 			}
@@ -1322,21 +1365,21 @@ public class Helper_Functions{
 	public static void LimitDataProvider(String methodName, int testLimit, List<Object[]> data) {
 		if (testLimit > 0 && data.size() > testLimit) {
 			System.out.println(methodName + "-- total scenarios " + data.size());
-		    while (data.size() > testLimit) {
-		    	data.remove(0);
-		    }
+			while (data.size() > testLimit) {
+				data.remove(0);
+			}
 		}
 		System.out.println(methodName + "-- " + data.size() + " scenarios.");
 	}
-	
+
 	public static boolean isNullOrUndefined(Object obj) {
-		if ( obj == null || obj.toString().contentEquals("")) {
+		if (obj == null || obj.toString().contentEquals("")) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 }// End Class
 
 /*

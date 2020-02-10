@@ -26,7 +26,7 @@ public class eMASS_Scans {
 	static String Scanning_Info_FedEx_Id = "703233";
 	static String Scanning_Info_FedEx_Route = "BSC";
 	static String CosmosNumber = "12";
-	static String Form_ID = "201"; //default for US to US 
+	static String Form_ID = "0201"; //default for US to US 
 	static String SessionEmassCookie = "";
 	
 	static String Level = "2";
@@ -116,14 +116,6 @@ public class eMASS_Scans {
 			// Enter tracking number
 			WebDriver_Functions.Type(By.id(MT + ":trkNo_inputtext"), Shipment_Info.Tracking_Number);
 			
-			// Enter from id
-			WebDriver_Functions.Type(By.id(MT + ":formCd_inputtext"), Form_ID);
-			
-			// Enter Cosmos ID
-			if (WebDriver_Functions.isEnabled(By.id(MT + ":cosmosNbr_inputtext"))) {
-				WebDriver_Functions.Type(By.id(MT + ":cosmosNbr_inputtext"), CosmosNumber);
-			}
-			
 			// if the destination address was not passed then load a dummy value for the pickup scan.
 			if (Shipment_Info.Destination_Address_Info == null || 
 					Shipment_Info.Destination_Address_Info.City.contentEquals("")) {
@@ -132,27 +124,32 @@ public class eMASS_Scans {
 			}
 
 			// Due to EMASS glitch     Enter first digit of city, country, and postal again
-			for (int addressLoop = 0;addressLoop < 4; addressLoop++) {
+			int numberOfDataChecks = 4;
+			for (int addressLoop = 0; addressLoop < numberOfDataChecks; addressLoop++) {
 				int valuesEnteredCorrectly = 0;
+				// Enter from id
+				valuesEnteredCorrectly += TypeAndCheck(By.id(MT + ":formCd_inputtext"), Form_ID);
+
+				// Enter Cosmos ID
+				if (WebDriver_Functions.isEnabled(By.id(MT + ":cosmosNbr_inputtext"))) {
+					valuesEnteredCorrectly += TypeAndCheck(By.id(MT + ":cosmosNbr_inputtext"), CosmosNumber);
+				}
+
 				// Enter first digit of city
 				valuesEnteredCorrectly += TypeAndCheck(By.id(MT + ":destCityCd_inputtext"), Shipment_Info.Destination_Address_Info.City.substring(0, 1).toUpperCase());
-					
+
 				// Enter country
 				valuesEnteredCorrectly += TypeAndCheck(By.id(MT + ":destCountryCd_inputtext"), Shipment_Info.Destination_Address_Info.Country_Code);
-					
+
 				// Enter destination postal code
 				valuesEnteredCorrectly += TypeAndCheck(By.id(MT + ":destZipCd_inputtext"), Shipment_Info.Destination_Address_Info.PostalCode);
-					
-				// Click base service
+
+				// Click base service - Used to trigger and test GUI to see if some value entered already was cleared.
 				WebDriver_Functions.Click(By.id(MT + ":baseSvc_selectonemenu"));
 				
-				WaitForInProgressOverlay();
-				
-				if (valuesEnteredCorrectly == 3) {
+				if (addressLoop > 1 && valuesEnteredCorrectly == 0) {
 					// break from the loop if all were updated successfully.
-					addressLoop = 4;
-				}else {
-					addressLoop++;
+					addressLoop = numberOfDataChecks;
 				}
 			}
 		
@@ -361,38 +358,36 @@ public class eMASS_Scans {
 		}
 	}
 	
-	public static boolean eMASS_Navigate_And_Login(int ScanOption) {
-		try {
-			WebDriver_Functions.ChangeURL("EMASS", null, null, false);
-			
-			// Login if prompted
-			if (WebDriver_Functions.isPresent(By.id("username"))) {
-				WebDriver_Functions.Type(By.id("username"), Credentials);
-				WebDriver_Functions.Type(By.id("password"), Credentials);
-				WebDriver_Functions.Click(By.id("submit"));
-			}
-			
-			// Enter the location  ex :NQAA
-			if (WebDriver_Functions.isPresent(By.id("locationField"))) {
-				WebDriver_Functions.Type(By.id("locationField"), LocationCode);
-				WebDriver_Functions.Click(By.className("primaryButton"));
-			}
-			
-			if (ScanOption == 1) { 
-				// Click the Pickup option
-				WebDriver_Functions.Click(By.linkText("Pickup"));
-				WebDriver_Functions.Click(By.linkText("PUP - Package Pick Up"));
-			} else if (ScanOption == 2) {
-				// Click the delivery exception option
-				WebDriver_Functions.Click(By.linkText("Delivery"));
-				WebDriver_Functions.Click(By.linkText("DEX - Delivery Attempt"));
-				WebDriver_Functions.Click(By.linkText("03 - Incorrect Address"));
-			}
-			
-			return true;
-		} catch (Exception e) {
-			return false;
+	public static boolean eMASS_Navigate_And_Login(int ScanOption) throws Exception {
+		WebDriver_Functions.ChangeURL("EMASS", null, null, false);
+		
+		// Login if prompted
+		if (WebDriver_Functions.isPresent(By.id("username"))) {
+			WebDriver_Functions.Type(By.id("username"), Credentials);
+			WebDriver_Functions.Type(By.id("password"), Credentials);
+			WebDriver_Functions.Click(By.id("submit"));
 		}
+		
+		// Enter the location  ex :NQAA
+		if (WebDriver_Functions.isPresent(By.id("locationField"))) {
+			WebDriver_Functions.Type(By.id("locationField"), LocationCode);
+			WebDriver_Functions.Click(By.className("primaryButton"));
+		}
+		
+		if (ScanOption == 1) { 
+			// Click the Pickup option
+			WebDriver_Functions.WaitClickable(By.linkText("Pickup"));
+			WebDriver_Functions.Click(By.linkText("Pickup"));
+			WebDriver_Functions.WaitClickable(By.linkText("PUP - Package Pick Up"));
+			WebDriver_Functions.Click(By.linkText("PUP - Package Pick Up"));
+		} else if (ScanOption == 2) {
+			// Click the delivery exception option
+			WebDriver_Functions.Click(By.linkText("Delivery"));
+			WebDriver_Functions.Click(By.linkText("DEX - Delivery Attempt"));
+			WebDriver_Functions.Click(By.linkText("03 - Incorrect Address"));
+		}
+		
+		return true;
 	}
 	
 	public static void eMASS_Scanning_Info() {
@@ -411,7 +406,7 @@ public class eMASS_Scans {
 	}
 	
 	public static void WaitForInProgressOverlay() throws Exception {
-		WebDriver_Functions.Wait(3);
+		WebDriver_Functions.Wait(1);
 		// WebDriver_Functions.WaitPresent(By.className("ice-sub-mon-txt"));
 		
 		WebDriver_Functions.WaitNotVisable(By.className("ui-widget-overlay"));
@@ -428,9 +423,9 @@ public class eMASS_Scans {
 			
 			if (!WebDriver_Functions.GetText(Ele).contentEquals(Input) && !WebDriver_Functions.GetValue(Ele).contentEquals(Input)) {
 				Helper_Functions.PrintOut(String.format("Expected: %s Currentl Text: %s Current Value: %s", Input, WebDriver_Functions.GetText(Ele), WebDriver_Functions.GetValue(Ele)));
-				return 0;
-			} else {
 				return 1;
+			} else {
+				return 0;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

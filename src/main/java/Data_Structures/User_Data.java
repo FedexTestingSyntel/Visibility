@@ -129,120 +129,120 @@ public class User_Data {
 	//will load the userids into the data class even if the rows have been changed.
 	public static User_Data[] Get_UserIds(int intLevel, boolean returnAllUsers) {
 		List<String[]> FullDataFromExcel = new ArrayList<String[]>();
-		FullDataFromExcel = Helper_Functions.getExcelData(Helper_Functions.DataDirectory + "\\TestingData.xls", "L" + intLevel);
+		FullDataFromExcel = Helper_Functions.getExcelData(Helper_Functions.TestingData, "L" + intLevel);
 		//a list of the Userids
-		User_Data User_Info_Array[] = new User_Data[FullDataFromExcel.size() - 1];
+		User_Data userInfoArray[] = new User_Data[FullDataFromExcel.size() - 1];
 		
 		String Headers[] = FullDataFromExcel.get(0);
 		
 		for (int i = 1; i < FullDataFromExcel.size(); i++) {
 			String Row[] = FullDataFromExcel.get(i);
-			User_Info_Array[i - 1] = new User_Data(false); 
+			userInfoArray[i - 1] = new User_Data(false); 
 			int pos = i - 1;
 			
 			for (int j = 0; j <Headers.length; j++) {
 				String CellValue = Row[j];
 				switch (Headers[j]) {
 		  		case "ERROR":
-		  			User_Info_Array[pos].ERROR = CellValue;
+		  			userInfoArray[pos].ERROR = CellValue;
 					break;	
 		  		case "UUID_NBR":
-					User_Info_Array[pos].UUID_NBR = CellValue;
+					userInfoArray[pos].UUID_NBR = CellValue;
 					break;
 		  		case "USER_ID":
-		  			User_Info_Array[pos].USER_ID = CellValue;
+		  			userInfoArray[pos].USER_ID = CellValue;
 					break;
 		  		case "PASSWORD":
-		  			User_Info_Array[pos].PASSWORD = CellValue;
+		  			userInfoArray[pos].PASSWORD = CellValue;
 					break;
 		  		case "SECRET_QUESTION_DESC":
-		  			User_Info_Array[pos].SECRET_QUESTION_DESC = CellValue;
+		  			userInfoArray[pos].SECRET_QUESTION_DESC = CellValue;
 					break;
 		  		case "SECRET_ANSWER_DESC":
-		  			User_Info_Array[pos].SECRET_ANSWER_DESC = CellValue;
+		  			userInfoArray[pos].SECRET_ANSWER_DESC = CellValue;
 					break;
 		  		case "FIRST_NM":
-		  			User_Info_Array[pos].FIRST_NM = CellValue;
+		  			userInfoArray[pos].FIRST_NM = CellValue;
 					break;
 		  		case "MIDDLE_NM":
-		  			User_Info_Array[pos].MIDDLE_NM = CellValue;
+		  			userInfoArray[pos].MIDDLE_NM = CellValue;
 					break;
 		  		case "LAST_NM":
-		  			User_Info_Array[pos].LAST_NM = CellValue;
+		  			userInfoArray[pos].LAST_NM = CellValue;
 					break;
 		  		case "PHONE_NUMBER":
-		  			User_Info_Array[pos].PHONE_NUMBER = CellValue;
-		  			User_Info_Array[pos].Address_Info.Phone_Number = CellValue;
+		  			userInfoArray[pos].PHONE_NUMBER = CellValue;
+		  			userInfoArray[pos].Address_Info.Phone_Number = CellValue;
 					break;
 		  		case "EMAIL_ADDRESS":
-		  			User_Info_Array[pos].EMAIL_ADDRESS = CellValue;
+		  			userInfoArray[pos].EMAIL_ADDRESS = CellValue;
 					break;
 		  		case "STREET_DESC":
-		  			User_Info_Array[pos].Address_Info.Address_Line_1 = CellValue;
+		  			userInfoArray[pos].Address_Info.Address_Line_1 = CellValue;
 					break;
 		  		case "STREET_DESC_TWO":
-		  			User_Info_Array[pos].Address_Info.Address_Line_2 = CellValue;
+		  			userInfoArray[pos].Address_Info.Address_Line_2 = CellValue;
 					break;
 		  		case "CITY_NM":
-		  			User_Info_Array[pos].Address_Info.City = CellValue;
+		  			userInfoArray[pos].Address_Info.City = CellValue;
 					break;
 		  		case "STATE_CD":
-		  			User_Info_Array[pos].Address_Info.State_Code = CellValue;
+		  			userInfoArray[pos].Address_Info.State_Code = CellValue;
 					break;
 		  		case "POSTAL_CD":
-		  			User_Info_Array[pos].Address_Info.PostalCode = CellValue;
+		  			userInfoArray[pos].Address_Info.PostalCode = CellValue;
 					break;
 		  		case "COUNTRY_CD":
-		  			User_Info_Array[pos].Address_Info.Country_Code = CellValue;
+		  			userInfoArray[pos].Address_Info.Country_Code = CellValue;
 					break;
 		  		case "RESIDENTIAL":
-		  			User_Info_Array[pos].Address_Info.Residential = CellValue;
+		  			userInfoArray[pos].Address_Info.Residential = CellValue;
 					break;
 		  		case "ACCOUNT_NUMBERS":
-		  			User_Info_Array[pos].ACCOUNT_NUMBERS = CellValue;
+		  			userInfoArray[pos].ACCOUNT_NUMBERS = CellValue;
 					break;
 		  		case "FSM_ENABLED":
-		  			User_Info_Array[pos].FSM_ENABLED = CellValue;
+		  			userInfoArray[pos].FSM_ENABLED = CellValue;
 					break;	
 		  		case "WDPA_ENABLED":
-		  			User_Info_Array[pos].WDPA_ENABLED = CellValue;
+		  			userInfoArray[pos].WDPA_ENABLED = CellValue;
 					break;
 		  		case "GFBO_ENABLED":
-		  			User_Info_Array[pos].GFBO_ENABLED = CellValue;
+		  			userInfoArray[pos].GFBO_ENABLED = CellValue;
 					break;	
 		  		case "WGRT_ENABLED":
-		  			User_Info_Array[pos].WGRT_ENABLED = CellValue;
+		  			userInfoArray[pos].WGRT_ENABLED = CellValue;
 					break;	
 		  		case "PASSKEY":
-		  			User_Info_Array[pos].PASSKEY = CellValue;
+		  			userInfoArray[pos].PASSKEY = CellValue;
 					break;
 		  		case "MIGRATION_STATUS":
-		  			User_Info_Array[pos].MIGRATION_STATUS = CellValue;
+		  			userInfoArray[pos].MIGRATION_STATUS = CellValue;
 					break;	
 		  		case "USER_TYPE":
-		  			User_Info_Array[pos].USER_TYPE = CellValue;
+		  			userInfoArray[pos].USER_TYPE = CellValue;
 					break;
 		  		case "FDM_STATUS":
-		  			User_Info_Array[pos].FDM_STATUS = CellValue;
+		  			userInfoArray[pos].FDM_STATUS = CellValue;
 					break;	
 		  		case "IS_LARGE_USER_TYPE":
-		  			User_Info_Array[pos].IS_LARGE_USER_TYPE = Boolean.parseBoolean(CellValue);
+		  			userInfoArray[pos].IS_LARGE_USER_TYPE = Boolean.parseBoolean(CellValue);
 					break;	
 		  		case "NEEDS_TO_ACCEPT_TERMS":
-		  			User_Info_Array[pos].NEEDS_TO_ACCEPT_TERMS = Boolean.parseBoolean(CellValue);
+		  			userInfoArray[pos].NEEDS_TO_ACCEPT_TERMS = Boolean.parseBoolean(CellValue);
 					break;
 		  		case "REQUEST_RUN_DATE":
-		  			User_Info_Array[pos].REQUEST_RUN_DATE = CellValue;
+		  			userInfoArray[pos].REQUEST_RUN_DATE = CellValue;
 					break;	
 		  		case "TOTAL_NUMBER_OF_SHIPMENTS":
-		  			User_Info_Array[pos].TOTAL_NUMBER_OF_SHIPMENTS = CellValue;
+		  			userInfoArray[pos].TOTAL_NUMBER_OF_SHIPMENTS = CellValue;
 					break;
 				}//end switch
 			}
 			
-			if (User_Info_Array[pos].ACCOUNT_NUMBERS != "") {
+			if (userInfoArray[pos].ACCOUNT_NUMBERS != "") {
 				 //EX   {"key":"0458136f8ca69488cce23d8b4216cacc","value":""}{"key":"d78e3b4ac25591d933221f06555d9c21","value":""}
-				String tempACCOUNT_NUMBERS = User_Info_Array[pos].ACCOUNT_NUMBERS;
+				String tempACCOUNT_NUMBERS = userInfoArray[pos].ACCOUNT_NUMBERS;
 				while(tempACCOUNT_NUMBERS != null && tempACCOUNT_NUMBERS.contains("key")){
 					String key = API_Functions.General_API_Calls.ParseStringValue(tempACCOUNT_NUMBERS, "key");
 					String value = API_Functions.General_API_Calls.ParseStringValue(tempACCOUNT_NUMBERS, "value");
@@ -251,13 +251,13 @@ public class User_Data {
 					tempACCOUNT_NUMBERS = tempACCOUNT_NUMBERS.replace("{\"key\":\"\",\"value\":\"\"", "");
 					
 					if (!value.contentEquals("")) {
-						if (User_Info_Array[pos].ACCOUNT_NUMBER_DETAILS == null) {
-							User_Info_Array[pos].ACCOUNT_NUMBER_DETAILS = new String[1][];
+						if (userInfoArray[pos].ACCOUNT_NUMBER_DETAILS == null) {
+							userInfoArray[pos].ACCOUNT_NUMBER_DETAILS = new String[1][];
 						}else {
-							User_Info_Array[pos].ACCOUNT_NUMBER_DETAILS = Arrays.copyOf(User_Info_Array[pos].ACCOUNT_NUMBER_DETAILS, User_Info_Array[pos].ACCOUNT_NUMBER_DETAILS.length + 1);
+							userInfoArray[pos].ACCOUNT_NUMBER_DETAILS = Arrays.copyOf(userInfoArray[pos].ACCOUNT_NUMBER_DETAILS, userInfoArray[pos].ACCOUNT_NUMBER_DETAILS.length + 1);
 						}
 						String NewElement[] = new String[] {key, value};
-						User_Info_Array[pos].ACCOUNT_NUMBER_DETAILS[User_Info_Array[pos].ACCOUNT_NUMBER_DETAILS.length - 1] = NewElement;
+						userInfoArray[pos].ACCOUNT_NUMBER_DETAILS[userInfoArray[pos].ACCOUNT_NUMBER_DETAILS.length - 1] = NewElement;
 					}
 					
 				}
@@ -265,45 +265,45 @@ public class User_Data {
 			
 			
 			
-			if (User_Info_Array[i - 1].USER_ID == null || User_Info_Array[i - 1].USER_ID.contentEquals("")) {
-				User_Info_Array[i - 1].ERROR = "ERROR";
+			if (userInfoArray[i - 1].USER_ID == null || userInfoArray[i - 1].USER_ID.contentEquals("")) {
+				userInfoArray[i - 1].ERROR = "ERROR";
 			}
 		}
 		
-		for (int index = 0; index < User_Info_Array.length; index++) {
-			if (!returnAllUsers && !User_Info_Array[index].ERROR.contentEquals("")) {
-					User_Info_Array = removeTheElement(User_Info_Array, index);
+		for (int index = 0; index < userInfoArray.length; index++) {
+			if (!returnAllUsers && !userInfoArray[index].ERROR.contentEquals("")) {
+					userInfoArray = removeTheElement(userInfoArray, index);
 				}
 			// Added to remove the EAN users with the Void First name issue.
-			else if (User_Info_Array[index].Address_Info.Country_Code.contentEquals("..")) {
-				User_Info_Array = removeTheElement(User_Info_Array, index);
+			else if (userInfoArray[index].Address_Info.Country_Code.contentEquals("..")) {
+				userInfoArray = removeTheElement(userInfoArray, index);
 			}
 		}
 
-		return User_Info_Array;
+		return userInfoArray;
 	}
 	
-	public static User_Data[] removeTheElement(User_Data[] User_Info_Array,  int index) {
+	public static User_Data[] removeTheElement(User_Data[] userInfoArray,  int index) {
 
 		// If the array is empty 
 		// or the index is not in array range 
 		// return the original array 
-		if (User_Info_Array == null || index < 0 || index >= User_Info_Array.length) { 
-			return User_Info_Array; 
+		if (userInfoArray == null || index < 0 || index >= userInfoArray.length) { 
+			return userInfoArray; 
 		} 
 		
 		 // Create another array of size one less 
-		User_Data[] anotherArray = new User_Data[User_Info_Array.length - 1]; 
+		User_Data[] anotherArray = new User_Data[userInfoArray.length - 1]; 
  
        // Copy the elements from starting till index 
        // from original array to the other array 
-       System.arraycopy(User_Info_Array, 0, anotherArray, 0, index); 
+       System.arraycopy(userInfoArray, 0, anotherArray, 0, index); 
  
        // Copy the elements from index + 1 till end 
        // from original array to the other array 
-       System.arraycopy(User_Info_Array, index + 1, 
+       System.arraycopy(userInfoArray, index + 1, 
                         anotherArray, index, 
-                        User_Info_Array.length - index - 1);
+                        userInfoArray.length - index - 1);
 
        // return the resultant array 
        return anotherArray; 

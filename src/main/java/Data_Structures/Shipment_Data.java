@@ -44,7 +44,7 @@ public class Shipment_Data implements Cloneable {
 	public String inflightDeliveryOptionsResponse = "";
 	public String associatedShipmentResponse = "";
 	public boolean MultiPieceShipment = false;
-
+	public String shipmentLightListResponse = "";
 	
 	// Constants that are used in the Tracking Numbers testing data sheet.
 	public String ERROR_IDENTIFIER = "ERROR";
@@ -273,7 +273,9 @@ public class Shipment_Data implements Cloneable {
 		  			break;	
 		  		case "associatedShipmentResponse":
 		  			Shipment_Info_Array[pos].associatedShipmentResponse = Row[j];
-		  			break;	
+		  			break;
+		  		case "shipmentLightListResponse":
+		  			Shipment_Info_Array[pos].shipmentLightListResponse = Row[j];
 				}//end switch
 			}
 			

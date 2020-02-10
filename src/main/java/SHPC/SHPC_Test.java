@@ -39,16 +39,16 @@ public class SHPC_Test {
 			int intLevel = Integer.parseInt(Level);
 			Environment.getInstance().setLevel(Level);
 			//Based on the method that is being called the array list will be populated
-			User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
+			User_Data userInfoArray[] = User_Data.Get_UserIds(intLevel);
 			
 			switch (m.getName()) {
 	    		/*case "CreditCard_Linked":
-	    			for (User_Data User_Info : User_Info_Array) {
+	    			for (User_Data User_Info : userInfoArray) {
 	    				data.add( new Object[] {Level, User_Info});
 	    			}
 	    		break;*/
 		    	case "Create_Shipment":
-		    		for (User_Data User_Info : User_Info_Array) {
+		    		for (User_Data User_Info : userInfoArray) {
 		    			//check for a WADM users
 		    			if (User_Info.getHasValidAccountNumber() 
 		    					&& User_Info.getCanScheduleShipment()) {

@@ -102,15 +102,16 @@ public class USRC_Data {
 			ContactList.add(new String[] {"TESTER", "", "ZPURPLEZ", Phone, Email, "3614 DELVERNE RD", "", "BALTIMORE", "MD", "21218", "US", "7i4ksltmhnqlxhzbs9j6356ix"}); //L3FDM061518T092659
 			
 		}else if (Level.contentEquals("7")) {//need to user real data in LP
+			// ContactList.add(new String[] {"naga", "", "vijayan", Phone, Email, "5340 ROSE RIDGE LN", "", "COLORADO SPRINGS", "CO", "80917", "US", "5t2ypr8g64nhb6kkg0m1eyfu7"});
 			ContactList.add(new String[] {"First", "", "Last", Phone, Email, "9427 Ruidosa Trl", "", "Irving", "TX", "75063", "US", "5g0d06szxzxyh5diyhyu4lnwi"});
 		}else {
 			//ContactList.add(new String[] {"Udaya", "", "Uriti", Phone, Email, "9427 Ruidosa Trl", "", "Irving", "TX", "75063", "US", "5g0d06szxzxyh5diyhyu4lnwi"});
 			//ContactList.add(new String[] {"Resmi", "", "Raveendran", Phone, Email, "387 Main Street", "3760 QNFW", "WACO", "TX", "76712", "US", "38mynlmeqanwftczn0yyg7jlz"});
-			ContactList.add(new String[] {"FIRSTNAME", "", "LASTNAME", Phone, Email, "2519 W ROYAL LN", "", "IRVING", "TX", "75063", "US", "c2cj08lvbmwkv5j1r5k38l1g"});
-			ContactList.add(new String[] {"Udaya", "", "Uriti", Phone, Email, "9427 Ruidosa Trl", "", "IRVING", "TX", "75063", "US", "5g0d06szxzxyh5diyhyu4lnwi"});
+			//ContactList.add(new String[] {"FIRSTNAME", "", "LASTNAME", Phone, Email, "2519 W ROYAL LN", "", "IRVING", "TX", "75063", "US", "c2cj08lvbmwkv5j1r5k38l1g"});
+			// ContactList.add(new String[] {"Udaya", "", "Uriti", Phone, Email, "9427 Ruidosa Trl", "", "IRVING", "TX", "75063", "US", "5g0d06szxzxyh5diyhyu4lnwi"});
 			
 			//These address are working from the WERL page as well         //Please note this data was setup for when using ACXIOM as the validator
-			ContactList.add(new String[] {"TESTER", "", "ZCHUCKZ", Phone, Email, "32 MEADOW CREST DR", "", "SHERWOOD", "AR", "72120", "US", "6xmc5tpjhrtaymw7yfwshqfao"});//L3FDM061418T172631
+			ContactList.add(new String[] {"TESTER", "", "ZCHUCKZ", "4694996524", "FEDEXA_USERA@FEDEX.COM", "32 MEADOW CREST DR", "", "SHERWOOD", "AR", "72120", "US", "6xmc5tpjhrtaymw7yfwshqfao"});//L3FDM061418T172631
 			ContactList.add(new String[] {"TESTER", "", "ZTHREEZ", Phone, Email, "58 CABOT ST", "", "HARTFORD", "CT", "06112", "US", "247p0y08t50f3zed2exvaue09"});//L3FDM061418T172722
 			ContactList.add(new String[] {"TESTER", "", "ZLILLYZ", Phone, Email, "9133 SUPERIOR DR","", "OLIVEBRANCH", "MS", "38654", "US", "2ojrqs935gpa1ypnicxcspwm5"}); //L3FDM061418T173123
 			ContactList.add(new String[] {"TESTER", "", "ZNINEZ", Phone, Email, "75-681 LALII PL", "", "KAILUA KONA", "HI", "96740", "US", "464fn6icyb6e4iw9vetuyz5ir"}); //L3FDM061518T092155

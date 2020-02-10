@@ -98,7 +98,7 @@ public class USRC_Endpoints {
 	public static String CreatePin(String Cookie, String ShareID, String PinType){
 		try{
 			USRC_Data USRC_Details = USRC_Data.USRC_Load();
-			HttpClient httpclient = HttpClients.createDefault();
+			// HttpClient httpclient = HttpClients.createDefault();
 			HttpPost httppost = new HttpPost(USRC_Details.CreatePinURL);
 
 			JSONObject main = new JSONObject()
@@ -107,6 +107,7 @@ public class USRC_Endpoints {
 
 			String json = main.toString();
 			
+			httppost.addHeader("Accept", "application/json");
 			httppost.addHeader("Content-Type", "application/json");
 			httppost.addHeader("Authorization", "Bearer " + USRC_Details.getOAuthToken());
 			httppost.addHeader("X-clientid", "WERL");
@@ -114,9 +115,9 @@ public class USRC_Endpoints {
 			httppost.addHeader("X-version", "1.0");
 			httppost.addHeader("Cookie", Cookie);
 			
-/*			StringEntity params = new StringEntity(json.toString());
+			StringEntity params = new StringEntity(json.toString());
 			httppost.setEntity(params);
-			HttpResponse response = httpclient.execute(httppost);
+/*			HttpResponse response = httpclient.execute(httppost);
 			String result = EntityUtils.toString(response.getEntity());*/
 			String Response = General_API_Calls.HTTPCall(httppost, json);
 

@@ -133,6 +133,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</dependency>
 
 	<!-- added for SOAP testing,  all of the below 4-->
+	<!-- Commented out for now as not using SOAP
 	<dependency>
         <groupId>com.github.redfish4ktc.soapui</groupId>
         <artifactId>maven-soapui-extension-plugin</artifactId>
@@ -159,6 +160,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <version>5.2.1</version>
       <scope>test</scope>
     </dependency>
+    -->
     <!-- end of SOAP section-->
     
     <dependency>
@@ -205,36 +207,18 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					</lifecycleMappingMetadata>
 				</configuration>
 			</plugin>
-			
-			<!--Used for creating jar executables. 1 of 2 -->
+
 			<plugin>
-    			<groupId>org.apache.maven.plugins</groupId>
-    			<artifactId>maven-dependency-plugin</artifactId>
-    			<executions>
-        			<execution>
-            			<id>copy-dependencies</id>
-            			<phase>prepare-package</phase>
-            			<goals>
-                			<goal>copy-dependencies</goal>
-            			</goals>
-            			<configuration>
-                			<outputDirectory>${project.build.directory}/libs</outputDirectory>
-            			</configuration>
-        			</execution>
-    			</executions>
-			</plugin>
-			<!--Used for creating jar executables. 2 of 2 -->
-			<plugin>
-    			<groupId>org.apache.maven.plugins</groupId>
-    			<artifactId>maven-jar-plugin</artifactId>
+    			<artifactId>maven-assembly-plugin</artifactId>
     			<configuration>
         			<archive>
             			<manifest>
-                			<addClasspath>true</addClasspath>
-                			<classpathPrefix>libs/</classpathPrefix>
-                			<mainClass>org.baeldung.executable.ExecutableMavenJar</mainClass>
+                			<mainClass>JAR.Create_Shipment_Main</mainClass>
             			</manifest>
         			</archive>
+        			<descriptorRefs>
+            			<descriptorRef>jar-with-dependencies</descriptorRef>
+        			</descriptorRefs>
     			</configuration>
 			</plugin>
 			

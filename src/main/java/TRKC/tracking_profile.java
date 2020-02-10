@@ -109,4 +109,32 @@ public class tracking_profile {
 		}
 		return Details;
 	}
+
+	public static int checkTotalNumberOfShipments(String userId, String cookie) {
+		String Details[][] = {};
+		Details = TRKC.tracking_profile.getATRK_Profile(Details, cookie);
+		int numberOfShipments = 0;
+		for (String[] Element : Details) {
+			if (!Helper_Functions.isNullOrUndefined(Element)
+					&& !Helper_Functions.isNullOrUndefined(Element[0])
+					&& !Helper_Functions.isNullOrUndefined(Element[1]) 
+					&& Element[0].contentEquals("TOTAL_NUMBER_OF_SHIPMENTS")) {
+				// if the user has more than 30,000 shipments TRKC will not send back the full list. 
+				// check the tracking profile call to get the updated total number of shipments.
+				if (Element[1].contentEquals("30000")) {
+					String TrackingProfileResponse = TrackingProfileRequest(cookie);
+					String newTotalNumber = API_Functions.General_API_Calls.ParseStringValue(TrackingProfileResponse,
+							"estimatedShipmentTotal");
+					if (Integer.parseInt(newTotalNumber) < 30001) {
+						Element[1] = "-1";
+					} else {
+						Element[1] = newTotalNumber;
+					}
+				}
+				numberOfShipments = Integer.parseInt(Element[1]);
+			}
+		}
+
+		return numberOfShipments;
+	}
 }

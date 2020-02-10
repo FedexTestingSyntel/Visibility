@@ -180,6 +180,47 @@ public class General_API_Calls {
 		}
 		return null;
 	}
+	
+	public static String ParseFirstArrayValue(String Main) {
+		if (Main != null) {
+			if (Main.charAt(0) == '[') {
+				Main = Main.substring(1, Main.length());
+			}
+			// find the parameter and return what the value is.
+			// send Foo, will turn into "Foo":". Then will return value such as "Foo":"value"
+			int curlyBraces = 0;
+			int squareBraces = 0;
+			for (int i = 0 ; i < Main.length(); i++) {
+				char letter = Main.charAt(i);
+				if (letter == '[') {
+					squareBraces++;
+				} else if (letter == ']') {
+					squareBraces--;
+				} else if (letter == '{') {
+					curlyBraces++;
+				} else if (letter == '}') {
+					curlyBraces--;
+				}
+					
+				boolean Curly = (curlyBraces <= 0), Square = (squareBraces <= 0);
+				if (Curly && Square) {
+					if ((letter == ']' || letter == '}') && curlyBraces == 0 && squareBraces == 0) {
+						return Main.substring(0, i + 1);
+					} else if (letter == '"' || letter == ']' || letter == '}') {
+						if (i > 0 && Main.charAt(i - 1) == ',') {
+							i--;
+						}
+						String response = Main.substring(0, i);
+						if (response.contentEquals("")) {
+							return null;
+						}
+						return response;
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 	public static void setPrintOutAPICallFlag(boolean flag) {
 		PrintOutAPICall = flag;

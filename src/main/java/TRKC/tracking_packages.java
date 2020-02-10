@@ -131,4 +131,16 @@ public class tracking_packages {
 		
 		return Details;
 	}
+	
+	public static String getSingleTrackingResponse(String TrackingPackagesResponse) {
+		String TrackingStart = "{\"shipperAccountNumber\"";
+		String TrackingEnd = "\"isSuccessful\":";
+		if (TrackingPackagesResponse.contains(TrackingEnd)) {
+			String SingleTrackingResponse = TrackingPackagesResponse.substring(TrackingPackagesResponse.indexOf(TrackingStart), TrackingPackagesResponse.indexOf(TrackingEnd) + TrackingEnd.length());
+			return SingleTrackingResponse;
+		} else {
+			return null;
+		}
+
+	}
 }

@@ -39,18 +39,18 @@ public class REGC_CreateNewUserTest {
 	    	String strLevel = String.valueOf(Environment.LevelsToTest.charAt(i));
 			int intLevel = Integer.parseInt(strLevel);
 			Environment.getInstance().setLevel(strLevel);
-			User_Data User_Info_Array[];
-			User_Info_Array = User_Data.Get_UserIds(intLevel);
+			User_Data userInfoArray[];
+			userInfoArray = User_Data.Get_UserIds(intLevel);
 			
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 			case "CreateNewUsers":
 				
 				User_Data User_Info = null; // will be loaded with user details of an already FDM enrolled user.
-				for (User_Data User : User_Info_Array) {
+				for (User_Data User : userInfoArray) {
 					if (User.getFDMregisteredAddress() != null) {
 						User.PASSWORD = SupportClasses.Helper_Functions.myPassword; // Test1234 or generic password listed there.
 						User_Info = User;
-						break; // break out of the User_Info_Array loop
+						break; // break out of the userInfoArray loop
 					}
 				}
 				

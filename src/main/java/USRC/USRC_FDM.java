@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_FDM {
  
-	static String LevelsToTest = "2"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
 
 	@BeforeClass
 	public void beforeClass() {
@@ -44,16 +44,16 @@ public class USRC_FDM {
 	    	
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 			case "EndtoEndEnrollment":
-				for (int j = 0 ; j < 1; j++) {
+				for (int j = 0 ; j < 2; j++) {
 					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
 					String Password = "Test1234";
-					String ContactDetails[] = USRC_Data.getContactDetails(j);
+					String ContactDetails[] = USRC_Data.getContactDetails(0);
 					/*ContactDetails[4] = "mei.fang@fedex.com";*/
 					data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D.OrgPostcard, UserID, Password, ContactDetails});
 				}
 				break;
 			case "CreateNewUsers":
-				for (int j = 0 ; j < 5; j++) {
+				for (int j = 0 ; j < 1; j++) {
 					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
 					// UserID = "L3ATRKExceptions";
 					String Password = "Test1234";
@@ -73,9 +73,9 @@ public class USRC_FDM {
 				break;
 				*/
 			case "EndtoEndEnrollment_UserID":
-				User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel);
+				User_Data userInfoArray[] = User_Data.Get_UserIds(intLevel);
 				//data.add(new Object[] {USRC_D, USRC_D.FDMPostcard_PinType, MFAC_D, MFAC_D.OrgPostcard, "L2FDM012919T124302pm", "Test1234"});
-				for (User_Data User_Info: User_Info_Array){
+				for (User_Data User_Info: userInfoArray){
 	    			if (User_Info.FDM_STATUS.contentEquals("false") 
 	    					&& User_Info.getHasValidAccountNumber() 
 	    					&& User_Info.getCanScheduleShipment()) {
@@ -109,6 +109,7 @@ public class USRC_FDM {
 	
 	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = true)
 	public void EndtoEndEnrollment(String Level, String USRC_Org, String MFAC_Org, String UserID, String Password, String[] ContactDetails) {
+		// UserID = "L7ATRKExtraordinary";
 		String Cookie = null;
 		String UUID = null;
 		String fdx_login_fcl_uuid[] = {"","", ""};
@@ -122,6 +123,8 @@ public class USRC_FDM {
 			//check to make sure that the userid was created.
 			assertThat(Response, containsString("successful\":true"));
 			UserCreated = true;
+			Helper_Functions.WriteUserToExcel(UserID, Password);
+			Helper_Functions.PrintOut("UserCreated : " + UserID + " Password: " + Password);
 			
 			//get the cookies and the uuid of the new user
 			fdx_login_fcl_uuid = login.Login(UserID, Password);
@@ -171,7 +174,7 @@ public class USRC_FDM {
 		}
 	}
 	
-	@Test (dataProvider = "dp", enabled = true)
+	@Test (dataProvider = "dp", enabled = false)
 	public void CreateNewUsers(String Level, String UserID, String Password, String[] ContactDetails) {
 
 		try {
@@ -246,7 +249,7 @@ public class USRC_FDM {
 		}
 	}
 	
-	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = true)
+	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = false)
 	public void EndtoEndEnrollment_UserID(String Level, String USRC_Org, MFAC_Data MFAC_Details, String MFAC_Org, User_Data User_Info) {
 		String Cookie = null, UUID = null, fdx_login_fcl_uuid[] = {"","", ""};
 		try {

@@ -45,14 +45,21 @@ public class login {
   				
   			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
   			httppost.addHeader("Accept", "application/json");
+  			httppost.addHeader("Accept", "text/javascript");
+  			httppost.addHeader("Accept", "q=0.01");
   			/*httppost.addHeader("Content-Type", "application/json");*/
   			httppost.addHeader("Content-Type", "charset=UTF-8");
   			
+  			
+  			
+  			/*Accept: application/json, , *; 
+   			X-Requested-With: XMLHttpRequest
+  			*/
 
   			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
   			urlParameters.add(new BasicNameValuePair("action", "LogIn"));
   			urlParameters.add(new BasicNameValuePair("format", "json"));
-  			urlParameters.add(new BasicNameValuePair("version", "1"));
+  			urlParameters.add(new BasicNameValuePair("version", "3"));
   			urlParameters.add(new BasicNameValuePair("locale", "en_US"));
   			urlParameters.add(new BasicNameValuePair("data", json));
 

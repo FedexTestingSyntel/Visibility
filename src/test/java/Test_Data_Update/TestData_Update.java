@@ -19,13 +19,15 @@ import org.testng.annotations.Test;
 public class TestData_Update {
 
 	//Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
-	static String LevelsToTest = "2"; 
+	static String LevelsToTest = "2";
 
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		API_Functions.General_API_Calls.setPrintOutAPICallFlag(false);//  false    true
 		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(false);
+		// uncomment for updating full list.
+		//Helper_Functions.TestingData = Helper_Functions.DataDirectory + "\\TestingData - Full.xls";
 	}
 
 	@DataProvider (parallel = true)
@@ -37,20 +39,22 @@ public class TestData_Update {
 	    	int intLevel = Integer.parseInt(strLevel);
 	    	
 	    	//load user ids since both of the below use that value
-	    	User_Data User_Info_Array[] = User_Data.Get_UserIds(intLevel, true);
+	    	User_Data userInfoArray[] = User_Data.Get_UserIds(intLevel, true);
 	    	
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.	
 			case "Update_Login_Information":
-				for (User_Data User_Info: User_Info_Array) {
+				for (User_Data User_Info: userInfoArray) {
 					if (User_Info.UUID_NBR.contentEquals("") || !User_Info.ERROR.contentEquals("")) {
     					data.add(new Object[] {strLevel, User_Info});
     				} else if (User_Info.EMAIL_ADDRESS == null || User_Info.EMAIL_ADDRESS.contentEquals("")){
     					data.add(new Object[] {strLevel, User_Info});
     				}
 					//single specific user.
-    				//else if (User_Info.USER_ID.contains("L2ATRKLARGE")){data.add(new Object[] {strLevel, User_Info});}
+/*    				else if (User_Info.USER_ID.contains("L2ATRK19K")) {
+    					data.add(new Object[] {strLevel, User_Info});
+    				}*/
     				//uncomment if need to run all
-    				else{data.add(new Object[] {strLevel, User_Info});}
+    				// else{data.add(new Object[] {strLevel, User_Info});}
 
     			}
 				break;
@@ -111,13 +115,11 @@ public class TestData_Update {
 				keyPosition = 1;
 			}
 			
-			String FileName = Helper_Functions.DataDirectory + "\\TestingData.xls";
-			boolean updatefile = Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, keyPosition);
+			String FileName = Helper_Functions.TestingData;
+			Helper_Functions.WriteToExcel(FileName, "L" + Level, Details, keyPosition);
 			//Helper_Functions.PrintOut("Contact Details: " + Arrays.deepToString(Details), true);
 			Helper_Functions.PrintOut("Contact Details Attempt: " + User_Info.USER_ID + "  " + Details[0][1] + "  " + Details[1][1], true);
-			if (!updatefile) {
-				Assert.fail("Not able to update file.");
-			}else if (fdx_login_fcl_uuid == null) {
+			if (fdx_login_fcl_uuid == null) {
 				Assert.fail("Not able to login with " + User_Info.USER_ID);
 			}
 		}catch (Exception e) {
@@ -140,6 +142,69 @@ public class TestData_Update {
 	
 	public void ExternalVisible(String Level, User_Data User_Info) {
 		Update_Login_Information( Level, User_Info);
+	}
+	
+	public static User_Data Update_User_Data_Information(String Level, User_Data User_Info) {
+		
+		try {
+			String Cookies = null, fdx_login_fcl_uuid[] = null;
+
+			if (User_Info.PASSWORD == null) {
+				User_Info.PASSWORD = "";
+			}
+			//in case cannot login will check with the generic other passwords
+			String GenericPasswords[] = new String[] {User_Info.PASSWORD.replaceAll(" ", ""), "Test1234", "Test12345", "Test123456", "Password1", "Inet2010", "Test1test"};
+			for (String TestPassword: GenericPasswords) {
+				if (fdx_login_fcl_uuid == null && !TestPassword.contentEquals("")){
+					User_Info.PASSWORD = TestPassword;
+					fdx_login_fcl_uuid = USRC.login.Login(User_Info.USER_ID, User_Info.PASSWORD);
+				}
+			}
+			
+			String Details[][];
+			
+			if (fdx_login_fcl_uuid != null){
+				Cookies = fdx_login_fcl_uuid[0];
+				
+				Details = new String[][]{{"UUID_NBR", fdx_login_fcl_uuid[1]}};
+				
+				Details = USRC.USRC_Endpoints.getContact_Details(Details, Cookies);
+				
+				Details = USRC.recipient_profile.FDM_Access(Details, Cookies);
+				
+				for (String Value[]: Details) {
+					switch(Value[0]) {
+					case "STREET_DESC":
+						User_Info.Address_Info.Address_Line_1 = Value[1];
+						break;
+					case "STREET_DESC_TWO":
+						User_Info.Address_Info.Address_Line_2 = Value[1];
+						break;
+					case "CITY_NM":
+						User_Info.Address_Info.City = Value[1];
+						break;
+					case "STATE_CD":
+						User_Info.Address_Info.State_Code = Value[1];
+						break;
+					case "POSTAL_CD":
+						User_Info.Address_Info.PostalCode = Value[1];
+						break;
+					case "COUNTRY_CD":
+						User_Info.Address_Info.Country_Code = Value[1];
+						break;
+					case "FDM_STATUS":
+						User_Info.FDM_STATUS = Value[1];
+						break;
+					}
+				}
+			}else {
+				throw new Exception("Unable to retrieve user data.");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+ 			Assert.fail(e.getCause().toString());
+		}
+		return User_Info;
 	}
 
 }
