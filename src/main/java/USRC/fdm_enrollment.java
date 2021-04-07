@@ -12,11 +12,17 @@ public class fdm_enrollment {
 	//0 - First name, 1 - middle name, 2 - last name, 3 - phone number, 4 - email address, 5 - address line 1, 6 - address line 2, 7 - city, 8 - state code, 9 - zip code, 10 - country
 	public static String Enrollment(String ContactDetails[], String Cookie){
 		USRC_Data USRC_Details = USRC_Data.USRC_Load();
-		String FirstName = ContactDetails[0], LastName = ContactDetails[2], 
-			PhoneNumber = ContactDetails[3], EmailAddress = ContactDetails[4], AddressLine1 = ContactDetails[5], 
-			AddressLine2 = ContactDetails[6], City = ContactDetails[7], StateCode = ContactDetails[8], 
-			Zip = ContactDetails[9], CountryCode = ContactDetails[10];
-		// MiddleName = ContactDetails[1]
+		String FirstName = ContactDetails[0], 
+				MiddleName = ContactDetails[1], 
+				LastName = ContactDetails[2], 
+				PhoneNumber = ContactDetails[3], 
+				EmailAddress = ContactDetails[4], 
+				AddressLine1 = ContactDetails[5], 
+				AddressLine2 = ContactDetails[6], 
+				City = ContactDetails[7], 
+				StateCode = ContactDetails[8], 
+				Zip = ContactDetails[9], 
+				CountryCode = ContactDetails[10];
 		
 		HttpPost httppost = new HttpPost(USRC_Details.EnrollmentURL);
 
@@ -26,7 +32,7 @@ public class fdm_enrollment {
 				
 		JSONObject parsedPersonName = new JSONObject()
 			.put("firstName", FirstName)
-			// .put("middleName", MiddleName)  removed on 8/20
+			.put("middleName", MiddleName)  //removed on 8/20, added back on 6/18/20 as present in prod
 			.put("lastName", LastName);
 		
 		contact.put("parsedPersonName", parsedPersonName);
@@ -77,7 +83,7 @@ public class fdm_enrollment {
 					
 		JSONObject parsedPersonName = new JSONObject()
 			.put("firstName", User_Info.FIRST_NM)
-			// .put("middleName", MiddleName)  removed on 8/20
+			.put("middleName", User_Info.MIDDLE_NM)
 			.put("lastName", User_Info.LAST_NM);
 			
 		contact.put("parsedPersonName", parsedPersonName);

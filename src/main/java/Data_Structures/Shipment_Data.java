@@ -44,6 +44,7 @@ public class Shipment_Data implements Cloneable {
 	public String inflightDeliveryOptionsResponse = "";
 	public String associatedShipmentResponse = "";
 	public boolean MultiPieceShipment = false;
+	public int pieceShipment = 1;
 	public String shipmentLightListResponse = "";
 	
 	// Constants that are used in the Tracking Numbers testing data sheet.
@@ -62,12 +63,15 @@ public class Shipment_Data implements Cloneable {
 	public String STREET_DESC_TWO_IDENTIFIER  = "STREET_DESC_TWO";/*
 			STATE_CD	POSTAL_CD	COUNTRY_CD	RESIDENTIAL	USER_PROFILE	FSM_ENABLED	WDPA_ENABLED	GFBO_ENABLED	WGRT_ENABLED	PASSKEY	ACCOUNT_NUMBERS	AccountRetrievalResponse	FDM_STATUS	IS_LARGE_USER_TYPE	NEEDS_TO_ACCEPT_TERMS	TRACKING_PROFILE	REQUEST_RUN_DATE	TOTAL_NUMBER_OF_SHIPMENTS	MIGRATION_STATUS	USER_TYPE	RoleAndStatus
 */
+	public String GROUND_TEST_ID = "";
+	
 	
 	public Shipment_Data() {
 	}
 	
 	public boolean PrintOutShipmentDetails() {
-		String Output[] = new String[] {this.Tracking_Number, this.User_Info.USER_ID, this.Service, this.User_Info.ACCOUNT_NUMBERS, Address_Data.Address_String(Origin_Address_Info), Address_Data.Address_String(Destination_Address_Info)};
+		String Output[] = new String[] {this.Tracking_Number, this.User_Info.USER_ID, this.Service, Address_Data.Address_String(Origin_Address_Info), Address_Data.Address_String(Destination_Address_Info)};
+		// String Output[] = new String[] {this.Tracking_Number, this.User_Info.USER_ID, this.Service, this.User_Info.ACCOUNT_NUMBERS, Address_Data.Address_String(Origin_Address_Info), Address_Data.Address_String(Destination_Address_Info)};
 		Helper_Functions.PrintOut(Arrays.toString(Output));
 		return true;
 	}
@@ -276,6 +280,8 @@ public class Shipment_Data implements Cloneable {
 		  			break;
 		  		case "shipmentLightListResponse":
 		  			Shipment_Info_Array[pos].shipmentLightListResponse = Row[j];
+		  		case "GROUND_TEST_ID":
+		  			Shipment_Info_Array[pos].GROUND_TEST_ID = Row[j];
 				}//end switch
 			}
 			

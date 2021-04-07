@@ -76,10 +76,12 @@ public class associated_shipments {
 		if (AssociatedShipmentResponse.contains("code\":\"1041\"")) {
 			// if there are no multipiece shipments associated then just update false to save space.
 			Tracking_Details[1] = "false";
+		} else {
+			Helper_Functions.PrintOut("Associated shipment: " + trackingNumber);
 		}
 		Details = Arrays.copyOf(Details, Details.length + 1);
 		Details[Details.length - 1] = Tracking_Details;
-
+		
 		return Details;
 	}
 

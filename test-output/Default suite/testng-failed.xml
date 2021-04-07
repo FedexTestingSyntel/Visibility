@@ -3,14 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Test_Data_Generation.Tracking_Number_Systematic_Search">
+      <class name="Test_Data_Generation.Add_Tracking_Numbers_To_User">
         <methods>
-          <include name="afterClass"/>
-          <include name="Tracking_Number_Search" invocation-numbers="23 15 25"/>
-          <include name="UpdateExcelAfterMethod"/>
           <include name="beforeClass"/>
+          <include name="Add_Tracking_To_User" invocation-numbers="3855 6851 6925 6975 7030 7092 7142 22792"/>
         </methods>
-      </class> <!-- Test_Data_Generation.Tracking_Number_Systematic_Search -->
+      </class> <!-- Test_Data_Generation.Add_Tracking_Numbers_To_User -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

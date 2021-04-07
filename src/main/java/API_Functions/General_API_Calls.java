@@ -261,10 +261,10 @@ public class General_API_Calls {
 	  			LevelIdentifier = "https://wwwdrt.idev.fedex.com";
 	  			break;
 	  		case "4":
-	  			LevelIdentifier = "https://wwwstress.idev.fedex.com";
+	  			LevelIdentifier = "https://wwwstress.dmz.idev.fedex.com";
 	  			break;
 	  		case "5":
-	  			LevelIdentifier = "https://wwwbit.fedex.com";
+	  			LevelIdentifier = "https://wwwbit.idev.fedex.com";
 	  			break;
 	  		case "6":
 	  			LevelIdentifier = "https://wwwtest.fedex.com";

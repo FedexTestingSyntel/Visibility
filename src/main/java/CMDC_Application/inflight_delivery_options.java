@@ -66,14 +66,18 @@ public class inflight_delivery_options {
 	public static String[][] getInflightDeliveryOptions(String Details[][], String trackingNumber, String Ship_Date, String trackingQualifier) throws Exception {
 		String inflightDeliveryOptionsResponse = CMDC_Application.CMDC_Endpoints.inflightDeliveryOptions(trackingNumber, Ship_Date, trackingQualifier);
 		
-		Details = Arrays.copyOf(Details, Details.length + 1);
-		Details[Details.length - 1] = new String[] {"inflightDeliveryOptionsResponse", inflightDeliveryOptionsResponse};
-		
 		if (Helper_Functions.isNullOrUndefined(inflightDeliveryOptionsResponse) 
 				|| !inflightDeliveryOptionsResponse.contains("\"successful\":true")
 				|| !inflightDeliveryOptionsResponse.contains("RESCHEDULE")) {
 			// call did not complete successfully
 			return Details;
+		}
+		
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		Details[Details.length - 1] = new String[] {"inflightDeliveryOptionsResponse", inflightDeliveryOptionsResponse};
+		
+		if (Helper_Functions.isNullOrUndefined(inflightDeliveryOptionsResponse)) {
+			inflightDeliveryOptionsResponse = "";
 		}
 		
 		String Tracking_Details[][] = {

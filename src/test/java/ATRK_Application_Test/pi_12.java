@@ -137,7 +137,7 @@ public class pi_12{
 	 		WebDriver_Functions.Click(AdvancedTrackingPageElements.hamburgerRemoveShipment);
 	 		
 	 			 		
-	 		// Wait for the 'Last updated' message to appear. 
+	 		// Wait for the 'Last updated' message to appear potentially. 
 	 		// This is a check to make sure the page loaded and ready to test next step.
 	 		WebDriver_Functions.WaitPresent(TrackingPageElements.LastUpdatedTime);
 	 		
@@ -154,7 +154,7 @@ public class pi_12{
 			}
 			Helper_Functions.PrintOut("Cookies Cleared");
 			
-			// Save the current url to make testing US easier, update later
+			// Save the current url to make testing US easier
 			String CurrentURL = WebDriver_Functions.GetCurrentURL();
 			String LevelURL = WebDriver_Functions.LevelUrlReturn();
 			// Click a tracking number on the ATRK page

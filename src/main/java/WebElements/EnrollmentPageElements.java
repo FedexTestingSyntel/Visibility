@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 public class EnrollmentPageElements {
 
 	// Start - The Marketing page of WERL
-	public static By SignUpButton = By.linkText("SIGN UP NOW");
+	public static By SignUpButton = By.linkText("SIGN UP FOR FREE");
 	// End - The Marketing Page of WERL 
 	
 	

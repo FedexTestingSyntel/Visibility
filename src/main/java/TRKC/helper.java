@@ -13,12 +13,15 @@ public class helper {
 				if (response.contains("{\"code\":\"0\"")) {
 					return true;
 				}
-				Helper_Functions.PrintOut("Response does not containt error code of 0. Error most likely present. \n" + response);
+				// uncomment the below if you want to see the error message.
+				// String responseCode = response.substring(response.indexOf("\"code\":\"") + 8, response.length());
+				// responseCode = response.substring(0, response.indexOf("\""));
+				// Helper_Functions.PrintOut("Response does not contain error code of 0. Error most likely present. -- " + responseCode);
 				return false;
 			}
 			return true;
 		}
-		Helper_Functions.PrintOut("Response does not contain successful true. \n" + response);
+		// Helper_Functions.PrintOut("Response does not contain successful true. \n" + response);
 		return false;
 	}
 	

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import Data_Structures.User_Data;
@@ -22,13 +24,21 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class USRC_FDM {
  
-	static String LevelsToTest = "7"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
-
+	static String LevelsToTest = "3"; //Can but updated to test multiple levels at once if needed. Setting to "23" will test both level 2 and level 3.
+	static List<String> Users = new ArrayList<String>();
+	
 	@BeforeClass
 	public void beforeClass() {
 		Environment.SetLevelsToTest(LevelsToTest);
 		API_Functions.General_API_Calls.setPrintOutAPICallFlag(true);
 		API_Functions.General_API_Calls.setPrintOutFullResponseFlag(true);
+	}
+	
+	@AfterClass
+	public void afterClass() {
+		for(String user : Users) {
+            System.out.println(user);
+        }
 	}
 	
 	@DataProvider //(parallel = true)
@@ -44,10 +54,10 @@ public class USRC_FDM {
 	    	
 			switch (m.getName()) { //Based on the method that is being called the array list will be populated.
 			case "EndtoEndEnrollment":
-				for (int j = 0 ; j < 2; j++) {
-					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
+				for (int j = 0 ; j < 5; j++) {
+					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "FDM");
 					String Password = "Test1234";
-					String ContactDetails[] = USRC_Data.getContactDetails(0);
+					String ContactDetails[] = USRC_Data.getContactDetails(j);
 					/*ContactDetails[4] = "mei.fang@fedex.com";*/
 					data.add(new Object[] {strLevel, USRC_D.FDMPostcard_PinType, MFAC_D.OrgPostcard, UserID, Password, ContactDetails});
 				}
@@ -55,7 +65,7 @@ public class USRC_FDM {
 			case "CreateNewUsers":
 				for (int j = 0 ; j < 1; j++) {
 					String UserID = Helper_Functions.LoadUserID("L" + strLevel + "ATRK");
-					// UserID = "L3ATRKExceptions";
+					UserID = "L4ATRKExceptions";
 					String Password = "Test1234";
 					String ContactDetails[] = USRC_Data.getContactDetails(j);
 					
@@ -109,7 +119,7 @@ public class USRC_FDM {
 	
 	@Test (dataProvider = "dp", priority = 1, description = "380527", enabled = true)
 	public void EndtoEndEnrollment(String Level, String USRC_Org, String MFAC_Org, String UserID, String Password, String[] ContactDetails) {
-		// UserID = "L7ATRKExtraordinary";
+		// UserID = "L3WERL061120Take3";
 		String Cookie = null;
 		String UUID = null;
 		String fdx_login_fcl_uuid[] = {"","", ""};
@@ -140,6 +150,13 @@ public class USRC_FDM {
 			//3 - request a pin
 			Helper_Functions.PrintOut("Request pin through USRC", false);
 			String ShareID = ParseShareID(Response);
+			//Added to test SMS on Priority
+			if (Response.contains("SMS")) {
+				USRC_Data USRC_D = new USRC_Data();
+		    	MFAC_Data MFAC_D = new  MFAC_Data();
+				USRC_Org = USRC_D.FDMSMS_PinType;
+				MFAC_Org = MFAC_D.OrgPhone;
+			}
 			Response = USRC_Endpoints.CreatePin(Cookie, ShareID, USRC_Org);
 			assertThat(Response, containsString("successful\":true"));
 		
@@ -155,12 +172,13 @@ public class USRC_FDM {
 			Response = USRC_Endpoints.VerifyPin(Cookie, ShareID, Pin, USRC_Org);
 			assertThat(Response, containsString("responseMessage\":\"Success"));
 
-			//6 - Verify the above enrollment completed succsessfully.
+			//6 - Verify the above enrollment completed successfully.
 			Helper_Functions.PrintOut("Check recipient profile for new FDM user through USRC", false);
 			Response = recipient_profile.RecipientProfile(Cookie);
 			
 			String Results[] = new String[] {UserID, Password, fdx_login_fcl_uuid[1], USRC_Org};
 			Helper_Functions.PrintOut(Arrays.toString(Results), false);
+			Users.add(Arrays.toString(Results));
 
 		} catch (Exception e) {
 			e.printStackTrace();

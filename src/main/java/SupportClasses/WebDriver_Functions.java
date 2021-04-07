@@ -34,7 +34,7 @@ public class WebDriver_Functions{
 		String LCL = null;
 		
 		// Default to US if the country code is not sent.
-		if (CountryCode == null) {
+		if (Helper_Functions.isNullOrUndefined(CountryCode)) {
 			CountryCode = "US";
 		}
 		CCL = CountryCode.toLowerCase();
@@ -56,6 +56,9 @@ public class WebDriver_Functions{
 				break;
 			case "ATRK":
 				AppUrl = LevelURL + "/apps/fedextracking/?cntry_code=" + CCL + "&locale=" + CCL + "_" + LCL;
+				break;
+			case "ATRK_BETA":
+				AppUrl = LevelURL + "/apps/fedextracking/?fromIsgt=true&cntry_code=" + CCL + "&locale=" + CCL + "_" + LCL;
 				break;
 			case "ECAM":			
     			if (Environment.getInstance().getLevel().contentEquals("2")) {
@@ -167,7 +170,10 @@ public class WebDriver_Functions{
 				break;
     		case "WDPA_LTL":  	
     			AppUrl = LevelURL + "/PickupApp/scheduleFreightPickup.do?method=doInit&locale=" + LCL + "_" + CCL;
-				break;	
+				break;
+    		case "WDRP":
+    			AppUrl = LevelURL + "/locate/index.html?locale=" + LCL + "_" + CCL;
+				break;
     		case "WPRL":  	
     			AppUrl = LevelURL + "/apps/myprofile/loginandcontact/?locale=" + LCL + "_" + CCU + "&cntry_code=" + CCL;
 				break;
@@ -260,6 +266,9 @@ public class WebDriver_Functions{
 	}
 	
 	public static void Type(By Ele, String text) throws Exception {
+		if (Helper_Functions.isNullOrUndefined(text)) {
+			text = "";
+		}
 		//wait for the element to be present.
 		WaitPresent(Ele);
 		for (int i = 0 ; i < 10 ; i++) {
@@ -656,6 +665,18 @@ public class WebDriver_Functions{
     	return GetCookieValue("fcl_uuid");
     }
     
+    public static String GetCookies() {
+		Set<Cookie> cookies = DriverFactory.getInstance().getDriver().manage().getCookies();
+        Iterator<Cookie> itr = cookies.iterator();
+        String Cookies = "";
+        while (itr.hasNext()) {
+            Cookie cookie = itr.next();
+            Cookies += cookie.getName() + "=" + cookie.getValue() + "; ";
+           //System.out.println("Name: " + cookie.getName() + "\n Path: " + cookie.getPath()+ "\n  Domain:  " + cookie.getDomain() + "\n   Value:  " + cookie.getValue()+ "\n    Expiry:  " + cookie.getExpiry());
+        }
+		return Cookies;
+	}
+    
 	public static String GetCookieValue(String Name){
 		Set<Cookie> cookies = DriverFactory.getInstance().getDriver().manage().getCookies();
         Iterator<Cookie> itr = cookies.iterator();
@@ -675,6 +696,8 @@ public class WebDriver_Functions{
 		cookie = new org.openqa.selenium.Cookie(Name , Value);
 		DriverFactory.getInstance().getDriver().manage().deleteCookieNamed(Name);
 		DriverFactory.getInstance().getDriver().manage().addCookie(cookie);
+		// Set<Cookie> test = DriverFactory.getInstance().getDriver().manage().getCookies();
+		// Helper_Functions.PrintOut(Name + " -- " + Value);
 	}
 	
 	public static String GetCurrentURL() {
@@ -739,10 +762,10 @@ public class WebDriver_Functions{
 
     public static boolean Login(User_Data User_Info) throws Exception {
     	//high level 
-    	if(User_Info.USER_ID == null || User_Info.USER_ID == ""){
+    	if (Helper_Functions.isNullOrUndefined(User_Info.USER_ID)){
     		Helper_Functions.PrintOut("Cannot login with user id as null. Recieved from " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
     		throw new Exception("User not provided");
-    	}else if (User_Info.PASSWORD == null || User_Info.PASSWORD == "") {
+    	}else if (Helper_Functions.isNullOrUndefined(User_Info.PASSWORD)) {
     		Helper_Functions.PrintOut("Cannot login with password as null. Recieved from " + Thread.currentThread().getStackTrace()[2].getMethodName(), true);
     		throw new Exception("Password not provided.");
     	}
@@ -877,6 +900,7 @@ public class WebDriver_Functions{
 	}
 
 	public static void Wait(long Seconds) {
+		// should not be used. Add temporary if needed but use this as a common location so that can be udpated at later date.
 		try {
 			Thread.sleep(Seconds * 1000);
 		} catch (InterruptedException e) {

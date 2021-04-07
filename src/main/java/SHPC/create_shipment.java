@@ -33,6 +33,22 @@ public class create_shipment {
 			Destination_Address_Info.PostalCode = Destination_Address_Info.PostalCode.replaceAll(" ", "");
 		}
 		
+	    String Service = "FEDEX_EXPRESS_SAVER";
+	    boolean residential = true;
+	    if (Destination_Address_Info.Country_Code.toLowerCase().contentEquals("us") && 
+	    		Origin_Address_Info.Country_Code.toLowerCase().contentEquals("us") ) {
+		    //   INTERNATIONAL_ECONOMY    FEDEX_EXPRESS_SAVER   FEDEX_GROUND
+		    if (Shipment_Info.Service.toLowerCase().contains("ground")) {
+		    	Service = "FEDEX_GROUND";
+		    	residential = false;
+		    } else if (Shipment_Info.Service.toLowerCase().contains("saver")) {
+		    	Service = "FEDEX_EXPRESS_SAVER";
+		    }
+	    } else {
+	    	Service = "INTERNATIONAL_ECONOMY";
+	    }
+
+		
 		SHPC_Data DC = SHPC_Data.SHPC_Load();
 		
 		if (!Shipment_Info.User_Info.getHasValidAccountNumber()) {
@@ -41,17 +57,20 @@ public class create_shipment {
 		
 		JSONObject accountNumber = new JSONObject()
 				.put("key", Shipment_Info.User_Info.ACCOUNT_NUMBER_DETAILS[0][0])
-				.put("value", Shipment_Info.User_Info.ACCOUNT_NUMBER_DETAILS[0][1]);
-		
+				//.put("value", Shipment_Info.User_Info.ACCOUNT_NUMBER_DETAILS[0][1])
+				.put("value", "");
+
+		String[] StreetLines = {Origin_Address_Info.Address_Line_1};;
+		if (!Origin_Address_Info.Address_Line_2.contentEquals("")) {
+			StreetLines = new String[] {Origin_Address_Info.Address_Line_1, Origin_Address_Info.Address_Line_2};
+		}
 		JSONObject OriginAddress = new JSONObject()
 				.put("countryCode", Origin_Address_Info.Country_Code)
 				.put("postalCode", Origin_Address_Info.PostalCode)
 				.put("city", Origin_Address_Info.City)
 				.put("stateOrProvinceCode", Origin_Address_Info.State_Code)
-				// Default the residential flag as true for the FDM data.    true
-				.put("residential", true)
-				.put("streetLines", new String[] {Origin_Address_Info.Address_Line_1, 
-						Origin_Address_Info.Address_Line_2});
+				.put("residential", residential)
+				.put("streetLines", StreetLines);
 		/* TODO: Will need to start sending address line 3 in the future.
 		 * Will need to add passing address line 3 in future.
 		 * Should be for July20CL 12/16/19
@@ -63,15 +82,25 @@ public class create_shipment {
 				.put("postalCode", Destination_Address_Info.PostalCode)
 				.put("city", Destination_Address_Info.City)
 				.put("stateOrProvinceCode", Destination_Address_Info.State_Code)
-				// Default the residential flag as true for the FDM data.     true
-				.put("residential", true)
+				.put("residential", residential)
 				.put("streetLines", new String[] {Destination_Address_Info.Address_Line_1, 
-						Destination_Address_Info.Address_Line_2, ""});
+						Destination_Address_Info.Address_Line_2});
 		// TODO: Same as above, address line 3 added.
+		
+		String personName = User_Info.FIRST_NM;
+		if (Helper_Functions.isNullOrUndefined(User_Info.FIRST_NM)) {
+			personName = "FirstName";
+		}
+		
+		if (Helper_Functions.isNullOrUndefined(User_Info.LAST_NM)) {
+			personName += " LastName";
+		} else {
+			personName += " " + User_Info.LAST_NM;
+		}
 		
 		JSONObject contact = new JSONObject()
 				.put("companyName", "")
-				.put("personName", User_Info.FIRST_NM + " " + User_Info.LAST_NM)
+				.put("personName", personName)
 				.put("phoneNumber", User_Info.PHONE_NUMBER)
 				.put("emailAddress", User_Info.EMAIL_ADDRESS);
 		
@@ -89,7 +118,7 @@ public class create_shipment {
 				.put("height", "6")
 				.put("units", "CM");
 		
-		// Need to work on signiture, SHPC throws error that signiture option is not recognized.
+		// Need to work on signature, SHPC throws error that signiture option is not recognized.
  		JSONObject signatureOptionDetail = new JSONObject()
 				.put("signatureOptionType", "INDIRECT")    //INDIRECT  DIRECT
 				.put("signatureOptionValue", "Indirect signature required"); //  "Indirect signature required"   Direct signature required
@@ -99,17 +128,7 @@ public class create_shipment {
 		JSONObject packageSpecialServices = new JSONObject()
 				.put("signatureOptionDetail", signatureOptionDetail)
 				.put("specialServiceTypes", specialServiceTypes);
-		
-		JSONObject commoditiesElement = new JSONObject()
-				.put("name", "PERSONAL_DOCUMENT") //PERSONAL_DOCUMENT   CORRESPONDENCE_NO_COMMERCIAL_VALUE
-				.put("description", "PERSONAL_DOCUMENT") //PERSONAL_DOCUMENT  CORRESPONDENCE_NO_COMMERCIAL_VALUE
-				.put("countryOfManufacture", "US")
-				.put("weight", weight)
-				.put("customsValue", customsValue)
-				.put("quantity", "1")
-				.put("quantityUnits", "PCS")
-				.put("unitPrice", customsValue);
-		
+
 		JSONObject shipper = new JSONObject()
 				.put("address", OriginAddress)
 				.put("contact", contact);
@@ -126,44 +145,18 @@ public class create_shipment {
 		JSONObject responsibleParty = new JSONObject()
 				.put("responsibleParty", accountNumberElement);
 		
-		JSONObject payorAccountNumber = new JSONObject()
-				.put("key", "")
-				.put("value", "");
-		
-		JSONObject payorAccountNumberElement = new JSONObject()
-				.put("accountNumber", payorAccountNumber);
-		
-		JSONObject payorResponsibleParty = new JSONObject()
-				.put("responsibleParty",payorAccountNumberElement);
-		
 		JSONObject shippingChargesPayment = new JSONObject()
 				.put("paymentType", "SENDER")
 				.put("payor", responsibleParty);
 		
-		JSONObject dutiesPayment = new JSONObject()
-				.put("paymentType", "RECIPIENT")   //RECIPIENT   SENDER
-				.put("payor", payorResponsibleParty);
-		
-		JSONObject commercialInvoice = new JSONObject()
-				.put("shipmentPurpose", "NOT_SOLD")
-				.put("specialInstructions", "") //added on 11/5/19
-				.put("termsOfSale", "");
-
-		Object commodities_Array[] = new Object[] {commoditiesElement};
-		
-		JSONObject customsClearanceDetail = new JSONObject()
-				.put("documentContent", "DOCUMENTS_ONLY")
-				.put("dutiesPayment", dutiesPayment)
-				.put("commercialInvoice", commercialInvoice)
-				.put("commodities", commodities_Array);
-		
 		JSONObject labelSpecification = new JSONObject()
 				.put("printerType", "PDF")
 				.put("paperType", "LETTER")
-				.put("autoPrint", false);
+				.put("autoPrint", true)
+				.put("returnedDispositionDetail", true);
 		
 		JSONObject requestedPackageLineItemsElement = new JSONObject()
-				.put("groupPackageCount", 1)
+				.put("groupPackageCount", "1")
 				.put("insuredValue", customsValue)
 				.put("weight", weight)
 				.put("customerReferences", JSONObject.NULL)
@@ -184,23 +177,48 @@ public class create_shipment {
 		}
 	    String TomorrowDateFormatted = formatter.format(dt);
 	    
+	    JSONObject customsClearanceDetail = getClearanceDetail(Shipment_Info, weight, customsValue);
+	   
+	    /*JSONObject recipientsEmail = new JSONObject()
+	    		.put("emailAddress", "fake@fedex.com") // Hard coded for now
+	    		.put("emailNotificationRecipientType", "SHIPPER")
+	    		.put("format", "HTML")
+	    		.put("locale", "en")
+	    		.put("notifyOnDelivery", true)
+	    		.put("notifyOnEstimatedDelivery", false)
+	    		.put("notifyOnException", true)
+	    		.put("notifyOnShipment", true)
+	    		.put("notifyOnTendered", true);
+
+	    Object recipientsEmailArray[] = new Object[] {recipientsEmail};
+	    JSONObject emailNotificationDetail = new JSONObject()
+	    		.put("recipients", recipientsEmailArray);*/
+	    
 		JSONObject requestedShipment = new JSONObject()
+				.put("blockInsightVisibility", true)
+				.put("customsClearanceDetail", customsClearanceDetail)
+				// .put("emailNotificationDetail", emailNotificationDetail)
+				.put("edtRequestType", "NONE")
 				.put("shipper", shipper)
 				.put("recipients", recipients_Array)
 				.put("shipTimestamp", TomorrowDateFormatted)
 				.put("pickupType", "DROPOFF_AT_FEDEX_LOCATION") // DROPOFF_AT_FEDEX_LOCATION  CONTACT_FEDEX_TO_SCHEDULE
-				.put("serviceType", "INTERNATIONAL_ECONOMY") //   INTERNATIONAL_ECONOMY
-				.put("packagingType", "YOUR_PACKAGING")
+				.put("serviceType", Service)
+				// .put("packagingType", "YOUR_PACKAGING")
 				.put("shippingChargesPayment", shippingChargesPayment)
 				.put("customsClearanceDetail", customsClearanceDetail)
 				.put("labelSpecification", labelSpecification)
 				.put("requestedPackageLineItems", requestedPackageLineItems_Array);
 		
 		HttpPut httpput = new HttpPut(DC.AShipmentURL);
+		
+		JSONObject input = new JSONObject()
+				// .put("openShipmentAction", "CONFIRM") removed on 11/4/2020
+				.put("accountNumber", accountNumber)
+				.put("requestedShipment", requestedShipment);
+		
 		JSONObject main = new JSONObject()
-			.put("openShipmentAction", "CONFIRM")
-			.put("accountNumber", accountNumber)
-			.put("requestedShipment", requestedShipment);
+			.put("input", input);
 
 		String json = main.toString();
 			
@@ -239,6 +257,52 @@ public class create_shipment {
 			return null;
 		}
 		
+	}
+	
+	public static JSONObject getClearanceDetail(Shipment_Data Shipment_Info, JSONObject weight, JSONObject customsValue) {
+		JSONObject customsClearanceDetail = new JSONObject();
+		
+	    if (Shipment_Info.Destination_Address_Info.Country_Code.contentEquals(Shipment_Info.Origin_Address_Info.Country_Code) &&
+	    		Shipment_Info.Destination_Address_Info.Country_Code.contentEquals("US")) {
+	    	customsClearanceDetail = null;
+	    } else {
+			JSONObject commoditiesElement = new JSONObject()
+					.put("name", "PERSONAL_DOCUMENT") //PERSONAL_DOCUMENT   CORRESPONDENCE_NO_COMMERCIAL_VALUE
+					.put("description", "PERSONAL_DOCUMENT") //PERSONAL_DOCUMENT  CORRESPONDENCE_NO_COMMERCIAL_VALUE
+					.put("countryOfManufacture", "US")
+					.put("weight", weight)
+					.put("customsValue", customsValue)
+					.put("quantity", "1")
+					.put("quantityUnits", "PCS")
+					.put("unitPrice", customsValue);
+			
+			JSONObject payorAccountNumber = new JSONObject()
+					.put("key", "")
+					.put("value", "");
+			
+			JSONObject payorAccountNumberElement = new JSONObject()
+					.put("accountNumber", payorAccountNumber);
+			
+			JSONObject payorResponsibleParty = new JSONObject()
+					.put("responsibleParty",payorAccountNumberElement);
+			
+			JSONObject commercialInvoice = new JSONObject()
+					.put("shipmentPurpose", "NOT_SOLD")
+					.put("specialInstructions", "") //added on 11/5/19
+					.put("termsOfSale", "");
+
+			Object commodities_Array[] = new Object[] {commoditiesElement};
+			JSONObject dutiesPayment = new JSONObject()
+					.put("paymentType", "RECIPIENT")   //RECIPIENT   SENDER
+					.put("payor", payorResponsibleParty);
+			
+	    	customsClearanceDetail.put("documentContent", "DOCUMENTS_ONLY")
+					.put("dutiesPayment", dutiesPayment)
+					.put("commercialInvoice", commercialInvoice)
+					.put("commodities", commodities_Array);
+	    }
+	    
+	    return customsClearanceDetail;
 	}
 	
 /*	public static String SHPC_Create_Shipment(Shipment_Data Shipment_Info, String Cookies){

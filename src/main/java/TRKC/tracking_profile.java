@@ -85,10 +85,17 @@ public class tracking_profile {
 			}
 			Details[Details.length - 1] = NewElement;
 		}
-
+		
+/*		String isAdvanceNotice = API_Functions.General_API_Calls.ParseStringValue(TrackingProfileResponse, "isAdvanceNotice");
+		if (isAdvanceNotice != null && isAdvanceNotice.contentEquals("1")) {
+			String userLoginName = API_Functions.General_API_Calls.ParseStringValue(TrackingProfileResponse, "userLoginName");
+			System.err.println("     User _" + userLoginName + "_ param: isAdvanceNotice_ value: " + isAdvanceNotice);
+		}*/
+		
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		Details[Details.length - 1] = new String[] { "TRACKING_PROFILE", TrackingProfileResponse };
+		
 		if (checkTotalShipmentCount) {
-			Details = Arrays.copyOf(Details, Details.length + 1);
-			Details[Details.length - 1] = new String[] { "TRACKING_PROFILE", TrackingProfileResponse };
 			Details = TRKC.shipment_list_request.getATRK_ShipmentList(Details, Cookies);
 
 			for (String[] Element : Details) {
@@ -112,6 +119,8 @@ public class tracking_profile {
 
 	public static int checkTotalNumberOfShipments(String userId, String cookie) {
 		String Details[][] = {};
+		Details = TRKC.shipment_list_request.getATRK_ShipmentList(Details, cookie);
+		
 		Details = TRKC.tracking_profile.getATRK_Profile(Details, cookie);
 		int numberOfShipments = 0;
 		for (String[] Element : Details) {

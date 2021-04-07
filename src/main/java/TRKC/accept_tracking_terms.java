@@ -41,6 +41,13 @@ public class accept_tracking_terms {
   			urlParameters.add(new BasicNameValuePair("data", json));
 
   			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
+  			/*
+  			action: acceptTrackingTerms
+  			locale: en_US
+  			version: 1
+  			format: json  
+  			data: {"AcceptTrackingTermsRequest":{"appType":"WTRK","appDeviceType":"","uniqueKey":"","processingParameters":{}}}
+  			*/
   			String Response = General_API_Calls.HTTPCall(httppost, json);	
 			
   			return Response;

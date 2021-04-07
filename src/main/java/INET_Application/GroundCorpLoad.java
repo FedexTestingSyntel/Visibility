@@ -1,5 +1,7 @@
 package INET_Application;
 
+import java.util.ArrayList;
+
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
@@ -9,28 +11,30 @@ import SupportClasses.Environment;
 import SupportClasses.Helper_Functions;
 
 public class GroundCorpLoad {
-
-	public static boolean AddGroundTracking(String TrackingIds[]) {
-		String Response = ValidateAndProcess(TrackingIds);
-		if (Response.contains("\"valid\":" + TrackingIds.length)) {
-			return true;
-		}
-		return false;
-	}
 	
-	public static String ValidateAndProcess(String TrackingIds[]){
+	//ArrayList<String> Tracking = new ArrayList<String>();
+	public static boolean ValidateAndProcess(ArrayList<String> TrackingIds, ArrayList<String> testID){
 		try{
-			String URL = "http://corploadsvc.test.cloud.fedex.com/FINAL_FILE/ValidateAndProcess";
+			String URL = "http://corploadlvsvc.test.cloud.fedex.com/FINAL_FILE/ValidateAndProcess";
 			HttpPost httppost = new HttpPost(URL);
 			
 			httppost.addHeader("Content-Type", "application/json");
 			
+			// TODO: come back and redo this, lazy
 			String trackIds ="";
+			String testIds ="";
 			for(String ID: TrackingIds) {
 				if (trackIds.contentEquals("")) {
 					trackIds = ID;
 				}else {
 					trackIds += "\n" + ID;
+				}
+			}
+			for(String ID: testID) {
+				if (testIds.contentEquals("")) {
+					testIds = ID;
+				}else {
+					testIds += "\n" + ID;
 				}
 			}
 			
@@ -39,7 +43,7 @@ public class GroundCorpLoad {
 			JSONObject Main = new JSONObject()
 			        .put("environment", "L" + Level)
 			        .put("allowFlag", "Y")
-			        .put("referenceId", Helper_Functions.getRandomString(12))
+			        .put("referenceId", testIds)
 			        .put("trackIds", trackIds)
 			        .put("delCons", "")
 			        .put("testIds", trackIds)
@@ -53,10 +57,15 @@ public class GroundCorpLoad {
   			
 			String Response = General_API_Calls.HTTPCall(httppost, Request);
 		
-			return Response;
+			if (Response.contains("\"valid\":1")) {
+				return true;
+			} else {
+				Helper_Functions.PrintOut("Not accepted to final file.");
+				return false;
+			}
 		}catch (Exception e){
 			e.printStackTrace();
-			return e.toString();
+			return false;
 		}
 			/*
 			 URL: POST http://corploadsvc.test.cloud.fedex.com/FINAL_FILE/ValidateAndProcess HTTP/1.1

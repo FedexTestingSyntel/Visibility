@@ -43,6 +43,8 @@ public class Helper_Functions {
 	public static String DataDirectory = BaseDirectory + "Data";
 	public static String TestingData = DataDirectory + "\\TestingData.xls";
 
+	public static boolean writeToExcelFailedMessageFlag = true;
+	
 	public final static Lock Excellock = new ReentrantLock();// prevent excel ready clashes
 	public static String Passed = "Passed", Failed = "Fail", Skipped = "Skipped";
 
@@ -649,8 +651,9 @@ public class Helper_Functions {
 				boolean EmptyRow = true;
 				int EmptyCount = 0;
 				for (int j = 0; j < totalNoOfCols; j++) {
+					// TODO: need to format this cell, facing issue with error.
 					String CellContents = sh.getCell(j, i).getContents();
-					if (CellContents == null || CellContents.contentEquals("")) {
+					if (isNullOrUndefined(CellContents)) {
 						EmptyCount++;
 						CellContents = "";
 					} else {
@@ -858,12 +861,27 @@ public class Helper_Functions {
 		return true;
 	}
 
+	public static boolean CheckFileToLarge(String FileName) {
+		// check if the excel is over 74 MB
+		File f = new File(FileName);
+        long fileSize = f.length();
+        if (fileSize > 74000000) {
+        	Helper_Functions.PrintOut("WARNING, the file is to large");
+			return true;
+        }
+        return false;
+	}
+	
 	// if KeyPosition = -1 then write new line to excel
 	public static boolean WriteToExcel(String FileName, String SheetName, String Data[][], int KeyPosition) {
 		Excellock.lock();
 		HSSFWorkbook wb = null;
 		boolean FileUpdated = false;
-
+		
+        if (CheckFileToLarge(FileName)) {
+        	return false;
+        }
+		
 		try {
 			// Read the spreadsheet that needs to be updated
 			FileInputStream fsIP = new FileInputStream(new File(FileName));
@@ -886,10 +904,10 @@ public class Helper_Functions {
 			KeyColumn = (int) results[0];
 			IdentifierRow = (HSSFRow) results[1];
 			
-			boolean fileShouldBeUpdated = false;
+			// boolean fileShouldBeUpdated = false;
 			int dataLength = Data[0].length;
-			for(int writeDataPosition = 1; writeDataPosition < Data[0].length; writeDataPosition++) {
-				for (int worksheetRow = 0; worksheetRow < worksheet.getLastRowNum() + 1; worksheetRow++) {
+			for(int writeDataPosition = 1; writeDataPosition < dataLength; writeDataPosition++) {
+				for (int worksheetRow = 0; worksheetRow < worksheet.getLastRowNum() + 2; worksheetRow++) {
 					
 					// when making an addition or haven't found place to update.
 					if (worksheetRow == worksheet.getLastRowNum() + 1) {
@@ -912,7 +930,7 @@ public class Helper_Functions {
 									}
 									Cell cell = worksheet.getRow(worksheetRow).getCell(newColumn);
 									cell.setCellValue(Data[newRow][writeDataPosition]);
-									fileShouldBeUpdated = true;
+									// fileShouldBeUpdated = true;
 									break;
 								}
 							}
@@ -945,11 +963,13 @@ public class Helper_Functions {
 										String value = formatter.formatCellValue(cell);
 										    
 										// only update the cell if the values differ
-										if (Data[k][writeDataPosition] != null
-												&& value.contentEquals(Data[k][writeDataPosition])) {
+/*										if (Data[k][writeDataPosition] != null
+												&& value.contentEquals(Data[k][writeDataPosition])
+												&& !Data[k][writeDataPosition].contentEquals("")) {
 											fileShouldBeUpdated = true;
 											cell.setCellValue(Data[k][writeDataPosition]);
-										}
+										}*/
+										cell.setCellValue(Data[k][writeDataPosition]);
 										
 										// column value found and updated. break from IdentifierRow
 										break;
@@ -966,23 +986,26 @@ public class Helper_Functions {
 			
 			// Close the InputStream
 			fsIP.close();
-			if (fileShouldBeUpdated) {
-				// Open FileOutputStream to write updates
-				FileOutputStream output_file = new FileOutputStream(new File(FileName));
-				// write changes
-				wb.write(output_file);
-				// close the stream
-				output_file.close();
-				FileUpdated = true;
-			} else if (KeyColumn == -1) {
+			if (KeyColumn == -1) {
 				Helper_Functions.PrintOut("Key " + Data[KeyPosition][0] + " not found.");
 			}
+			
+			// Open FileOutputStream to write updates
+			FileOutputStream output_file = new FileOutputStream(new File(FileName));
+			// write changes
+			wb.write(output_file);
+			// close the stream
+			output_file.close();
 		} catch (Exception e) {
 			try {
 				wb.close();
 			} catch (Exception e1) {
 			}
-			e.printStackTrace();
+			if (writeToExcelFailedMessageFlag) {
+				e.printStackTrace();
+				Helper_Functions.PrintOut("Failed to write to file, only printing once.");
+				writeToExcelFailedMessageFlag = false;
+			}	
 		}
 
 		Excellock.unlock();
@@ -1084,7 +1107,7 @@ public class Helper_Functions {
 					// Updating values
 					// System.out.print("j: " + j + " ");//for debug
 					if (worksheet.getRow(j) != null) { // worksheet.getRow(j).getCell(KeyColumn).getStringCellValue().contentEquals(Data[KeyPosition][1]
-						boolean MakeUpdate = true;
+						boolean MakeUpdate = false;
 						for (int CellCheck = 0; CellCheck < KeyPosition.length; CellCheck++) {
 							if (worksheet.getRow(j).getCell(KeyColumn[CellCheck]) != null) {
 								// format the cell just in case it is not a string.
@@ -1092,10 +1115,10 @@ public class Helper_Functions {
 										.formatCellValue(worksheet.getRow(j).getCell(KeyColumn[CellCheck]));
 
 								if (!val.contentEquals(Data[KeyPosition[CellCheck]][1])) {
-									MakeUpdate = false;
+									MakeUpdate = true;
 								}
 							} else if (worksheet.getRow(j).getCell(KeyColumn[CellCheck]) == null) {
-								MakeUpdate = false;
+								MakeUpdate = true;
 							}
 						}
 
@@ -1364,16 +1387,16 @@ public class Helper_Functions {
 
 	public static void LimitDataProvider(String methodName, int testLimit, List<Object[]> data) {
 		if (testLimit > 0 && data.size() > testLimit) {
-			System.out.println(methodName + "-- total scenarios " + data.size());
+			System.out.println(methodName + " -- total scenarios " + data.size());
 			while (data.size() > testLimit) {
 				data.remove(0);
 			}
 		}
-		System.out.println(methodName + "-- " + data.size() + " scenarios.");
+		System.out.println(methodName + " -- " + data.size() + " scenarios.");
 	}
 
 	public static boolean isNullOrUndefined(Object obj) {
-		if (obj == null || obj.toString().contentEquals("")) {
+		if (obj == null || obj.toString().contentEquals("") || obj.toString().contentEquals("null")) {
 			return true;
 		} else {
 			return false;

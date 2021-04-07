@@ -66,6 +66,7 @@ public class User_Data {
 	public static User_Data Set_Dummy_Contact_Name(User_Data User_Info, String BaseValue, String Level) {
 		String ContactName[] = Helper_Functions.LoadDummyName(BaseValue, Level);
 		User_Info.FIRST_NM = ContactName[0];
+		User_Info.MIDDLE_NM = "";
 		User_Info.LAST_NM = ContactName[2];
 		return User_Info;
 	}
@@ -142,6 +143,9 @@ public class User_Data {
 			
 			for (int j = 0; j <Headers.length; j++) {
 				String CellValue = Row[j];
+				if (Helper_Functions.isNullOrUndefined(CellValue)) {
+					CellValue = "";
+				}
 				switch (Headers[j]) {
 		  		case "ERROR":
 		  			userInfoArray[pos].ERROR = CellValue;
@@ -249,6 +253,7 @@ public class User_Data {
 					tempACCOUNT_NUMBERS = tempACCOUNT_NUMBERS.replaceFirst(key, "");
 					tempACCOUNT_NUMBERS = tempACCOUNT_NUMBERS.replaceFirst(value, "");
 					tempACCOUNT_NUMBERS = tempACCOUNT_NUMBERS.replace("{\"key\":\"\",\"value\":\"\"", "");
+					tempACCOUNT_NUMBERS = tempACCOUNT_NUMBERS.replace("{\"value\":\"\",\"key\":\"\"", "");
 					
 					if (!value.contentEquals("")) {
 						if (userInfoArray[pos].ACCOUNT_NUMBER_DETAILS == null) {
@@ -316,7 +321,9 @@ public class User_Data {
 	
 	public boolean getCanScheduleShipment() {
 		boolean flag = false;
-		if (this.FSM_ENABLED != null && this.FSM_ENABLED.contentEquals("USER")) {
+		if (this.FSM_ENABLED != null &&
+				this.FSM_ENABLED.contentEquals("USER") &&
+				!this.Address_Info.Address_Line_1.contentEquals("VoidStreet1")) {
 			flag = true;
 		}
 		// Helper_Functions.PrintOut("getCanScheduleShipment: " + flag);

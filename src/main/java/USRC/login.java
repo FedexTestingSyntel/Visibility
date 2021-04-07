@@ -8,6 +8,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
@@ -47,15 +48,9 @@ public class login {
   			httppost.addHeader("Accept", "application/json");
   			httppost.addHeader("Accept", "text/javascript");
   			httppost.addHeader("Accept", "q=0.01");
-  			/*httppost.addHeader("Content-Type", "application/json");*/
+  			httppost.addHeader("Content-Type", "application/json");
   			httppost.addHeader("Content-Type", "charset=UTF-8");
   			
-  			
-  			
-  			/*Accept: application/json, , *; 
-   			X-Requested-With: XMLHttpRequest
-  			*/
-
   			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
   			urlParameters.add(new BasicNameValuePair("action", "LogIn"));
   			urlParameters.add(new BasicNameValuePair("format", "json"));
@@ -124,6 +119,63 @@ public class login {
   			}
   		}catch (Exception e){
   			e.printStackTrace();
+  			return null;
+  		}
+  	}
+	
+  	public static String[] Login_validate(String UserID, String Password){
+  		try{
+  			USRC_Data USRC_Details = USRC_Data.USRC_Load();
+  			HttpClient httpclient = HttpClients.createDefault();
+  			
+  			HttpPost httppost = new HttpPost(USRC_Details.Validate);
+
+  			JSONObject main = new JSONObject()
+  				.put("userName", UserID)
+  				.put("password", Password);
+  		
+  			String json = main.toString();
+  				
+  			httppost.addHeader("Content-Type", "application/json");
+  			httppost.addHeader("Authorization", "Bearer " + USRC_Details.getOAuthToken());
+  			httppost.addHeader("X-clientid", "WCDO");
+  			httppost.addHeader("X-locale", "en_US");
+  			httppost.addHeader("X-version", "1.0");
+  			
+  			// httppost.addHeader("authorization", "Bearer " + USRC_Details.getOAuthToken());
+  			
+
+  			httppost.setEntity(new StringEntity(json.toString()));
+  			// Helper_Functions.PrintOut("Get cookie from USRC for " + UserID + "/" + Password, true);
+  			HttpResponse Response = httpclient.execute(httppost);
+  			// Helper_Functions.PrintOut("response: " + EntityUtils.toString(Response.getEntity()), true);
+  			Header[] Headers = Response.getAllHeaders();
+  			//takes apart the headers of the response and returns the fdx_login cookie if present
+  			String fdx_login = null, fcl_uuid = null, full_cookies = "", RequestHeaders = "";
+  			for (Header Header : Headers) {
+  				//String Test = header.getName() + "    " + header.getValue();PrintOut(Test, false);// used in debugging or if want to see other cookie values
+  				if (Header.getName().contentEquals("Set-Cookie") && Header.getValue().contains("fdx_login")) {
+  					fdx_login = Header.toString().replace("Set-Cookie: ", "").replace("; domain=.fedex.com; path=/; secure", "");
+  				}else if (Header.getName().contentEquals("Set-Cookie") && Header.getValue().contains("fcl_uuid")) {
+  					fcl_uuid = Header.toString().replace("Set-Cookie: fcl_uuid=", "").replace("; domain=.fedex.com; path=/; secure", "");
+  				}
+  				if (Header.getName().contentEquals("Set-Cookie")) {
+  					full_cookies += Header.toString(); 
+  				}
+  				RequestHeaders += Header + "___";
+  			}
+  			
+  			String MethodName = "USRCLogin";
+  			General_API_Calls.Print_Out_API_Call(MethodName, httppost.toString(), RequestHeaders, json, Response.toString());
+					  
+  			if (fdx_login == null) {
+  				throw new Exception("Unable to login");
+  			}
+  			String HeaderArray[] = new String[] {fdx_login, fcl_uuid, full_cookies};
+  			return HeaderArray;
+  		}catch (Exception e){
+  			System.err.println("USRC.login() - Unable to login - " + UserID + " / " + Password);
+  			// e.printStackTrace();
   			return null;
   		}
   	}

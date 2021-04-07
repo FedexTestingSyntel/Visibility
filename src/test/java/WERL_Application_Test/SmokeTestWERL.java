@@ -19,8 +19,8 @@ import WebElements.EnrollmentPageElements;
 
 @Listeners(SupportClasses.TestNG_TestListener.class)
 
-public class SmokeTest{
-	static String LevelsToTest = "6";
+public class SmokeTestWERL{
+	static String LevelsToTest = "3";
 	
 	@BeforeClass
 	public void beforeClass() {
@@ -38,7 +38,12 @@ public class SmokeTest{
 			//Based on the method that is being called the array list will be populated.
 			switch (m.getName()) {
 				case "WERL_Registration":
-					data.add( new Object[] {Level});
+					User_Data User_Info = new User_Data();
+					User_Data.Set_Generic_Address(User_Info, "US");
+					User_Data.Set_Dummy_Contact_Name(User_Info, "FDM", Level);
+					User_Info.EMAIL_ADDRESS = Helper_Functions.MyFakeEmail;
+					User_Info.PHONE_NUMBER = Helper_Functions.myPhone;
+					data.add( new Object[] {Level, User_Info});
 				break;
 			}
 		}	
@@ -47,16 +52,11 @@ public class SmokeTest{
 	}
 	
 	@Test(dataProvider = "dp")
-	public void WERL_Registration(String Level){		
+	public void WERL_Registration(String Level, User_Data User_Info){		
 		try {
-			User_Data User_Info = new User_Data();
-			User_Data.Set_Generic_Address(User_Info, "US");
-			User_Data.Set_Dummy_Contact_Name(User_Info, "FDM", Level);
 			User_Data.Set_User_Id(User_Info, "L" + Level + "FDM");
-			User_Info.EMAIL_ADDRESS = "otherasdfa@fedex.com";
-			
 	 		WebDriver_Functions.ChangeURL("WERL", User_Info.Address_Info.Country_Code, "en", true);
-	 		
+	 		WebDriver_Functions.takeSnapShot("WerlPageStart.png");
 	 		WebDriver_Functions.Click(EnrollmentPageElements.SignUpButton);
 	 		WERL_Functions.EnterContactInformaiton(User_Info, true);
 	 		
@@ -67,7 +67,7 @@ public class SmokeTest{
 	 		if (WebDriver_Functions.CheckBodyText("Verify your registration address by mail")) {
 	 			WERL_Functions.FDMValidation(UserName, "POSTAL");
 	 		}else {
-	 			
+	 			WERL_Functions.FDMValidation(UserName, "PHONE");
 	 		}
 	 		
 	 		WebDriver_Functions.Click(By.linkText("SAVE"));

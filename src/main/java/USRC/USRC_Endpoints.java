@@ -317,7 +317,9 @@ public class USRC_Endpoints {
 	public static String AccountRetrievalRequest(String Cookie){
 		//This takes the generic USRC url    EX: https://wwwdrt.idev.fedex.com/userCal/user
   		try{
-  			USRC_Data USRC_Details = USRC_Data.USRC_Load();
+  			/* Using the CXS call
+  			 * 
+  			 * USRC_Data USRC_Details = USRC_Data.USRC_Load();
   			HttpPost httppost = new HttpPost(USRC_Details.GenericUSRCURL);
 
   			JSONObject processingParameters = new JSONObject()
@@ -348,11 +350,24 @@ public class USRC_Endpoints {
 
   			httppost.setEntity(new UrlEncodedFormEntity(urlParameters));
 
-  			String Response = General_API_Calls.HTTPCall(httppost, json);	
+  			String Response = General_API_Calls.HTTPCall(httppost, json);*/	
 			/*
 			{"AccountRetrievalResponse":{"customerAccountList":[{"customerAccountInfo":{"account":{"accountIdentifier":{"accountNickname":"My Account - 430","accountNumber":{"key":"9a4457a79152d55132661972048cfe9b","value":"<<Account number here>>"},"displayName":"My Account - 430-430"}},"activeAppRoleInfoList":[{"appRoleInfo":{"appName":"fclcro","roleCode":"ADMIN"}},{"appRoleInfo":{"appName":"fclrates","roleCode":"ADMIN"}},{"appRoleInfo":{"appName":"oadr","roleCode":"USER"}},{"appRoleInfo":{"appName":"fclgfbo","roleCode":"ADMIN"}},{"appRoleInfo":{"appName":"fclpickup","roleCode":"USER"}},{"appRoleInfo":{"appName":"fclpasskey","roleCode":"ADMIN"}},{"appRoleInfo":{"appName":"fclsupplies","roleCode":"USER"}},{"appRoleInfo":{"appName":"fclfreight","roleCode":"USER"}},{"appRoleInfo":{"appName":"fclsed","roleCode":"USER"}},{"appRoleInfo":{"appName":"oar","roleCode":"USER"}}]}}],"successful":true,"transactionDetailList":[]}}
 			*/
   			
+			USRC_Data USRC_Details = USRC_Data.USRC_Load();
+			// HttpClient httpclient = HttpClients.createDefault();
+			HttpGet httpget = new HttpGet(USRC_Details.GetAccountsURL);
+
+			httpget.addHeader("Content-Type", "application/json");
+			httpget.addHeader("Authorization", "Bearer l7xxb066f2954ba043f59ce5501ab775555f");// TODO: hard coded from WRPL token, need to make dynamic
+			httpget.addHeader("X-clientid", "WPRL");
+			httpget.addHeader("X-locale", "en_US");
+			httpget.addHeader("X-version", "1.0");
+			httpget.addHeader("Cookie", Cookie);
+
+			String Response = General_API_Calls.HTTPCall(httpget, "");
+
   			return Response;
   		}catch (Exception e){
   			e.printStackTrace();
@@ -362,7 +377,7 @@ public class USRC_Endpoints {
 	
 	public static String[][] getApp_Role_Info_Check(String Details[][], String Cookies){
 		String AccountRetrievalResponse = USRC_Endpoints.AccountRetrievalRequest(Cookies);
-		if (AccountRetrievalResponse == null || !AccountRetrievalResponse.contains("\"successful\":true")) {
+		if (AccountRetrievalResponse == null || !AccountRetrievalResponse.contains("customerAccountList")) {
 			// call did not complete successfully
 			return Details;
 		}
@@ -384,10 +399,11 @@ public class USRC_Endpoints {
 		String Account[][] = {{"ACCOUNT_NUMBERS", "accountNumber"}, //hard coded below for update
 							{"AccountRetrievalResponse", AccountRetrievalResponse}};
 		String AllAcountInfo = "";
+		String AllEnterpriseCustomerResponse = "";
 		String customerAccountList = API_Functions.General_API_Calls.ParseStringValue(AccountRetrievalResponse, "customerAccountList");
 		
 		do {
-			String customerAccountInfo = API_Functions.General_API_Calls.ParseStringValue(customerAccountList, "customerAccountInfo");
+			String customerAccountInfo = API_Functions.General_API_Calls.ParseStringValue(customerAccountList, "account");
 			String SingleAccountInfo = API_Functions.General_API_Calls.ParseStringValue(customerAccountInfo, "accountNumber");
 			// if the account number is not present try and see if the nickname starts with account number.
 			// WARNING, the 8 digit number may not be account number but standard practive is to put the account number as nickname.
@@ -409,7 +425,7 @@ public class USRC_Endpoints {
 			String accountKey = API_Functions.General_API_Calls.ParseStringValue(SingleAccountInfo, "key");
 			String accountValue = API_Functions.General_API_Calls.ParseStringValue(SingleAccountInfo, "value");
 			String EnterpriseCustomerResponse = EnterpriseCustomerRequest(Cookies, accountValue, accountKey);
-			
+
 			if (accountValue.contentEquals("")) {
 				accountValue = API_Functions.General_API_Calls.ParseStringValue(EnterpriseCustomerResponse, "value");
 				SingleAccountInfo = SingleAccountInfo.replace("\"value\":\"\"", "\"value\":\"" + accountValue + "\"");
@@ -419,7 +435,9 @@ public class USRC_Endpoints {
 			}
 			
 			customerAccountList = customerAccountList.replaceFirst("customerAccountInfo", "a");
+			
 			AllAcountInfo+= SingleAccountInfo;
+			AllEnterpriseCustomerResponse += EnterpriseCustomerResponse;
 		} while (customerAccountList.contains("customerAccountInfo"));
 		Account[0][1] = AllAcountInfo;
 		
@@ -427,17 +445,26 @@ public class USRC_Endpoints {
 		Details = API_Functions.General_API_Calls.copyToTwoDimArray(Details, Account);
 
 		
-/*		//This will check if the user is the owner of the account
-		String Account_Value = General_API_Calls.Parse_API_For_Value(Contact_Details[0][1], "value");
-		String Account_Key = General_API_Calls.Parse_API_For_Value(Contact_Details[0][1], "key");
+		Details = Arrays.copyOf(Details, Details.length + 1);
+		Details[Details.length - 1] = new String[] {"EnterpriseCustomerResponse", AllEnterpriseCustomerResponse};
 		
-		String Linage_Indicator = "NOTKNOWN";
+		
+		String Account_Value = General_API_Calls.ParseStringValue(AllAcountInfo, "value");
+		String Account_Key = General_API_Calls.ParseStringValue(AllAcountInfo, "key");
+
 		if (Account_Key != null && !Account_Key.contentEquals("") && Account_Value != null && !Account_Value.contentEquals("") ) {
 			String EnterpriseCustomerRequest = USRC_Endpoints.EnterpriseCustomerRequest(Cookies, Account_Value, Account_Key);
-			Linage_Indicator = General_API_Calls.Parse_API_For_Value(EnterpriseCustomerRequest, "linkageIndicator");
+			
+			Details = Arrays.copyOf(Details, Details.length + 1);
+			Details[Details.length - 1] = new String[] {"EnterpriseCustomerResponse", EnterpriseCustomerRequest};
+
+			String Linage_Indicator = "NOTKNOWN";
+			Linage_Indicator = General_API_Calls.ParseStringValue(EnterpriseCustomerRequest, "linkageIndicator");
+			Details = Arrays.copyOf(Details, Details.length + 1);
+			Details[Details.length - 1] = new String[] {"LINKAGE_INDICATOR", Linage_Indicator};
 		}
-		Details = Arrays.copyOf(Details, Details.length + 1);
-		Details[Details.length - 1] = new String[] {"LINKAGE_INDICATOR", Linage_Indicator};*/
+
+
 		
 		return Details;
 	}
@@ -491,10 +518,17 @@ public class USRC_Endpoints {
   	  				.put("value", Account_Value)
   	  				.put("key", Account_Key);
   			
-  			String requestedProfile[] = {"EXPRESS", "LTLFREIGHT"};
+  			/*String requestedProfile[] = {"EXPRESS", "LTLFREIGHT"}; Changed on 11/3/2020 vs what seeing in prod.
   			JSONObject requestedProfileTypes = new JSONObject()
-  	  				.put("requestedProfileType", requestedProfile);
-  	  				
+  	  				.put("requestedProfileType", requestedProfile);*/
+  		
+  			JSONObject requestedProfileTypeExpress = new JSONObject()
+  	  				.put("requestedProfileType", "EXPRESS");
+  			JSONObject requestedProfileTypeFreight = new JSONObject()
+  	  				.put("requestedProfileType", "LTLFREIGHT");
+  			
+  			JSONObject requestedProfileTypes[] = {requestedProfileTypeFreight, requestedProfileTypeExpress}; 
+  			
   	  		JSONObject EnterpriseCustomerRequest = new JSONObject()
   	  				.put("processingParameters", processingParameters)
   	  				.put("accountNumber", accountNumber)

@@ -68,6 +68,8 @@ public class SHPC_Data {
 			
 			DC.OAuth_Token_Client_ID = "l7xx7a6a4540432a4fd3bdd4cc747be24e50";
 			DC.OAuth_Token_Client_Secret ="ad3599ff60564101823d46aa1bdbdc0a";
+			/*client_id: l7xx3bf5b994c7af4c42949c707d094ebd6c // from 10/06/2020
+			client_secret: ff24dae1ff46417fb2f1bd7d4ddc1f0f*/
 			break;
 		case "7":
 			DC.OAuth_Token_Client_ID = "";

@@ -14,25 +14,25 @@ import SupportClasses.Helper_Functions;
 public class tracking_packages {
 
 	// will take in multiple tracking numbers and make single call.
-	public static String TrackingPackagesRequest(String TrackingNumberArray[]){
+	public static String TrackingPackagesRequest(String cookie, String TrackingNumberArray[]){
 		Object trackingInfoListArray[] = new Object[TrackingNumberArray.length];
 		
 		for (int i = 0; i < TrackingNumberArray.length; i++) {
 			String TrackingNumber = TrackingNumberArray[i];
   			trackingInfoListArray[i] = buildTrackingInfoListArray(TrackingNumber, "", "");
 		}
-		return TrackingPackagesRequestBuild(trackingInfoListArray);
+		return TrackingPackagesRequestBuild(cookie,trackingInfoListArray);
 	}
 	
 	// will take in single tracking number and make single call.
 	public static String TrackingPackagesRequest(String TrackingNumber){
 		Object trackingInfoListArray[] = new Object[] {buildTrackingInfoListArray(TrackingNumber, "", "")};
-		return TrackingPackagesRequestBuild(trackingInfoListArray);
+		return TrackingPackagesRequestBuild("", trackingInfoListArray);
 	}
 	
 	public static String TrackingPackagesRequest(String trackingNumber, String trackingQualifier, String trackingCarrier){
 		Object trackingInfoListArray[] = new Object[] {buildTrackingInfoListArray(trackingNumber, trackingQualifier, trackingCarrier)};
-		return TrackingPackagesRequestBuild(trackingInfoListArray);
+		return TrackingPackagesRequestBuild("", trackingInfoListArray);
 	}
 	
 	private static Object buildTrackingInfoListArray(String trackingNumber, String trackingQualifier, String trackingCarrier) {
@@ -47,13 +47,13 @@ public class tracking_packages {
 		return trackingInfoListElement;
 	}
 	
-	private static String TrackingPackagesRequestBuild(Object trackingInfoListArray[]){
+	private static String TrackingPackagesRequestBuild(String cookie, Object trackingInfoListArray[]){
   		try{
   			TRKC_Data TRKC_Details = TRKC_Data.LoadVariables();
   			HttpPost httppost = new HttpPost(TRKC_Details.TrackingGenericURL);
 
   			JSONObject processingParameters = new JSONObject();
-  			
+  			//INCLUDE_ADVANCE_NOTIFICATION
   			JSONObject TrackPackagesRequest = new JSONObject()
   	  				.put("appType", "WTRK")
   	  				.put("appDeviceType", "DESKTOP")
@@ -70,6 +70,7 @@ public class tracking_packages {
   				
   			httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
   			httppost.addHeader("Content-Type", "charset=UTF-8");
+  			httppost.addHeader("Cookie", cookie);
   			
   			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
   			urlParameters.add(new BasicNameValuePair("action", "trackpackages"));
@@ -93,6 +94,7 @@ public class tracking_packages {
 	public static String[][] getTrackpackages(String[][] Details, String trackingNumber, String trackingQualifier, String trackingCarrier) throws Exception {
 		String TrackPackagesResponse = TrackingPackagesRequest(trackingNumber, trackingQualifier, trackingCarrier);
 		
+		// removed to save space.
 		Details = Arrays.copyOf(Details, Details.length + 1);
 		Details[Details.length - 1] = new String[] {"TrackPackagesResponse", TrackPackagesResponse};
 		
@@ -108,9 +110,10 @@ public class tracking_packages {
 			{"TRACKING_CARRIER", "trackingCarrierCd"},
 			{"SERVICE", "serviceCD"},
 			{"STATUS", "keyStatus"},
-			{"isEstDelTmWindowLabel", "isEstDelTmWindowLabel"},
-			{"estDelTmWindowStart", "estDelTmWindowStart"},
-			{"isNonHistoricalEDTW", "isNonHistoricalEDTW"}
+			// removed to save space.
+			// {"isEstDelTmWindowLabel", "isEstDelTmWindowLabel"},
+			// {"estDelTmWindowStart", "estDelTmWindowStart"},
+			// {"isNonHistoricalEDTW", "isNonHistoricalEDTW"}
 		};
 		
 		// Add the new element to the details array
@@ -135,7 +138,21 @@ public class tracking_packages {
 	public static String getSingleTrackingResponse(String TrackingPackagesResponse) {
 		String TrackingStart = "{\"shipperAccountNumber\"";
 		String TrackingEnd = "\"isSuccessful\":";
-		if (TrackingPackagesResponse.contains(TrackingEnd)) {
+		
+		String TrackingPackagesResponseTemp = TrackingPackagesResponse.substring(TrackingPackagesResponse.indexOf(TrackingStart) + 1, TrackingPackagesResponse.length() - 1);
+		
+		
+/*		if (TrackingPackagesResponseTemp.contains(TrackingStart)) {
+			String SingleTrackingResponse = "{" + TrackingPackagesResponseTemp.substring(0, TrackingPackagesResponseTemp.indexOf(TrackingStart));
+			return SingleTrackingResponse;
+		} else if (TrackingPackagesResponse.contains(TrackingStart)) {
+			String SingleTrackingResponse = TrackingPackagesResponse.substring(TrackingPackagesResponse.indexOf(TrackingStart), TrackingPackagesResponse.indexOf(TrackingEnd) + TrackingEnd.length());
+			return SingleTrackingResponse;
+		} else {
+			return null;
+		}*/
+		
+	if (TrackingPackagesResponse.contains(TrackingEnd)) {
 			String SingleTrackingResponse = TrackingPackagesResponse.substring(TrackingPackagesResponse.indexOf(TrackingStart), TrackingPackagesResponse.indexOf(TrackingEnd) + TrackingEnd.length());
 			return SingleTrackingResponse;
 		} else {

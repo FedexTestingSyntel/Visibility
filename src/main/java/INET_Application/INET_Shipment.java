@@ -141,14 +141,19 @@ public class INET_Shipment {
 							"    T--Text Entered " + Address_Info.PostalCode + " in element " + zipcode.toString(),
 							true);
 				}
+				
+				if (Loc.contentEquals("to") && !Shipment_Info.Service.toLowerCase().contains("ground")) {
+					// needed to make indirect signature available.
+					WebDriver_Functions.Click(By.id("toData.residential"));
+					// TODO: Need to fix this to make dynamic, there is a reset after clicking check box for the city/state fields.
+					WebDriver_Functions.Wait(3);
+				}
+				
 				// enter city
 				WebDriver_Functions.Type(By.id(Loc + "Data.city"), Address_Info.City);
 				WebDriver_Functions.Select(By.id(Loc + "Data.stateProvinceCode"), Address_Info.State_Code, "v");
 				WebDriver_Functions.Type(By.id(Loc + "Data.phoneNumber"), Helper_Functions.myPhone);
 			}
-
-			// Select the to address is residential
-			WebDriver_Functions.Click(By.id("toData.residential"));
 
 			// Service type
 			WebDriver_Functions.WaitClickable(By.id("psdData.serviceType"));
@@ -168,13 +173,23 @@ public class INET_Shipment {
 				optTxt = Shipment_Info.Service;
 			}
 
-
+			// number of packages
+			if (Shipment_Info.pieceShipment > 1) {
+				WebDriver_Functions.WaitPresent(By.id("psdData.numberOfPackages"));
+				WebDriver_Functions.Click(By.id("psdData.numberOfPackages"));
+				WebDriver_Functions.Select(By.id("psdData.numberOfPackages"), String.valueOf(Shipment_Info.pieceShipment), "t");
+				
+				WebDriver_Functions.WaitPresent(By.id("psdData.arePackagesIdentical.Yes"));
+				WebDriver_Functions.Click(By.id("psdData.arePackagesIdentical.Yes"));
+			}
+			
 			WebDriver_Functions.WaitPresent(By.id("psd.mps.row.weight.0"));
 			WebDriver_Functions.Type(By.id("psd.mps.row.weight.0"), "120");
 
-			WebDriver_Functions.WaitPresent(By.id("psdData.serviceType"));
-			
 			try {
+				// TODO: Need to fix this to make dynamic, there is a reset after clicking check box for the city/state fields.
+				WebDriver_Functions.Wait(3);
+				WebDriver_Functions.WaitPresent(By.id("psdData.serviceType"));
 				WebDriver_Functions.Select(By.id("psdData.serviceType"), optTxt, "t");
 			} catch (Exception e) {
 				Helper_Functions.PrintOut("Service not found. --" + Shipment_Info.Service + ". Attempting with new service.");
@@ -229,20 +244,30 @@ public class INET_Shipment {
 				WebDriver_Functions.Select(By.id("pdm.truckSize"), "28", "v");
 			}
 
-			// Select indirect signature required.
-			if (WebDriver_Functions.isPresent(By.id("module.ss._headerEdit"))) {
-				// click the edit button for special services
-				WebDriver_Functions.WaitClickable(By.id("module.ss._headerEdit"));
-				// Need to fix to make dynamic, issue where 
-				WebDriver_Functions.Wait(2);
-				WebDriver_Functions.Click(By.id("module.ss._headerEdit"));
+			try {
+				// Select indirect signature required.
+				if (WebDriver_Functions.isPresent(By.id("module.ss._headerEdit")) && !Shipment_Info.Service.toLowerCase().contains("ground")) {
+					// click the edit button for special services
+					WebDriver_Functions.WaitClickable(By.id("module.ss._headerEdit"));
+					// Need to fix to make dynamic, issue where 
+					WebDriver_Functions.Wait(2);
+					WebDriver_Functions.Click(By.id("module.ss._headerEdit"));
+
+					WebDriver_Functions.WaitPresent(By.id("ss.signature.sel"));
+					WebDriver_Functions.WaitForTextPresentIn(By.id("ss.signature.sel"), "Indirect signature required");
+					WebDriver_Functions.Select(By.id("ss.signature.sel"), "Indirect signature required", "t");
+				}
+			} catch(Exception e) {
+				Helper_Functions.PrintOut(" -!-!-! Not able to apply a signature.", true);
 			}
 
-			WebDriver_Functions.WaitPresent(By.id("ss.signature.sel"));
-			WebDriver_Functions.WaitForTextPresentIn(By.id("ss.signature.sel"), "Indirect signature required");
-			WebDriver_Functions.Select(By.id("ss.signature.sel"), "Indirect signature required", "t");
+			// enter city
+			WebDriver_Functions.Type(By.id("toData.city"), Shipment_Info.Destination_Address_Info.City);
+			WebDriver_Functions.Select(By.id("toData.stateProvinceCode"), Shipment_Info.Destination_Address_Info.State_Code, "v");
+			WebDriver_Functions.Type(By.id("toData.phoneNumber"), Helper_Functions.myPhone);
 
-			// schedule the shipment
+
+// schedule the shipment
 			WebDriver_Functions.takeSnapShot("Shipment.png");
 			WebDriver_Functions.Click(By.id("completeShip.ship.field"));
 
@@ -268,6 +293,7 @@ public class INET_Shipment {
 
 			// Confirm shipping details
 			if (WebDriver_Functions.isPresent(By.id("completeShip.ship.field"))) {
+				WebDriver_Functions.WaitPresent(By.id("confirm.button.edit"));
 				WebDriver_Functions.Click(By.id("completeShip.ship.field"));
 			} else if (WebDriver_Functions.isPresent(By.id("confirm.ship.field"))) {
 				WebDriver_Functions.Click(By.id("confirm.ship.field"));
